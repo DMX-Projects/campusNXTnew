@@ -1,0 +1,41 @@
+{
+  "books": [
+    {
+      "id": "BOOK001",
+      "title": "Introduction to Algorithms",
+      "author": "Thomas H. Cormen",
+      "isbn": "978-0262033848",
+      "category": "Computer Science",
+      "availableCopies": 8,
+      "totalCopies": 10,
+      "issuedTo": ["CS2023001", "CS2023002"]
+    },
+    {
+      "id": "BOOK002",
+      "title": "Database System Concepts",
+      "author": "Abraham Silberschatz",
+      "isbn": "978-0078022159",
+      "category": "Computer Science",
+      "availableCopies": 5,
+      "totalCopies": 8,
+      "issuedTo": ["CS2024001", "CS2023002", "EE2023001"]
+    },
+    {
+      "id": "BOOK003",
+      "title": "Fundamentals of Electric Circuits",
+      "author": "Charles K. Alexander",
+      "isbn": "978-0073380575",
+      "category": "Electrical Engineering",
+      "availableCopies": 12,
+      "totalCopies": 15,
+      "issuedTo": ["EE2023001", "ME2023001", "CS2023001"]
+    }
+  ],
+  "circulation": [
+    {"bookId": "BOOK001", "count": 45},
+    {"bookId": "BOOK002", "count": 38},
+    {"bookId": "BOOK003", "count": 32},
+    {"bookId": "BOOK004", "count": 28},
+    {"bookId": "BOOK005", "count": 25}
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "placements": [
+    {
+      "id": "PLC001",
+      "companyName": "TechCorp Solutions",
+      "position": "Software Engineer",
+      "package": 850000,
+      "studentsSelected": ["CS2023001", "CS2023002"],
+      "driveDate": "2024-12-15",
+      "eligibilityCriteria": {
+        "minCGPA": 7.0,
+        "departments": ["Computer Science"],
+        "year": 3
+      }
+    },
+    {
+      "id": "PLC002",
+      "companyName": "Innovation Labs",
+      "position": "Full Stack Developer",
+      "package": 750000,
+      "studentsSelected": ["CS2024001"],
+      "driveDate": "2024-12-20",
+      "eligibilityCriteria": {
+        "minCGPA": 7.5,
+        "departments": ["Computer Science", "Information Technology"],
+        "year": 3
+      }
+    },
+    {
+      "id": "PLC003",
+      "companyName": "ElectriTech Industries",
+      "position": "Electrical Engineer",
+      "package": 680000,
+      "studentsSelected": ["EE2023001"],
+      "driveDate": "2024-12-25",
+      "eligibilityCriteria": {
+        "minCGPA": 7.0,
+        "departments": ["Electrical Engineering"],
+        "year": 3
+      }
+    }
+  ],
+  "companies": [
+    {
+      "id": "COMP001",
+      "name": "TechCorp Solutions",
+      "industry": "Software",
+      "website": "https://techcorp.com",
+      "contactPerson": "John Doe",
+      "email": "john.doe@techcorp.com",
+      "phone": "+1234567000"
+    },
+    {
+      "id": "COMP002", 
+      "name": "Innovation Labs",
+      "industry": "Technology",
+      "website": "https://innovationlabs.com",
+      "contactPerson": "Jane Smith",
+      "email": "jane.smith@innovationlabs.com",
+      "phone": "+1234567001"
+    }
+  ]
+}

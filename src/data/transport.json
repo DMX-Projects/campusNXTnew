@@ -1,0 +1,59 @@
+{
+  "routes": [
+    {
+      "id": "RT001",
+      "name": "City Center Route",
+      "busNumber": "BUS-001",
+      "driverName": "Mr. Rajesh Kumar",
+      "capacity": 50,
+      "currentPassengers": 45,
+      "stops": ["Main Gate", "City Center", "Metro Station", "Shopping Mall"],
+      "schedule": {
+        "morning": "7:30 AM",
+        "evening": "5:30 PM"
+      },
+      "status": "Active"
+    },
+    {
+      "id": "RT002",
+      "name": "Suburbs Route",
+      "busNumber": "BUS-002",
+      "driverName": "Mr. Suresh Patel",
+      "capacity": 45,
+      "currentPassengers": 38,
+      "stops": ["Main Gate", "Residential Area", "Park View", "Suburb Center"],
+      "schedule": {
+        "morning": "7:45 AM",
+        "evening": "5:45 PM"
+      },
+      "status": "Active"
+    }
+  ],
+  "passengers": [
+    {
+      "id": "CS2023001",
+      "name": "Alex Wilson",
+      "type": "Student",
+      "route": "RT001",
+      "feeStatus": "Paid",
+      "monthlyFee": 1200
+    },
+    {
+      "id": "FAC001",
+      "name": "Prof. Emily Davis",
+      "type": "Faculty",
+      "route": "RT002",
+      "feeStatus": "Paid",
+      "monthlyFee": 800
+    }
+  ],
+  "expenses": [
+    {
+      "month": "January",
+      "fuel": 45000,
+      "maintenance": 12000,
+      "driverSalary": 25000,
+      "insurance": 8000
+    }
+  ]
+}

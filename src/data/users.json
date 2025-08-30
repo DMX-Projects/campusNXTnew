@@ -1,0 +1,29 @@
+{
+  "users": [
+    {"id": "CS001", "username": "secretary", "password": "1234", "role": "College Secretary", "name": "Ms. Patricia Williams", "authority": "highest", "campusId": "MAIN"},
+    {"id": "CH001", "username": "chairperson", "password": "1234", "role": "Chairperson", "name": "Dr. Richard Anderson", "authority": "highest", "campusId": "MAIN"},
+    {"id": "P001", "username": "principal", "password": "1234", "role": "Principal", "name": "Dr. John Smith", "campusId": "MAIN"},
+    {"id": "D001", "username": "dean", "password": "1234", "role": "Dean", "name": "Prof. Sarah Johnson", "collegeId": "ENG"},
+    {"id": "H001", "username": "hod", "password": "1234", "role": "HoD", "name": "Dr. Michael Brown", "department": "Computer Science", "departmentId": "CSE"},
+    {"id": "TP001", "username": "tpo", "password": "1234", "role": "TPO", "name": "Ms. Lisa Anderson", "campusId": "MAIN"},
+    {"id": "COE001", "username": "controller", "password": "1234", "role": "Controller of Examination", "name": "Dr. James Wilson", "campusId": "MAIN"},
+    {"id": "F001", "username": "faculty", "password": "1234", "role": "Faculty", "name": "Prof. Emily Davis", "department": "Computer Science", "departmentId": "CSE", "employeeId": "EMP001"},
+    {"id": "LA001", "username": "labassistant", "password": "1234", "role": "Lab Assistant", "name": "Mr. Kevin Martinez", "department": "Computer Science", "labIds": ["LAB001", "LAB002"]},
+    {"id": "LT001", "username": "labtechnician", "password": "1234", "role": "Lab Technician", "name": "Ms. Rachel Green", "department": "Computer Science", "labIds": ["LAB003"]},
+    {"id": "S001", "username": "student", "password": "1234", "role": "Student", "name": "Alex Wilson", "studentId": "CS2023001", "departmentId": "CSE", "year": 2, "section": "A"},
+    {"id": "PA001", "username": "parent", "password": "1234", "role": "Parent", "name": "Robert Wilson", "childId": "CS2023001", "childStudentId": "CS2023001"},
+    {"id": "AO001", "username": "admin", "password": "1234", "role": "Administration Officer", "name": "Mr. David Lee", "campusId": "MAIN"},
+    {"id": "TI001", "username": "transport", "password": "1234", "role": "Transportation Incharge", "name": "Mr. Carlos Rodriguez", "routeIds": ["R001", "R002"]},
+    {"id": "HI001", "username": "hostel", "password": "1234", "role": "Hostel Incharge", "name": "Ms. Maria Garcia", "hostelIds": ["H001", "H002"]},
+    {"id": "LI001", "username": "librarian", "password": "1234", "role": "Library Incharge", "name": "Ms. Jennifer Taylor", "libraryId": "LIB001"},
+    {"id": "AC001", "username": "accounts", "password": "1234", "role": "Accounts Officer", "name": "Mr. Thomas Clark", "campusId": "MAIN"},
+    {"id": "SC001", "username": "scholarship", "password": "1234", "role": "Scholarship Incharge", "name": "Ms. Nancy Lewis", "campusId": "MAIN"},
+    {"id": "ST001", "username": "stores", "password": "1234", "role": "Stores Incharge", "name": "Mr. Steven Walker", "campusId": "MAIN"},
+    {"id": "SP001", "username": "sports", "password": "1234", "role": "Sports Incharge", "name": "Coach Mark Johnson", "campusId": "MAIN"},
+    {"id": "SE001", "username": "security", "password": "1234", "role": "Security Incharge", "name": "Mr. Paul Robinson", "campusId": "MAIN"},
+    {"id": "IT001", "username": "it", "password": "1234", "role": "IT Department", "name": "Mr. Alex Thompson", "campusId": "MAIN"},
+    {"id": "SS001", "username": "services", "password": "1234", "role": "Student Services", "name": "Ms. Linda White", "campusId": "MAIN"},
+    {"id": "CM001", "username": "maintenance", "password": "1234", "role": "College Maintenance Incharge", "name": "Mr. Frank Miller", "campusId": "MAIN"},
+    {"id": "EA001", "username": "erpadmin", "password": "1234", "role": "ERP Admin", "name": "Mr. System Administrator", "authority": "system", "campusId": "MAIN"}
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "hostels": [
+    {
+      "id": "H001",
+      "name": "Boys Hostel A",
+      "capacity": 160,
+      "occupied": 145,
+      "warden": "Mr. Prakash Sharma",
+      "floors": 4,
+      "roomsPerFloor": 40
+    },
+    {
+      "id": "H002",
+      "name": "Girls Hostel A", 
+      "capacity": 120,
+      "occupied": 98,
+      "warden": "Ms. Priya Gupta",
+      "floors": 3,
+      "roomsPerFloor": 40
+    }
+  ],
+  "students": [
+    {
+      "id": "CS2023001",
+      "name": "Alex Wilson",
+      "hostelId": "H001",
+      "roomNumber": "H1-201",
+      "feeStatus": "Paid",
+      "monthlyFee": 8000,
+      "checkInTime": "22:30",
+      "checkOutTime": "06:30"
+    }
+  ],
+  "inOutRegister": [
+    {
+      "studentId": "CS2023001",
+      "date": "2025-01-15",
+      "outTime": "18:30",
+      "inTime": "21:45",
+      "purpose": "Library Study"
+    }
+  ]
+}

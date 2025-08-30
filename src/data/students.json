@@ -1,0 +1,68 @@
+{
+  "students": [
+    {
+      "id": "CS2023001",
+      "name": "Alex Wilson",
+      "department": "Computer Science",
+      "year": 3,
+      "section": "A",
+      "email": "alex.wilson@college.edu",
+      "phone": "+1234567890",
+      "parentId": "parent_001",
+      "hostelRoom": "H1-201",
+      "feeStatus": "Paid",
+      "cgpa": 8.5,
+      "attendancePercentage": 92
+    },
+    {
+      "id": "CS2023002",
+      "name": "Emma Johnson",
+      "department": "Computer Science",
+      "year": 3,
+      "section": "A",
+      "email": "emma.johnson@college.edu",
+      "phone": "+1234567891",
+      "feeStatus": "Pending",
+      "cgpa": 9.2,
+      "attendancePercentage": 95
+    },
+    {
+      "id": "EE2023001",
+      "name": "Michael Chen",
+      "department": "Electrical Engineering",
+      "year": 2,
+      "section": "B",
+      "email": "michael.chen@college.edu",
+      "phone": "+1234567892",
+      "hostelRoom": "H2-105",
+      "feeStatus": "Paid",
+      "cgpa": 7.8,
+      "attendancePercentage": 88
+    },
+    {
+      "id": "ME2023001",
+      "name": "Sophia Rodriguez",
+      "department": "Mechanical Engineering",
+      "year": 1,
+      "section": "A",
+      "email": "sophia.rodriguez@college.edu",
+      "phone": "+1234567893",
+      "feeStatus": "Overdue",
+      "cgpa": 8.9,
+      "attendancePercentage": 90
+    },
+    {
+      "id": "CS2024001",
+      "name": "David Kim",
+      "department": "Computer Science",
+      "year": 2,
+      "section": "B",
+      "email": "david.kim@college.edu",
+      "phone": "+1234567894",
+      "hostelRoom": "H1-305",
+      "feeStatus": "Paid",
+      "cgpa": 8.1,
+      "attendancePercentage": 87
+    }
+  ]
+}

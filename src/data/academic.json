@@ -1,0 +1,71 @@
+{
+  "subjects": [
+    {
+      "id": "CS301",
+      "name": "Data Structures",
+      "department": "Computer Science",
+      "year": 3,
+      "semester": 1,
+      "credits": 4,
+      "facultyId": "FAC001",
+      "syllabusCompleted": 75
+    },
+    {
+      "id": "CS302",
+      "name": "Algorithms",
+      "department": "Computer Science",
+      "year": 3,
+      "semester": 1,
+      "credits": 4,
+      "facultyId": "FAC001",
+      "syllabusCompleted": 68
+    },
+    {
+      "id": "EE201",
+      "name": "Circuit Analysis",
+      "department": "Electrical Engineering",
+      "year": 2,
+      "semester": 1,
+      "credits": 3,
+      "facultyId": "FAC002",
+      "syllabusCompleted": 82
+    }
+  ],
+  "timeTable": [
+    {
+      "day": "Monday",
+      "slots": [
+        {"time": "9:00-10:00", "subject": "Data Structures", "faculty": "Prof. Emily Davis", "room": "CS-101"},
+        {"time": "10:00-11:00", "subject": "Algorithms", "faculty": "Prof. Emily Davis", "room": "CS-102"},
+        {"time": "11:00-12:00", "subject": "Database Systems", "faculty": "Prof. Emily Davis", "room": "CS-103"}
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "slots": [
+        {"time": "9:00-10:00", "subject": "Circuit Analysis", "faculty": "Dr. Robert Thompson", "room": "EE-201"},
+        {"time": "10:00-11:00", "subject": "Digital Electronics", "faculty": "Dr. Robert Thompson", "room": "EE-202"}
+      ]
+    }
+  ],
+  "assignments": [
+    {
+      "id": "ASG001",
+      "title": "Binary Search Tree Implementation",
+      "subject": "Data Structures",
+      "dueDate": "2025-01-20",
+      "status": "Active",
+      "submissions": 15,
+      "totalStudents": 25
+    },
+    {
+      "id": "ASG002",
+      "title": "Sorting Algorithms Comparison",
+      "subject": "Algorithms",
+      "dueDate": "2025-01-25",
+      "status": "Active",
+      "submissions": 8,
+      "totalStudents": 25
+    }
+  ]
+}

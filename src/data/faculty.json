@@ -1,0 +1,48 @@
+{
+  "faculty": [
+    {
+      "id": "FAC001",
+      "name": "Prof. Emily Davis",
+      "department": "Computer Science",
+      "designation": "Associate Professor",
+      "email": "emily.davis@college.edu",
+      "phone": "+1234567800",
+      "subjects": ["Data Structures", "Algorithms", "Database Systems"],
+      "experience": 8,
+      "attendancePercentage": 96
+    },
+    {
+      "id": "FAC002",
+      "name": "Dr. Robert Thompson",
+      "department": "Electrical Engineering",
+      "designation": "Professor",
+      "email": "robert.thompson@college.edu",
+      "phone": "+1234567801",
+      "subjects": ["Circuit Analysis", "Digital Electronics", "Power Systems"],
+      "experience": 12,
+      "attendancePercentage": 94
+    },
+    {
+      "id": "FAC003",
+      "name": "Prof. Lisa Martinez",
+      "department": "Mechanical Engineering",
+      "designation": "Assistant Professor",
+      "email": "lisa.martinez@college.edu",
+      "phone": "+1234567802",
+      "subjects": ["Thermodynamics", "Fluid Mechanics", "Machine Design"],
+      "experience": 6,
+      "attendancePercentage": 91
+    },
+    {
+      "id": "FAC004",
+      "name": "Dr. Michael Brown",
+      "department": "Computer Science",
+      "designation": "Head of Department",
+      "email": "michael.brown@college.edu",
+      "phone": "+1234567803",
+      "subjects": ["Software Engineering", "Computer Networks", "AI/ML"],
+      "experience": 15,
+      "attendancePercentage": 98
+    }
+  ]
+}
