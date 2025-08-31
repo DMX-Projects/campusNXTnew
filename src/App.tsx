@@ -8,7 +8,8 @@ import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import ModuleDashboard from './components/ModuleDashboard';
 import PlaceholderPage from './components/PlaceholderPage';
-
+import { NavigationProvider } from './contexts/NavigationContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 // Import all route components
 import HomeRoutes from './routes/HomeRoutes';
 import PlacementRoutes from './routes/PlacementsRoute';
@@ -23,13 +24,26 @@ import ExaminationRoutes from './routes/ExaminationRoutes';
 // import ParentRoutes from './routes/ParentRoutes'; // Uncomment when available
 
 const AppRoutes: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+
+  const getRedirectPath = (userRole: string) => {
+    if (userRole === 'Chairperson' || userRole === 'College Secretary') {
+      return '/home';
+    }
+    return '/academics';
+  };
 
   return (
     <Routes>
       <Route 
         path="/" 
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />} 
+        element={
+          isAuthenticated && user ? (
+            <Navigate to={getRedirectPath(user.role)} replace />
+          ) : (
+            <Login />
+          )
+        } 
       />
       <Route 
         element={
@@ -38,7 +52,16 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         } 
       >
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route 
+          path="/dashboard" 
+          element={
+            user ? (
+              <Navigate to={getRedirectPath(user.role)} replace />
+            ) : (
+              <Dashboard />
+            )
+          } 
+        />
         
         {/* Home Module Routes */}
         <Route path="/home/*" element={<HomeRoutes />} />
@@ -94,9 +117,11 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-            <AppRoutes />
-          </div>
+          <NavigationProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+              <AppRoutes />
+            </div>
+          </NavigationProvider>
         </Router>
       </AuthProvider>
     </ThemeProvider>

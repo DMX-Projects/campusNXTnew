@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState ,useEffect} from 'react';
 import { useAuth } from './AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface NavigationContextType {
   activeModule: string;
@@ -657,9 +658,77 @@ const SIDEBAR_ITEMS = {
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeModule, setActiveModule] = useState('Home');
-  const [activeSidebarItem, setActiveSidebarItem] = useState('Dashboard');
+  const [activeSidebarItem, setActiveSidebarItem] = useState('');
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Auto-navigate to appropriate module and first item on login
+  useEffect(() => {
+    if (user) {
+      const userModules = getModulesForRole(user.role);
+      
+      // Determine initial module based on role
+      let initialModule = 'Academics'; // default
+      if (user.role === 'Chairperson' || user.role === 'College Secretary') {
+        initialModule = 'Home';
+      }
+      
+      // Check if current path matches any module
+      const currentPath = location.pathname;
+      const matchedModule = userModules.find(module => 
+        currentPath.includes(`/${module.toLowerCase()}`)
+      );
+      
+      if (!matchedModule && currentPath === '/') {
+        // User just logged in, redirect to appropriate module
+        setActiveModule(initialModule);
+        const sidebarItems = getSidebarItemsForModule(initialModule, user.role);
+        
+        if (sidebarItems.length > 0) {
+          const firstItem = getFirstNavigableItem(sidebarItems);
+          if (firstItem) {
+            navigate(firstItem.path);
+            setActiveSidebarItem(firstItem.path);
+          }
+        }
+      } else if (matchedModule) {
+        // Update active module based on current path
+        setActiveModule(matchedModule);
+      }
+    }
+  }, [user, location.pathname, navigate]);
+
+  // Helper function to get the first navigable item (not a parent with children)
+  const getFirstNavigableItem = (items: any[]): any | null => {
+    for (const item of items) {
+      if (!item.children || item.children.length === 0) {
+        return item;
+      } else {
+        // Look in children
+        const childItem = getFirstNavigableItem(item.children);
+        if (childItem) return childItem;
+      }
+    }
+    return null;
+  };
+
+  // Update active module and navigate to first item when module changes
+  const handleSetActiveModule = (module: string) => {
+    setActiveModule(module);
+    
+    if (user) {
+      const sidebarItems = getSidebarItemsForModule(module, user.role);
+      if (sidebarItems.length > 0) {
+        const firstItem = getFirstNavigableItem(sidebarItems);
+        if (firstItem) {
+          navigate(firstItem.path);
+          setActiveSidebarItem(firstItem.path);
+        }
+      }
+    }
+  };
 
   const getModulesForRole = (role: string): string[] => {
     return MODULE_ACCESS[role as keyof typeof MODULE_ACCESS] || ['Home'];
@@ -683,7 +752,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   return (
     <NavigationContext.Provider value={{
       activeModule,
-      setActiveModule,
+      setActiveModule: handleSetActiveModule, // Use the updated function
       activeSidebarItem,
       setActiveSidebarItem,
       getModulesForRole,
