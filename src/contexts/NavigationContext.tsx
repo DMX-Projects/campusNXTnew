@@ -56,6 +56,7 @@ const MODULE_ACCESS = {
 const SIDEBAR_ITEMS = {
   Home: {
     'Chairperson': [
+      { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
       { 
         name: 'Masters', 
         path: '/home', 

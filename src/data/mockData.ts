@@ -98,6 +98,62 @@ export interface FeeStructure {
   totalFee: number;
 }
 
+export interface User {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface Role {
+  id: string;
+  name: string;
+  code?: string;
+  description: string;
+  status: string;
+  permissions: string[];
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  code: string;
+  hod: string;
+  status: string;
+  description: string;
+}
+
+export interface Program {
+  id: string;
+  code: string;
+  name: string;
+  duration: string;
+  department: string;
+  status: string;
+}
+
+export interface Institution {
+  id: string;
+  name: string;
+  code: string;
+  type: string;
+  location: string;
+  status: string;
+}
+
+export interface Client {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  organization: string;
+  status: string;
+}
+
 // Mock data
 export const mockStudents: Student[] = [
   {
@@ -308,7 +364,6 @@ export const mockFeeStructure: FeeStructure[] = [
     totalFee: 106000,
   },
 ];
-import { User, Role, Department, Course, Program, Institution, Client } from '../types';
 
 export const mockUsers: User[] = [
   {
@@ -436,31 +491,187 @@ export const mockUsers: User[] = [
 export const mockRoles: Role[] = [
   {
     id: '1',
-    name: 'Student',
-    description: 'Student role with limited access',
+    name: 'Transportation Incharge',
+    code: 'TI',
+    description: 'Manages transportation and vehicle operations',
     status: 'active',
-    permissions: ['view_courses', 'submit_assignments']
+    permissions: [
+      'manage_vehicles',
+      'track_routes',
+      'manage_drivers',
+      'view_transportation_reports'
+    ]
   },
   {
     id: '2',
-    name: 'Faculty',
-    description: 'Faculty member with course management access',
+    name: 'TPO',
+    code: 'TPO',
+    description: 'Training and Placement Officer',
     status: 'active',
-    permissions: ['view_courses', 'manage_courses', 'grade_students']
+    permissions: [
+      'manage_placements',
+      'coordinate_training',
+      'manage_companies',
+      'view_student_records',
+      'schedule_interviews'
+    ]
   },
   {
     id: '3',
-    name: 'Administrator',
-    description: 'Full system administrator access',
+    name: 'Super Admin',
+    code: 'SA',
+    description: 'Full system administrator with complete access',
     status: 'active',
-    permissions: ['full_access']
+    permissions: [
+      'full_access',
+      'manage_users',
+      'manage_roles',
+      'system_configuration',
+      'view_all_reports',
+      'manage_institutions'
+    ]
   },
   {
     id: '4',
-    name: 'HOD',
-    description: 'Head of Department role',
+    name: 'Student',
+    code: 'STU',
+    description: 'Student role with limited access to academic features',
     status: 'active',
-    permissions: ['manage_department', 'approve_courses', 'manage_faculty']
+    permissions: [
+      'view_courses',
+      'view_attendance',
+      'view_results',
+      'submit_assignments',
+      'view_fee_details',
+      'access_library'
+    ]
+  },
+  {
+    id: '5',
+    name: 'Principal',
+    code: 'PRINCIPAL',
+    description: 'Principal with institutional management access',
+    status: 'active',
+    permissions: [
+      'manage_institution',
+      'view_all_departments',
+      'approve_policies',
+      'view_financial_reports',
+      'manage_faculty',
+      'manage_students'
+    ]
+  },
+  {
+    id: '6',
+    name: 'Parent',
+    code: 'PRNT',
+    description: 'Parent/Guardian with limited student information access',
+    status: 'active',
+    permissions: [
+      'view_child_attendance',
+      'view_child_results',
+      'view_child_fee_status',
+      'communicate_with_faculty',
+      'view_child_progress'
+    ]
+  },
+  {
+    id: '7',
+    name: 'Library Incharge',
+    code: 'LI',
+    description: 'Manages library operations and resources',
+    status: 'active',
+    permissions: [
+      'manage_books',
+      'issue_returns',
+      'manage_library_members',
+      'view_library_reports',
+      'manage_book_inventory'
+    ]
+  },
+  {
+    id: '8',
+    name: 'Lab Technician',
+    code: 'LT',
+    description: 'Manages laboratory equipment and assists in practical sessions',
+    status: 'active',
+    permissions: [
+      'manage_lab_equipment',
+      'assist_practicals',
+      'maintain_lab_inventory',
+      'report_equipment_issues'
+    ]
+  },
+  {
+    id: '9',
+    name: 'Lab Assistant',
+    code: 'LA',
+    description: 'Assists in laboratory operations and maintenance',
+    status: 'active',
+    permissions: [
+      'assist_lab_operations',
+      'basic_equipment_handling',
+      'student_assistance',
+      'lab_cleanliness'
+    ]
+  },
+  {
+    id: '10',
+    name: 'Hostel Incharge',
+    code: 'HI',
+    description: 'Manages hostel operations and student accommodation',
+    status: 'active',
+    permissions: [
+      'manage_hostel_rooms',
+      'manage_hostel_students',
+      'handle_hostel_complaints',
+      'manage_mess_operations',
+      'hostel_fee_management'
+    ]
+  },
+  {
+    id: '11',
+    name: 'Faculty',
+    code: 'FAC',
+    description: 'Faculty member with teaching and course management access',
+    status: 'active',
+    permissions: [
+      'manage_courses',
+      'mark_attendance',
+      'grade_students',
+      'create_assignments',
+      'view_student_progress',
+      'communicate_with_students'
+    ]
+  },
+  {
+    id: '12',
+    name: 'Administrator',
+    code: 'ADM',
+    description: 'Administrative staff with management access',
+    status: 'active',
+    permissions: [
+      'manage_admissions',
+      'manage_fee_structure',
+      'generate_reports',
+      'manage_academic_calendar',
+      'student_registration'
+    ]
+  },
+  {
+    id: '13',
+    name: 'Head of Department',
+    code: 'HOD',
+    description: 'Department head with departmental management access',
+    status: 'active',
+    permissions: [
+      'manage_department',
+      'approve_courses',
+      'manage_faculty',
+      'approve_curriculum',
+      'department_budget_management',
+      'faculty_evaluation'
+    ]
   }
 ];
 
@@ -498,45 +709,6 @@ export const mockDepartments: Department[] = [
     description: 'Department of Information Technology'
   }
 ];
-
-// export const mockCourses: Course[] = [
-//   {
-//     id: '1',
-//     code: 'CSE101',
-//     name: 'Introduction to Programming',
-//     credits: 4,
-//     department: 'Computer Science Engineering',
-//     status: 'active',
-//     description: 'Basic programming concepts using Python'
-//   },
-//   {
-//     id: '2',
-//     code: 'CSE201',
-//     name: 'Data Structures and Algorithms',
-//     credits: 4,
-//     department: 'Computer Science Engineering',
-//     status: 'active',
-//     description: 'Fundamental data structures and algorithms'
-//   },
-//   {
-//     id: '3',
-//     code: 'EE101',
-//     name: 'Circuit Analysis',
-//     credits: 3,
-//     department: 'Electrical Engineering',
-//     status: 'active',
-//     description: 'Basic electrical circuit analysis'
-//   },
-//   {
-//     id: '4',
-//     code: 'ME101',
-//     name: 'Engineering Mechanics',
-//     credits: 3,
-//     department: 'Mechanical Engineering',
-//     status: 'active',
-//     description: 'Fundamentals of engineering mechanics'
-//   }
-// ];
 
 export const mockPrograms: Program[] = [
   {
