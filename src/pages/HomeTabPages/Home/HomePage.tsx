@@ -280,15 +280,7 @@ export const HomePage = () => {
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    // Check if user prefers dark mode
-    const isDark =
-      localStorage.getItem("darkMode") === "true" ||
-      (!localStorage.getItem("darkMode") &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-    setIsDarkMode(isDark);
-    document.documentElement.classList.toggle("dark", isDark);
-  }, []);
+
 
   const getTrendIcon = (trend: string) => {
     if (trend === "up")
