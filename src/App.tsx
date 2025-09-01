@@ -25,7 +25,8 @@ import ParentRoutes from './routes/ParentRoutes';
 // import ParentRoutes from './routes/ParentRoutes'; // Uncomment when available
 
 const AppRoutes: React.FC = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user,loading  } = useAuth();
+  if (loading) return <div>Loading...</div>; 
 
   const getRedirectPath = (userRole: string) => {
     if (userRole === 'Chairperson' || userRole === 'College Secretary') {
