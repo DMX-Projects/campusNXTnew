@@ -264,7 +264,7 @@ const StudentManagementSystem: React.FC = () => {
     setFilteredStudents(filtered);
   }, [students, searchQuery, filters]);
 
-  const programs: string[] = ['XI Arts', 'XI Science', 'XII Arts', 'XII Science'];
+  const programs: string[] = ['', 'XI Science', 'XII Arts', 'XII Science'];
   const states: string[] = ['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
   const bloodGroups: string[] = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
   const categories: string[] = ['General', 'OBC', 'SC', 'ST', 'EWS'];
@@ -722,12 +722,14 @@ const StudentManagementSystem: React.FC = () => {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+               
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Details</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact Info</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -749,31 +751,7 @@ const StudentManagementSystem: React.FC = () => {
               ) : (
                 filteredStudents.map((student) => (
                   <tr key={student.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex space-x-2">
-                        <button 
-                          className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
-                          onClick={() => editStudent(student)}
-                          title="Edit Student"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button 
-                          className="text-green-600 hover:text-green-800 p-1 rounded transition-colors"
-                          onClick={() => showNotification('info', `Viewing details for ${student.name}`)}
-                          title="View Details"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button 
-                          className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
-                          onClick={() => deleteStudent(student.id)}
-                          title="Delete Student"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+                    
                     <td className="px-6 py-4">
                       <div>
                         <div className="text-sm font-medium text-gray-900">{student.name}</div>
@@ -801,6 +779,25 @@ const StudentManagementSystem: React.FC = () => {
                       }`}>
                         {student.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex space-x-2">
+                        <button 
+                          className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                          onClick={() => editStudent(student)}
+                          title="Edit Student"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        
+                        <button 
+                          className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
+                          onClick={() => deleteStudent(student.id)}
+                          title="Delete Student"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -889,16 +886,7 @@ const StudentManagementSystem: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <BookOpen className="w-5 h-5 mr-2 text-green-600" />
-                Program Details
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {renderFormField('Program', 'program', 'select', programs, true)}
-                {renderFormField('Batch', 'batch', 'text', null, false, 'e.g., Morning, Evening')}
-              </div>
-            </div>
+            
           </div>
         );
 
@@ -912,11 +900,10 @@ const StudentManagementSystem: React.FC = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {renderFormField('Course', 'course', 'text', null, true, 'Enter course name')}
-                {renderFormField('Branch/Stream', 'branch', 'text', null, false, 'Enter branch or stream')}
+                 {renderFormField('Branch/stream', 'Branch', 'select', ['cse', 'eee', 'ece', 'civil', 'robotics', ], false)}
                 {renderFormField('Semester', 'semester', 'select', ['1', '2', '3', '4', '5', '6', '7', '8'], false)}
-                {renderFormField('Section', 'section', 'text', null, false, 'e.g., A, B, C')}
-                {renderFormField('Specialization', 'specialization', 'text', null, false, 'Enter specialization if any')}
-                {renderFormField('Course Duration', 'courseDuration', 'text', null, false, 'e.g., 2 years, 4 years')}
+               
+                
               </div>
             </div>
           </div>
