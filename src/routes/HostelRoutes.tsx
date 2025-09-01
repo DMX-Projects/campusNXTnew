@@ -11,8 +11,10 @@ import HostelFeeDues from "../pages/Hostel/HostelFee_Dues";
 import HostelInOut from "../pages/Hostel/HostelInOut";
 import HostelPermissions from "../pages/Hostel/Hostel_Permissions";
 import HostelInventory from "../pages/Hostel/HostelInventory";
+import GeofencingManagement from "../pages/Hostel/GeofencingManagement";
 // import HostelGeoFencing from "../pages/Hostel/HostelGeoFencing";
-// import HostelReports from "../pages/Hostel/HostelReports";
+import HostelReports from "../pages/Hostel/HostelReports";
+import HostelTickets from "../pages/Hostel/HostelTickets";
 // import HostelTickets from "../pages/Hostel/HostelTickets";
 // import HostelTransfer from "../pages/Hostel/HostelTransfer";
 
@@ -28,14 +30,16 @@ const HostelRoutes: React.FC = () => {
       <Route path="details" element={<HostelDetails />} />
       <Route path="students" element={<HostelStudentsList />} />
       <Route path="faculty" element={<HostelFacultyList />} />
-      <Route path="fees" element={<HostelFeeDues />} />
-      <Route path="inout" element={<HostelInOut />} /> 
-       <Route path="permissions" element={<HostelPermissions />} />
+      <Route path="fee-details" element={<HostelFeeDues />} />
+      <Route path="out-time" element={<HostelInOut />} /> 
+       <Route path="student-permissions" element={<HostelPermissions />} />
         <Route path="inventory" element={<HostelInventory />} />
+        <Route path="geo-fencing" element={<GeofencingManagement />} />
+      <Route path="reports" element={<HostelReports />} />
       {/* <Route path="geo-fencing" element={<HostelGeoFencing />} />
       <Route path="transfer" element={<HostelTransfer />} />
-      <Route path="reports" element={<HostelReports />} />
-      <Route path="tickets" element={<HostelTickets />} />   */}
+      <Route path="reports" element={<HostelReports />} />*/}
+      <Route path="raise-ticket" element={<HostelTickets />} />
 
       {/* Catch all → Redirect back to dashboard */}
       <Route path="*" element={<Navigate to="/hostel/dashboard" replace />} />

@@ -569,7 +569,7 @@ const SIDEBAR_ITEMS = {
     'Chairperson': [
       { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
       { name: 'Inbox', path: '/hostel/inbox', icon: 'Mail' },
-      { name: 'Hostel Student List', path: '/hostel/hostel-student-list', icon: 'Users' },
+      { name: 'Hostel Student List', path: '/hostel/students', icon: 'Users' },
       { name: 'Fee Details', path: '/hostel/fee-details', icon: 'DollarSign' },
       { name: 'Out Time', path: '/hostel/out-time', icon: 'Clock' },
       { name: 'Student Permissions', path: '/hostel/student-permissions', icon: 'UserCheck' },

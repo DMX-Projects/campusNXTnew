@@ -20,6 +20,7 @@ import SportsDashboard from './Dashboard/SportsDashboard';
 import SecurityDashboard from './Dashboard/SecurityDashboard';
 import ITDashboard from './Dashboard/ITDashboard';
 import MaintenanceDashboard from './Dashboard/MaintenanceDashboard';
+import HostelDashboardforadmin from '../pages/Hostel/HostelDashboard';
 
 interface ModuleDashboardProps {
   module: string;
@@ -129,6 +130,10 @@ const ModuleDashboard: React.FC<ModuleDashboardProps> = ({ module }) => {
             return <HostelDashboard />;
           case 'Student':
             return <StudentDashboard />;
+          case 'Chairperson':
+          case 'College Secretary':
+          case 'Principal':
+            return <HostelDashboardforadmin />;
           default:
             return <HostelDashboard />;
         }
@@ -154,7 +159,7 @@ const ModuleDashboard: React.FC<ModuleDashboardProps> = ({ module }) => {
   return (
     <div className="space-y-6">
       {/* Module Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+      {/* <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-green-500 rounded-lg flex items-center justify-center">
             <span className="text-white text-xl font-bold">
@@ -179,7 +184,7 @@ const ModuleDashboard: React.FC<ModuleDashboardProps> = ({ module }) => {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Module-Specific Dashboard Content */}
       {renderModuleDashboard()}
