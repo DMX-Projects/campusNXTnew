@@ -1,10 +1,12 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-         LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+         LineChart, Line, AreaChart, Area } from 'recharts';
 import DashboardCard from './DashboardCard';
-import { Users, Briefcase, TrendingUp, Calendar, Award, Target, Building, CheckCircle } from 'lucide-react';
-
+import { Users, TrendingUp, Calendar, Award, Target, Building, CheckCircle } from 'lucide-react';
+import * as XLSX from "xlsx";  // npm install xlsx
+import DriveScheduleModal from "../../pages/Placements/components/DriveScheduleModal";
 const TPODashboard: React.FC = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
   const cardData = [
     { title: 'Total Placements', value: '287', change: '+12%', trend: 'up' as const, icon: Award, color: 'bg-green-500' },
     { title: 'Companies Registered', value: '45', change: '+8', trend: 'up' as const, icon: Building, color: 'bg-blue-500' },
@@ -36,6 +38,19 @@ const TPODashboard: React.FC = () => {
     { year: '2023', placements: 312, avgPackage: 7.2 },
     { year: '2024', placements: 287, avgPackage: 7.2 }
   ];
+  const handleGenerateReport = () => {
+    const data = [
+      { Company: "TechCorp", Students: 78, Selected: 15, Package: "7 LPA" },
+      { Company: "Innovation Labs", Students: 92, Selected: 18, Package: "6.5 LPA" },
+      { Company: "DataFlow Systems", Students: 134, Selected: 22, Package: "8 LPA" },
+    ];
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Placement Report");
+
+    XLSX.writeFile(wb, "Placement_Report.xlsx");
+  };
 
   const studentPerformanceData = [
     { department: 'Computer Science', excellent: 45, good: 78, average: 32, needsImprovement: 12 },
@@ -47,7 +62,7 @@ const TPODashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+       <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Training & Placement Dashboard
@@ -57,14 +72,21 @@ const TPODashboard: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
             Schedule Drive
           </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+          <button
+            onClick={handleGenerateReport}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
             Generate Report
           </button>
         </div>
       </div>
+            <DriveScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
