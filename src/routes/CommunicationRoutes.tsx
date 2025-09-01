@@ -16,13 +16,13 @@ const CommunicationRoute: React.FC = () => {
     <Routes>
       {/* Default Home Route */}
       <Route index element={<HomeDashboard activeSection="Academics" />} />
-      <Route path = "/nostWall" element ={<PostWall/>}/>
-      <Route path = "/notification" element = {<Notification/>}/>
-      <Route path = "/messages" element = {<Messages/>}/>
-      <Route path ="/whatsapp" element = {<WhatsApp/>}/>
-      <Route path ="/mail" element ={<Mail/>}/>
-      <Route path ="/mcredits" element ={<MCredits/>}/>
-      <Route path ="/reports" element ={<Reports/>}/>
+      <Route path = "post-on-wall" element ={<PostWall/>}/>
+      <Route path = "send-push-notification" element = {<Notification/>}/>
+      <Route path = "send-sms" element = {<Messages/>}/>
+      <Route path ="send-whatsapp" element = {<WhatsApp/>}/>
+      <Route path ="send-email" element ={<Mail/>}/>
+      <Route path ="message-credits" element ={<MCredits/>}/>
+      <Route path ="reports" element ={<Reports/>}/>
        
 
       
