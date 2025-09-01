@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Users, Search, Filter, Phone, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { students } from './data/mockData';
 
 export default function StudentsList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterClass, setFilterClass] = useState('all');
+  const navigate = useNavigate();
 
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -19,14 +21,21 @@ export default function StudentsList() {
     overdue: 'text-red-600 bg-red-50',
   };
 
+  const handleAddStudent = () => {
+    navigate('/transport/add-student');
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">Students List</h3>
-          <p className="text-sm text-gray-600">Total {students.length} students using transport</p>
+          <h3 className="text-lg font-semibold text-gray-800"></h3>
+          <p className="text-sm text-gray-600"></p>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+        <button 
+          onClick={handleAddStudent}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
           Add Student
         </button>
       </div>
