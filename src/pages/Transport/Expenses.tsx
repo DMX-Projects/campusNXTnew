@@ -51,7 +51,7 @@ export default function Expenses() {
             <DollarSign className="w-6 h-6 text-red-600" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-gray-900">${totalExpenses}</p>
+            <p className="text-2xl font-bold text-gray-900">₹{totalExpenses.toLocaleString('en-IN')}</p>
             <p className="text-sm text-gray-600">Total Expenses ({filteredExpenses.length} items)</p>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function Expenses() {
                   </div>
                   
                   <div className="text-right">
-                    <p className="text-xl font-bold text-gray-900">${expense.amount}</p>
+                    <p className="text-xl font-bold text-gray-900">₹{expense.amount.toLocaleString('en-IN')}</p>
                     <div className="flex space-x-2 mt-2">
                       <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">Edit</button>
                       <button className="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>
