@@ -1,110 +1,160 @@
-import React from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-} from "recharts";
+import React, { useState } from "react";
 
-interface ChartData {
-  name: string;
-  messages: number;
-}
-
-interface ReportRow {
-  id: number;
-  channel: string;
-  sent: number;
-  date: string;
-}
-
-const Reports: React.FC = () => {
-  // Chart Data
-  const data: ChartData[] = [
-    { name: "WhatsApp", messages: 120 },
-    { name: "Email", messages: 80 },
-    { name: "SMS", messages: 50 },
+export default function ReportsPage() {
+  // Dummy data for table
+  const reports = [
+    {
+      id: 1,
+      date: "2025-09-01 10:30 AM",
+      type: "SMS",
+      sentBy: "Admin",
+      recipients: "1st Year Students",
+      status: "Success",
+    },
+    {
+      id: 2,
+      date: "2025-09-01 09:15 AM",
+      type: "WhatsApp",
+      sentBy: "Sub-Admin",
+      recipients: "Parents Group",
+      status: "Success",
+    },
+    {
+      id: 3,
+      date: "2025-08-31 04:45 PM",
+      type: "Email",
+      sentBy: "Admin",
+      recipients: "All Teachers",
+      status: "Failed",
+    },
+    {
+      id: 4,
+      date: "2025-08-30 11:00 AM",
+      type: "Push Notification",
+      sentBy: "Admin",
+      recipients: "All Students",
+      status: "Success",
+    },
   ];
 
-  // Table Data
-  const reportData: ReportRow[] = [
-    { id: 1, channel: "WhatsApp", sent: 50, date: "2025-08-20" },
-    { id: 2, channel: "Email", sent: 30, date: "2025-08-21" },
-    { id: 3, channel: "SMS", sent: 10, date: "2025-08-22" },
-  ];
+  const [filterType, setFilterType] = useState("");
+  const [filterDate, setFilterDate] = useState("");
+
+  // Filtering logic
+  const filteredReports = reports.filter((report) => {
+    const matchesType = filterType ? report.type === filterType : true;
+    const matchesDate = filterDate
+      ? report.date.startsWith(filterDate)
+      : true;
+    return matchesType && matchesDate;
+  });
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen">
-      <div className="bg-white rounded-3xl shadow-2xl p-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">📊 Reports Dashboard</h1>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <h1 className="text-2xl font-bold text-blue-700 mb-6">
+        Communication Reports
+      </h1>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-100 to-indigo-200 shadow hover:shadow-lg transition">
-            <h3 className="text-gray-700 text-lg font-semibold">Total Messages Sent</h3>
-            <p className="text-3xl font-bold text-indigo-700 mt-2">250</p>
-          </div>
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-green-100 to-green-200 shadow hover:shadow-lg transition">
-            <h3 className="text-gray-700 text-lg font-semibold">Credits Used</h3>
-            <p className="text-3xl font-bold text-green-700 mt-2">200</p>
-          </div>
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-yellow-100 to-yellow-200 shadow hover:shadow-lg transition">
-            <h3 className="text-gray-700 text-lg font-semibold">Active Users</h3>
-            <p className="text-3xl font-bold text-yellow-700 mt-2">15</p>
-          </div>
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-blue-100 p-6 rounded-2xl shadow-md">
+          <p className="text-sm text-blue-600">Total SMS</p>
+          <h2 className="text-2xl font-bold text-blue-800">1,245</h2>
+        </div>
+        <div className="bg-blue-100 p-6 rounded-2xl shadow-md">
+          <p className="text-sm text-blue-600">WhatsApp Messages</p>
+          <h2 className="text-2xl font-bold text-blue-800">980</h2>
+        </div>
+        <div className="bg-blue-100 p-6 rounded-2xl shadow-md">
+          <p className="text-sm text-blue-600">Emails Sent</p>
+          <h2 className="text-2xl font-bold text-blue-800">750</h2>
+        </div>
+        <div className="bg-blue-100 p-6 rounded-2xl shadow-md">
+          <p className="text-sm text-blue-600">Push Notifications</p>
+          <h2 className="text-2xl font-bold text-blue-800">1,100</h2>
+        </div>
+      </div>
+
+      {/* Filter Section */}
+      <div className="bg-white p-4 rounded-2xl shadow-md mb-6 flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col">
+          <label className="text-sm text-blue-600 mb-1">Filter by Type</label>
+          <select
+            className="p-2 rounded-lg border border-blue-300 focus:ring-2 focus:ring-blue-500"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="SMS">SMS</option>
+            <option value="WhatsApp">WhatsApp</option>
+            <option value="Email">Email</option>
+            <option value="Push Notification">Push Notification</option>
+          </select>
         </div>
 
-        {/* Chart Section */}
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 mb-10">
-          <h3 className="text-xl font-semibold text-gray-700 mb-4">Messages by Channel</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="messages" fill="#6366f1" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="flex flex-col">
+          <label className="text-sm text-blue-600 mb-1">Filter by Date</label>
+          <input
+            type="date"
+            className="p-2 rounded-lg border border-blue-300 focus:ring-2 focus:ring-blue-500"
+            value={filterDate}
+            onChange={(e) => setFilterDate(e.target.value)}
+          />
         </div>
+      </div>
 
-        {/* Table Section */}
-        <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl shadow-lg p-6">
-          <h3 className="text-xl font-semibold text-gray-700 mb-4">Recent Activity</h3>
-          <div className="overflow-hidden rounded-xl border border-gray-200 shadow">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-200 text-gray-700 text-left">
-                  <th className="p-3">ID</th>
-                  <th className="p-3">Channel</th>
-                  <th className="p-3">Messages Sent</th>
-                  <th className="p-3">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reportData.map((row, idx) => (
+      {/* Reports Table */}
+      <div className="bg-white rounded-2xl shadow-md p-6">
+        <h2 className="text-xl font-semibold text-blue-700 mb-4">
+          Detailed Report
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-blue-100 text-blue-700">
+                <th className="p-3 text-left">Date</th>
+                <th className="p-3 text-left">Type</th>
+                <th className="p-3 text-left">Sent By</th>
+                <th className="p-3 text-left">Recipients</th>
+                <th className="p-3 text-left">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredReports.length > 0 ? (
+                filteredReports.map((report) => (
                   <tr
-                    key={row.id}
-                    className={`transition hover:bg-indigo-50 ${
-                      idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    }`}
+                    key={report.id}
+                    className="border-b hover:bg-blue-50 transition"
                   >
-                    <td className="p-3">{row.id}</td>
-                    <td className="p-3 font-medium">{row.channel}</td>
-                    <td className="p-3">{row.sent}</td>
-                    <td className="p-3">{row.date}</td>
+                    <td className="p-3">{report.date}</td>
+                    <td className="p-3">{report.type}</td>
+                    <td className="p-3">{report.sentBy}</td>
+                    <td className="p-3">{report.recipients}</td>
+                    <td
+                      className={`p-3 font-medium ${
+                        report.status === "Success"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {report.status}
+                    </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="p-4 text-center text-gray-500 italic"
+                  >
+                    No reports found for selected filters.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   );
-};
-
-export default Reports;
+}

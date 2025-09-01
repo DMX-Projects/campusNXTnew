@@ -1,157 +1,69 @@
 import React, { useState } from "react";
 
-interface Errors {
-  to?: string;
-  message?: string;
-}
-
-const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
-
-const SendMail: React.FC = () => {
-  const [to, setTo] = useState<string>("");
-  const [subject, setSubject] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
-  const [errors, setErrors] = useState<Errors>({});
-  const [loading, setLoading] = useState<boolean>(false);
-  const [sent, setSent] = useState<boolean>(false);
-
-  const validateForm = (): Errors => {
-    let errs: Errors = {};
-
-    if (!to.trim()) {
-      errs.to = "Recipient is required.";
-    } else {
-      // Support multiple emails separated by comma
-      const emails = to.split(",").map((e) => e.trim());
-      const invalids = emails.filter((email) => !validateEmail(email));
-      if (invalids.length) {
-        errs.to = "Invalid email(s): " + invalids.join(", ");
-      }
-    }
-
-    if (!message.trim()) {
-      errs.message = "Message cannot be empty.";
-    }
-
-    return errs;
-  };
+export default function SendMail() {
+  const [recipient, setRecipient] = useState("all");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSend = () => {
-    const errs = validateForm();
-    setErrors(errs);
-
-    if (Object.keys(errs).length > 0) return;
-
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-      setSent(true);
-
-      // Reset fields
-      setTo("");
-      setSubject("");
-      setMessage("");
-
-      setTimeout(() => setSent(false), 2500);
-    }, 1500);
-
-    // Example: To really send use backend API or EmailJS
-    // const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-    // window.location.href = mailtoLink;
-  };
-
-  const handleReset = () => {
-    setTo("");
-    setSubject("");
-    setMessage("");
-    setErrors({});
+    alert(`Email sent to ${recipient} with subject "${subject}"`);
+    // 👉 Here you’ll connect your backend API for sending emails
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-blue-600">
-        📧 Send Email
-      </h2>
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-6">
+      <div className="bg-white shadow-lg rounded-2xl w-full max-w-2xl p-6">
+        {/* Header */}
+        <h1 className="text-2xl font-bold text-blue-600 mb-4">
+          Send Email
+        </h1>
 
-      {/* To */}
-      <label htmlFor="to" className="block mb-1 font-medium text-gray-700">
-        To
-      </label>
-      <input
-        id="to"
-        type="text"
-        value={to}
-        onChange={(e) => setTo(e.target.value)}
-        placeholder="Recipient email(s), comma separated"
-        className={`w-full p-3 border rounded-lg mb-1 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-          errors.to ? "border-red-500" : "border-gray-300"
-        }`}
-        aria-invalid={!!errors.to}
-      />
-      {errors.to && <div className="text-red-500 text-sm mb-2">{errors.to}</div>}
+        {/* Recipient selection */}
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Select Recipient
+        </label>
+        <select
+          value={recipient}
+          onChange={(e) => setRecipient(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg p-2 mb-4 focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="all">All Students</option>
+          <option value="parents">Parents</option>
+          <option value="staff">Staff</option>
+          <option value="custom">Custom Email Address</option>
+        </select>
 
-      {/* Subject */}
-      <label htmlFor="subject" className="block mb-1 font-medium text-gray-700">
-        Subject
-      </label>
-      <input
-        id="subject"
-        type="text"
-        value={subject}
-        onChange={(e) => setSubject(e.target.value)}
-        placeholder="Subject"
-        className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400 border-gray-300"
-      />
+        {/* Subject input */}
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Subject
+        </label>
+        <input
+          type="text"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg p-2 mb-4 focus:ring-2 focus:ring-blue-400"
+          placeholder="Enter email subject"
+        />
 
-      {/* Message */}
-      <label htmlFor="message" className="block mb-1 font-medium text-gray-700">
-        Message
-      </label>
-      <textarea
-        id="message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type your message..."
-        className={`w-full p-3 border rounded-lg mb-1 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-          errors.message ? "border-red-500" : "border-gray-300"
-        }`}
-        rows={5}
-        aria-invalid={!!errors.message}
-      />
-      {errors.message && (
-        <div className="text-red-500 text-sm mb-2">{errors.message}</div>
-      )}
+        {/* Message box */}
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Message
+        </label>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg p-3 h-32 mb-4 focus:ring-2 focus:ring-blue-400"
+          placeholder="Write your email message..."
+        ></textarea>
 
-      {/* Buttons */}
-      <div className="flex gap-3 mt-4">
+        {/* Send Button */}
         <button
           onClick={handleSend}
-          className={`flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          disabled={loading}
-          aria-busy={loading}
+          className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700 transition"
         >
-          {loading ? "Sending..." : "Send Email"}
-        </button>
-
-        <button
-          onClick={handleReset}
-          className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition"
-        >
-          Clear
+          Send Email
         </button>
       </div>
-
-      {/* Status */}
-      {sent && (
-        <div className="text-green-600 text-center mt-4 font-medium">
-          ✅ Email Sent Successfully!
-        </div>
-      )}
     </div>
   );
-};
-
-export default SendMail;
+}
