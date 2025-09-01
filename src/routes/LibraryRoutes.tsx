@@ -4,15 +4,18 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 // Import your administration components
 
-import LibrarySearch from "../Pages/Library/Librarysearch";
-import Categories from "../Pages/Library/Categories";
-import OverDues from "../Pages/Library/OverDues";
-import Alerts from "../Pages/Library/Alerts";
-import BookIssueReturn from "../Pages/Library/BookIssueReturn";
-import BookList from "../Pages/Library/BookList";
-import Dashboard from "../Pages/Library/Dashboard";
-import LateFee from "../Pages/Library/LateFee";
-import RaiseTicket from "../Pages/Library/RaiseTicket"; 
+import LibrarySearch from "../pages/Library/Librarysearch";
+import Categories from "../pages/Library/Categories";
+import OverDues from "../pages/Library/OverDues";
+import Alerts from "../pages/Library/Alerts";
+import BookIssueReturn from "../pages/Library/BookIssueReturn";
+import BookList from "../pages/Library/BookList";
+import Dashboard from "../pages/Library/Dashboard";
+import LateFee from "../pages/Library/LateFee";
+import RaiseTicket from "../pages/Library/RaiseTicket"; 
+import Inbox from "../pages/Library/Inbox";
+import  Reports from "../pages/Library/Reports";
+import BookReservation from "../pages/Library/BookReservation";
 
 
 
@@ -26,14 +29,17 @@ const LibraryRoutes: React.FC = () => {
       <Route index element={<Dashboard />} />
       <Route path="library-search" element={<LibrarySearch />} />
         <Route path="categories" element={<Categories />} />
-        <Route path="over-dues" element={<OverDues />} />
+        <Route path="overdue-list" element={<OverDues />} />
         <Route path="alerts" element={<Alerts/>} />
-        <Route path="Bookissuereturn" element={<BookIssueReturn />} />
-        <Route path="BookList" element={<BookList/>} />
+        <Route path="book-issue" element={<BookIssueReturn />} />
+        <Route path="list-of-books" element={<BookList/>} />
         <Route path="Dashboard" element={<Dashboard />} />
-        <Route path="LateFee" element={<LateFee/>} />
+        <Route path="late-fee" element={<LateFee/>} />
         {/* <Route path="MockData" element={<   mockData/>} />   */}
         <Route path="raise-ticket" element={<RaiseTicket/>} />
+        <Route path="inbox" element={<Inbox/>} />
+        <Route path="reports" element={<Reports/>}/>
+        <Route path="book-reservation" element={<BookReservation/>}/>
 
       {/* Catch all for invalid administration routes */}
       <Route path="*" element={<Navigate to="/library" replace />} />

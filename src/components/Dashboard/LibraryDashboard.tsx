@@ -50,20 +50,11 @@ const LibraryDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Library Management Dashboard
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Comprehensive library operations and circulation analytics
-          </p>
+        
+          
         </div>
         <div className="flex items-center space-x-3">
-          <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Issue Book
-          </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Generate Report
-          </button>
+        
         </div>
       </div>
 

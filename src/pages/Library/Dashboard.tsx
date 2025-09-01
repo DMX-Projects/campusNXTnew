@@ -41,7 +41,7 @@ export default function Dashboard() {
     },
     {
       title: 'Fines Collected',
-      value: `$${dashboardStats.finesCollected.toFixed(2)}`,
+      value: `₹${dashboardStats.finesCollected.toFixed(2)}`,
       icon: DollarSign,
       color: 'bg-indigo-500',
       change: '+18.9%'

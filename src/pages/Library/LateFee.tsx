@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DollarSign, CreditCard, Receipt, AlertCircle, Check, X } from 'lucide-react';
+import { IndianRupee, CreditCard, Receipt, AlertCircle, Check, X } from 'lucide-react';
 import { fines, bookIssues, books, members } from './Data/mockData';
 
 export default function LateFee() {
@@ -32,16 +32,13 @@ export default function LateFee() {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <DollarSign className="h-6 w-6 text-green-600" />
+            <IndianRupee className="h-6 w-6 text-green-600" />
             Late Fees & Fines
           </h2>
           <p className="text-gray-600">Manage library fines and payments</p>
         </div>
         
-        <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-          <CreditCard className="h-4 w-4" />
-          Record Payment
-        </button>
+        
       </div>
 
       {/* Stats */}
@@ -51,7 +48,7 @@ export default function LateFee() {
             <AlertCircle className="h-5 w-5 text-yellow-600" />
             <span className="text-sm font-medium text-yellow-800">Pending Fines</span>
           </div>
-          <p className="text-2xl font-bold text-yellow-900 mt-1">${totalPending.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-yellow-900 mt-1">₹{totalPending.toFixed(2)}</p>
           <p className="text-sm text-yellow-600">{pendingFines.length} members</p>
         </div>
         
@@ -60,7 +57,7 @@ export default function LateFee() {
             <Check className="h-5 w-5 text-green-600" />
             <span className="text-sm font-medium text-green-800">Collected</span>
           </div>
-          <p className="text-2xl font-bold text-green-900 mt-1">${totalCollected.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-green-900 mt-1">₹{totalCollected.toFixed(2)}</p>
           <p className="text-sm text-green-600">This month</p>
         </div>
         
@@ -69,16 +66,16 @@ export default function LateFee() {
             <Receipt className="h-5 w-5 text-blue-600" />
             <span className="text-sm font-medium text-blue-800">Waived</span>
           </div>
-          <p className="text-2xl font-bold text-blue-900 mt-1">${totalWaived.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-blue-900 mt-1">₹{totalWaived.toFixed(2)}</p>
           <p className="text-sm text-blue-600">{waivedFines.length} fines</p>
         </div>
         
         <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
           <div className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-purple-600" />
+            <IndianRupee className="h-5 w-5 text-purple-600" />
             <span className="text-sm font-medium text-purple-800">Total Revenue</span>
           </div>
-          <p className="text-2xl font-bold text-purple-900 mt-1">${(totalCollected * 12).toFixed(2)}</p>
+          <p className="text-2xl font-bold text-purple-900 mt-1">₹{(totalCollected * 12).toFixed(2)}</p>
           <p className="text-sm text-purple-600">Yearly estimate</p>
         </div>
       </div>
@@ -126,18 +123,18 @@ export default function LateFee() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="border border-gray-200 rounded-lg p-4">
             <h4 className="font-medium text-gray-900">Books</h4>
-            <p className="text-sm text-gray-600 mt-1">$0.50 per day</p>
-            <p className="text-xs text-gray-500">Maximum: $10.00</p>
+            <p className="text-sm text-gray-600 mt-1">₹0.50 per day</p>
+            <p className="text-xs text-gray-500">Maximum: ₹10.00</p>
           </div>
           <div className="border border-gray-200 rounded-lg p-4">
             <h4 className="font-medium text-gray-900">Journals</h4>
-            <p className="text-sm text-gray-600 mt-1">$1.00 per day</p>
-            <p className="text-xs text-gray-500">Maximum: $25.00</p>
+            <p className="text-sm text-gray-600 mt-1">₹1.00 per day</p>
+            <p className="text-xs text-gray-500">Maximum: ₹25.00</p>
           </div>
           <div className="border border-gray-200 rounded-lg p-4">
             <h4 className="font-medium text-gray-900">Reference Books</h4>
-            <p className="text-sm text-gray-600 mt-1">$2.00 per day</p>
-            <p className="text-xs text-gray-500">Maximum: $50.00</p>
+            <p className="text-sm text-gray-600 mt-1">₹2.00 per day</p>
+            <p className="text-xs text-gray-500">Maximum: ₹50.00</p>
           </div>
         </div>
       </div>
@@ -198,7 +195,7 @@ export default function LateFee() {
                       <div className="text-sm text-gray-900">{fine.reason}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-lg font-semibold text-gray-900">${fine.amount.toFixed(2)}</div>
+                      <div className="text-lg font-semibold text-gray-900">₹{fine.amount.toFixed(2)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {new Date(fine.createdDate).toLocaleDateString()}
