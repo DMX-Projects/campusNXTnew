@@ -1,419 +1,521 @@
-import React, { useState } from "react";
-import { Search, UserPlus, Users, GraduationCap, Hash, MapPin, BookOpen, Calendar, Edit3, Trash2, Filter } from "lucide-react";
+import React, { useState, useMemo } from 'react';
+import { Search, Filter, Download, Eye, Edit, Trash2, Users, Building, Home, GraduationCap } from 'lucide-react';
 
-interface Student {
-  id: number;
-  name: string;
-  rollNo: string;
-  roomNo: string;
-  course: string;
-  year: string;
-}
+// Mock data for students - in real app, this would come from your API
+const mockStudents = [
+  {
+    id: 'STU001',
+    name: 'Rahul Kumar',
+    rollNo: '2023CS001',
+    stream: 'Engineering',
+    branch: 'Computer Science',
+    year: 2,
+    gender: 'Male',
+    hostelBlock: 'Block A',
+    roomNo: 'A-101',
+    bedNo: 'A-101-1',
+    joiningDate: '2023-08-15',
+    feeStatus: 'Paid',
+    phone: '+91 9876543210',
+    email: 'rahul.kumar@college.edu',
+    guardianName: 'Suresh Kumar',
+    guardianPhone: '+91 9876543211',
+    address: 'Delhi, India'
+  },
+  {
+    id: 'STU002',
+    name: 'Priya Sharma',
+    rollNo: '2023EC002',
+    stream: 'Engineering',
+    branch: 'Electronics',
+    year: 1,
+    gender: 'Female',
+    hostelBlock: 'Block C',
+    roomNo: 'C-201',
+    bedNo: 'C-201-2',
+    joiningDate: '2023-08-10',
+    feeStatus: 'Pending',
+    phone: '+91 9876543212',
+    email: 'priya.sharma@college.edu',
+    guardianName: 'Rajesh Sharma',
+    guardianPhone: '+91 9876543213',
+    address: 'Mumbai, India'
+  },
+  {
+    id: 'STU003',
+    name: 'Amit Singh',
+    rollNo: '2022ME003',
+    stream: 'Engineering',
+    branch: 'Mechanical',
+    year: 3,
+    gender: 'Male',
+    hostelBlock: 'Block B',
+    roomNo: 'B-305',
+    bedNo: 'B-305-1',
+    joiningDate: '2022-08-20',
+    feeStatus: 'Paid',
+    phone: '+91 9876543214',
+    email: 'amit.singh@college.edu',
+    guardianName: 'Vikram Singh',
+    guardianPhone: '+91 9876543215',
+    address: 'Pune, India'
+  },
+  {
+    id: 'STU004',
+    name: 'Sneha Patel',
+    rollNo: '2023CE004',
+    stream: 'Engineering',
+    branch: 'Civil Engineering',
+    year: 1,
+    gender: 'Female',
+    hostelBlock: 'Block C',
+    roomNo: 'C-105',
+    bedNo: 'C-105-3',
+    joiningDate: '2023-08-12',
+    feeStatus: 'Paid',
+    phone: '+91 9876543216',
+    email: 'sneha.patel@college.edu',
+    guardianName: 'Kiran Patel',
+    guardianPhone: '+91 9876543217',
+    address: 'Ahmedabad, India'
+  },
+  {
+    id: 'STU005',
+    name: 'Arjun Reddy',
+    rollNo: '2021EE005',
+    stream: 'Engineering',
+    branch: 'Electrical',
+    year: 4,
+    gender: 'Male',
+    hostelBlock: 'Block A',
+    roomNo: 'A-405',
+    bedNo: 'A-405-2',
+    joiningDate: '2021-08-18',
+    feeStatus: 'Paid',
+    phone: '+91 9876543218',
+    email: 'arjun.reddy@college.edu',
+    guardianName: 'Ramesh Reddy',
+    guardianPhone: '+91 9876543219',
+    address: 'Hyderabad, India'
+  }
+];
 
-const HostelStudentsList: React.FC = () => {
-  // Sample initial data for demonstration
-  const [students, setStudents] = useState<Student[]>([
-    {
-      id: 1,
-      name: "Rajesh Kumar",
-      rollNo: "CS21001",
-      roomNo: "A-201",
-      course: "B.Tech Computer Science",
-      year: "3rd Year"
-    },
-    {
-      id: 2,
-      name: "Priya Sharma",
-      rollNo: "ME21045",
-      roomNo: "B-103",
-      course: "B.Tech Mechanical",
-      year: "2nd Year"
-    },
-    {
-      id: 3,
-      name: "Ankit Patel",
-      rollNo: "EE21023",
-      roomNo: "A-305",
-      course: "B.Tech Electrical",
-      year: "4th Year"
-    },
-    {
-      id: 4,
-      name: "Sneha Reddy",
-      rollNo: "CE21067",
-      roomNo: "C-202",
-      course: "B.Tech Civil",
-      year: "1st Year"
-    }
-  ]);
+const HostelStudentManagement = () => {
+  const [students] = useState(mockStudents);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterBlock, setFilterBlock] = useState('All');
+  const [filterBranch, setFilterBranch] = useState('All');
+  const [filterYear, setFilterYear] = useState('All');
+  const [filterFeeStatus, setFilterFeeStatus] = useState('All');
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    rollNo: "",
-    roomNo: "",
-    course: "",
-    year: "",
-  });
-  
-  const [search, setSearch] = useState("");
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [filterYear, setFilterYear] = useState("");
-  const [filterCourse, setFilterCourse] = useState("");
+  // Get unique values for filters
+  const hostelBlocks = [...new Set(students.map(s => s.hostelBlock))];
+  const branches = [...new Set(students.map(s => s.branch))];
+  const years = [...new Set(students.map(s => s.year))];
+  const feeStatuses = [...new Set(students.map(s => s.feeStatus))];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  // Filter students based on search and filters
+  const filteredStudents = useMemo(() => {
+    return students.filter(student => {
+      const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           student.rollNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           student.roomNo.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesBlock = filterBlock === 'All' || student.hostelBlock === filterBlock;
+      const matchesBranch = filterBranch === 'All' || student.branch === filterBranch;
+      const matchesYear = filterYear === 'All' || student.year.toString() === filterYear;
+      const matchesFeeStatus = filterFeeStatus === 'All' || student.feeStatus === filterFeeStatus;
 
-  const handleSubmit = () => {
-    if (!formData.name || !formData.rollNo || !formData.roomNo) {
-      alert("Please fill required fields!");
-      return;
-    }
-
-    if (editingId) {
-      // Update existing student
-      setStudents(prev => prev.map(s => 
-        s.id === editingId 
-          ? { 
-              ...s, 
-              name: formData.name.trim(),
-              rollNo: formData.rollNo.trim(),
-              roomNo: formData.roomNo.trim(),
-              course: formData.course.trim(),
-              year: formData.year.trim()
-            }
-          : s
-      ));
-      setEditingId(null);
-    } else {
-      // Add new student
-      const newStudent: Student = {
-        id: Date.now(),
-        name: formData.name.trim(),
-        rollNo: formData.rollNo.trim(),
-        roomNo: formData.roomNo.trim(),
-        course: formData.course.trim(),
-        year: formData.year.trim(),
-      };
-      setStudents((prev) => [...prev, newStudent]);
-    }
-
-    setFormData({ name: "", rollNo: "", roomNo: "", course: "", year: "" });
-  };
-
-  const handleEdit = (student: Student) => {
-    setFormData({
-      name: student.name,
-      rollNo: student.rollNo,
-      roomNo: student.roomNo,
-      course: student.course,
-      year: student.year,
+      return matchesSearch && matchesBlock && matchesBranch && matchesYear && matchesFeeStatus;
     });
-    setEditingId(student.id);
+  }, [students, searchTerm, filterBlock, filterBranch, filterYear, filterFeeStatus]);
+
+  // Statistics
+  const stats = {
+    totalStudents: students.length,
+    maleStudents: students.filter(s => s.gender === 'Male').length,
+    femaleStudents: students.filter(s => s.gender === 'Female').length,
+    pendingFees: students.filter(s => s.feeStatus === 'Pending').length
   };
 
-  const handleDelete = (id: number) => {
-    if (confirm("Are you sure you want to delete this student record?")) {
-      setStudents(prev => prev.filter(s => s.id !== id));
-    }
+  const handleViewStudent = (student) => {
+    setSelectedStudent(student);
+    setShowModal(true);
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setFormData({ name: "", rollNo: "", roomNo: "", course: "", year: "" });
-  };
+  const exportData = () => {
+    const csvContent = [
+      ['Roll No', 'Name', 'Branch', 'Year', 'Hostel Block', 'Room No', 'Fee Status', 'Phone', 'Email'],
+      ...filteredStudents.map(student => [
+        student.rollNo, student.name, student.branch, student.year,
+        student.hostelBlock, student.roomNo, student.feeStatus, student.phone, student.email
+      ])
+    ].map(row => row.join(',')).join('\n');
 
-  const filteredStudents = students.filter((s) => {
-    const matchesSearch = [s.name, s.rollNo, s.roomNo].some((field) =>
-      field.toLowerCase().includes(search.toLowerCase())
-    );
-    const matchesYear = filterYear === "" || s.year.includes(filterYear);
-    const matchesCourse = filterCourse === "" || s.course.toLowerCase().includes(filterCourse.toLowerCase());
-    
-    return matchesSearch && matchesYear && matchesCourse;
-  });
-
-  const getUniqueYears = () => {
-    const years = students.map(s => s.year).filter(year => year);
-    return [...new Set(years)].sort();
-  };
-
-  const getUniqueCourses = () => {
-    const courses = students.map(s => s.course).filter(course => course);
-    return [...new Set(courses)].sort();
-  };
-
-  const getYearColor = (year: string) => {
-    const colors = {
-      "1st": "bg-blue-100 text-blue-800",
-      "2nd": "bg-green-100 text-green-800", 
-      "3rd": "bg-yellow-100 text-yellow-800",
-      "4th": "bg-purple-100 text-purple-800",
-    };
-    const yearNum = year.split(' ')[0];
-    return colors[yearNum as keyof typeof colors] || "bg-gray-100 text-gray-800";
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'hostel_students.csv';
+    a.click();
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <div className="p-3 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-lg">
-              <Users className="w-8 h-8 text-white" />
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Hostel Student Management</h1>
+          <p className="text-gray-600">Manage and monitor hostel student data, room allocations, and more</p>
+        </div>
+
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <Users className="h-8 w-8 text-blue-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Total Students</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalStudents}</p>
+              </div>
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
-            Student Management System
-          </h1>
-          <p className="text-gray-600 text-lg">Manage hostel student records efficiently</p>
-          <div className="mt-4 flex items-center justify-center space-x-6 text-sm text-gray-500">
+          <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <Users className="w-4 h-4 mr-1" />
-              Total Students: {students.length}
+              <Users className="h-8 w-8 text-green-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Male Students</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.maleStudents}</p>
+              </div>
             </div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <Filter className="w-4 h-4 mr-1" />
-              Filtered: {filteredStudents.length}
+              <Users className="h-8 w-8 text-pink-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Female Students</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.femaleStudents}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <Building className="h-8 w-8 text-red-600" />
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Pending Fees</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.pendingFees}</p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Search and Filter Section */}
-        <div className="max-w-6xl mx-auto mb-8">
-          <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-2xl shadow-lg p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Search */}
+        {/* Search and Filters */}
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+            <div className="flex-1 max-w-md">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search by name, roll no, or room..."
-                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-
-              {/* Year Filter */}
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <select
-                  value={filterYear}
-                  onChange={(e) => setFilterYear(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 appearance-none bg-white"
-                >
-                  <option value="">All Years</option>
-                  {getUniqueYears().map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Course Filter */}
-              <div className="relative">
-                <BookOpen className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <select
-                  value={filterCourse}
-                  onChange={(e) => setFilterCourse(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 appearance-none bg-white"
-                >
-                  <option value="">All Courses</option>
-                  {getUniqueCourses().map(course => (
-                    <option key={course} value={course}>{course}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Add/Edit Student Form */}
-        <div className="max-w-5xl mx-auto mb-12">
-          <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-3xl shadow-xl p-8">
-            <div className="flex items-center mb-6">
-              <div className="p-2 bg-emerald-100 rounded-lg mr-3">
-                {editingId ? <Edit3 className="w-5 h-5 text-emerald-600" /> : <UserPlus className="w-5 h-5 text-emerald-600" />}
-              </div>
-              <h2 className="text-2xl font-bold text-gray-800">
-                {editingId ? "Edit Student" : "Add New Student"}
-              </h2>
-              {editingId && (
-                <button
-                  onClick={cancelEdit}
-                  className="ml-auto px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  Cancel
-                </button>
-              )}
             </div>
 
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="relative">
-                  <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    placeholder="Student Name *"
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200"
-                    required
-                  />
-                </div>
+            <div className="flex gap-4 flex-wrap">
+              <select
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={filterBlock}
+                onChange={(e) => setFilterBlock(e.target.value)}
+              >
+                <option value="All">All Blocks</option>
+                {hostelBlocks.map(block => (
+                  <option key={block} value={block}>{block}</option>
+                ))}
+              </select>
 
-                <div className="relative">
-                  <Hash className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="rollNo"
-                    value={formData.rollNo}
-                    placeholder="Roll Number *"
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200"
-                    required
-                  />
-                </div>
+              <select
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={filterBranch}
+                onChange={(e) => setFilterBranch(e.target.value)}
+              >
+                <option value="All">All Branches</option>
+                {branches.map(branch => (
+                  <option key={branch} value={branch}>{branch}</option>
+                ))}
+              </select>
 
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="roomNo"
-                    value={formData.roomNo}
-                    placeholder="Room Number *"
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200"
-                    required
-                  />
-                </div>
+              <select
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value)}
+              >
+                <option value="All">All Years</option>
+                {years.map(year => (
+                  <option key={year} value={year}>Year {year}</option>
+                ))}
+              </select>
 
-                <div className="relative">
-                  <GraduationCap className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="course"
-                    value={formData.course}
-                    placeholder="Course (e.g., B.Tech Computer Science)"
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200"
-                  />
-                </div>
-
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <select
-                    name="year"
-                    value={formData.year}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 appearance-none bg-white"
-                  >
-                    <option value="">Select Year</option>
-                    <option value="1st Year">1st Year</option>
-                    <option value="2nd Year">2nd Year</option>
-                    <option value="3rd Year">3rd Year</option>
-                    <option value="4th Year">4th Year</option>
-                  </select>
-                </div>
-              </div>
+              <select
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={filterFeeStatus}
+                onChange={(e) => setFilterFeeStatus(e.target.value)}
+              >
+                <option value="All">All Fee Status</option>
+                {feeStatuses.map(status => (
+                  <option key={status} value={status}>{status}</option>
+                ))}
+              </select>
 
               <button
-                onClick={handleSubmit}
-                className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-700 focus:ring-4 focus:ring-emerald-200 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                onClick={exportData}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                {editingId ? "Update Student" : "Add Student"}
+                <Download className="h-4 w-4" />
+                Export CSV
               </button>
             </div>
           </div>
         </div>
 
-        {/* Students Display */}
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-3xl shadow-xl overflow-hidden">
-            <div className="px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-emerald-500/10 to-teal-500/10">
-              <h3 className="text-2xl font-bold text-gray-800 flex items-center">
-                <div className="p-2 bg-emerald-100 rounded-lg mr-3">
-                  <Users className="w-5 h-5 text-emerald-600" />
-                </div>
-                Student Records ({filteredStudents.length})
-              </h3>
-            </div>
-
-            {filteredStudents.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                  <Users className="w-10 h-10 text-gray-400" />
-                </div>
-                <p className="text-gray-500 text-lg">No students found</p>
-                <p className="text-gray-400 text-sm mt-2">Add some student records to get started</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8">
+        {/* Students Table */}
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Info</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Academic</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hostel Details</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
                 {filteredStudents.map((student) => (
-                  <div key={student.id} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <h4 className="text-lg font-bold text-gray-900 mb-1">{student.name}</h4>
-                        <div className="flex items-center text-sm text-gray-600 mb-2">
-                          <Hash className="w-4 h-4 mr-1" />
-                          {student.rollNo}
+                  <tr key={student.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                            <span className="text-sm font-medium text-indigo-800">
+                              {student.name.charAt(0)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{student.name}</div>
+                          <div className="text-sm text-gray-500">{student.rollNo}</div>
                         </div>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{student.branch}</div>
+                      <div className="text-sm text-gray-500">Year {student.year}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center text-sm text-gray-900">
+                        <Building className="h-4 w-4 mr-2 text-gray-400" />
+                        {student.hostelBlock}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Home className="h-4 w-4 mr-2 text-gray-400" />
+                        Room {student.roomNo}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        student.feeStatus === 'Paid' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {student.feeStatus}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div>{student.phone}</div>
+                      <div className="truncate max-w-xs">{student.email}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
                         <button
-                          onClick={() => handleEdit(student)}
-                          className="p-2 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors duration-150"
-                          title="Edit student"
+                          onClick={() => handleViewStudent(student)}
+                          className="text-indigo-600 hover:text-indigo-900"
+                          title="View Details"
                         >
-                          <Edit3 className="w-4 h-4" />
+                          <Eye className="h-4 w-4" />
                         </button>
                         <button
-                          onClick={() => handleDelete(student.id)}
-                          className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors duration-150"
-                          title="Delete student"
+                          className="text-green-600 hover:text-green-900"
+                          title="Edit Student"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button
+                          className="text-red-600 hover:text-red-900"
+                          title="Delete Student"
+                        >
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <MapPin className="w-4 h-4 text-gray-400 mr-2" />
-                        <span className="text-sm text-gray-700">Room: </span>
-                        <span className="ml-1 px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full font-medium">
-                          {student.roomNo}
-                        </span>
-                      </div>
-
-                      {student.course && (
-                        <div className="flex items-center">
-                          <GraduationCap className="w-4 h-4 text-gray-400 mr-2" />
-                          <span className="text-sm text-gray-700 truncate">{student.course}</span>
-                        </div>
-                      )}
-
-                      {student.year && (
-                        <div className="flex items-center">
-                          <Calendar className="w-4 h-4 text-gray-400 mr-2" />
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getYearColor(student.year)}`}>
-                            {student.year}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            )}
+              </tbody>
+            </table>
           </div>
+
+          {filteredStudents.length === 0 && (
+            <div className="text-center py-12">
+              <Users className="mx-auto h-12 w-12 text-gray-400" />
+              <h3 className="mt-2 text-sm font-medium text-gray-900">No students found</h3>
+              <p className="mt-1 text-sm text-gray-500">Try adjusting your search or filter criteria.</p>
+            </div>
+          )}
         </div>
+
+        {/* Student Detail Modal */}
+        {showModal && selectedStudent && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full m-4 max-h-screen overflow-y-auto">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900">Student Details</h3>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <span className="sr-only">Close</span>
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">Personal Information</h4>
+                    <dl className="space-y-2">
+                      <div>
+                        <dt className="text-xs text-gray-500">Name</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.name}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Roll Number</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.rollNo}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Gender</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.gender}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Email</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.email}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Phone</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.phone}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">Academic Information</h4>
+                    <dl className="space-y-2">
+                      <div>
+                        <dt className="text-xs text-gray-500">Stream</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.stream}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Branch</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.branch}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Year</dt>
+                        <dd className="text-sm text-gray-900">Year {selectedStudent.year}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Joining Date</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.joiningDate}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">Hostel Information</h4>
+                    <dl className="space-y-2">
+                      <div>
+                        <dt className="text-xs text-gray-500">Hostel Block</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.hostelBlock}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Room Number</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.roomNo}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Bed Number</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.bedNo}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Fee Status</dt>
+                        <dd>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            selectedStudent.feeStatus === 'Paid' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {selectedStudent.feeStatus}
+                          </span>
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">Guardian Information</h4>
+                    <dl className="space-y-2">
+                      <div>
+                        <dt className="text-xs text-gray-500">Guardian Name</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.guardianName}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Guardian Phone</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.guardianPhone}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs text-gray-500">Address</dt>
+                        <dd className="text-sm text-gray-900">{selectedStudent.address}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  Close
+                </button>
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700">
+                  Edit Student
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default HostelStudentsList;
+export default HostelStudentManagement;
