@@ -17,8 +17,9 @@ import ClassroomDetails from "../pages/administration/ClassroomDetails";
 import Appraisals from "../pages/administration/Appraisals";
 import Visitors from "../pages/administration/Visitors";
 import InvoicesReceipts from "../pages/administration/InvoicesReceipts";
-import FeeManagement from "../pages/administration/FeeManagement";
-
+import FeeManagement from "../pages/administration/Feetype/FeeManagement";
+import LeaveType from "../pages/administration/LeaveType"
+import FeeTypesContent from "../pages/administration/Feetype/FeeTypesContent";
 const AdministrationRoutes: React.FC = () => {
   return (
     <Routes>
@@ -40,7 +41,9 @@ const AdministrationRoutes: React.FC = () => {
       <Route path="appraisals" element={<Appraisals />} />
       <Route path="visitors" element={<Visitors />} />
       <Route path="invoices-receipts" element={<InvoicesReceipts />} />
-      <Route path="fee-management" element={<FeeManagement/>}/>
+      <Route path="masters/fee-types" element={<FeeTypesContent />} />
+      <Route path="masters/leave-types" element={<LeaveType />} />
+
       {/* Catch all for invalid administration routes */}
       <Route path="*" element={<Navigate to="/administration" replace />} />
     </Routes>

@@ -296,7 +296,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Inbox', path: '/examination/inbox', icon: 'Mail' },
       { name: 'Exam Timetable', path: '/examination/exam-timetable', icon: 'Calendar' },
       { name: 'Seating Plan', path: '/examination/seating-plan', icon: 'MapPin' },
-      { name: 'Investigation', path: '/examination/investigation', icon: 'Search' },
+      { name: ' Invigilators', path: '/examination/investigation', icon: 'Search' },
       { name: 'Student Attendance', path: '/examination/student-attendance', icon: 'CheckCircle' },
       { name: 'Condonation List', path: '/examination/condonation-list', icon: 'FileCheck' },
       { name: 'Detained List', path: '/examination/detained-list', icon: 'UserX' },
