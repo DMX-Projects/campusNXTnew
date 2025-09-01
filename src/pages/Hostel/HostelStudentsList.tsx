@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, Download, Eye, Edit, Trash2, Users, Building, Home, GraduationCap } from 'lucide-react';
+import { Search, Filter, Download, Eye, Edit, Trash2, Users, Building, Home, Plus,X,GraduationCap } from 'lucide-react';
 
 // Mock data for students - in real app, this would come from your API
 const mockStudents = [
@@ -101,7 +101,7 @@ const mockStudents = [
 ];
 
 const HostelStudentManagement = () => {
-  const [students] = useState(mockStudents);
+  const [students, setStudents] = useState(mockStudents);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBlock, setFilterBlock] = useState('All');
   const [filterBranch, setFilterBranch] = useState('All');
@@ -109,6 +109,29 @@ const HostelStudentManagement = () => {
   const [filterFeeStatus, setFilterFeeStatus] = useState('All');
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [studentToDelete, setStudentToDelete] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    rollNo: '',
+    stream: 'Engineering',
+    branch: '',
+    year: 1,
+    gender: 'Male',
+    hostelBlock: '',
+    roomNo: '',
+    bedNo: '',
+    joiningDate: '',
+    feeStatus: 'Pending',
+    phone: '',
+    email: '',
+    guardianName: '',
+    guardianPhone: '',
+    address: ''
+  });
 
   // Get unique values for filters
   const hostelBlocks = [...new Set(students.map(s => s.hostelBlock))];
@@ -161,15 +184,76 @@ const HostelStudentManagement = () => {
     a.download = 'hostel_students.csv';
     a.click();
   };
+  const handleEditStudent = (student) => {
+  setEditingStudent(student);
+  setFormData({ ...student });
+  setShowEditModal(true);
+};
+
+const handleDeleteStudent = (student) => {
+  setStudentToDelete(student);
+  setShowDeleteModal(true);
+};
+
+const confirmDelete = () => {
+  setStudents(students.filter(s => s.id !== studentToDelete.id));
+  setShowDeleteModal(false);
+  setStudentToDelete(null);
+};
+
+const handleAddStudent = () => {
+  setFormData({
+    name: '',
+    rollNo: '',
+    stream: 'Engineering',
+    branch: '',
+    year: 1,
+    gender: 'Male',
+    hostelBlock: '',
+    roomNo: '',
+    bedNo: '',
+    joiningDate: '',
+    feeStatus: 'Pending',
+    phone: '',
+    email: '',
+    guardianName: '',
+    guardianPhone: '',
+    address: ''
+  });
+  setShowAddModal(true);
+};
+
+const handleFormSubmit = (e) => {
+  e.preventDefault();
+  
+  if (editingStudent) {
+    // Update existing student
+    setStudents(students.map(s => s.id === editingStudent.id ? { ...formData, id: editingStudent.id } : s));
+    setShowEditModal(false);
+    setEditingStudent(null);
+  } else {
+    // Add new student
+    const newStudent = {
+      ...formData,
+      id: 'STU' + String(Date.now()).slice(-6) // Simple ID generation
+    };
+    setStudents([...students, newStudent]);
+    setShowAddModal(false);
+  }
+};
+
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setFormData(prev => ({
+    ...prev,
+    [name]: value
+  }));
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Hostel Student Management</h1>
-          <p className="text-gray-600">Manage and monitor hostel student data, room allocations, and more</p>
-        </div>
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -209,6 +293,16 @@ const HostelStudentManagement = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Hostel Student Management</h1>
+          <button
+            onClick={handleAddStudent}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <Plus className="h-4 w-4" />
+            Add Student
+          </button>
         </div>
 
         {/* Search and Filters */}
@@ -346,19 +440,21 @@ const HostelStudentManagement = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleViewStudent(student)}
-                          className="text-indigo-600 hover:text-indigo-900"
+                          className="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50"
                           title="View Details"
                         >
                           <Eye className="h-4 w-4" />
                         </button>
                         <button
-                          className="text-green-600 hover:text-green-900"
+                          onClick={() => handleEditStudent(student)}
+                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
                           title="Edit Student"
                         >
                           <Edit className="h-4 w-4" />
                         </button>
                         <button
-                          className="text-red-600 hover:text-red-900"
+                          onClick={() => handleDeleteStudent(student)}
+                          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
                           title="Delete Student"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -379,6 +475,313 @@ const HostelStudentManagement = () => {
             </div>
           )}
         </div>
+        {/* Add/Edit Student Modal */}
+        {(showAddModal || showEditModal) && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full m-4 max-h-screen overflow-y-auto">
+              <form onSubmit={handleFormSubmit}>
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {editingStudent ? 'Edit Student' : 'Add New Student'}
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowAddModal(false);
+                        setShowEditModal(false);
+                        setEditingStudent(null);
+                      }}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <X className="h-6 w-6" />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="px-6 py-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Personal Information */}
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-4">Personal Information</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Name *</label>
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Roll Number *</label>
+                          <input
+                            type="text"
+                            name="rollNo"
+                            value={formData.rollNo}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Gender *</label>
+                          <select
+                            name="gender"
+                            value={formData.gender}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Phone *</label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Email *</label>
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Academic Information */}
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-4">Academic Information</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Stream *</label>
+                          <select
+                            name="stream"
+                            value={formData.stream}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="Engineering">Engineering</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Science">Science</option>
+                            <option value="Commerce">Commerce</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Branch *</label>
+                          <input
+                            type="text"
+                            name="branch"
+                            value={formData.branch}
+                            onChange={handleInputChange}
+                            required
+                            placeholder="e.g., Computer Science, Electronics"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Year *</label>
+                          <select
+                            name="year"
+                            value={formData.year}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value={1}>1st Year</option>
+                            <option value={2}>2nd Year</option>
+                            <option value={3}>3rd Year</option>
+                            <option value={4}>4th Year</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Joining Date *</label>
+                          <input
+                            type="date"
+                            name="joiningDate"
+                            value={formData.joiningDate}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Fee Status *</label>
+                          <select
+                            name="feeStatus"
+                            value={formData.feeStatus}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Overdue">Overdue</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Hostel Information */}
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-4">Hostel Information</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Hostel Block *</label>
+                          <select
+                            name="hostelBlock"
+                            value={formData.hostelBlock}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="">Select Block</option>
+                            <option value="Block A">Block A</option>
+                            <option value="Block B">Block B</option>
+                            <option value="Block C">Block C</option>
+                            <option value="Block D">Block D</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Room Number *</label>
+                          <input
+                            type="text"
+                            name="roomNo"
+                            value={formData.roomNo}
+                            onChange={handleInputChange}
+                            required
+                            placeholder="e.g., A-101"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Bed Number *</label>
+                          <input
+                            type="text"
+                            name="bedNo"
+                            value={formData.bedNo}
+                            onChange={handleInputChange}
+                            required
+                            placeholder="e.g., A-101-1"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Guardian Information */}
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-4">Guardian Information</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Guardian Name *</label>
+                          <input
+                            type="text"
+                            name="guardianName"
+                            value={formData.guardianName}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Guardian Phone *</label>
+                          <input
+                            type="tel"
+                            name="guardianPhone"
+                            value={formData.guardianPhone}
+                            onChange={handleInputChange}
+                            required
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Address *</label>
+                          <textarea
+                            name="address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                            required
+                            rows={3}
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddModal(false);
+                      setShowEditModal(false);
+                      setEditingStudent(null);
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
+                  >
+                    {editingStudent ? 'Update Student' : 'Add Student'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && studentToDelete && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full m-4">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Confirm Delete</h3>
+              </div>
+              <div className="px-6 py-4">
+                <p className="text-sm text-gray-600">
+                  Are you sure you want to delete <strong>{studentToDelete.name}</strong>? 
+                  This action cannot be undone.
+                </p>
+              </div>
+              <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setStudentToDelete(null);
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Student Detail Modal */}
         {showModal && selectedStudent && (

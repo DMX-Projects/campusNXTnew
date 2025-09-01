@@ -17,7 +17,6 @@ interface Student {
   twelfthPercent?: number; // 12th %
   previousPlacements?: { company: string; role: string; year: number }[];
 }
-
 const mockStudents: Student[] = [
   {
     id: 1,
@@ -67,7 +66,92 @@ const mockStudents: Student[] = [
     twelfthPercent: 85,
     previousPlacements: [],
   },
+  {
+    id: 4,
+    name: "Sneha Verma",
+    rollNo: "20EC022",
+    branch: "ECE",
+    cgpa: 9.0,
+    skills: ["VLSI", "Verilog", "Python"],
+    status: "Placed",
+    email: "sneha.verma@example.com",
+    phone: "+91 9876523456",
+    profilePic: "https://randomuser.me/api/portraits/women/68.jpg",
+    tenthPercent: 91,
+    twelfthPercent: 90,
+    previousPlacements: [
+      { company: "Qualcomm", role: "Intern", year: 2023 },
+      { company: "Intel", role: "Research Intern", year: 2022 },
+    ],
+  },
+  {
+    id: 5,
+    name: "Ravi Kumar",
+    rollNo: "20EE017",
+    branch: "Electrical",
+    cgpa: 7.8,
+    skills: ["Power Systems", "MATLAB", "C++"],
+    status: "Eligible",
+    email: "ravi.kumar@example.com",
+    phone: "+91 9876534567",
+    profilePic: "https://randomuser.me/api/portraits/men/52.jpg",
+    tenthPercent: 85,
+    twelfthPercent: 82,
+    previousPlacements: [],
+  },
+  {
+    id: 6,
+    name: "Ayesha Khan",
+    rollNo: "20CS025",
+    branch: "CSE",
+    cgpa: 9.5,
+    skills: ["AI", "Deep Learning", "TensorFlow", "Python"],
+    status: "Shortlisted",
+    email: "ayesha.khan@example.com",
+    phone: "+91 9876547890",
+    profilePic: "https://randomuser.me/api/portraits/women/21.jpg",
+    tenthPercent: 96,
+    twelfthPercent: 94,
+    previousPlacements: [
+      { company: "Microsoft", role: "Intern", year: 2023 },
+      { company: "Amazon", role: "Research Intern", year: 2022 },
+    ],
+  },
+  {
+    id: 7,
+    name: "Karan Mehta",
+    rollNo: "20CE040",
+    branch: "Civil",
+    cgpa: 8.2,
+    skills: ["AutoCAD", "STAAD Pro", "Revit"],
+    status: "Eligible",
+    email: "karan.mehta@example.com",
+    phone: "+91 9876549870",
+    profilePic: "https://randomuser.me/api/portraits/men/70.jpg",
+    tenthPercent: 87,
+    twelfthPercent: 84,
+    previousPlacements: [{ company: "L&T", role: "Intern", year: 2022 }],
+  },
+  {
+    id: 8,
+    name: "Neha Gupta",
+    rollNo: "20IT055",
+    branch: "IT",
+    cgpa: 8.7,
+    skills: ["JavaScript", "React", "Node.js"],
+    status: "Placed",
+    email: "neha.gupta@example.com",
+    phone: "+91 9876598765",
+    profilePic: "https://randomuser.me/api/portraits/women/15.jpg",
+    tenthPercent: 93,
+    twelfthPercent: 91,
+    previousPlacements: [
+      { company: "Accenture", role: "Intern", year: 2023 },
+      { company: "Wipro", role: "Intern", year: 2022 },
+    ],
+  },
 ];
+
 
 const EligibleStudentList: React.FC = () => {
   const [search, setSearch] = useState("");

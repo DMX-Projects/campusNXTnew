@@ -53,8 +53,8 @@ export default function Tickets() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">Support Tickets</h3>
-          <p className="text-sm text-gray-600">Raise and track maintenance & support requests</p>
+          <h3 className="text-lg font-semibold text-gray-800"></h3>
+          <p className="text-sm text-gray-600"></p>
         </div>
         <button 
           onClick={() => setShowCreateForm(!showCreateForm)}

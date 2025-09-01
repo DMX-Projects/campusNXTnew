@@ -11,6 +11,8 @@ import AssignmentManagement from './../pages/LMS/AssignmentManagement';
 import AttendanceManagement from './../pages/LMS/AttendanceManagement';
 import GradeManagement from './../pages/LMS/GradeManagement';
 import LibraryManagement from './../pages/LMS/LibraryManagement';
+import Mail from '../pages/LMS/Mail';
+
 
 const PlacementsRoutes: React.FC = () => {
   return (
@@ -28,7 +30,8 @@ const PlacementsRoutes: React.FC = () => {
               <Route path="attendance" element={<AttendanceManagement />} />
               <Route path="grades" element={<GradeManagement />} />
               <Route path="library" element={<LibraryManagement />} />
-
+              <Route path="mail" element={<Mail />} />
+              
 
     </Routes>
   );

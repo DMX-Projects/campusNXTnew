@@ -21,6 +21,7 @@ import AcademicsRoutes from './routes/AcademicsRoutes';
 import TransportRoutes from './routes/TransportRoutes';
 import AdministrationRoutes from './routes/AdministrationRoutes';
 import ExaminationRoutes from './routes/ExaminationRoutes';
+import ParentRoutes from './routes/ParentRoutes';
 // import ParentRoutes from './routes/ParentRoutes'; // Uncomment when available
 
 const AppRoutes: React.FC = () => {
@@ -101,7 +102,7 @@ const AppRoutes: React.FC = () => {
         {/* Parent Module Routes */}
         <Route path="/parent/dashboard" element={<ModuleDashboard module="Parent" />} />
         {/* <Route path="/parent/*" element={<ParentRoutes />} /> */}
-        <Route path="/parent/*" element={<PlaceholderPage module="Parent" feature="Parent Portal" />} />
+        <Route path="/parent/*" element={<ParentRoutes />} />
         
         {/* Communications Module Routes */}
         <Route path="/communications/dashboard" element={<ModuleDashboard module="Communications" />} />

@@ -1,204 +1,216 @@
+
+
+
 import React, { useState } from 'react';
-import { Search, Filter, Plus, Edit, Trash2, Eye } from 'lucide-react';
-import { books } from './Data/mockData';
-import { Book } from '../Library/types/index';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-export default function BookList() {
-  const [bookList, setBookList] = useState<Book[]>(books);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('All');
-  const [showAddModal, setShowAddModal] = useState(false);
+const data = [
+  { 
+    name: 'Computer Science', 
+    value: 3250, 
+    color: '#3B82F6',
+    books: [
+      'Clean Code by Robert C. Martin',
+      'Design Patterns by Gang of Four',
+      'Introduction to Algorithms by Cormen',
+      'The Pragmatic Programmer by Hunt & Thomas',
+      'Computer Networks by Tanenbaum',
+      'Operating System Concepts by Silberschatz',
+      'Database System Concepts by Korth',
+      'Artificial Intelligence: A Modern Approach by Russell'
+    ]
+  },
+  { 
+    name: 'Engineering', 
+    value: 2890, 
+    color: '#10B981',
+    books: [
+      'Engineering Mechanics by Beer & Johnston',
+      'Thermodynamics by Cengel & Boles',
+      'Fluid Mechanics by White',
+      'Materials Science by Callister',
+      'Control Systems Engineering by Nise',
+      'Digital Signal Processing by Proakis',
+      'Engineering Ethics by Martin & Schinzinger'
+    ]
+  },
+  { 
+    name: 'Science', 
+    value: 1980, 
+    color: '#EF4444',
+    books: [
+      'Physics for Scientists by Serway',
+      'General Chemistry by Petrucci',
+      'Biology by Campbell & Reece',
+      'Earth Science by Tarbuck',
+      'Organic Chemistry by Wade',
+      'Molecular Biology by Watson',
+      'Environmental Science by Miller'
+    ]
+  },
+  { 
+    name: 'Others', 
+    value: 1570, 
+    color: '#6B7280',
+    books: [
+      'The Art of War by Sun Tzu',
+      'Psychology by Myers',
+      'Economics by Mankiw',
+      'History of the World by Roberts',
+      'Philosophy by Russell',
+      'Sociology by Giddens'
+    ]
+  },
+  { 
+    name: 'Mathematics', 
+    value: 1560, 
+    color: '#F59E0B',
+    books: [
+      'Calculus by Stewart',
+      'Linear Algebra by Strang',
+      'Discrete Mathematics by Rosen',
+      'Real Analysis by Rudin',
+      'Abstract Algebra by Hungerford',
+      'Probability and Statistics by Ross',
+      'Numerical Methods by Burden'
+    ]
+  },
+  { 
+    name: 'Literature', 
+    value: 1200, 
+    color: '#8B5CF6',
+    books: [
+      'Pride and Prejudice by Jane Austen',
+      'To Kill a Mockingbird by Harper Lee',
+      '1984 by George Orwell',
+      'The Great Gatsby by F. Scott Fitzgerald',
+      'Hamlet by William Shakespeare',
+      'One Hundred Years of Solitude by García Márquez'
+    ]
+  }
+];
 
-  const categories = ['All', ...new Set(books.map(book => book.category))];
+const RADIAN = Math.PI / 180;
 
-  const filteredBooks = bookList.filter(book => {
-    const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         book.isbn.includes(searchTerm);
-    const matchesCategory = filterCategory === 'All' || book.category === filterCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Available': return 'bg-green-100 text-green-800';
-      case 'Issued': return 'bg-orange-100 text-orange-800';
-      case 'Reserved': return 'bg-blue-100 text-blue-800';
-      case 'Maintenance': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+const renderCustomizedLabel = ({
+  cx, cy, midAngle, innerRadius, outerRadius, percent, name, value
+}: any) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 1.2;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Books & Journals</h2>
-          <p className="text-gray-600">{filteredBooks.length} books found</p>
-        </div>
-        <button 
-          onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="h-4 w-4" />
-          Add New Book
-        </button>
-      </div>
+    <text 
+      x={x} 
+      y={y} 
+      fill="#374151" 
+      textAnchor={x > cx ? 'start' : 'end'} 
+      dominantBaseline="central"
+      fontSize="14"
+      fontWeight="500"
+    >
+      {`${name}: ${value}`}
+    </text>
+  );
+};
 
-      {/* Search and Filter */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search books by title, author, or ISBN..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-gray-500" />
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            {categories.map(category => (
-              <option key={category} value={category}>{category}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+const BookList: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-      {/* Books Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Book Details
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Availability
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Location
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredBooks.map((book) => (
-                <tr key={book.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{book.title}</div>
-                      <div className="text-sm text-gray-500">by {book.author}</div>
-                      <div className="text-xs text-gray-400">ISBN: {book.isbn}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
-                      {book.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {book.availableCopies} / {book.totalCopies}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(book.status)}`}>
-                      {book.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {book.location}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center gap-2">
-                      <button className="text-blue-600 hover:text-blue-800">
-                        <Eye className="h-4 w-4" />
-                      </button>
-                      <button className="text-green-600 hover:text-green-800">
-                        <Edit className="h-4 w-4" />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+  const handlePieClick = (data: any, index: number) => {
+    setSelectedCategory(selectedCategory === data.name ? null : data.name);
+  };
 
-      {/* Add Book Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md m-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Add New Book</h3>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                  <option>Fiction</option>
-                  <option>Technology</option>
-                  <option>Science</option>
-                  <option>History</option>
-                </select>
-              </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+  const selectedCategoryData = data.find(item => item.name === selectedCategory);
+
+  return (
+    <div className="w-full max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-sm">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Collection by Category
+      </h2>
+      
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Pie Chart Section */}
+        <div className="lg:w-1/2">
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={120}
+                  fill="#8884d8"
+                  dataKey="value"
+                  onClick={handlePieClick}
+                  className="cursor-pointer"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  Add Book
-                </button>
-              </div>
-            </form>
+                  {data.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.color}
+                      stroke={selectedCategory === entry.name ? '#000' : 'none'}
+                      strokeWidth={selectedCategory === entry.name ? 2 : 0}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
           </div>
+          <p className="text-sm text-gray-600 text-center mt-2">
+            Click on a slice to view books in that category
+          </p>
         </div>
-      )}
+
+        {/* Book List Section */}
+        <div className="lg:w-1/2">
+          {selectedCategory ? (
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-xl font-semibold mb-4 flex items-center">
+                <span 
+                  className="w-4 h-4 rounded-full mr-2" 
+                  style={{ backgroundColor: selectedCategoryData?.color }}
+                ></span>
+                {selectedCategory} Books ({selectedCategoryData?.value})
+              </h3>
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {selectedCategoryData?.books.map((book, index) => (
+                  <div 
+                    key={index}
+                    className="bg-white p-3 rounded border-l-4 shadow-sm hover:shadow-md transition-shadow"
+                    style={{ borderLeftColor: selectedCategoryData.color }}
+                  >
+                    <p className="text-gray-800">{book}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-gray-50 p-8 rounded-lg text-center">
+              <p className="text-gray-500 text-lg">Select a category to view its book collection</p>
+              <div className="mt-4 space-y-2">
+                {data.map((category) => (
+                  <button
+                    key={category.name}
+                    onClick={() => setSelectedCategory(category.name)}
+                    className="block w-full text-left p-2 rounded hover:bg-gray-200 transition-colors"
+                  >
+                    <span 
+                      className="w-3 h-3 rounded-full inline-block mr-2" 
+                      style={{ backgroundColor: category.color }}
+                    ></span>
+                    {category.name} ({category.value} books)
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default BookList;
