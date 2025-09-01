@@ -56,6 +56,7 @@ const MODULE_ACCESS = {
 const SIDEBAR_ITEMS = {
   Home: {
     'Chairperson': [
+      { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
       { 
         name: 'Masters', 
         path: '/home', 
@@ -81,6 +82,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Events', path: '/home/events', icon: 'Calendar' }
     ],
     'College Secretary': [
+      { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
       { 
         name: 'Masters', 
         path: '/home', 
@@ -106,6 +108,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Events', path: '/home/events', icon: 'Calendar' }
     ],
     'Principal': [
+      { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
       { 
         name: 'Masters', 
         path: '/home', 
