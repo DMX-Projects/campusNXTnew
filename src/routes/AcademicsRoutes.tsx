@@ -9,6 +9,14 @@ import { AddUserPage } from '../pages/Academics/Users/AddUserPage';
 import { InstitutionsPage } from '../pages/Academics/Institutions/InstitutionsPage';
 import { ProgramsPage } from '../pages/Academics/Programs/ProgramsPage';
 import { RolesPage } from '../pages/Academics/Roles/RolesPage';
+import Timetable from '../pages/Academics/timetable/TimeTable';
+import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
+import AcademicCalender from '../pages/Academics/AcademicCalender/AcademicCalender';
+import SubjectsAndSyllabus from '../pages/Academics/SubjectandSyllabus/SubjectSyllabus';
+import StudentExamprepation from '../pages/Academics/StudentExamprepration/StudentExamprep';
+import StudyMaterialPage from '../pages/Academics/StudyMaterial/StudyMaterial';
+import StudentProject from '../pages/Academics/StudentProject/StudentProject';
+import StudentAppruval from '../pages/Academics/StudentAppruval/StudentAppruval'
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
@@ -29,9 +37,16 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/faculty-leaves" element={<FacultyLeaves />} />
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/student-attendance" element={<StudentAttendance />} />
-       
+      <Route path="/timetable" element={<Timetable />} />
+      <Route path="student-leaves" element={<StudentLeave />} />
+      <Route path="academic-calendar" element={<AcademicCalender />} />
+      <Route path="subjects-syllabus" element={<SubjectsAndSyllabus />} />
+      <Route path="exam-preparation" element={<StudentExamprepation />} />
+      <Route path="study-material" element={<StudyMaterialPage />} />
+      <Route path="student-projects" element={<StudentProject />} />
+      <Route path="student-approval" element={<StudentAppruval />} />
 
-      
+
       {/* Users Routes
       <Route path="users" element={<Users />} />
       <Route path="users/add" element={<AddUser />} />
