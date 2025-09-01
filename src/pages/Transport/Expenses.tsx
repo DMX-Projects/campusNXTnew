@@ -35,8 +35,8 @@ export default function Expenses() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">Expense Management</h3>
-          <p className="text-sm text-gray-600">Track and manage transport expenses</p>
+          <h3 className="text-lg font-semibold text-gray-800"></h3>
+          <p className="text-sm text-gray-600"></p>
         </div>
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
           <Plus className="w-4 h-4" />

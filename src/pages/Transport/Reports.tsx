@@ -42,8 +42,8 @@ export default function Reports() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">Reports & Analytics</h3>
-          <p className="text-sm text-gray-600">Comprehensive transport system analysis</p>
+          <h3 className="text-lg font-semibold text-gray-800"></h3>
+          <p className="text-sm text-gray-600"></p>
         </div>
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
           <Download className="w-4 h-4" />

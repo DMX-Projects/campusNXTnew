@@ -42,10 +42,10 @@ const TransportDashboard: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Transport Management Dashboard
+            
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Monitor transport operations and passenger management
+           
           </p>
         </div>
         <div className="flex items-center space-x-3">

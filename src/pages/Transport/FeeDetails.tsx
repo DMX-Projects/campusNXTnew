@@ -27,8 +27,8 @@ export default function FeeDetails() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800">Fee Management</h3>
-          <p className="text-sm text-gray-600">Track and manage transport fees</p>
+          <h3 className="text-lg font-semibold text-gray-800"></h3>
+          <p className="text-sm text-gray-600"></p>
         </div>
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
           Generate Report
