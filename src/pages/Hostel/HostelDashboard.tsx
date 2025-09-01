@@ -3,218 +3,194 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, Legend, AreaChart, Area,
   RadialBarChart, RadialBar, ScatterChart, Scatter, ComposedChart,
-  CartesianGrid, FunnelChart, Funnel, LabelList
+  CartesianGrid
 } from "recharts";
-import { Search, Filter, Users, Bed, Building2, Utensils, Package, TrendingUp, TrendingDown, AlertCircle, Wifi, Zap, Droplets, Car, Shield, Thermometer, Clock, Star, DollarSign, UserCheck, AlertTriangle } from "lucide-react";
+import { Search, Filter, Users, MapPin, Package, FileText, AlertCircle, Shield, Clock, Bed, Utensils, Wifi, Zap, Droplets } from "lucide-react";
 
-const HostelDashboard: React.FC = () => {
+const HostelAdminDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [timeFilter, setTimeFilter] = useState("monthly");
 
-  // Enhanced Static Data
-  const hostelStats = {
-    totalStudents: 1247,
-    totalRooms: 425,
-    totalBeds: 1360,
-    occupiedBeds: 1247,
-    vacantBeds: 113,
-    occupancyRate: 91.7,
-    totalEmployees: 68,
-    messCapacity: 1400,
-    monthlyRevenue: 2450000,
-    avgRoomRent: 4800,
-    maintenanceRequests: 23,
-    complaintsPending: 8,
-    guestRooms: 12,
-    wifiConnections: 1156,
-    powerConsumption: 45600,
-    waterConsumption: 28900
-  };
+  // Hostel-specific data based on implemented modules
 
-  const hostelBlocks = [
-    { name: "Block A", rooms: 85, capacity: 272, occupied: 268, vacant: 4, occupancy: 98.5, floors: 4, warden: "Dr. Sharma", condition: "Excellent" },
-    { name: "Block B", rooms: 90, capacity: 288, occupied: 275, vacant: 13, occupancy: 95.5, floors: 4, warden: "Prof. Kumar", condition: "Good" },
-    { name: "Block C", rooms: 75, capacity: 240, occupied: 228, vacant: 12, occupancy: 95.0, floors: 3, warden: "Dr. Patel", condition: "Good" },
-    { name: "Block D", rooms: 95, capacity: 304, occupied: 246, vacant: 58, occupancy: 80.9, floors: 5, warden: "Prof. Singh", condition: "Fair" },
-    { name: "Block E", rooms: 80, capacity: 256, occupied: 230, vacant: 26, occupancy: 89.8, floors: 4, warden: "Dr. Mehta", condition: "Good" }
+  // Out Time/In Time Tracking Data
+  const entryExitData = [
+    { day: "Mon", entries: 245, exits: 238, lateEntries: 12, violations: 3 },
+    { day: "Tue", entries: 278, exits: 275, lateEntries: 8, violations: 1 },
+    { day: "Wed", entries: 267, exits: 262, lateEntries: 15, violations: 2 },
+    { day: "Thu", entries: 289, exits: 286, lateEntries: 10, violations: 4 },
+    { day: "Fri", entries: 298, exits: 295, lateEntries: 18, violations: 2 },
+    { day: "Sat", entries: 234, exits: 230, lateEntries: 22, violations: 5 },
+    { day: "Sun", entries: 198, exits: 195, lateEntries: 6, violations: 1 }
   ];
 
+  // Student Location Tracking (Geofencing)
+  const geofencingStatus = [
+    { zone: "Inside Hostel", students: 856, percentage: 68.7 },
+    { zone: "College Campus", students: 234, percentage: 18.8 },
+    { zone: "Outside Campus", students: 157, percentage: 12.5 }
+  ];
+
+  // Block-wise Occupancy
+  const blockOccupancy = [
+    { block: "A Block", occupied: 268, capacity: 272, occupancy: 98.5, maintenance: 2 },
+    { block: "B Block", occupied: 275, capacity: 288, occupancy: 95.5, maintenance: 5 },
+    { block: "C Block", occupied: 228, capacity: 240, occupancy: 95.0, maintenance: 3 },
+    { block: "D Block", occupied: 246, capacity: 304, occupancy: 80.9, maintenance: 8 },
+    { block: "E Block", occupied: 230, capacity: 256, occupancy: 89.8, maintenance: 4 }
+  ];
+
+  // Room Type Distribution
   const roomTypes = [
-    { type: "Single AC", count: 45, occupied: 43, rate: 8500, revenue: 365500, satisfaction: 4.6 },
-    { type: "Single Non-AC", count: 85, occupied: 78, rate: 6500, revenue: 507000, satisfaction: 4.2 },
-    { type: "Double AC", count: 125, occupied: 122, rate: 5500, revenue: 671000, satisfaction: 4.4 },
-    { type: "Double Non-AC", count: 145, occupied: 140, rate: 4200, revenue: 588000, satisfaction: 4.0 },
-    { type: "Triple Non-AC", count: 25, occupied: 24, rate: 3800, revenue: 91200, satisfaction: 3.8 }
+    { type: "Single AC", occupied: 43, total: 45, revenue: 365500 },
+    { type: "Single Non-AC", occupied: 78, total: 85, revenue: 507000 },
+    { type: "Double AC", occupied: 122, total: 125, revenue: 671000 },
+    { type: "Double Non-AC", occupied: 140, total: 145, revenue: 588000 },
+    { type: "Triple", occupied: 24, total: 25, revenue: 91200 }
   ];
 
-  const employeeData = [
-    { department: "Mess Staff", count: 28, present: 26, absent: 2, salary: 18000, performance: 4.3 },
-    { department: "Housekeeping", count: 18, present: 17, absent: 1, salary: 15000, performance: 4.1 },
-    { department: "Security", count: 12, present: 12, absent: 0, salary: 20000, performance: 4.7 },
-    { department: "Maintenance", count: 6, present: 5, absent: 1, salary: 22000, performance: 4.2 },
-    { department: "Administration", count: 4, present: 4, absent: 0, salary: 35000, performance: 4.5 }
+  // Support Tickets by Category
+  const ticketsByCategory = [
+    { category: "Maintenance", open: 12, inProgress: 5, resolved: 23, total: 40 },
+    { category: "Housekeeping", open: 3, inProgress: 2, resolved: 15, total: 20 },
+    { category: "Food/Mess", open: 6, inProgress: 3, resolved: 12, total: 21 },
+    { category: "Wi-Fi/Internet", open: 4, inProgress: 1, resolved: 8, total: 13 },
+    { category: "Security", open: 2, inProgress: 0, resolved: 5, total: 7 }
   ];
 
-  const messData = [
-    { meal: "Breakfast", capacity: 1400, served: 1156, cost: 45000, avgRating: 4.2, wastage: 8.5 },
-    { meal: "Lunch", capacity: 1400, served: 1289, cost: 78000, avgRating: 4.5, wastage: 12.3 },
-    { meal: "Snacks", capacity: 1400, served: 892, cost: 25000, avgRating: 4.1, wastage: 6.2 },
-    { meal: "Dinner", capacity: 1400, served: 1234, cost: 82000, avgRating: 4.4, wastage: 10.1 }
+  // Permission Requests Trends
+  const permissionTrends = [
+    { month: "Jan", gatePass: 145, medical: 23, visitor: 67, late: 34 },
+    { month: "Feb", gatePass: 167, medical: 18, visitor: 89, late: 28 },
+    { month: "Mar", gatePass: 189, medical: 29, visitor: 76, late: 42 },
+    { month: "Apr", gatePass: 156, medical: 15, visitor: 45, late: 25 },
+    { month: "May", gatePass: 123, medical: 12, visitor: 34, late: 18 },
+    { month: "Jun", gatePass: 178, medical: 25, visitor: 98, late: 38 },
+    { month: "Jul", gatePass: 198, medical: 31, visitor: 112, late: 45 },
+    { month: "Aug", gatePass: 212, medical: 28, visitor: 87, late: 52 },
+    { month: "Sep", gatePass: 234, medical: 22, visitor: 94, late: 48 }
   ];
 
-  const monthlyOccupancy = [
-    { month: "Jan", occupancy: 89.5, revenue: 2350000, complaints: 15, maintenance: 28 },
-    { month: "Feb", occupancy: 91.2, revenue: 2420000, complaints: 12, maintenance: 22 },
-    { month: "Mar", occupancy: 88.9, revenue: 2280000, complaints: 18, maintenance: 35 },
-    { month: "Apr", occupancy: 85.4, revenue: 2180000, complaints: 8, maintenance: 15 },
-    { month: "May", occupancy: 78.2, revenue: 1950000, complaints: 5, maintenance: 12 },
-    { month: "Jun", occupancy: 92.8, revenue: 2580000, complaints: 25, maintenance: 42 },
-    { month: "Jul", occupancy: 94.1, revenue: 2650000, complaints: 20, maintenance: 38 },
-    { month: "Aug", occupancy: 93.7, revenue: 2620000, complaints: 16, maintenance: 30 },
-    { month: "Sep", occupancy: 91.7, revenue: 2450000, complaints: 14, maintenance: 26 }
+  // Inventory Management
+  const inventoryStatus = [
+    { category: "Bedding", current: 2845, required: 3000, reorderLevel: 2800, status: "Low" },
+    { category: "Furniture", current: 1389, required: 1400, reorderLevel: 1350, status: "Critical" },
+    { category: "Electronics", current: 456, required: 450, reorderLevel: 400, status: "Good" },
+    { category: "Kitchen Items", current: 189, required: 200, reorderLevel: 180, status: "Critical" },
+    { category: "Cleaning Supplies", current: 567, required: 500, reorderLevel: 450, status: "Good" }
   ];
 
-  const inventoryData = [
-    { item: "Bed Sheets", stock: 2845, required: 3000, status: "low", cost: 450000, lastOrder: "2024-08-15" },
-    { item: "Pillows", stock: 1456, required: 1400, status: "good", cost: 291200, lastOrder: "2024-07-20" },
-    { item: "Mattresses", stock: 1389, required: 1400, status: "critical", cost: 2778000, lastOrder: "2024-06-10" },
-    { item: "Study Tables", stock: 1247, required: 1247, status: "good", cost: 4988000, lastOrder: "2024-01-15" },
-    { item: "Chairs", stock: 1189, required: 1247, status: "low", cost: 1785000, lastOrder: "2024-03-22" },
-    { item: "Wardrobes", stock: 623, required: 625, status: "good", cost: 4984000, lastOrder: "2024-02-08" }
+  // Mess/Food Services
+  const messUtilization = [
+    { meal: "Breakfast", served: 1156, capacity: 1400, satisfaction: 4.2, wastage: 8.5 },
+    { meal: "Lunch", served: 1289, capacity: 1400, satisfaction: 4.5, wastage: 12.3 },
+    { meal: "Snacks", served: 892, capacity: 1400, satisfaction: 4.1, wastage: 6.2 },
+    { meal: "Dinner", served: 1234, capacity: 1400, satisfaction: 4.4, wastage: 10.1 }
   ];
 
-  const feeStatus = [
+  // Employee/Staff Attendance
+  const staffAttendance = [
+    { department: "Mess Staff", present: 26, total: 28, absentToday: 2 },
+    { department: "Housekeeping", present: 17, total: 18, absentToday: 1 },
+    { department: "Security", present: 12, total: 12, absentToday: 0 },
+    { department: "Maintenance", present: 5, total: 6, absentToday: 1 },
+    { department: "Administration", present: 8, total: 8, absentToday: 0 }
+  ];
+
+  // Utility Consumption
+  const utilityConsumption = [
+    { month: "Jan", electricity: 45600, water: 28900, gas: 1250, internet: 15000 },
+    { month: "Feb", electricity: 42300, water: 26800, gas: 1180, internet: 15000 },
+    { month: "Mar", electricity: 48900, water: 31200, gas: 1320, internet: 15000 },
+    { month: "Apr", electricity: 41200, water: 25600, gas: 1100, internet: 15000 },
+    { month: "May", electricity: 38500, water: 23400, gas: 980, internet: 15000 },
+    { month: "Jun", electricity: 52100, water: 33800, gas: 1450, internet: 15000 },
+    { month: "Jul", electricity: 54200, water: 35100, gas: 1520, internet: 15000 },
+    { month: "Aug", electricity: 51800, water: 32900, gas: 1480, internet: 15000 },
+    { month: "Sep", electricity: 49300, water: 30500, gas: 1380, internet: 15000 }
+  ];
+
+  // Security Incidents & Violations
+  const securityIncidents = [
+    { month: "Jan", incidents: 2, violations: 15, lateEntries: 234 },
+    { month: "Feb", incidents: 1, violations: 12, lateEntries: 198 },
+    { month: "Mar", incidents: 4, violations: 28, lateEntries: 287 },
+    { month: "Apr", incidents: 0, violations: 8, lateEntries: 156 },
+    { month: "May", incidents: 1, violations: 5, lateEntries: 123 },
+    { month: "Jun", incidents: 3, violations: 22, lateEntries: 267 },
+    { month: "Jul", incidents: 2, violations: 18, lateEntries: 298 },
+    { month: "Aug", incidents: 1, violations: 16, lateEntries: 256 },
+    { month: "Sep", incidents: 0, violations: 12, lateEntries: 234 }
+  ];
+
+  // Fee Collection Status
+  const feeCollection = [
     { status: "Paid", count: 1089, amount: 22869000, percentage: 87.3 },
     { status: "Pending", count: 128, amount: 2688000, percentage: 10.3 },
     { status: "Overdue", count: 30, amount: 630000, percentage: 2.4 }
   ];
 
-  // New data for additional charts
-  const studentDemographics = [
-    { year: "1st Year", count: 389, male: 245, female: 144 },
-    { year: "2nd Year", count: 342, male: 218, female: 124 },
-    { year: "3rd Year", count: 298, male: 189, female: 109 },
-    { year: "4th Year", count: 218, male: 138, female: 80 }
+  // Monthly Revenue Trends
+  const revenueTrends = [
+    { month: "Jan", hostelFees: 2350000, messFees: 890000, miscellaneous: 45000 },
+    { month: "Feb", hostelFees: 2420000, messFees: 912000, miscellaneous: 52000 },
+    { month: "Mar", hostelFees: 2280000, messFees: 856000, miscellaneous: 38000 },
+    { month: "Apr", hostelFees: 2180000, messFees: 823000, miscellaneous: 41000 },
+    { month: "May", hostelFees: 1950000, messFees: 734000, miscellaneous: 29000 },
+    { month: "Jun", hostelFees: 2580000, messFees: 972000, miscellaneous: 68000 },
+    { month: "Jul", hostelFees: 2650000, messFees: 998000, miscellaneous: 72000 },
+    { month: "Aug", hostelFees: 2620000, messFees: 987000, miscellaneous: 69000 },
+    { month: "Sep", hostelFees: 2450000, messFees: 923000, miscellaneous: 58000 }
   ];
 
-  const branchWiseDistribution = [
-    { branch: "CSE", students: 285, occupancy: 94.2 },
-    { branch: "ECE", students: 234, occupancy: 89.6 },
-    { branch: "ME", students: 198, occupancy: 87.3 },
-    { branch: "EE", students: 176, occupancy: 92.1 },
-    { branch: "CE", students: 154, occupancy: 85.8 },
-    { branch: "IT", students: 142, occupancy: 91.4 },
-    { branch: "Others", students: 58, occupancy: 78.9 }
-  ];
-
-  const facilitiesUsage = [
-    { facility: "Wi-Fi", usage: 92.7, satisfaction: 4.1, issues: 12 },
-    { facility: "Laundry", usage: 78.3, satisfaction: 3.8, issues: 8 },
-    { facility: "Gym", usage: 34.6, satisfaction: 4.5, issues: 3 },
-    { facility: "Study Hall", usage: 56.2, satisfaction: 4.3, issues: 2 },
-    { facility: "Recreation", usage: 41.8, satisfaction: 4.0, issues: 5 },
-    { facility: "Parking", usage: 67.4, satisfaction: 3.6, issues: 15 }
-  ];
-
-  const maintenanceRequests = [
-    { type: "Electrical", pending: 8, completed: 45, inProgress: 3, priority: "High" },
-    { type: "Plumbing", pending: 5, completed: 32, inProgress: 2, priority: "Medium" },
-    { type: "Furniture", pending: 6, completed: 28, inProgress: 4, priority: "Low" },
-    { type: "AC/Heating", pending: 4, completed: 19, inProgress: 1, priority: "High" },
-    { type: "Network", pending: 3, completed: 15, inProgress: 2, priority: "Medium" }
-  ];
-
-  const weeklyFootfall = [
-    { day: "Mon", mess: 1289, library: 145, gym: 67, recreation: 89 },
-    { day: "Tue", mess: 1234, library: 158, gym: 72, recreation: 94 },
-    { day: "Wed", mess: 1276, library: 162, gym: 69, recreation: 78 },
-    { day: "Thu", mess: 1198, library: 139, gym: 75, recreation: 86 },
-    { day: "Fri", mess: 1156, library: 124, gym: 81, recreation: 112 },
-    { day: "Sat", mess: 998, library: 89, gym: 95, recreation: 145 },
-    { day: "Sun", mess: 876, library: 67, gym: 88, recreation: 167 }
-  ];
-
-  const securityIncidents = [
-    { month: "Jan", incidents: 2, severity: "Low", resolved: 2 },
-    { month: "Feb", incidents: 1, severity: "Low", resolved: 1 },
-    { month: "Mar", incidents: 4, severity: "Medium", resolved: 4 },
-    { month: "Apr", incidents: 0, severity: "None", resolved: 0 },
-    { month: "May", incidents: 1, severity: "Low", resolved: 1 },
-    { month: "Jun", incidents: 3, severity: "Medium", resolved: 3 },
-    { month: "Jul", incidents: 2, severity: "Low", resolved: 2 },
-    { month: "Aug", incidents: 1, severity: "Low", resolved: 1 },
-    { month: "Sep", incidents: 0, severity: "None", resolved: 0 }
-  ];
-
-  const utilityConsumption = [
-    { utility: "Electricity", current: 45600, target: 42000, cost: 456000, trend: "up" },
-    { utility: "Water", current: 28900, target: 30000, cost: 289000, trend: "down" },
-    { utility: "Gas", current: 1250, target: 1200, cost: 62500, trend: "up" },
-    { utility: "Internet", current: 1156, target: 1400, cost: 125000, trend: "stable" }
-  ];
-
-  const COLORS = {
-    primary: "#3B82F6",
-    secondary: "#10B981",
-    warning: "#F59E0B",
-    danger: "#EF4444",
-    info: "#8B5CF6",
-    success: "#06D6A0",
-    accent: "#FF6B6B",
-    purple: "#A855F7",
-    indigo: "#6366F1",
-    pink: "#EC4899",
-    teal: "#14B8A6"
-  };
-
-  const pieColors = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#14B8A6"];
+  const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#14B8A6"];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-4">
       {/* Header */}
-      
+     
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="bg-white rounded-lg shadow-sm p-3 mb-4">
+        <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Search students, rooms, blocks, facilities..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Search students, rooms, tickets..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <select
               value={selectedFilter}
               onChange={(e) => setSelectedFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
             >
               <option value="all">All Blocks</option>
-              <option value="blockA">Block A</option>
-              <option value="blockB">Block B</option>
-              <option value="blockC">Block C</option>
-              <option value="blockD">Block D</option>
-              <option value="blockE">Block E</option>
+              <option value="blockA">A Block</option>
+              <option value="blockB">B Block</option>
+              <option value="blockC">C Block</option>
+              <option value="blockD">D Block</option>
+              <option value="blockE">E Block</option>
             </select>
             
             <select
               value={timeFilter}
               onChange={(e) => setTimeFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
             >
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
+              <option value="daily">Today</option>
+              <option value="weekly">This Week</option>
+              <option value="monthly">This Month</option>
+              <option value="quarterly">This Quarter</option>
             </select>
             
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+            <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 text-sm">
               <Filter className="w-4 h-4" />
               Export Report
             </button>
@@ -222,726 +198,358 @@ const HostelDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Enhanced Key Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Students</p>
-              <p className="text-3xl font-bold text-gray-900">{hostelStats.totalStudents}</p>
-              <p className="text-sm text-green-600 flex items-center mt-1">
-                <TrendingUp className="w-4 h-4 mr-1" />
-                +3.2% from last month
-              </p>
-            </div>
-            <div className="p-3 bg-blue-100 rounded-full">
-              <Users className="w-8 h-8 text-blue-600" />
-            </div>
+      {/* Main Dashboard Grid - Row 1: Entry/Exit & Location Tracking */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        
+        {/* Daily Entry/Exit Pattern */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Daily Entry/Exit</h3>
+            <Clock className="w-4 h-4 text-blue-600" />
           </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Occupancy Rate</p>
-              <p className="text-3xl font-bold text-gray-900">{hostelStats.occupancyRate}%</p>
-              <p className="text-sm text-green-600 flex items-center mt-1">
-                <TrendingUp className="w-4 h-4 mr-1" />
-                +1.5% from last month
-              </p>
-            </div>
-            <div className="p-3 bg-green-100 rounded-full">
-              <Bed className="w-8 h-8 text-green-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
-              <p className="text-3xl font-bold text-gray-900">₹{(hostelStats.monthlyRevenue / 100000).toFixed(1)}L</p>
-              <p className="text-sm text-red-600 flex items-center mt-1">
-                <TrendingDown className="w-4 h-4 mr-1" />
-                -2.1% from last month
-              </p>
-            </div>
-            <div className="p-3 bg-yellow-100 rounded-full">
-              <DollarSign className="w-8 h-8 text-yellow-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Maintenance Requests</p>
-              <p className="text-3xl font-bold text-gray-900">{hostelStats.maintenanceRequests}</p>
-              <p className="text-sm text-orange-600 flex items-center mt-1">
-                <AlertTriangle className="w-4 h-4 mr-1" />
-                8 pending today
-              </p>
-            </div>
-            <div className="p-3 bg-orange-100 rounded-full">
-              <AlertCircle className="w-8 h-8 text-orange-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">WiFi Connected</p>
-              <p className="text-3xl font-bold text-gray-900">{hostelStats.wifiConnections}</p>
-              <p className="text-sm text-blue-600 flex items-center mt-1">
-                <Wifi className="w-4 h-4 mr-1" />
-                92.7% usage rate
-              </p>
-            </div>
-            <div className="p-3 bg-purple-100 rounded-full">
-              <Wifi className="w-8 h-8 text-purple-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Power Usage</p>
-              <p className="text-3xl font-bold text-gray-900">{(hostelStats.powerConsumption / 1000).toFixed(0)}kW</p>
-              <p className="text-sm text-red-600 flex items-center mt-1">
-                <TrendingUp className="w-4 h-4 mr-1" />
-                +8.6% this month
-              </p>
-            </div>
-            <div className="p-3 bg-red-100 rounded-full">
-              <Zap className="w-8 h-8 text-red-600" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Row 1 - Occupancy and Demographics */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Radial Chart - Block Occupancy */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Block Occupancy Rates</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <RadialBarChart cx="50%" cy="50%" innerRadius="30%" outerRadius="90%" data={hostelBlocks}>
-              <RadialBar dataKey="occupancy" cornerRadius={10} fill="#3B82F6" />
-              <Legend />
+          <ResponsiveContainer width="100%" height={160}>
+            <ComposedChart data={entryExitData}>
+              <XAxis dataKey="day" tick={{ fontSize: 10 }} />
               <Tooltip />
-            </RadialBarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Stacked Bar - Student Demographics */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Student Demographics by Year</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={studentDemographics}>
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="male" stackId="a" fill="#3B82F6" name="Male" />
-              <Bar dataKey="female" stackId="a" fill="#EC4899" name="Female" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Area Chart - Monthly Trends */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Complaints & Maintenance</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <ComposedChart data={monthlyOccupancy}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="complaints" fill="#EF4444" name="Complaints" />
-              <Line type="monotone" dataKey="maintenance" stroke="#F59E0B" name="Maintenance" />
+              <Bar dataKey="entries" fill="#3B82F6" />
+              <Bar dataKey="exits" fill="#10B981" />
+              <Line type="monotone" dataKey="violations" stroke="#EF4444" strokeWidth={2} />
             </ComposedChart>
           </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Charts Row 2 - Branch Distribution and Facilities */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Scatter Plot - Branch wise distribution */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Branch-wise Student Distribution</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <ScatterChart data={branchWiseDistribution}>
-              <CartesianGrid />
-              <XAxis type="number" dataKey="students" name="Students" />
-              <YAxis type="number" dataKey="occupancy" name="Occupancy %" />
-              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-              <Scatter name="Branches" dataKey="occupancy" fill="#8B5CF6" />
-            </ScatterChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Funnel Chart - Room Types */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Room Types Satisfaction</h3>
-          <div className="space-y-4">
-            {roomTypes.map((room, index) => (
-              <div key={room.type} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="font-medium text-gray-900">{room.type}</p>
-                    <div className="flex items-center">
-                      <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                      <span className="text-sm font-medium">{room.satisfaction}</span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600">{room.occupied}/{room.count} occupied</p>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                    <div 
-                      className="bg-blue-400 h-2 rounded-full" 
-                      style={{ width: `${(room.occupied / room.count) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="text-right ml-4">
-                  <p className="font-semibold text-green-600">₹{(room.revenue / 1000).toFixed(0)}K</p>
-                  <p className="text-xs text-gray-500">Monthly</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Row 3 - Weekly Footfall and Facilities Usage */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Multi-line Chart - Weekly Footfall */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Weekly Facilities Footfall</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={weeklyFootfall}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="mess" stroke="#EF4444" name="Mess" />
-              <Line type="monotone" dataKey="library" stroke="#3B82F6" name="Library" />
-              <Line type="monotone" dataKey="gym" stroke="#10B981" name="Gym" />
-              <Line type="monotone" dataKey="recreation" stroke="#F59E0B" name="Recreation" />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Horizontal Bar - Facilities Usage */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Facilities Usage & Satisfaction</h3>
-          <div className="space-y-4">
-            {facilitiesUsage.map((facility, index) => (
-              <div key={facility.facility} className="p-3 border border-gray-200 rounded-lg">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="font-medium text-gray-900">{facility.facility}</h4>
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                    <span className="text-sm">{facility.satisfaction}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Usage: {facility.usage}%</span>
-                  <span className="text-red-500">{facility.issues} issues</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-green-400 h-2 rounded-full" 
-                    style={{ width: `${facility.usage}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Row 4 - Maintenance and Security */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Donut Chart - Maintenance Requests */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Maintenance Requests Status</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie
-                  data={maintenanceRequests}
-                  dataKey="pending"
-                  nameKey="type"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={80}
-                  label
-                >
-                  {maintenanceRequests.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={pieColors[index]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="space-y-2">
-              {maintenanceRequests.map((item, index) => (
-                <div key={item.type} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                  <div className="flex items-center">
-                    <div className={`w-3 h-3 rounded-full mr-2`} style={{backgroundColor: pieColors[index]}}></div>
-                    <span className="text-sm font-medium">{item.type}</span>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold">{item.pending} pending</p>
-                    <p className="text-xs text-gray-500">{item.completed} done</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>Avg: 254 daily</span>
+            <span className="text-red-500">18 violations</span>
           </div>
         </div>
 
-        {/* Line Chart - Security Incidents */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Security Incidents Trend</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <AreaChart data={securityIncidents}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Area type="monotone" dataKey="incidents" stroke="#EF4444" fill="#FEE2E2" />
-            </AreaChart>
-          </ResponsiveContainer>
-          <div className="mt-4 grid grid-cols-3 gap-4 text-center">
-            <div className="p-3 bg-green-50 rounded-lg">
-              <Shield className="w-6 h-6 text-green-600 mx-auto mb-1" />
-              <p className="text-sm text-gray-600">Total Incidents</p>
-              <p className="text-xl font-bold text-green-600">14</p>
-            </div>
-            <div className="p-3 bg-blue-50 rounded-lg">
-              <UserCheck className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-              <p className="text-sm text-gray-600">Resolved</p>
-              <p className="text-xl font-bold text-blue-600">14</p>
-            </div>
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <Clock className="w-6 h-6 text-gray-600 mx-auto mb-1" />
-              <p className="text-sm text-gray-600">Avg Response</p>
-              <p className="text-xl font-bold text-gray-600">2.3hrs</p>
-            </div>
+        {/* Student Location Distribution */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Student Locations</h3>
+            <MapPin className="w-4 h-4 text-green-600" />
           </div>
-        </div>
-      </div>
-
-      {/* Charts Row 5 - Utility Consumption and Employee Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        
-
-        {/* Employee Performance Radar */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Employee Performance & Attendance</h3>
-          <div className="space-y-4">
-            {employeeData.map((dept, index) => (
-              <div key={dept.department} className="p-4 border border-gray-200 rounded-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900">{dept.department}</h4>
-                  <div className="flex items-center space-x-4">
-                    <div className="text-right">
-                      <p className="text-sm text-gray-600">Performance</p>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                        <span className="font-medium">{dept.performance}</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-600">Salary</p>
-                      <p className="font-medium">₹{(dept.salary / 1000).toFixed(0)}K</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600">Attendance Today</span>
-                  <span className="text-sm font-medium">{dept.present}/{dept.count}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-green-400 h-2 rounded-full" 
-                    style={{ width: `${(dept.present / dept.count) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Inventory & Cost Analysis</h3>
-            <Package className="w-6 h-6 text-purple-500" />
-          </div>
-          <div className="space-y-4">
-            {inventoryData.map((item, index) => (
-              <div key={item.item} className="flex items-center justify-between p-3 rounded-lg border">
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="font-medium text-gray-900">{item.item}</p>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      item.status === 'good' ? 'bg-green-100 text-green-800' :
-                      item.status === 'low' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {item.status.toUpperCase()}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-1">{item.stock}/{item.required} available</p>
-                  <p className="text-xs text-gray-500">Last Order: {item.lastOrder}</p>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                    <div 
-                      className={`h-2 rounded-full ${
-                        item.status === 'good' ? 'bg-green-400' :
-                        item.status === 'low' ? 'bg-yellow-400' : 'bg-red-400'
-                      }`}
-                      style={{ width: `${(item.stock / item.required) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="text-right ml-4">
-                  <p className="font-semibold text-purple-600">₹{(item.cost / 1000).toFixed(0)}K</p>
-                  <p className="text-xs text-gray-500">Total Value</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 pt-4 border-t">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-700">Total Inventory Value</span>
-              <span className="text-lg font-bold text-purple-600">
-                ₹{(inventoryData.reduce((sum, item) => sum + item.cost, 0) / 100000).toFixed(1)}L
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mess Operations Enhanced */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Gauge Chart - Utility Consumption */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Utility Consumption vs Target</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {utilityConsumption.map((utility, index) => (
-              <div key={utility.utility} className="p-4 border border-gray-200 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium text-gray-900">{utility.utility}</h4>
-                  {utility.utility === 'Electricity' && <Zap className="w-5 h-5 text-yellow-500" />}
-                  {utility.utility === 'Water' && <Droplets className="w-5 h-5 text-blue-500" />}
-                  {utility.utility === 'Gas' && <Thermometer className="w-5 h-5 text-orange-500" />}
-                  {utility.utility === 'Internet' && <Wifi className="w-5 h-5 text-purple-500" />}
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Current: {utility.current.toLocaleString()}</span>
-                    <span className={`${
-                      utility.trend === 'up' ? 'text-red-500' : 
-                      utility.trend === 'down' ? 'text-green-500' : 'text-gray-500'
-                    }`}>
-                      {utility.trend === 'up' ? '↑' : utility.trend === 'down' ? '↓' : '→'}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full ${
-                        utility.current > utility.target ? 'bg-red-400' : 'bg-green-400'
-                      }`}
-                      style={{ width: `${Math.min((utility.current / utility.target) * 100, 100)}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>Target: {utility.target.toLocaleString()}</span>
-                    <span>₹{(utility.cost / 1000).toFixed(0)}K</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* Mess Details with Wastage */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Mess Operations & Food Wastage</h3>
-            <Utensils className="w-6 h-6 text-orange-500" />
-          </div>
-          <div className="space-y-4">
-            {messData.map((meal, index) => (
-              <div key={meal.meal} className="border-l-4 border-orange-400 pl-4 py-3 bg-orange-50 rounded-r-lg">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h4 className="font-medium text-gray-900">{meal.meal}</h4>
-                    <p className="text-sm text-gray-600">{meal.served}/{meal.capacity} served</p>
-                    <div className="flex items-center space-x-4 mt-1">
-                      <div className="flex items-center">
-                        <Star className="w-3 h-3 text-yellow-400 mr-1" />
-                        <span className="text-xs">{meal.avgRating}/5.0</span>
-                      </div>
-                      <span className="text-xs text-red-500">Wastage: {meal.wastage}%</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-orange-600">₹{(meal.cost / 1000).toFixed(0)}K</p>
-                    <p className="text-xs text-gray-500">Daily Cost</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Utilization</p>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-400 h-2 rounded-full" 
-                        style={{ width: `${(meal.served / meal.capacity) * 100}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Wastage Level</p>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-red-400 h-2 rounded-full" 
-                        style={{ width: `${meal.wastage * 5}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Enhanced Inventory with Cost Analysis */}
-        
-      </div>
-
-      {/* Enhanced Fee Collection */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Fee Collection Analysis</h3>
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={160}>
             <PieChart>
               <Pie
-                data={feeStatus}
-                dataKey="amount"
-                nameKey="status"
+                data={geofencingStatus}
+                dataKey="students"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
-                label={({status, percentage}) => `${status}: ${percentage}%`}
+                innerRadius={30}
+                outerRadius={60}
+                label={({percentage}) => `${percentage}%`}
               >
-                {feeStatus.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={pieColors[index]} />
-                ))}
+                <Cell fill="#10B981" />
+                <Cell fill="#3B82F6" />
+                <Cell fill="#F59E0B" />
               </Pie>
-              <Tooltip formatter={(value) => `₹${(value/100000).toFixed(1)}L`} />
+              <Tooltip />
             </PieChart>
           </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Collection Summary</h3>
-          <div className="space-y-4">
-            {feeStatus.map((status, index) => (
-              <div key={status.status} className="p-3 rounded-lg border-l-4" style={{borderColor: pieColors[index]}}>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium" style={{color: pieColors[index]}}>{status.status}</h4>
-                    <p className="text-sm text-gray-600">{status.count} students</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-gray-900">₹{(status.amount/100000).toFixed(1)}L</p>
-                    <p className="text-xs text-gray-500">{status.percentage}%</p>
-                  </div>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 gap-1 text-xs text-gray-600">
+            {geofencingStatus.map((zone, idx) => (
+              <span key={idx} className="flex justify-between">
+                <span>{zone.zone.split(' ')[0]}:</span>
+                <span>{zone.students}</span>
+              </span>
             ))}
-            <div className="pt-3 border-t">
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-700">Total Expected</span>
-                <span className="font-bold text-gray-900">
-                  ₹{(feeStatus.reduce((sum, item) => sum + item.amount, 0) / 100000).toFixed(1)}L
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Trends</h3>
-          <div className="space-y-4">
-            <div className="p-4 bg-green-50 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">On-time Payments</p>
-                  <p className="text-2xl font-bold text-green-600">87.3%</p>
-                </div>
-                <TrendingUp className="w-8 h-8 text-green-600" />
-              </div>
-            </div>
-            <div className="p-4 bg-yellow-50 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Late Payments</p>
-                  <p className="text-2xl font-bold text-yellow-600">10.3%</p>
-                </div>
-                <Clock className="w-8 h-8 text-yellow-600" />
-              </div>
-            </div>
-            <div className="p-4 bg-red-50 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Defaulters</p>
-                  <p className="text-2xl font-bold text-red-600">2.4%</p>
-                </div>
-                <AlertTriangle className="w-8 h-8 text-red-600" />
-              </div>
-            </div>
+        {/* Block Occupancy Status */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Block Occupancy</h3>
+            <Bed className="w-4 h-4 text-purple-600" />
           </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <BarChart data={blockOccupancy}>
+              <XAxis dataKey="block" tick={{ fontSize: 9 }} />
+              <Tooltip />
+              <Bar dataKey="occupancy" fill="#8B5CF6" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>Avg: 91.9%</span>
+            <span className="text-green-600">1247/1360 beds</span>
+          </div>
+        </div>
+
+        {/* Room Type Revenue */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Room Revenue</h3>
+            <div className="text-xs text-green-500">₹22.2L/month</div>
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <BarChart data={roomTypes} layout="horizontal">
+              <XAxis type="number" tick={{ fontSize: 10 }} />
+              <YAxis dataKey="type" type="category" tick={{ fontSize: 8 }} width={60} />
+              <Tooltip formatter={(value) => `₹${(value/1000).toFixed(0)}K`} />
+              <Bar dataKey="revenue" fill="#10B981" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>407/425 occupied</span>
+            <span className="text-green-600">95.8% utilization</span>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Row 2: Support & Permissions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        
+        {/* Support Tickets */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Support Tickets</h3>
+            <AlertCircle className="w-4 h-4 text-orange-600" />
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <BarChart data={ticketsByCategory}>
+              <XAxis dataKey="category" tick={{ fontSize: 8 }} />
+              <Tooltip />
+              <Bar dataKey="open" fill="#EF4444" />
+              <Bar dataKey="inProgress" fill="#F59E0B" />
+              <Bar dataKey="resolved" fill="#10B981" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>Open: 27</span>
+            <span className="text-green-600">Resolved: 63</span>
+          </div>
+        </div>
+
+        {/* Permission Requests */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Permission Trends</h3>
+            <Shield className="w-4 h-4 text-indigo-600" />
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <AreaChart data={permissionTrends}>
+              <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+              <Tooltip />
+              <Area type="monotone" dataKey="gatePass" stackId="1" stroke="#3B82F6" fill="#3B82F6" />
+              <Area type="monotone" dataKey="visitor" stackId="1" stroke="#10B981" fill="#10B981" />
+              <Area type="monotone" dataKey="medical" stackId="1" stroke="#F59E0B" fill="#F59E0B" />
+              <Area type="monotone" dataKey="late" stackId="1" stroke="#EF4444" fill="#EF4444" />
+            </AreaChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>Sep: 398 total</span>
+            <span className="text-blue-600">Gate Pass: 234</span>
+          </div>
+        </div>
+
+        {/* Inventory Status */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Inventory Status</h3>
+            <Package className="w-4 h-4 text-purple-600" />
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <BarChart data={inventoryStatus} layout="horizontal">
+              <XAxis type="number" tick={{ fontSize: 10 }} />
+              <YAxis dataKey="category" type="category" tick={{ fontSize: 9 }} width={60} />
+              <Tooltip />
+              <Bar dataKey="current" fill="#8B5CF6" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span className="text-red-500">Low: 2 items</span>
+            <span className="text-green-600">94% Available</span>
+          </div>
+        </div>
+
+        {/* Mess Utilization */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Mess Utilization</h3>
+            <Utensils className="w-4 h-4 text-orange-600" />
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <ComposedChart data={messUtilization}>
+              <XAxis dataKey="meal" tick={{ fontSize: 10 }} />
+              <Tooltip />
+              <Bar dataKey="served" fill="#F59E0B" />
+              <Line type="monotone" dataKey="satisfaction" stroke="#10B981" strokeWidth={2} />
+            </ComposedChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>Avg: 1143/day</span>
+            <span className="text-green-600">Rating: 4.3⭐</span>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Row 3: Staff & Security */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        
+        {/* Staff Attendance */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Staff Attendance</h3>
+            <Users className="w-4 h-4 text-blue-600" />
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <BarChart data={staffAttendance}>
+              <XAxis dataKey="department" tick={{ fontSize: 9 }} />
+              <Tooltip />
+              <Bar dataKey="present" fill="#10B981" />
+              <Bar dataKey="absentToday" fill="#EF4444" />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>Present: 68/72</span>
+            <span className="text-green-600">94.4% attendance</span>
+          </div>
+        </div>
+
+        {/* Security & Violations */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Security Monitoring</h3>
+            <Shield className="w-4 h-4 text-red-600" />
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <ComposedChart data={securityIncidents}>
+              <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+              <Tooltip />
+              <Bar dataKey="incidents" fill="#EF4444" />
+              <Line type="monotone" dataKey="lateEntries" stroke="#F59E0B" strokeWidth={2} />
+            </ComposedChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span>Sep: 0 incidents</span>
+            <span className="text-yellow-600">234 late entries</span>
+          </div>
+        </div>
+
+        {/* Utility Consumption */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Utility Usage</h3>
+            <Zap className="w-4 h-4 text-yellow-600" />
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <LineChart data={utilityConsumption}>
+              <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+              <Tooltip />
+              <Line type="monotone" dataKey="electricity" stroke="#F59E0B" strokeWidth={2} />
+              <Line type="monotone" dataKey="water" stroke="#3B82F6" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
+            <span className="flex items-center"><div className="w-2 h-2 bg-yellow-500 rounded mr-1"></div>Electricity</span>
+            <span className="flex items-center"><div className="w-2 h-2 bg-blue-500 rounded mr-1"></div>Water</span>
+          </div>
+        </div>
+
+        {/* Fee Collection */}
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">Fee Collection</h3>
+            <div className="text-xs text-green-500">87.3% paid</div>
+          </div>
+          <ResponsiveContainer width="100%" height={160}>
+            <PieChart>
+              <Pie
+                data={feeCollection}
+                dataKey="count"
+                cx="50%"
+                cy="50%"
+                innerRadius={30}
+                outerRadius={60}
+                label={({percentage}) => `${percentage}%`}
+              >
+                <Cell fill="#10B981" />
+                <Cell fill="#F59E0B" />
+                <Cell fill="#EF4444" />
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="grid grid-cols-1 gap-1 text-xs text-gray-600">
+            <span className="flex justify-between">
+              <span>Overdue:</span>
+              <span className="text-red-600">₹6.3L</span>
+            </span>
+            <span className="flex justify-between">
+              <span>Pending:</span>
+              <span className="text-yellow-600">₹26.8L</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Revenue Trends - Full Width */}
+      <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold text-gray-700">Monthly Revenue Trends</h3>
+          <div className="text-sm text-green-600">Current: ₹34.3L</div>
+        </div>
+        <ResponsiveContainer width="100%" height={200}>
+          <ComposedChart data={revenueTrends}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip formatter={(value) => `₹${(value/100000).toFixed(1)}L`} />
+            <Bar dataKey="hostelFees" fill="#3B82F6" name="Hostel Fees" />
+            <Bar dataKey="messFees" fill="#10B981" name="Mess Fees" />
+            <Bar dataKey="miscellaneous" fill="#F59E0B" name="Miscellaneous" />
+          </ComposedChart>
+        </ResponsiveContainer>
+        <div className="flex justify-center gap-6 text-xs text-gray-600 mt-2">
+          <span className="flex items-center"><div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>Hostel Fees</span>
+          <span className="flex items-center"><div className="w-3 h-3 bg-green-500 rounded mr-1"></div>Mess Fees</span>
+          <span className="flex items-center"><div className="w-3 h-3 bg-yellow-500 rounded mr-1"></div>Miscellaneous</span>
         </div>
       </div>
 
-      {/* Enhanced Detailed Block Information Table */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Comprehensive Block Management</h3>
-          <div className="flex space-x-2">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
-              Generate Report
-            </button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-              Export Data
-            </button>
+      {/* Key Performance Indicators */}
+      <div className="bg-white rounded-lg shadow-sm p-4">
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Today's Key Metrics</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+          <div className="text-center p-3 bg-blue-50 rounded-lg">
+            <div className="text-xl font-bold text-blue-600">1,247</div>
+            <div className="text-xs text-gray-600">Students Present</div>
           </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Block Details</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Capacity</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Occupancy</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Warden</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Condition</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {hostelBlocks.map((block, index) => (
-                <tr key={block.name} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">{block.name}</div>
-                      <div className="text-sm text-gray-500">{block.floors} floors, {block.rooms} rooms</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{block.capacity} beds</div>
-                    <div className="text-sm text-gray-500">{block.rooms} rooms</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{block.occupied}/{block.capacity}</div>
-                    <div className="text-sm text-gray-500">{block.occupancy}% occupied</div>
-                    <div className="w-16 bg-gray-200 rounded-full h-1 mt-1">
-                      <div 
-                        className="bg-blue-400 h-1 rounded-full" 
-                        style={{ width: `${block.occupancy}%` }}
-                      ></div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{block.warden}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      block.condition === 'Excellent' ? 'bg-green-100 text-green-800' :
-                      block.condition === 'Good' ? 'bg-blue-100 text-blue-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {block.condition}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      block.occupancy >= 95 ? 'bg-red-100 text-red-800' :
-                      block.occupancy >= 90 ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
-                      {block.occupancy >= 95 ? 'Nearly Full' : block.occupancy >= 90 ? 'High Occupancy' : 'Available'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">View</button>
-                    <button className="text-green-600 hover:text-green-900">Manage</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="text-center p-3 bg-green-50 rounded-lg">
+            <div className="text-xl font-bold text-green-600">91.9%</div>
+            <div className="text-xs text-gray-600">Occupancy Rate</div>
+          </div>
+          <div className="text-center p-3 bg-orange-50 rounded-lg">
+            <div className="text-xl font-bold text-orange-600">27</div>
+            <div className="text-xs text-gray-600">Open Tickets</div>
+          </div>
+          <div className="text-center p-3 bg-purple-50 rounded-lg">
+            <div className="text-xl font-bold text-purple-600">48</div>
+            <div className="text-xs text-gray-600">Late Entries</div>
+          </div>
+          <div className="text-center p-3 bg-red-50 rounded-lg">
+            <div className="text-xl font-bold text-red-600">0</div>
+            <div className="text-xs text-gray-600">Security Incidents</div>
+          </div>
+          <div className="text-center p-3 bg-indigo-50 rounded-lg">
+            <div className="text-xl font-bold text-indigo-600">1,143</div>
+            <div className="text-xs text-gray-600">Mess Attendance</div>
+          </div>
+          <div className="text-center p-3 bg-yellow-50 rounded-lg">
+            <div className="text-xl font-bold text-yellow-600">68/72</div>
+            <div className="text-xs text-gray-600">Staff Present</div>
+          </div>
+          <div className="text-center p-3 bg-teal-50 rounded-lg">
+            <div className="text-xl font-bold text-teal-600">398</div>
+            <div className="text-xs text-gray-600">Month Permissions</div>
+          </div>
         </div>
       </div>
-
-      {/* Quick Actions Panel */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-center">
-            <div className="p-3 bg-blue-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
-              <Users className="w-6 h-6 text-blue-600" />
-            </div>
-            <h4 className="font-medium text-gray-900 mb-1">Student Management</h4>
-            <p className="text-sm text-gray-500 mb-3">Manage admissions, transfers</p>
-            <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
-              Manage Students
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-center">
-            <div className="p-3 bg-green-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
-              <Building2 className="w-6 h-6 text-green-600" />
-            </div>
-            <h4 className="font-medium text-gray-900 mb-1">Room Allocation</h4>
-            <p className="text-sm text-gray-500 mb-3">Assign and manage rooms</p>
-            <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
-              Allocate Rooms
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-center">
-            <div className="p-3 bg-yellow-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
-              <AlertCircle className="w-6 h-6 text-yellow-600" />
-            </div>
-            <h4 className="font-medium text-gray-900 mb-1">Maintenance</h4>
-            <p className="text-sm text-gray-500 mb-3">Handle requests & issues</p>
-            <button className="w-full px-4 py-2 bg-yellow-600 text-white rounded-lg text-sm hover:bg-yellow-700">
-              View Requests
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="text-center">
-            <div className="p-3 bg-purple-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
-              <DollarSign className="w-6 h-6 text-purple-600" />
-            </div>
-            <h4 className="font-medium text-gray-900 mb-1">Fee Management</h4>
-            <p className="text-sm text-gray-500 mb-3">Track payments & dues</p>
-            <button className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700">
-              Manage Fees
-            </button>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };
 
-export default HostelDashboard;
+export default HostelAdminDashboard;
