@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BarChart, Download, Calendar, TrendingUp, Users, Book, DollarSign, FileText } from 'lucide-react';
+import { BarChart, Download, Calendar, TrendingUp, Users, Book, IndianRupee, FileText } from 'lucide-react';
 import { dashboardStats, bookIssues, books, members, fines } from './Data/mockData';
 
 export default function Reports() {
@@ -10,7 +10,7 @@ export default function Reports() {
     { id: 'circulation', name: 'Circulation Report', icon: TrendingUp },
     { id: 'inventory', name: 'Inventory Report', icon: Book },
     { id: 'members', name: 'Membership Report', icon: Users },
-    { id: 'financial', name: 'Financial Report', icon: DollarSign },
+    { id: 'financial', name: 'Financial Report', icon: IndianRupee },
     { id: 'overdue', name: 'Overdue Report', icon: FileText }
   ];
 
@@ -136,17 +136,17 @@ export default function Reports() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <h4 className="text-sm font-medium text-green-800">Fines Collected</h4>
-          <p className="text-2xl font-bold text-green-900 mt-1">${dashboardStats.finesCollected.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-green-900 mt-1">₹{dashboardStats.finesCollected.toFixed(2)}</p>
           <p className="text-sm text-green-600">This month</p>
         </div>
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <h4 className="text-sm font-medium text-yellow-800">Outstanding Fines</h4>
-          <p className="text-2xl font-bold text-yellow-900 mt-1">$342.75</p>
+          <p className="text-2xl font-bold text-yellow-900 mt-1">₹342.75</p>
           <p className="text-sm text-yellow-600">Pending collection</p>
         </div>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <h4 className="text-sm font-medium text-blue-800">Annual Revenue</h4>
-          <p className="text-2xl font-bold text-blue-900 mt-1">$14,970</p>
+          <p className="text-2xl font-bold text-blue-900 mt-1">₹14,970</p>
           <p className="text-sm text-blue-600">Projected</p>
         </div>
       </div>
@@ -159,7 +159,7 @@ export default function Reports() {
               <div 
                 className="w-full bg-green-500 rounded-t"
                 style={{ height: `${(data.fines / 500) * 100}%` }}
-                title={`Revenue: $${data.fines}`}
+                title={`Revenue: ₹${data.fines}`}
               ></div>
               <span className="text-xs text-gray-600 mt-2">{data.month}</span>
             </div>
@@ -261,7 +261,8 @@ export default function Reports() {
       {/* Report Content */}
       {renderReport()}
 
-      {/* Recent Reports */}
+      {/* Recent Reports */}Pending Fines
+
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Reports</h3>
         <div className="space-y-3">
