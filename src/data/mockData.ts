@@ -32,16 +32,25 @@ export interface Faculty {
 
 export interface Course {
   id: string;
-  name: string;
-  code: string;
-  department: string;
+  name: string;          // Course Name
+  code: string;          // Course Code (CS301 etc.)
+  program: string;       // UG / PG / Diploma
+  department: string;    // Computer Science, Mechanical etc.
+  specialization?: string; // Optional specialization
   year: number;
-  semester: number;
-  credits: number;
-  facultyId: string;
-  description: string;
-  thumbnail?: string;
+  examType:string;          // Academic Year (1,2,3,4)
+  semester: number;      // Semester (1-8 etc.)
+  credits: number;       // Credits (2,3,4 etc.)
+  subjectType: string;   // Core / Elective / Lab / Theory / Practical
+  facultyId: string;     // Reference to faculty handling course
+  internalMarks: number; // e.g. 30
+  externalMarks: number; // e.g. 70
+  evaluationMethod: string; // Theory / Lab / Project / Viva
+  description: string;   // Short description
+  thumbnail?: string;    // Optional image
+  status: 'active' | 'inactive'; // For enabling/disabling courses
 }
+
 
 export interface AttendanceRecord {
   id: string;
@@ -129,21 +138,33 @@ export interface Department {
 
 export interface Program {
   id: string;
-  code: string;
-  name: string;
-  duration: string;
-  department: string;
-  status: string;
+  code: string;             // e.g., "BTECHEE"
+  name: string;             // e.g., "B.TECH ECE"
+  institutionCode: string;  // e.g., "LSTINST"
+  branchCode: string;       // e.g., "ECE"
+  branchName: string;       // e.g., "Electronics and Communication Engineering"
+  duration: string;         // e.g., "4 years"
+  notes?: string;           // Optional notes
+  status: "active" | "inactive";
 }
+
 
 export interface Institution {
   id: string;
-  name: string;
-  code: string;
-  type: string;
-  location: string;
-  status: string;
+  clientCode: string;       // e.g., "LSTUNIV"
+  code: string;             // Institution Code, e.g., "LSTINST"
+  name: string;             // Institution Name, e.g., "LST INSTITUTE OF ENGINEERING"
+  type: string;             // e.g., "Engineering", "School", "College"
+  location: string;         // e.g., "Hyderabad"
+  address: string;          // Full address
+  phone: string;            // Contact number
+  email: string;            // Official email
+  website: string;          // Institution website
+  establishedYear: string;  // e.g., "2001"
+  description: string;      // Short description
+  status: "active" | "inactive";
 }
+
 
 export interface Client {
   id: string;
@@ -250,25 +271,42 @@ export const mockCourses: Course[] = [
     id: 'COU001',
     name: 'Data Structures and Algorithms',
     code: 'CS301',
+    program: 'Undergraduate',
     department: 'Computer Science',
+    specialization: 'Software Engineering',
     year: 2,
+    examType:'Theory',
     semester: 1,
     credits: 4,
+    subjectType: 'Core',
     facultyId: 'FAC001',
+    internalMarks: 30,
+    externalMarks: 70,
+    evaluationMethod: 'Theory',
     description: 'Introduction to fundamental data structures and algorithms',
+    status: 'active',
   },
   {
     id: 'COU002',
     name: 'Database Management Systems',
     code: 'CS302',
+    program: 'Undergraduate',
     department: 'Computer Science',
+    specialization: 'Data Engineering',
     year: 2,
+    examType:'Practical',
     semester: 2,
     credits: 3,
-    facultyId: 'FAC001',
+    subjectType: 'Core',
+    facultyId: 'FAC002',
+    internalMarks: 30,
+    externalMarks: 70,
+    evaluationMethod: 'Theory + Lab',
     description: 'Comprehensive study of database design and management',
+    status: 'inactive',
   },
 ];
+
 
 export const mockAttendance: AttendanceRecord[] = [
   {
@@ -712,57 +750,111 @@ export const mockDepartments: Department[] = [
 
 export const mockPrograms: Program[] = [
   {
-    id: '1',
-    code: 'BTECH-CSE',
-    name: 'Bachelor of Technology in Computer Science',
-    duration: '4 Years',
-    department: 'Computer Science Engineering',
-    status: 'active'
+    id: "PROG001",
+    code: "BTECHE",
+    name: "B.TECH CE",
+    institutionCode: "LSTINST",
+    branchCode: "CE",
+    branchName: "Civil Engineering",
+    duration: "4 years",
+    notes: "",
+    status: "active",
   },
   {
-    id: '2',
-    code: 'BTECH-EE',
-    name: 'Bachelor of Technology in Electrical Engineering',
-    duration: '4 Years',
-    department: 'Electrical Engineering',
-    status: 'active'
+    id: "PROG002",
+    code: "BTECHCSE",
+    name: "B.TECH CSE",
+    institutionCode: "LSTINST",
+    branchCode: "CSE",
+    branchName: "Computer Science Engineering",
+    duration: "4 years",
+    notes: "",
+    status: "active",
   },
   {
-    id: '3',
-    code: 'MTECH-CSE',
-    name: 'Master of Technology in Computer Science',
-    duration: '2 Years',
-    department: 'Computer Science Engineering',
-    status: 'active'
-  }
+    id: "PROG003",
+    code: "BTECHAIML",
+    name: "B.TECH CSE (AI & ML)",
+    institutionCode: "LSTINST",
+    branchCode: "AIML",
+    branchName: "CSE (AI & ML)",
+    duration: "4 years",
+    notes: "",
+    status: "active",
+  },
+  {
+    id: "PROG004",
+    code: "BTECHDS",
+    name: "B.TECH CSE (DS)",
+    institutionCode: "LSTINST",
+    branchCode: "DS",
+    branchName: "CSE (Data Science)",
+    duration: "4 years",
+    notes: "",
+    status: "active",
+  },
+  {
+    id: "PROG005",
+    code: "BTECHEE",
+    name: "B.TECH EEE",
+    institutionCode: "LSTINST",
+    branchCode: "EEE",
+    branchName: "Electrical & Electronics Engineering",
+    duration: "4 years",
+    notes: "",
+    status: "active",
+  },
 ];
+
 
 export const mockInstitutions: Institution[] = [
   {
-    id: '1',
-    name: 'Main Campus',
-    code: 'MAIN',
-    type: 'Primary',
-    location: 'City Center',
-    status: 'active'
+    id: "INST001",
+    clientCode: "LSTUNIV",
+    code: "LSTINST",
+    name: "LST INSTITUTE OF ENGINEERING",
+    type: "Engineering",
+    location: "Hyderabad",
+    address: "Hyderabad, Telangana",
+    phone: "+91-9876543210",
+    email: "info@lstinst.edu.in",
+    website: "http://www.lstinst.edu.in",
+    establishedYear: "2005",
+    description: "Premier engineering institute in Hyderabad.",
+    status: "active",
   },
   {
-    id: '2',
-    name: 'North Campus',
-    code: 'NORTH',
-    type: 'Branch',
-    location: 'North District',
-    status: 'active'
+    id: "INST002",
+    clientCode: "PRGM",
+    code: "PTQ",
+    name: "Pragmatiq Systems",
+    type: "Training",
+    location: "Hyderabad",
+    address: "Hyderabad, Telangana",
+    phone: "+91-9845123456",
+    email: "contact@pragmatiq.com",
+    website: "http://www.pragmatiq.com",
+    establishedYear: "2010",
+    description: "Industry-focused IT training provider.",
+    status: "active",
   },
   {
-    id: '3',
-    name: 'Research Center',
-    code: 'RC',
-    type: 'Research',
-    location: 'Tech Park',
-    status: 'active'
-  }
+    id: "INST003",
+    clientCode: "LSTUNIV",
+    code: "MES01",
+    name: "Nowrosjee Wadia College, Pune",
+    type: "College",
+    location: "Pune",
+    address: "Pune, Maharashtra",
+    phone: "+91-9768123456",
+    email: "principal@wadiacollege.edu",
+    website: "http://www.wadiacollege.edu",
+    establishedYear: "1932",
+    description: "Renowned arts and science college in Pune.",
+    status: "active",
+  },
 ];
+
 
 export const mockClients: Client[] = [
   {

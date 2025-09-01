@@ -19,13 +19,17 @@ import { ClientsPage } from "../pages/HomeTabPages/Clients/ClientsPage";
 import { AddClientsPage } from "../pages/HomeTabPages/Clients/AddClientsPage";
 import { EditClientsPage } from "../pages/HomeTabPages/Clients/EditClientsPage";
 import { InstitutionsPage } from "../pages/HomeTabPages/Institutions/InstitutionsPage";
+import { AddInstitutionsPage } from "../pages/HomeTabPages/Institutions/AddInstitutionsPage";
+import { EditInstitutionsPage } from "../pages/HomeTabPages/Institutions/EditInstitutionsPage";
 import { ProgramsPage } from "../pages/HomeTabPages/Programs/ProgramsPage";
+import { AddProgramsPage } from "../pages/HomeTabPages/Programs/AddProgramsPage";
+import { EditProgramsPage } from "../pages/HomeTabPages/Programs/EditProgramsPage";
 import { GenericListPage } from "../pages/HomeTabPages/Common/GenericListPage";
 import Events from "../pages/HomeTabPages/Events/Events";
 import Notifications from "../pages/HomeTabPages/Notifications/Notifications";
 import Inbox from "../pages/HomeTabPages/Inbox/Inbox";
 import PlacementCalendar from "../pages/HomeTabPages/Calender/Calender";
-import { HolidayManager } from "../pages/HomeTabPages/HolidayList/HolidayManager";
+import  {HolidaysManager}  from "../pages/HomeTabPages/HolidayList/HolidaysManager";
 import { HolidayCalendar } from "../pages/HomeTabPages/HolidayCalender/HolidayCalender";
 import { TopicManager } from "../pages/HomeTabPages/Topic/TopicManager";
 import {LessonManager} from "../pages/HomeTabPages/Lessons/LessonManager";
@@ -62,10 +66,13 @@ const HomeRoutes: React.FC = () => {
       <Route path="clients/add" element={<AddClientsPage />} />
       <Route path="clients/edit/:id" element={<EditClientsPage />} />
       <Route path="institutions" element={<InstitutionsPage />} />
+      <Route path="institutions/add" element={<AddInstitutionsPage />} />
+      <Route path="institutions/edit/:id" element={<EditInstitutionsPage />} />
       <Route path="programs" element={<ProgramsPage />} />
-
-      
-      <Route path="holiday-list" element={<HolidayManager />} />
+      <Route path="programs/add" element={<AddProgramsPage />} />
+      <Route path="programs/edit/:id" element={<EditProgramsPage />} />
+      {/* Holiday and Calendar */}
+      <Route path="holiday-list" element={<HolidaysManager />} />
       <Route path="holiday-calendar" element={<HolidayCalendar />} />
       <Route path="topics" element={<TopicManager />} />
       {/* Generic pages */}

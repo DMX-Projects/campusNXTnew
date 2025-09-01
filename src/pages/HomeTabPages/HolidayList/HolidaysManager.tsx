@@ -1,118 +1,222 @@
-import React, { useState, useMemo } from 'react';
-import { Calendar, Plus, Edit3, Trash2, Search, Filter, Eye, Save, X } from 'lucide-react';
+import { useState, useMemo } from "react";
+import { Calendar, Plus, Edit3, Trash2, Search, Save, X } from "lucide-react";
 
-export const HolidayManager = () => {
-  const [holidays, setHolidays] = useState([
-    { id: 1, code: 'AC_2425', year: '2024-2025', date: '2024-01-14', name: 'Sankrant', description: 'Traditional Hindu harvest festival', active: true },
-    { id: 2, code: 'AC_2425', year: '2024-2025', date: '2024-01-26', name: 'Republic Day', description: 'National holiday celebrating the Constitution of India', active: true },
-    { id: 3, code: 'AC_2425', year: '2024-2025', date: '2024-03-08', name: 'Maha Shivratri', description: 'Hindu festival dedicated to Lord Shiva', active: true },
-    { id: 4, code: 'AC_2425', year: '2024-2025', date: '2024-03-25', name: 'Holi', description: 'Festival of colors', active: true },
-    { id: 5, code: 'AC_2425', year: '2024-2025', date: '2024-04-09', name: 'Ugadi', description: 'Telugu and Kannada New Year', active: true },
-    { id: 6, code: 'AC_2425', year: '2024-2025', date: '2024-05-29', name: 'Good Friday', description: 'Christian holiday commemorating the crucifixion of Jesus', active: true },
-    { id: 7, code: 'AC_2425', year: '2024-2025', date: '2024-04-10', name: 'Ramzan Eid-ul-Fitr', description: 'Islamic festival marking the end of Ramadan', active: true },
-    { id: 8, code: 'AC_2425', year: '2024-2025', date: '2024-04-14', name: 'Ambedkar Jayanti', description: 'Birthday of Dr. B.R. Ambedkar', active: true },
-    { id: 9, code: 'AC_2425', year: '2024-2025', date: '2024-06-02', name: 'Telangana Formation Day', description: 'State formation day celebration', active: true },
-    { id: 10, code: 'AC_2425', year: '2024-2025', date: '2024-06-17', name: 'Bakrid Eid-ul-Adha', description: 'Islamic festival of sacrifice', active: true },
+interface Holiday {
+  id: number;
+  code: string;
+  year: string;
+  date: string;
+  name: string;
+  description: string;
+  active: boolean;
+}
+
+interface HolidayFormData {
+  code: string;
+  year: string;
+  date: string;
+  name: string;
+  description: string;
+  active: boolean;
+}
+
+export const HolidaysManager: React.FC = () => {
+  const [holidays, setHolidays] = useState<Holiday[]>([
+    {
+      id: 1,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-01-14",
+      name: "Sankranti",
+      description: "Traditional Hindu harvest festival",
+      active: true,
+    },
+    {
+      id: 2,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-01-26",
+      name: "Republic Day",
+      description: "National holiday celebrating the Constitution of India",
+      active: true,
+    },
+    {
+      id: 3,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-03-08",
+      name: "Maha Shivratri",
+      description: "Hindu festival dedicated to Lord Shiva",
+      active: true,
+    },
+    {
+      id: 4,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-03-25",
+      name: "Holi",
+      description: "Festival of colors",
+      active: true,
+    },
+    {
+      id: 5,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-04-09",
+      name: "Ugadi",
+      description: "Telugu and Kannada New Year",
+      active: true,
+    },
+    {
+      id: 6,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-05-29",
+      name: "Good Friday",
+      description: "Christian holiday commemorating the crucifixion of Jesus",
+      active: true,
+    },
+    {
+      id: 7,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-04-10",
+      name: "Ramzan Eid-ul-Fitr",
+      description: "Islamic festival marking the end of Ramadan",
+      active: true,
+    },
+    {
+      id: 8,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-04-14",
+      name: "Ambedkar Jayanti",
+      description: "Birthday of Dr. B.R. Ambedkar",
+      active: true,
+    },
+    {
+      id: 9,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-06-02",
+      name: "Telangana Formation Day",
+      description: "State formation day celebration",
+      active: true,
+    },
+    {
+      id: 10,
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "2024-06-17",
+      name: "Bakrid Eid-ul-Adha",
+      description: "Islamic festival of sacrifice",
+      active: true,
+    },
   ]);
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterYear, setFilterYear] = useState('');
-  const [filterActive, setFilterActive] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterYear, setFilterYear] = useState("");
+  const [filterActive, setFilterActive] = useState<"all" | "active" | "inactive">("all");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [editingHoliday, setEditingHoliday] = useState(null);
-  const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
+  const [editingHoliday, setEditingHoliday] = useState<Holiday | null>(null);
+  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
 
-  const [formData, setFormData] = useState({
-    code: 'AC_2425',
-    year: '2024-2025',
-    date: '',
-    name: '',
-    description: '',
-    active: true
+  const [formData, setFormData] = useState<HolidayFormData>({
+    code: "AC_2425",
+    year: "2024-2025",
+    date: "",
+    name: "",
+    description: "",
+    active: true,
   });
 
-  const years = [...new Set(holidays.map(h => h.year))];
+  const years = [...new Set(holidays.map((h) => h.year))];
 
   const filteredHolidays = useMemo(() => {
-    return holidays.filter(holiday => {
-      const matchesSearch = holiday.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          holiday.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return holidays.filter((holiday) => {
+      const matchesSearch =
+        holiday.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        holiday.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesYear = !filterYear || holiday.year === filterYear;
-      const matchesActive = filterActive === 'all' || 
-                          (filterActive === 'active' && holiday.active) ||
-                          (filterActive === 'inactive' && !holiday.active);
-      
+      const matchesActive =
+        filterActive === "all" ||
+        (filterActive === "active" && holiday.active) ||
+        (filterActive === "inactive" && !holiday.active);
+
       return matchesSearch && matchesYear && matchesActive;
     });
   }, [holidays, searchTerm, filterYear, filterActive]);
 
   const handleSubmit = () => {
     if (!formData.name.trim() || !formData.date || !formData.description.trim()) {
-      alert('Please fill in all required fields');
+      alert("Please fill in all required fields");
       return;
     }
-    
+
     if (editingHoliday) {
-      setHolidays(holidays.map(h => 
-        h.id === editingHoliday.id ? { ...formData, id: editingHoliday.id } : h
-      ));
+      setHolidays(
+        holidays.map((h) =>
+          h.id === editingHoliday.id ? { ...formData, id: editingHoliday.id } : h
+        )
+      );
       setEditingHoliday(null);
     } else {
-      const newHoliday = {
+      const newHoliday: Holiday = {
         ...formData,
-        id: Math.max(...holidays.map(h => h.id)) + 1
+        id: holidays.length ? Math.max(...holidays.map((h) => h.id)) + 1 : 1,
       };
       setHolidays([...holidays, newHoliday]);
     }
-    
+
     setShowAddModal(false);
-    setFormData({
-      code: 'AC_2425',
-      year: '2024-2025',
-      date: '',
-      name: '',
-      description: '',
-      active: true
-    });
+    resetForm();
   };
 
-  const handleEdit = (holiday) => {
+  const handleEdit = (holiday: Holiday) => {
     setEditingHoliday(holiday);
     setFormData(holiday);
     setShowAddModal(true);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this holiday?')) {
-      setHolidays(holidays.filter(h => h.id !== id));
+  const handleDelete = (id: number) => {
+    if (window.confirm("Are you sure you want to delete this holiday?")) {
+      setHolidays(holidays.filter((h) => h.id !== id));
     }
   };
 
-  const toggleActive = (id) => {
-    setHolidays(holidays.map(h => 
-      h.id === id ? { ...h, active: !h.active } : h
-    ));
+  const toggleActive = (id: number) => {
+    setHolidays(
+      holidays.map((h) => (h.id === id ? { ...h, active: !h.active } : h))
+    );
   };
 
   const closeModal = () => {
     setShowAddModal(false);
     setEditingHoliday(null);
+    resetForm();
+  };
+
+  const resetForm = () => {
     setFormData({
-      code: 'AC_2425',
-      year: '2024-2025',
-      date: '',
-      name: '',
-      description: '',
-      active: true
+      code: "AC_2425",
+      year: "2024-2025",
+      date: "",
+      name: "",
+      description: "",
+      active: true,
     });
   };
 
-  const formatDate = (dateStr) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  setFilterActive(e.target.value as "all" | "active" | "inactive");
+};
+
+  const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-IN', { 
-      day: 'numeric', 
-      month: 'short', 
-      year: 'numeric' 
+    return date.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
     });
   };
 
@@ -159,7 +263,7 @@ export const HolidayManager = () => {
 
                 <select
                   value={filterActive}
-                  onChange={(e) => setFilterActive(e.target.value)}
+                  onChange={handleFilterChange}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="all">All Status</option>

@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Edit, Plus } from 'lucide-react';
-import { mockDepartments } from '../../../data/mockData';
-import { Department } from '../../../types';
+import { mockDepartments,Department } from '../../../data/mockData';
+
 import { SearchBar } from '../../../components/UI/SearchBar';
 import { Table } from '../../../components/UI/Table';
 import { StatusToggle } from '../../../components/UI/StatusToggle';
