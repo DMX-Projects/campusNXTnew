@@ -43,7 +43,7 @@ export default function FeeDetails() {
               <DollarSign className="w-6 h-6 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">${totalFees}</p>
+              <p className="text-2xl font-bold text-gray-900">₹{totalFees.toLocaleString('en-IN')}</p>
               <p className="text-sm text-gray-600">Total Fees</p>
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function FeeDetails() {
               <DollarSign className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">${paidFees}</p>
+              <p className="text-2xl font-bold text-gray-900">₹{paidFees.toLocaleString('en-IN')}</p>
               <p className="text-sm text-gray-600">Collected</p>
             </div>
           </div>
@@ -67,7 +67,7 @@ export default function FeeDetails() {
               <DollarSign className="w-6 h-6 text-red-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">${pendingFees}</p>
+              <p className="text-2xl font-bold text-gray-900">₹{pendingFees.toLocaleString('en-IN')}</p>
               <p className="text-sm text-gray-600">Outstanding</p>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function FeeDetails() {
                   </td>
                   <td className="py-4 px-4 text-gray-800">{record.class}</td>
                   <td className="py-4 px-4 text-gray-800">{record.dueMonth}</td>
-                  <td className="py-4 px-4 font-semibold text-gray-800">${record.monthlyFee}</td>
+                  <td className="py-4 px-4 font-semibold text-gray-800">₹{record.monthlyFee.toLocaleString('en-IN')}</td>
                   <td className="py-4 px-4">
                     <div className="flex items-center text-gray-800">
                       <Calendar className="w-4 h-4 mr-1 text-gray-500" />
