@@ -298,42 +298,54 @@ export const HomePage = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <div className="space-y-8 p-6">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-primary-600 via-purple-600 to-indigo-600 dark:from-primary-700 dark:via-purple-700 dark:to-indigo-700 rounded-2xl p-8 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-primary-600 via-purple-600 to-indigo-600 dark:from-primary-700 dark:via-purple-700 dark:to-indigo-700 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-white/5 backdrop-blur-sm"></div>
-          <div className="relative z-10 flex justify-between items-center">
-            <div>
-              <h1 className="text-4xl font-bold mb-2 font-sans">
+
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            {/* Left Section */}
+            <div className="text-left md:text-left">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 font-sans">
                 AI-Powered Campus Dashboard
               </h1>
-              <p className="text-primary-100 dark:text-primary-200 text-lg">
+              <p className="text-primary-100 dark:text-primary-200 text-sm sm:text-base md:text-lg">
                 India's Most Advanced Educational ERP System
               </p>
-              <div className="flex items-center space-x-6 mt-4">
+
+              {/* Features */}
+              <div className="flex flex-wrap items-center gap-4 mt-4">
                 <div className="flex items-center space-x-2">
                   <Globe className="h-5 w-5" />
-                  <span className="font-medium">Multi-Campus</span>
+                  <span className="font-medium text-sm sm:text-base">
+                    Multi-Campus
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Zap className="h-5 w-5" />
-                  <span className="font-medium">Real-time Analytics</span>
+                  <span className="font-medium text-sm sm:text-base">
+                    Real-time Analytics
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Star className="h-5 w-5" />
-                  <span className="font-medium">AI-Enhanced</span>
+                  <span className="font-medium text-sm sm:text-base">
+                    AI-Enhanced
+                  </span>
                 </div>
               </div>
             </div>
-            <div className="text-right">
-              <button className="mb-4 p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
+
+            {/* Right Section */}
+            <div className="w-full md:w-auto flex flex-col items-start md:items-end">
+              <button className="hidden md:block mb-4 p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors self-end">
                 <LayoutDashboard className="h-5 w-5" />
               </button>
-              <div className="text-2xl font-mono font-bold">
+              <div className="text-lg sm:text-xl md:text-2xl font-mono font-bold">
                 {currentTime.toLocaleTimeString("en-IN", {
                   timeZone: "Asia/Kolkata",
                   hour12: true,
                 })}
               </div>
-              <div className="text-primary-200 dark:text-primary-300">
+              <div className="text-primary-200 dark:text-primary-300 text-sm sm:text-base">
                 {currentTime.toLocaleDateString("en-IN", {
                   weekday: "long",
                   year: "numeric",
