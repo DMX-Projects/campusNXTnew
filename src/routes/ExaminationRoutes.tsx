@@ -11,7 +11,13 @@ import MarksList from "../pages/examination/pages/MarksList";
 import Reports from "../pages/examination/pages/Reports";
 import SeatingPlan from "../pages/examination/pages/SeatingPlan";
 import StudentAttendance from "../pages/examination/pages/StudentAttendance";
-
+import InvigilatorManagement from "../pages/examination/pages/Invisgilator";
+import CondonationManager from "../pages/examination/pages/CondonationList";
+import DetainedStudentsManager from "../pages/examination/pages/DetainedList";
+import ExamAttendanceManager from "../pages/examination/pages/ExamAttendance";
+import ResultAnalyticsDashboard from "../pages/examination/pages/ExamResults";
+import ExamInbox from "../pages/examination/pages/ExamInbox";
+import ExamEvaluation from "../pages/examination/pages/ExamEvaluation";
 const ExaminationRoutes: React.FC = () => {
   return (
     <Routes>
@@ -28,8 +34,14 @@ const ExaminationRoutes: React.FC = () => {
       <Route path="reports" element={<Reports />} />
       <Route path="seating-plan" element={<SeatingPlan />} />
       <Route path="student-attendance" element={<StudentAttendance />} />
-
-      {/* Catch all for invalid examination routes */}
+       <Route path="invisgilator" element={<InvigilatorManagement/>} />
+       <Route path="condonation" element={<CondonationManager/>} />
+       <Route path="detained" element={<DetainedStudentsManager/>} />
+       <Route path="exam-attendance" element={<ExamAttendanceManager/>}/> 
+       <Route path="exam-results" element={<ResultAnalyticsDashboard/>}/>
+       <Route path="inbox" element={<ExamInbox/>}/>
+       <Route path="exam-evaluation" element={<ExamEvaluation/>}/>
+           {/* Catch all for invalid examination routes */}
       <Route path="*" element={<Navigate to="/examination" replace />} />
     </Routes>
   );
