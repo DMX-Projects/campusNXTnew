@@ -611,13 +611,14 @@ const SIDEBAR_ITEMS = {
   },
   Parent: {
     'Chairperson': [
-      { name: 'Inbox', path: '/parent/inbox', icon: 'Mail' },
-      { name: 'Your Child Class Room', path: '/parent/child-classroom', icon: 'Users' },
-      { name: 'Your Child Hostel Attendance', path: '/parent/child-hostel-attendance', icon: 'CheckCircle' },
-      { name: 'Your Child Result', path: '/parent/child-result', icon: 'Award' },
-      { name: 'Notice Board', path: '/parent/notice-board', icon: 'Clipboard' },
-      { name: 'Fee Details', path: '/parent/fee-details', icon: 'DollarSign' },
-      { name: 'Talk to Mentor', path: '/parent/talk-to-mentor', icon: 'MessageCircle' }
+      // { name: 'Inbox', path: '/parent/inbox', icon: 'Mail' },
+      // { name: 'Your Child Class Room', path: '/parent/child-classroom', icon: 'Users' },
+      // { name: 'Your Child Hostel Attendance', path: '/parent/child-hostel-attendance', icon: 'CheckCircle' },
+      // { name: 'Your Child Result', path: '/parent/child-result', icon: 'Award' },
+      // { name: 'Notice Board', path: '/parent/notice-board', icon: 'Clipboard' },
+      // { name: 'Fee Details', path: '/parent/fee-details', icon: 'DollarSign' },
+      // { name: 'Talk to Mentor', path: '/parent/talk-to-mentor', icon: 'MessageCircle' }
+      {name: 'Ticket Raised', path: '/parent/ticket-raised', icon: 'AlertCircle'}
     ],
     'Parent': [
       { name: 'Inbox', path: '/parent/inbox', icon: 'Mail' },
