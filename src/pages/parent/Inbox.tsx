@@ -26,7 +26,8 @@ import {
   Trophy,
   Heart,
   Phone,
-  Clock
+  Clock,
+  Plus
 } from 'lucide-react';
 
 const ParentInbox = () => {
@@ -35,6 +36,18 @@ const ParentInbox = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedMail, setSelectedMail] = useState(null);
   const [showCompose, setShowCompose] = useState(false);
+
+function handleSubmit(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+  event.preventDefault();
+  // You can collect form data here if you use state for each field.
+  // For now, just close the modal and show a success message.
+  alert('Ticket submitted successfully!');
+  // Optionally, reset form fields if you use state.
+  // Hide the compose modal.
+  setShowCompose(false);
+}
+
+
 
   // Current parent user data
   const [currentParent] = useState({
@@ -280,45 +293,65 @@ const ParentInbox = () => {
   const unreadCount = mails.filter(mail => !mail.isRead).length;
 
   const ComposeModal = () => (
-    showCompose && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-hidden">
-          <div className="border-b border-gray-200 px-6 py-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Compose Message</h3>
-              <button 
-                onClick={() => setShowCompose(false)}
-                className="text-gray-400 hover:text-gray-600 text-xl"
-              >
-                ×
-              </button>
-            </div>
-          </div>
-          <div className="p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
-              <select className="w-full border border-gray-300 rounded-md px-3 py-2">
-                <option>Select Recipient</option>
-                <option>Class Teacher - Prof. Dr. Meera Singh</option>
-                <option>Academic Office</option>
-                <option>Hostel Warden</option>
-                <option>Accounts Department</option>
-                <option>Placement Cell</option>
-                <option>Transport Office</option>
-                <option>Principal Office</option>
+  showCompose && (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+          <h3 className="text-lg font-semibold text-gray-900">Raise Ticket</h3>
+          <button 
+            onClick={() => setShowCompose(false)}
+            className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Form Body */}
+        <div className="p-6 space-y-4">
+          {/* Form Fields in bordered cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <select className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white">
+                <option>Select Ticket Type</option>
+                <option>Hostel</option>
+                <option>Transport</option>
+                <option>Library</option>
+                <option>Academic</option>
+                <option>Examination</option>
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Regarding Student</label>
-              <select className="w-full border border-gray-300 rounded-md px-3 py-2">
-                {currentParent.children.map(child => (
-                  <option key={child.id} value={child.id}>
-                    {child.name} ({child.rollNumber}) - {child.department}
-                  </option>
-                ))}
-              </select>
+
+            <div className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Child Name</label>
+              <input 
+                type="text" 
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                placeholder="Enter child's name"
+              />
             </div>
-            <div>
+
+            <div className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Parent Name</label>
+              <input 
+                type="text" 
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                placeholder="Enter parent name"
+              />
+            </div>
+
+            <div className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Roll Number</label>
+              <input 
+                type="text" 
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                placeholder="Enter roll number"
+              />
+            </div>
+
+            <div className="border border-gray-300 rounded-lg p-3 bg-gray-50 col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
               <input 
                 type="text" 
@@ -326,46 +359,50 @@ const ParentInbox = () => {
                 placeholder="Enter subject"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <select className="border border-gray-300 rounded-md px-3 py-2">
-                <option value="academic">Academic Inquiry</option>
-                <option value="financial">Fee Related</option>
-                <option value="hostel">Hostel Matter</option>
-                <option value="medical">Health Concern</option>
-                <option value="transport">Transport Issue</option>
-                <option value="general">General Query</option>
+
+            <div className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+              <select className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white">
+                <option value="academic">Computer Science Engineering</option>
+                <option value="electronics">Electronics & Communication</option>
+                <option value="mechanical">Mechanical Engineering</option>
+                <option value="ai">Artificial Intelligence</option>
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-              <textarea 
-                className="w-full border border-gray-300 rounded-md px-3 py-2 h-32"
-                placeholder="Type your message here..."
-              />
+
+            <div className="border border-gray-300 rounded-lg p-3 bg-gray-50">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <select className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white">
+                <option>Pending</option>
+                <option>In Progress</option>
+                <option>Resolved</option>
+                <option>Closed</option>
+              </select>
             </div>
-            <div className="flex items-center justify-between pt-4 border-t">
-              <button className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
-                <Paperclip size={16} />
-                Attach File
+
+          </div>
+
+          {/* Attach & Buttons */}
+          <div className="flex items-center justify-between pt-4 border-t">
+            
+            <div className="flex gap-2 ">
+              <button 
+                onClick={() => setShowCompose(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
               </button>
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => setShowCompose(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                  Send Message
-                </button>
-              </div>
+              <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                Submit Ticket
+              </button>
             </div>
           </div>
         </div>
       </div>
-    )
-  );
+    </div>
+  )
+);
+
 
   const MailDetailModal = () => (
     selectedMail && (
@@ -495,15 +532,19 @@ const ParentInbox = () => {
               onClick={() => setShowCompose(true)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              <Mail size={16} />
-              Contact College
-            </button>
-            <button className="p-2 text-gray-600 hover:text-gray-800">
+              <Plus size={16} />
+                 Raise Ticket
+            </button>       
+ 
+   <button className="p-2 text-gray-600 hover:text-gray-800">
               <RefreshCw size={20} />
             </button>
           </div>
+          
         </div>
+        
       </div>
+      
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
@@ -824,3 +865,6 @@ const ParentInbox = () => {
 };
 
 export default ParentInbox;
+
+
+

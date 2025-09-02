@@ -10,6 +10,7 @@ import YourChildClassroom from "../pages/parent/Yourchildclassroom";
  import YourChildHostelAttendance from "../pages/parent/Yourchildhostelattendence";
 import Feedetails from "../pages/parent/Feedetails";
  import TalkToMentor from "../pages/parent/Talktomentor";
+ import Ticketraised from "../pages/chairpersonparent/Ticketraised";
 // import { i } from "framer-motion/client";
 // Or, if the file is named 'Dashboard/index.tsx':
 // import ParentDashboard from "../pages/Parent/Dashboard";
@@ -24,6 +25,7 @@ const ParentRoutes: React.FC = () => {
                 <Route path="notice-board" element={<Noticeboard />} />
                 <Route path="fee-details" element={<Feedetails   />} />
                 <Route path="talk-to-mentor" element={<TalkToMentor />} />
+                <Route path="ticket-raised" element={<Ticketraised />} />
 
             {/* <Route path="/parent/feedetails" element={<Feedetails   />} />
             <Route path="/parent/noticeboard" element={<Noticeboard />} />

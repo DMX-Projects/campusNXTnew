@@ -1,13 +1,22 @@
 
-
-
 import React, { useState } from 'react';
-import { Calendar, User, Mail, Phone, Clock, MessageCircle, Video, FileText, Star, Send, BookOpen, Award } from 'lucide-react';
+import { Calendar, User, Mail, Phone, Clock, MessageCircle, Video, FileText, Star, Send, BookOpen, Award, X, Check, AlertCircle } from 'lucide-react';
 
 const TalkToMentor = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [messageText, setMessageText] = useState('');
+  const [messageSubject, setMessageSubject] = useState('');
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+  const [meetingType, setMeetingType] = useState('Academic Discussion');
+  const [meetingMode, setMeetingMode] = useState('In-person');
+  const [meetingAgenda, setMeetingAgenda] = useState('');
+  const [messagePriority, setMessagePriority] = useState('Normal Priority');
+  const [showVideoCall, setShowVideoCall] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [isBookingAppointment, setIsBookingAppointment] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [messageSuccess, setMessageSuccess] = useState(false);
 
   // Mock data for mentor and student information
   const mentorData = {
@@ -35,7 +44,7 @@ const TalkToMentor = () => {
     attendance: '92%'
   };
 
-  const previousConversations = [
+  const [previousConversations, setPreviousConversations] = useState([
     {
       id: 1,
       date: '2025-01-15',
@@ -60,7 +69,7 @@ const TalkToMentor = () => {
       summary: 'Helped choose final year project topic in Machine Learning domain.',
       type: 'Project'
     }
-  ];
+  ]);
 
   const availableSlots = [
     { date: '2025-01-20', time: '10:00 AM', available: true },
@@ -72,7 +81,7 @@ const TalkToMentor = () => {
     { date: '2025-01-22', time: '1:00 PM', available: true },
   ];
 
-  const upcomingAppointments = [
+  const [upcomingAppointments, setUpcomingAppointments] = useState([
     {
       id: 1,
       date: '2025-01-18',
@@ -81,7 +90,7 @@ const TalkToMentor = () => {
       type: 'In-person',
       status: 'Confirmed'
     }
-  ];
+  ]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -102,22 +111,126 @@ const TalkToMentor = () => {
     }
   };
 
+  const handleVideoCall = () => {
+    setShowVideoCall(true);
+    // Simulate connection process
+    setTimeout(() => {
+      alert('Connecting to Dr. Anjali Sharma...\nVideo call feature would integrate with your preferred video platform.');
+      setShowVideoCall(false);
+    }, 2000);
+  };
+
+  const handleScheduleMeeting = () => {
+    setShowScheduleModal(true);
+    setActiveTab('schedule');
+  };
+
+  const handleBookAppointment = async () => {
+    if (!selectedTimeSlot || !meetingAgenda.trim()) {
+      alert('Please select a time slot and provide meeting agenda');
+      return;
+    }
+
+    setIsBookingAppointment(true);
+    
+    // Simulate booking process
+    setTimeout(() => {
+      const [date, time] = selectedTimeSlot.split('-');
+      const newAppointment = {
+        id: Date.now(),
+        date: date,
+        time: time,
+        subject: meetingType,
+        type: meetingMode,
+        status: 'Confirmed',
+        agenda: meetingAgenda
+      };
+      
+      setUpcomingAppointments(prev => [...prev, newAppointment]);
+      setBookingSuccess(true);
+      setIsBookingAppointment(false);
+      setSelectedTimeSlot('');
+      setMeetingAgenda('');
+      
+      setTimeout(() => {
+        setBookingSuccess(false);
+        setShowScheduleModal(false);
+      }, 3000);
+    }, 2000);
+  };
+
+  const handleSendMessage = async () => {
+    if (!messageSubject.trim() || !messageText.trim()) {
+      alert('Please fill in both subject and message');
+      return;
+    }
+
+    setIsSendingMessage(true);
+    
+    // Simulate message sending
+    setTimeout(() => {
+      const newMessage = {
+        id: Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        subject: messageSubject,
+        summary: messageText.substring(0, 100) + '...',
+        type: 'Personal',
+        status: 'Sent'
+      };
+      
+      setPreviousConversations(prev => [newMessage, ...prev]);
+      setMessageSuccess(true);
+      setIsSendingMessage(false);
+      setMessageText('');
+      setMessageSubject('');
+      
+      setTimeout(() => {
+        setMessageSuccess(false);
+      }, 3000);
+    }, 1500);
+  };
+
+  const handleQuickAction = (action) => {
+    switch (action) {
+      case 'message':
+        setActiveTab('messages');
+        break;
+      case 'video':
+        handleVideoCall();
+        break;
+      case 'schedule':
+        handleScheduleMeeting();
+        break;
+      case 'reports':
+        alert('Reports feature: This would open academic progress reports and performance analytics.');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-3 sm:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 mb-6">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Talk to Mentor</h1>
-              <p className="text-gray-600">Connect with your child's academic mentor for guidance and support</p>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Talk to Mentor</h1>
+              <p className="text-gray-600 text-sm sm:text-base">Connect with your child's academic mentor for guidance and support</p>
             </div>
-            <div className="flex gap-2">
-              <button className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
+            <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
+              <button 
+                onClick={handleVideoCall}
+                className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors w-full sm:w-auto"
+              >
                 <Video size={16} />
                 Video Call
               </button>
-              <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+              <button 
+                onClick={handleScheduleMeeting}
+                className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors w-full sm:w-auto"
+              >
                 <Calendar size={16} />
                 Schedule Meeting
               </button>
@@ -126,71 +239,71 @@ const TalkToMentor = () => {
         </div>
 
         {/* Student Info Bar */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-4 mb-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-4 sm:p-6 mb-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h2 className="text-lg font-semibold">Student: {studentData.name}</h2>
-              <p className="text-blue-100">{studentData.rollNo} • {studentData.branch} • {studentData.semester}</p>
+              <p className="text-blue-100 text-sm sm:text-base">{studentData.rollNo} • {studentData.branch} • {studentData.semester}</p>
             </div>
-            <div className="flex gap-6 mt-2 md:mt-0">
+            <div className="flex gap-4 sm:gap-6">
               <div className="text-center">
-                <p className="text-blue-100 text-sm">Current GPA</p>
-                <p className="text-xl font-bold">{studentData.currentGPA}</p>
+                <p className="text-blue-100 text-xs sm:text-sm">Current GPA</p>
+                <p className="text-lg sm:text-xl font-bold">{studentData.currentGPA}</p>
               </div>
               <div className="text-center">
-                <p className="text-blue-100 text-sm">Attendance</p>
-                <p className="text-xl font-bold">{studentData.attendance}</p>
+                <p className="text-blue-100 text-xs sm:text-sm">Attendance</p>
+                <p className="text-lg sm:text-xl font-bold">{studentData.attendance}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Mentor Profile */}
-          <div className="lg:col-span-1">
+          <div className="xl:col-span-1 order-2 xl:order-1">
             <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-              <div className="p-6 text-center">
+              <div className="p-4 sm:p-6 text-center">
                 <img 
                   src={mentorData.image} 
                   alt={mentorData.name}
-                  className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-gray-200"
+                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4 object-cover border-4 border-gray-200"
                 />
-                <h2 className="text-xl font-bold text-gray-900 mb-1">{mentorData.name}</h2>
-                <p className="text-gray-600 mb-2">{mentorData.designation}</p>
-                <p className="text-sm text-gray-500 mb-4">{mentorData.department}</p>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">{mentorData.name}</h2>
+                <p className="text-gray-600 mb-2 text-sm sm:text-base">{mentorData.designation}</p>
+                <p className="text-xs sm:text-sm text-gray-500 mb-4">{mentorData.department}</p>
                 
                 <div className="flex items-center justify-center gap-1 mb-4">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
                       <Star 
                         key={i} 
-                        size={16} 
+                        size={14} 
                         className={i < Math.floor(mentorData.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'} 
                       />
                     ))}
                   </div>
-                  <span className="text-sm text-gray-600 ml-2">
+                  <span className="text-xs sm:text-sm text-gray-600 ml-2">
                     {mentorData.rating} ({mentorData.totalReviews} reviews)
                   </span>
                 </div>
 
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-center gap-2 text-gray-600">
-                    <Mail size={14} />
+                <div className="space-y-2 text-xs sm:text-sm">
+                  <div className="flex items-center justify-center gap-2 text-gray-600 break-all">
+                    <Mail size={12} />
                     <span>{mentorData.email}</span>
                   </div>
                   <div className="flex items-center justify-center gap-2 text-gray-600">
-                    <Phone size={14} />
+                    <Phone size={12} />
                     <span>{mentorData.phone}</span>
                   </div>
                   <div className="flex items-center justify-center gap-2 text-gray-600">
-                    <Clock size={14} />
+                    <Clock size={12} />
                     <span>{mentorData.officeHours}</span>
                   </div>
                 </div>
 
                 <div className="mt-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Specializations</h4>
+                  <h4 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">Specializations</h4>
                   <div className="flex flex-wrap gap-1 justify-center">
                     {mentorData.specialization.map((spec, index) => (
                       <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
@@ -203,35 +316,47 @@ const TalkToMentor = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border mt-6 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="bg-white rounded-lg shadow-sm border mt-6 p-4 sm:p-6">
+              <h3 className="font-semibold text-gray-900 mb-4 text-sm sm:text-base">Quick Actions</h3>
               <div className="space-y-3">
-                <button className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
-                  <MessageCircle size={20} className="text-blue-600" />
-                  <span className="font-medium">Send Message</span>
+                <button 
+                  onClick={() => handleQuickAction('message')}
+                  className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <MessageCircle size={18} className="text-blue-600 flex-shrink-0" />
+                  <span className="font-medium text-sm sm:text-base">Send Message</span>
                 </button>
-                <button className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
-                  <Video size={20} className="text-green-600" />
-                  <span className="font-medium">Video Call</span>
+                <button 
+                  onClick={() => handleQuickAction('video')}
+                  className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <Video size={18} className="text-green-600 flex-shrink-0" />
+                  <span className="font-medium text-sm sm:text-base">Video Call</span>
                 </button>
-                <button className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
-                  <Calendar size={20} className="text-purple-600" />
-                  <span className="font-medium">Book Appointment</span>
+                <button 
+                  onClick={() => handleQuickAction('schedule')}
+                  className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <Calendar size={18} className="text-purple-600 flex-shrink-0" />
+                  <span className="font-medium text-sm sm:text-base">Book Appointment</span>
                 </button>
-                <button className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
-                  <FileText size={20} className="text-orange-600" />
-                  <span className="font-medium">View Reports</span>
+                <button 
+                  onClick={() => handleQuickAction('reports')}
+                  className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <FileText size={18} className="text-orange-600 flex-shrink-0" />
+                  <span className="font-medium text-sm sm:text-base">View Reports</span>
                 </button>
               </div>
             </div>
           </div>
 
           {/* Main Content Area */}
-          <div className="lg:col-span-2">
+          <div className="xl:col-span-2 order-1 xl:order-2">
             {/* Tab Navigation */}
             <div className="bg-white rounded-lg shadow-sm border mb-6">
-              <div className="border-b">
-                <nav className="flex space-x-8 px-6">
+              <div className="border-b overflow-x-auto">
+                <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 min-w-max">
                   {[
                     { id: 'overview', label: 'Overview', icon: User },
                     { id: 'schedule', label: 'Schedule Meeting', icon: Calendar },
@@ -241,26 +366,26 @@ const TalkToMentor = () => {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center gap-2 py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
+                      className={`flex items-center gap-2 py-4 px-2 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap ${
                         activeTab === tab.id
                           ? 'border-blue-600 text-blue-600'
                           : 'border-transparent text-gray-500 hover:text-gray-700'
                       }`}
                     >
-                      <tab.icon size={16} />
+                      <tab.icon size={14} />
                       {tab.label}
                     </button>
                   ))}
                 </nav>
               </div>
 
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {/* Overview Tab */}
                 {activeTab === 'overview' && (
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">About Your Mentor</h3>
-                      <p className="text-gray-700 leading-relaxed">{mentorData.about}</p>
+                      <p className="text-gray-700 leading-relaxed text-sm sm:text-base">{mentorData.about}</p>
                     </div>
 
                     <div>
@@ -269,10 +394,10 @@ const TalkToMentor = () => {
                         <div className="space-y-3">
                           {upcomingAppointments.map(appointment => (
                             <div key={appointment.id} className="border rounded-lg p-4 bg-blue-50">
-                              <div className="flex justify-between items-start">
-                                <div>
-                                  <h4 className="font-medium text-gray-900">{appointment.subject}</h4>
-                                  <p className="text-sm text-gray-600 mt-1">
+                              <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
+                                <div className="flex-1">
+                                  <h4 className="font-medium text-gray-900 text-sm sm:text-base">{appointment.subject}</h4>
+                                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
                                     {formatDate(appointment.date)} at {appointment.time}
                                   </p>
                                   <span className="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
@@ -287,29 +412,29 @@ const TalkToMentor = () => {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-gray-500 italic">No upcoming appointments scheduled</p>
+                        <p className="text-gray-500 italic text-sm sm:text-base">No upcoming appointments scheduled</p>
                       )}
                     </div>
 
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Student Progress Overview</h3>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="text-blue-100 text-sm">Academic Performance</p>
-                              <p className="text-2xl font-bold">Excellent</p>
+                              <p className="text-blue-100 text-xs sm:text-sm">Academic Performance</p>
+                              <p className="text-lg sm:text-2xl font-bold">Excellent</p>
                             </div>
-                            <BookOpen className="h-8 w-8 text-blue-200" />
+                            <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200" />
                           </div>
                         </div>
                         <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
                           <div className="flex items-center justify-between">
                             <div>
-                              <p className="text-green-100 text-sm">Overall Rating</p>
-                              <p className="text-2xl font-bold">A Grade</p>
+                              <p className="text-green-100 text-xs sm:text-sm">Overall Rating</p>
+                              <p className="text-lg sm:text-2xl font-bold">A Grade</p>
                             </div>
-                            <Award className="h-8 w-8 text-green-200" />
+                            <Award className="h-6 w-6 sm:h-8 sm:w-8 text-green-200" />
                           </div>
                         </div>
                       </div>
@@ -320,15 +445,26 @@ const TalkToMentor = () => {
                 {/* Schedule Meeting Tab */}
                 {activeTab === 'schedule' && (
                   <div className="space-y-6">
+                    {bookingSuccess && (
+                      <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
+                        <Check size={16} />
+                        <span className="text-sm sm:text-base">Appointment booked successfully!</span>
+                      </div>
+                    )}
+                    
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Schedule a Meeting</h3>
-                      <p className="text-gray-600 mb-4">Book a consultation session with your child's mentor</p>
+                      <p className="text-gray-600 mb-4 text-sm sm:text-base">Book a consultation session with your child's mentor</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Meeting Type</label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <select 
+                          value={meetingType}
+                          onChange={(e) => setMeetingType(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                        >
                           <option>Academic Discussion</option>
                           <option>Career Guidance</option>
                           <option>Performance Review</option>
@@ -339,7 +475,11 @@ const TalkToMentor = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Meeting Mode</label>
-                        <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <select 
+                          value={meetingMode}
+                          onChange={(e) => setMeetingMode(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                        >
                           <option>In-person</option>
                           <option>Video Call</option>
                           <option>Phone Call</option>
@@ -348,14 +488,14 @@ const TalkToMentor = () => {
                     </div>
 
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-3">Available Time Slots</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <h4 className="font-medium text-gray-900 mb-3 text-sm sm:text-base">Available Time Slots</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {availableSlots.map((slot, index) => (
                           <button
                             key={index}
                             disabled={!slot.available}
                             onClick={() => setSelectedTimeSlot(`${slot.date}-${slot.time}`)}
-                            className={`p-3 border rounded-lg text-left transition-colors ${
+                            className={`p-3 border rounded-lg text-left transition-colors text-sm ${
                               slot.available
                                 ? selectedTimeSlot === `${slot.date}-${slot.time}`
                                   ? 'border-blue-500 bg-blue-50 text-blue-700'
@@ -364,7 +504,7 @@ const TalkToMentor = () => {
                             }`}
                           >
                             <div className="font-medium">{formatDate(slot.date)}</div>
-                            <div className="text-sm text-gray-600">{slot.time}</div>
+                            <div className="text-xs sm:text-sm text-gray-600">{slot.time}</div>
                             {!slot.available && <div className="text-xs text-red-500 mt-1">Unavailable</div>}
                           </button>
                         ))}
@@ -374,17 +514,20 @@ const TalkToMentor = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Meeting Agenda</label>
                       <textarea 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={meetingAgenda}
+                        onChange={(e) => setMeetingAgenda(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                         rows="3"
                         placeholder="Please describe what you'd like to discuss in this meeting..."
                       ></textarea>
                     </div>
 
                     <button 
-                      disabled={!selectedTimeSlot}
-                      className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                      onClick={handleBookAppointment}
+                      disabled={!selectedTimeSlot || !meetingAgenda.trim() || isBookingAppointment}
+                      className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
                     >
-                      Book Appointment
+                      {isBookingAppointment ? 'Booking...' : 'Book Appointment'}
                     </button>
                   </div>
                 )}
@@ -392,16 +535,25 @@ const TalkToMentor = () => {
                 {/* Messages Tab */}
                 {activeTab === 'messages' && (
                   <div className="space-y-6">
+                    {messageSuccess && (
+                      <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg flex items-center gap-2">
+                        <Check size={16} />
+                        <span className="text-sm sm:text-base">Message sent successfully!</span>
+                      </div>
+                    )}
+                    
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Send Message</h3>
-                      <p className="text-gray-600 mb-4">Send a message to discuss your child's academic progress</p>
+                      <p className="text-gray-600 mb-4 text-sm sm:text-base">Send a message to discuss your child's academic progress</p>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
                       <input 
                         type="text"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={messageSubject}
+                        onChange={(e) => setMessageSubject(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                         placeholder="Enter message subject..."
                       />
                     </div>
@@ -409,7 +561,7 @@ const TalkToMentor = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                       <textarea 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                         rows="6"
                         placeholder="Type your message here..."
                         value={messageText}
@@ -417,41 +569,49 @@ const TalkToMentor = () => {
                       ></textarea>
                     </div>
 
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-2">
-                        <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm">
                           Attach File
                         </button>
-                        <select className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <select 
+                          value={messagePriority}
+                          onChange={(e) => setMessagePriority(e.target.value)}
+                          className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        >
                           <option>Normal Priority</option>
                           <option>High Priority</option>
                           <option>Urgent</option>
                         </select>
                       </div>
-                      <button className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
-                        <Send size={16} />
-                        Send Message
+                      <button 
+                        onClick={handleSendMessage}
+                        disabled={!messageSubject.trim() || !messageText.trim() || isSendingMessage}
+                        className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm"
+                      >
+                        <Send size={14} />
+                        {isSendingMessage ? 'Sending...' : 'Send Message'}
                       </button>
                     </div>
 
                     <div className="border-t pt-6">
-                      <h4 className="font-medium text-gray-900 mb-3">Recent Messages</h4>
+                      <h4 className="font-medium text-gray-900 mb-3 text-sm sm:text-base">Recent Messages</h4>
                       <div className="space-y-3">
                         <div className="border rounded-lg p-4 bg-gray-50">
-                          <div className="flex justify-between items-start mb-2">
-                            <h5 className="font-medium text-gray-900">Re: Mid-semester concerns</h5>
+                          <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
+                            <h5 className="font-medium text-gray-900 text-sm sm:text-base">Re: Mid-semester concerns</h5>
                             <span className="text-xs text-gray-500">Jan 16, 2025</span>
                           </div>
-                          <p className="text-sm text-gray-600">Thank you for your concern. Arjun is showing good improvement in his recent assignments...</p>
+                          <p className="text-xs sm:text-sm text-gray-600">Thank you for your concern. Arjun is showing good improvement in his recent assignments...</p>
                           <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Replied</span>
                         </div>
                         
                         <div className="border rounded-lg p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h5 className="font-medium text-gray-900">Career guidance request</h5>
+                          <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
+                            <h5 className="font-medium text-gray-900 text-sm sm:text-base">Career guidance request</h5>
                             <span className="text-xs text-gray-500">Jan 12, 2025</span>
                           </div>
-                          <p className="text-sm text-gray-600">Could we schedule a session to discuss internship opportunities...</p>
+                          <p className="text-xs sm:text-sm text-gray-600">Could we schedule a session to discuss internship opportunities...</p>
                           <span className="inline-block mt-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Pending</span>
                         </div>
                       </div>
@@ -464,16 +624,16 @@ const TalkToMentor = () => {
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Consultation History</h3>
-                      <p className="text-gray-600 mb-4">Previous interactions and meetings with your child's mentor</p>
+                      <p className="text-gray-600 mb-4 text-sm sm:text-base">Previous interactions and meetings with your child's mentor</p>
                     </div>
 
                     <div className="space-y-4">
                       {previousConversations.map(conversation => (
                         <div key={conversation.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                          <div className="flex justify-between items-start mb-3">
+                          <div className="flex flex-col sm:flex-row justify-between items-start mb-3 gap-2">
                             <div className="flex-1">
-                              <h4 className="font-medium text-gray-900 mb-1">{conversation.subject}</h4>
-                              <p className="text-sm text-gray-600">{formatDate(conversation.date)}</p>
+                              <h4 className="font-medium text-gray-900 mb-1 text-sm sm:text-base">{conversation.subject}</h4>
+                              <p className="text-xs sm:text-sm text-gray-600">{formatDate(conversation.date)}</p>
                             </div>
                             <div className="flex gap-2">
                               <span className={`px-2 py-1 text-xs rounded-full ${getTypeColor(conversation.type)}`}>
@@ -484,12 +644,12 @@ const TalkToMentor = () => {
                               </span>
                             </div>
                           </div>
-                          <p className="text-sm text-gray-700 mb-3">{conversation.summary}</p>
-                          <div className="flex gap-2">
-                            <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                          <p className="text-xs sm:text-sm text-gray-700 mb-3">{conversation.summary}</p>
+                          <div className="flex flex-col sm:flex-row gap-2">
+                            <button className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium text-left">
                               View Details
                             </button>
-                            <button className="text-gray-600 hover:text-gray-800 text-sm font-medium">
+                            <button className="text-gray-600 hover:text-gray-800 text-xs sm:text-sm font-medium text-left">
                               Download Report
                             </button>
                           </div>
@@ -498,7 +658,7 @@ const TalkToMentor = () => {
                     </div>
 
                     <div className="text-center">
-                      <button className="text-blue-600 hover:text-blue-800 font-medium">
+                      <button className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base">
                         Load More History
                       </button>
                     </div>
@@ -510,24 +670,136 @@ const TalkToMentor = () => {
         </div>
 
         {/* Footer Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-          <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-            <div className="text-2xl font-bold text-blue-600 mb-1">12</div>
-            <div className="text-sm text-gray-600">Total Consultations</div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6">
+          <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 text-center">
+            <div className="text-xl sm:text-2xl font-bold text-blue-600 mb-1">12</div>
+            <div className="text-xs sm:text-sm text-gray-600">Total Consultations</div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-            <div className="text-2xl font-bold text-green-600 mb-1">24hrs</div>
-            <div className="text-sm text-gray-600">Avg Response Time</div>
+          <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 text-center">
+            <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">24hrs</div>
+            <div className="text-xs sm:text-sm text-gray-600">Avg Response Time</div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-            <div className="text-2xl font-bold text-purple-600 mb-1">98%</div>
-            <div className="text-sm text-gray-600">Satisfaction Rate</div>
+          <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 text-center">
+            <div className="text-xl sm:text-2xl font-bold text-purple-600 mb-1">98%</div>
+            <div className="text-xs sm:text-sm text-gray-600">Satisfaction Rate</div>
           </div>
-          <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-            <div className="text-2xl font-bold text-orange-600 mb-1">Active</div>
-            <div className="text-sm text-gray-600">Mentor Status</div>
+          <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 text-center">
+            <div className="text-xl sm:text-2xl font-bold text-orange-600 mb-1">Active</div>
+            <div className="text-xs sm:text-sm text-gray-600">Mentor Status</div>
           </div>
         </div>
+
+        {/* Video Call Modal */}
+        {showVideoCall && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Connecting to Video Call</h3>
+                <p className="text-gray-600 text-sm">Connecting you with Dr. Anjali Sharma...</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Schedule Modal */}
+        {showScheduleModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Quick Schedule</h3>
+                <button 
+                  onClick={() => setShowScheduleModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Meeting Type</label>
+                    <select 
+                      value={meetingType}
+                      onChange={(e) => setMeetingType(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    >
+                      <option>Academic Discussion</option>
+                      <option>Career Guidance</option>
+                      <option>Performance Review</option>
+                      <option>Personal Consultation</option>
+                      <option>Project Guidance</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Meeting Mode</label>
+                    <select 
+                      value={meetingMode}
+                      onChange={(e) => setMeetingMode(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    >
+                      <option>In-person</option>
+                      <option>Video Call</option>
+                      <option>Phone Call</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Select Time Slot</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto">
+                    {availableSlots.map((slot, index) => (
+                      <button
+                        key={index}
+                        disabled={!slot.available}
+                        onClick={() => setSelectedTimeSlot(`${slot.date}-${slot.time}`)}
+                        className={`p-2 border rounded text-left transition-colors text-xs ${
+                          slot.available
+                            ? selectedTimeSlot === `${slot.date}-${slot.time}`
+                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+                            : 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                        }`}
+                      >
+                        <div className="font-medium text-xs">{formatDate(slot.date)}</div>
+                        <div className="text-xs text-gray-600">{slot.time}</div>
+                        {!slot.available && <div className="text-xs text-red-500">Unavailable</div>}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Agenda</label>
+                  <textarea 
+                    value={meetingAgenda}
+                    onChange={(e) => setMeetingAgenda(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    rows="2"
+                    placeholder="Brief agenda for the meeting..."
+                  ></textarea>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button 
+                    onClick={() => setShowScheduleModal(false)}
+                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleBookAppointment}
+                    disabled={!selectedTimeSlot || !meetingAgenda.trim() || isBookingAppointment}
+                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm"
+                  >
+                    {isBookingAppointment ? 'Booking...' : 'Book Now'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
