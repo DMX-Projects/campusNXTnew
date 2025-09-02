@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 // import ParentDashboard from "../components/Dashboard/ParentDashboard";
 import Inbox from "../pages/parent/Inbox";
- import Noticeboard from "../pages/parent/noticeboard";
+ import Noticeboard from "../pages/parent/Noticeboard";
 
 import YourChildClassroom from "../pages/parent/Yourchildclassroom";
  import YourchildResults from "../pages/parent/Yourchildresults";
