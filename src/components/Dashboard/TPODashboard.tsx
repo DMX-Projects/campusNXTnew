@@ -72,12 +72,12 @@ const TPODashboard: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <button
+          {/* <button
             onClick={() => setIsModalOpen(true)}
             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
             Schedule Drive
-          </button>
+          </button> */}
           <button
             onClick={handleGenerateReport}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
