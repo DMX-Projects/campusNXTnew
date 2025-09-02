@@ -15,7 +15,7 @@ interface Company {
   location: string;
   package: string;
   positions: number;
-  status: "Active" | "Inactive";
+  status: "Active" | "Inactive" | "Closed" | "Upcoming";
   lastVisit: string;
   arrivalDate: string;
 }
@@ -333,7 +333,7 @@ const PlacementCompanies: React.FC = () => {
           className="w-full border rounded p-2"
           value={newCompany.positions}
           onChange={(e) =>
-            setNewCompany({ ...newCompany, positions: e.target.value })
+            setNewCompany({ ...newCompany, positions: Number(e.target.value) })
           }
         />
 

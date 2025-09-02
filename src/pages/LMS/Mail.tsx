@@ -80,7 +80,7 @@ Tech Innovators Pvt. Ltd. – HR Team`;
       ]);
       setLoading(false);
     }, 1000);
-  }, []);
+  }, [messageBody]);
 
   const handleComposeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setComposeData({ ...composeData, [e.target.name]: e.target.value });
