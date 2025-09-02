@@ -10,7 +10,7 @@ import AdministrationDashboard from './Dashboard/AdministrationDashboard';
 import TransportDashboard from './Dashboard/TransportDashboard';
 import HostelDashboard from './Dashboard/HostelDashboard';
 import LibraryDashboard from './Dashboard/LibraryDashboard';
-import CollegeSecretaryDashboard from './Dashboard/CollegeSecretaryDashboard';
+import CollegeSecretaryDashboard from '../pages/Academics/AcademicDashboar/CollegeSecretaryDashboard';
 import DeanDashboard from './Dashboard/DeanDashboard';
 import HoDDashboard from './Dashboard/HoDDashboard';
 import LabAssistantDashboard from './Dashboard/LabAssistantDashboard';

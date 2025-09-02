@@ -16,7 +16,11 @@ import SubjectsAndSyllabus from '../pages/Academics/SubjectandSyllabus/SubjectSy
 import StudentExamprepation from '../pages/Academics/StudentExamprepration/StudentExamprep';
 import StudyMaterialPage from '../pages/Academics/StudyMaterial/StudyMaterial';
 import StudentProject from '../pages/Academics/StudentProject/StudentProject';
-import StudentAppruval from '../pages/Academics/StudentAppruval/StudentAppruval'
+import StudentAppruval from '../pages/Academics/StudentAppruval/StudentAppruval';
+// import AcademicDashboard from '../pages/Academics/AcademicDashboar/AcademicDashboard';
+import AcademicFaculty from '../pages/Academics/AcademicFaculty/AcademicFaculty';
+import OnlineTest from '../pages/Academics/OnlineTest/OnlineTest';
+import CodingAssesment from '../pages/Academics/OnlineTest/codingAssesment'
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
@@ -45,7 +49,10 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="study-material" element={<StudyMaterialPage />} />
       <Route path="student-projects" element={<StudentProject />} />
       <Route path="student-approval" element={<StudentAppruval />} />
-
+      {/* <Route path="academic-dashboard" element={<AcademicDashboard />} /> */}
+      <Route path="faculty" element={<AcademicFaculty />} />
+      <Route path="online-tests" element={<OnlineTest />} />
+      <Route path="coding-assessment" element={<CodingAssesment />} />
 
       {/* Users Routes
       <Route path="users" element={<Users />} />
