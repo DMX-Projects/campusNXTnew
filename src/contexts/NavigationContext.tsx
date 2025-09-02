@@ -593,10 +593,17 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/hostel/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
-      { name: 'Fee Details', path: '/hostel/fee-details', icon: 'DollarSign' },
-      { name: 'Out Time', path: '/hostel/out-time', icon: 'Clock' },
-      { name: 'Student Permissions', path: '/hostel/student-permissions', icon: 'UserCheck' },
-      { name: 'Raise Ticket', path: '/hostel/raise-ticket', icon: 'AlertCircle' }
+        { name: 'Dashboard', path: '/hostel/student/dashboard', icon: 'BarChart' },  
+        { name: 'My Room', path: '/hostel/student/my-room', icon: 'Home' },          
+        { name: 'Permissions', path: '/hostel/student/student-permissions', icon: 'UserCheck' }, 
+        { name: 'Fees & Payments', path: '/hostel/student/fee-details', icon: 'DollarSign' },   
+        { name: 'Mess Services', path: '/hostel/student/mess-services', icon: 'Coffee' },         
+        { name: 'Attendance', path: '/hostel/student/attendance', icon: 'Clock' },               
+        { name: 'Support Tickets', path: '/hostel/student/raise-ticket', icon: 'AlertCircle' },  
+        { name: 'My Profile', path: '/hostel/student/my-profile', icon: 'User' },                
+        { name: 'Notices', path: '/hostel/student/notices', icon: 'Speaker' },                   
+        { name: 'Reports', path: '/hostel/student/reports', icon: 'FileText' }                   
+
     ],
     'default': [
       { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },

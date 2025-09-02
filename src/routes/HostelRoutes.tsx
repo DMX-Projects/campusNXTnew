@@ -17,7 +17,10 @@ import HostelReports from "../pages/Hostel/HostelReports";
 import HostelTickets from "../pages/Hostel/HostelTickets";
 // import HostelTickets from "../pages/Hostel/HostelTickets";
 // import HostelTransfer from "../pages/Hostel/HostelTransfer";
-
+import StudentHostelInbox from "../StudentModules/Hostel/HostelInbox"
+import MyRoomPage from "../StudentModules/Hostel/MyRoomPage";
+import MyHostelPermissions from "../StudentModules/Hostel/MyHostelPermissions";
+import FeePaymentsPage from "../StudentModules/Hostel/FeePaymentPage";
 const HostelRoutes: React.FC = () => {
   return (
     <Routes>
@@ -36,6 +39,10 @@ const HostelRoutes: React.FC = () => {
         <Route path="inventory" element={<HostelInventory />} />
         <Route path="geo-fencing" element={<GeofencingManagement />} />
       <Route path="reports" element={<HostelReports />} />
+      <Route path="student/inbox" element={<StudentHostelInbox />} />
+      <Route path="student/my-room" element={<MyRoomPage />} />
+      <Route path="student/student-permissions" element={<MyHostelPermissions />} />
+      <Route path="student/fee-details" element={<FeePaymentsPage />} />
       {/* <Route path="geo-fencing" element={<HostelGeoFencing />} />
       <Route path="transfer" element={<HostelTransfer />} />
       <Route path="reports" element={<HostelReports />} />*/}
