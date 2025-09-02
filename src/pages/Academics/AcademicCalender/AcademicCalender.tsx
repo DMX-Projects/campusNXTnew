@@ -1,4 +1,4 @@
- // AcademicDashboardPage.tsx
+
 import React, { useMemo, useState, useCallback } from "react";
 import {
   Calendar,
@@ -26,7 +26,7 @@ type ProgramType = "Full-Time" | "Part-Time" | "Research" | "Diploma";
 
 interface CalendarEntry {
   id: string;
-  university: string;
+  // university: string;
   academicYear: string;
   course: string;
   programType: ProgramType;
@@ -43,7 +43,7 @@ interface CalendarEntry {
 
 interface ExamEntry {
   id: string;
-  university: string;
+  // university: string;
   semester: number;
   programName: string;
   examType: "Mid-Sem" | "End-Sem" | "External" | "Practical";
@@ -54,7 +54,7 @@ interface ExamEntry {
 
 interface VacationEntry {
   id: string;
-  university: string;
+  // university: string;
   name: string;
   start: string; // YYYY-MM-DD
   end: string; // YYYY-MM-DD
@@ -65,7 +65,7 @@ interface VacationEntry {
 const CALENDAR_DUMMY: CalendarEntry[] = [
   {
     id: "C1",
-    university: "Mumbai University",
+    // university: "Mumbai University",
     academicYear: "2024-2025",
     course: "B.Tech",
     programType: "Full-Time",
@@ -81,7 +81,7 @@ const CALENDAR_DUMMY: CalendarEntry[] = [
   },
   {
     id: "C2",
-    university: "Delhi University",
+    // university: "Delhi University",
     academicYear: "2024-2025",
     course: "MBA",
     programType: "Full-Time",
@@ -97,7 +97,7 @@ const CALENDAR_DUMMY: CalendarEntry[] = [
   },
   {
     id: "C3",
-    university: "IIT Kharagpur",
+    // university: "IIT Kharagpur",
     academicYear: "2023-2024",
     course: "M.Tech",
     programType: "Full-Time",
@@ -113,7 +113,7 @@ const CALENDAR_DUMMY: CalendarEntry[] = [
   },
   {
     id: "C4",
-    university: "Anna University",
+    // university: "Anna University",
     academicYear: "2024-2025",
     course: "M.Tech",
     programType: "Full-Time",
@@ -129,7 +129,7 @@ const CALENDAR_DUMMY: CalendarEntry[] = [
   },
   {
     id: "C5",
-    university: "JNU",
+    // university: "JNU",
     academicYear: "2023-2024",
     course: "MA",
     programType: "Full-Time",
@@ -145,7 +145,7 @@ const CALENDAR_DUMMY: CalendarEntry[] = [
   },
   {
     id: "C6",
-    university: "Pune University",
+    // university: "Pune University",
     academicYear: "2024-2025",
     course: "B.Sc",
     programType: "Part-Time",
@@ -164,7 +164,7 @@ const CALENDAR_DUMMY: CalendarEntry[] = [
 const EXAM_DUMMY: ExamEntry[] = [
   {
     id: "E1",
-    university: "Mumbai University",
+    // university: "Mumbai University",
     semester: 6,
     programName: "Computer Science",
     examType: "Mid-Sem",
@@ -174,7 +174,7 @@ const EXAM_DUMMY: ExamEntry[] = [
   },
   {
     id: "E2",
-    university: "Mumbai University",
+    // university: "Mumbai University",
     semester: 6,
     programName: "Computer Science",
     examType: "External",
@@ -184,7 +184,7 @@ const EXAM_DUMMY: ExamEntry[] = [
   },
   {
     id: "E3",
-    university: "Delhi University",
+    // university: "Delhi University",
     semester: 1,
     programName: "Business Analytics",
     examType: "Mid-Sem",
@@ -192,7 +192,7 @@ const EXAM_DUMMY: ExamEntry[] = [
   },
   {
     id: "E4",
-    university: "IIT Kharagpur",
+    // university: "IIT Kharagpur",
     semester: 4,
     programName: "Electrical Engg.",
     examType: "Practical",
@@ -204,7 +204,7 @@ const EXAM_DUMMY: ExamEntry[] = [
 const VACATION_DUMMY: VacationEntry[] = [
   {
     id: "V1",
-    university: "Mumbai University",
+    // university: "Mumbai University",
     name: "Summer Vacation",
     start: "2025-05-26",
     end: "2025-07-05",
@@ -212,14 +212,14 @@ const VACATION_DUMMY: VacationEntry[] = [
   },
   {
     id: "V2",
-    university: "Delhi University",
+    // university: "Delhi University",
     name: "Winter Break",
     start: "2024-12-20",
     end: "2025-01-05",
   },
   {
     id: "V3",
-    university: "IIT Kharagpur",
+    // university: "IIT Kharagpur",
     name: "Diwali Holidays",
     start: "2024-10-22",
     end: "2024-10-29",
@@ -293,7 +293,7 @@ export default function AcademicDashboardPage(): JSX.Element {
     if (!examSearch.trim()) return exams;
     const q = examSearch.toLowerCase();
     return exams.filter((e) =>
-      [e.university, e.programName, e.examType, e.from, e.to || ""]
+      [ e.programName, e.examType, e.from, e.to || ""]
         .some((f) => String(f).toLowerCase().includes(q))
     );
   }, [exams, examSearch]);
@@ -303,7 +303,7 @@ export default function AcademicDashboardPage(): JSX.Element {
     if (!vacSearch.trim()) return vacations;
     const q = vacSearch.toLowerCase();
     return vacations.filter((v) =>
-      [v.university, v.name, v.start, v.end, v.notes || ""]
+      [v.name, v.start, v.end, v.notes || ""]
         .some((f) => String(f).toLowerCase().includes(q))
     );
   }, [vacations, vacSearch]);
@@ -338,7 +338,7 @@ export default function AcademicDashboardPage(): JSX.Element {
   const exportCalendarCSV = useCallback(() => {
     const rows = [
       [
-        "University",
+        // "University",
         "Academic Year",
         "Course",
         "Program Type",
@@ -353,7 +353,7 @@ export default function AcademicDashboardPage(): JSX.Element {
         "Working Days",
       ],
       ...calendar.map((c) => [
-        c.university,
+        // c.university,
         c.academicYear,
         c.course,
         c.programType,
@@ -454,7 +454,7 @@ export default function AcademicDashboardPage(): JSX.Element {
               <table className="w-full text-sm border-collapse">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="p-2 border">University</th>
+                    {/* <th className="p-2 border">University</th> */}
                     <th className="p-2 border">Academic Year</th>
                     <th className="p-2 border">Course</th>
                     <th className="p-2 border">Program</th>
@@ -471,7 +471,7 @@ export default function AcademicDashboardPage(): JSX.Element {
                 <tbody>
                   {calendarPageData.map((r) => (
                     <tr key={r.id} className="hover:bg-gray-50">
-                      <td className="p-2 border">{r.university}</td>
+                      {/* <td className="p-2 border">{r.university}</td> */}
                       <td className="p-2 border">{r.academicYear}</td>
                       <td className="p-2 border">{r.course}</td>
                       <td className="p-2 border">{r.programName} ({r.programType})</td>
@@ -539,7 +539,7 @@ export default function AcademicDashboardPage(): JSX.Element {
               <table className="w-full text-sm border-collapse">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="p-2 border">University</th>
+                    {/* <th className="p-2 border">University</th> */}
                     <th className="p-2 border">Program</th>
                     <th className="p-2 border">Semester</th>
                     <th className="p-2 border">Exam Type</th>
@@ -551,7 +551,7 @@ export default function AcademicDashboardPage(): JSX.Element {
                 <tbody>
                   {filteredExams.map((e) => (
                     <tr key={e.id} className="hover:bg-gray-50">
-                      <td className="p-2 border">{e.university}</td>
+                      {/* <td className="p-2 border">{e.university}</td> */}
                       <td className="p-2 border">{e.programName}</td>
                       <td className="p-2 border text-center">{e.semester}</td>
                       <td className="p-2 border text-center">{e.examType}</td>
@@ -591,7 +591,7 @@ export default function AcademicDashboardPage(): JSX.Element {
               <table className="w-full text-sm border-collapse">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="p-2 border">University</th>
+                    {/* <th className="p-2 border">University</th> */}
                     <th className="p-2 border">Holiday Name</th>
                     <th className="p-2 border">Start</th>
                     <th className="p-2 border">End</th>
@@ -602,7 +602,7 @@ export default function AcademicDashboardPage(): JSX.Element {
                 <tbody>
                   {filteredVacs.map((v) => (
                     <tr key={v.id} className="hover:bg-gray-50">
-                      <td className="p-2 border">{v.university}</td>
+                      {/* <td className="p-2 border">{v.university}</td> */}
                       <td className="p-2 border">{v.name}</td>
                       <td className="p-2 border text-center">{v.start}</td>
                       <td className="p-2 border text-center">{v.end}</td>
