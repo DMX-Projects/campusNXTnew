@@ -16,7 +16,7 @@ export default function BusDetails() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800"></h3>
@@ -34,7 +34,7 @@ export default function BusDetails() {
           
           return (
             <div key={bus.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between ">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
                     <Bus className="w-6 h-6 text-blue-600" />

@@ -22,7 +22,17 @@ export default function StudentsList() {
   };
 
   const handleAddStudent = () => {
+    // Fixed: Use correct route path
     navigate('/transport/add-student');
+  };
+
+  // Fixed: Updated navigation handlers to match route definitions
+  const handleEditStudent = (studentId) => {
+    navigate(`/transport/edit-student/${studentId}`);
+  };
+
+  const handleViewStudent = (studentId) => {
+    navigate(`/transport/view-student/${studentId}`);
   };
 
   return (
@@ -116,8 +126,18 @@ export default function StudentsList() {
                   </td>
                   <td className="py-4 px-4">
                     <div className="flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">Edit</button>
-                      <button className="text-gray-600 hover:text-gray-800 text-sm font-medium">View</button>
+                      <button 
+                        onClick={() => handleEditStudent(student.id)}
+                        className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        onClick={() => handleViewStudent(student.id)}
+                        className="text-gray-600 hover:text-gray-800 text-sm font-medium transition-colors"
+                      >
+                        View
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -125,6 +145,13 @@ export default function StudentsList() {
             </tbody>
           </table>
         </div>
+
+        {filteredStudents.length === 0 && (
+          <div className="text-center py-8">
+            <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">No students found matching your search criteria.</p>
+          </div>
+        )}
       </div>
     </div>
   );
