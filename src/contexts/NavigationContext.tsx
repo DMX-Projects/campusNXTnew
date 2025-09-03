@@ -29,10 +29,12 @@ const MODULE_ACCESS = {
   'HoD': ['Academics', 'Examination', 'Placements', 'LMS', 'Library', 'Communications'],
   'TPO': [ 'Placements', 'Academics', 'Communications'],
   'Controller of Examination': [ 'Examination', 'Academics'],
-  'Faculty': ['Academics', 'LMS', 'Library','Parent'],
+
+  'Faculty': ['Academics','Examination' ,'LMS', 'Library','Parent'],
   'Lab Assistant': ['Academics', 'LMS'],
   'Lab Technician': ['Academics', 'LMS'],
-  'Student': ['LMS','Placements', 'Library', 'Transport', 'Hostel'],
+  'Student': ['Academics','Administration','Examination' ,'LMS','Placements', 'Library', 'Transport', 'Hostel'],
+
   'Parent': ['Parent', 'Communications'],
   'Administration Officer': ['Administration', 'Communications'],
   'Transportation Incharge': ['Transport'],
@@ -302,7 +304,6 @@ const SIDEBAR_ITEMS = {
       { name: 'Exam Evaluation', path: '/examination/exam-evaluation', icon: 'FileText' },
       { name: 'Exam Results', path: '/examination/exam-results', icon: 'Award' },
       { name: 'Marks List', path: '/examination/marks-list', icon: 'List' },
-      
       { name: 'Assessment Tests', path: '/examination/assessment-tests', icon: 'FileQuestion' },
       { name: 'Reports', path: '/examination/reports', icon: 'FileText' },
       { name: 'Raise Ticket', path: '/examination/raise-ticket', icon: 'AlertCircle' }
@@ -328,20 +329,23 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/examination/raise-ticket', icon: 'AlertCircle' }
     ],
     'Faculty': [
-      { name: 'Dashboard', path: '/examination/dashboard', icon: 'BarChart3' },
+      { name: 'Dashboard', path: '/examination/dashboard-faculty', icon: 'BarChart3' },
       { name: 'Inbox', path: '/examination/inbox', icon: 'Mail' },
-      { name: 'Exam Timetable', path: '/examination/exam-timetable', icon: 'Calendar' },
-      { name: 'Exam Evaluation', path: '/examination/exam-evaluation', icon: 'FileText' },
-      { name: 'Assessment Tests', path: '/examination/assessment-tests', icon: 'FileQuestion' },
-      { name: 'Reports', path: '/examination/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/examination/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Exam Timetable', path: '/examination/examtimetable-faculty', icon: 'Calendar' },
+      { name: 'Invigilation Duties', path: '/examination/invigilation-faculty', icon: 'FileText' },
+      { name: 'Student Attendance', path: '/examination/studentattendance-faculty', icon: 'FileText' },
+      { name: 'Exam Evaluation', path: '/examination/examevalution-faculty', icon: 'FileText' },
+      { name: 'Marks List', path: '/examination/marklist-faculty', icon: 'FileText' },
+      { name: 'Exam Results', path: '/examination/examresults-faculty', icon: 'FileText' },
+      { name: 'Raise Ticket', path: '/examination/faculty-raiseticket', icon: 'AlertCircle' }
     ],
     'Student': [
-      { name: 'Exam Timetable', path: '/examination/exam-timetable', icon: 'Calendar' },
-      { name: 'Hall Tickets', path: '/examination/hall-tickets', icon: 'CreditCard' },
-      { name: 'Exam Results', path: '/examination/exam-results', icon: 'Award' },
-      { name: 'Assessment Tests', path: '/examination/assessment-tests', icon: 'FileQuestion' },
-      { name: 'Raise Ticket', path: '/examination/raise-ticket', icon: 'AlertCircle' }
+       { name: 'Dashboard', path: '/examination/student-dashboard', icon: 'Calendar' },
+       { name: 'ExamAttendance', path: '/examination/student-examattendance', icon: 'Calendar' },
+      { name: 'Exam Schedule', path: '/examination/student-examtimetable', icon: 'Calendar' },
+      { name: 'Hall Tickets', path: '/examination/student-studenthallticket', icon: 'CreditCard' },
+       { name: 'Exam Results', path: '/examination/student-examresult', icon: 'Award' },
+      { name: 'Raise Ticket', path: '/examination/student-raiseticket', icon: 'AlertCircle' }
     ],
     'default': [
       { name: 'Dashboard', path: '/examination/dashboard', icon: 'BarChart3' },
