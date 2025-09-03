@@ -19,6 +19,8 @@ import Tickets from "../pages/Transport/Tickets";
 import AddFaculty from "../pages/Transport/Components/addfaculty";
 import Inbox from "../pages/Transport/Inbox";
 import AddStudent from "../pages/Transport/Components/addstudent";
+import EditStudent from "../pages/Transport/Components/editstudent";
+import ViewDetailsStudent from "../pages/Transport/Components/viewdetailsstudent";
 
 const TransportRoutes: React.FC = () => {
   return (
@@ -41,6 +43,8 @@ const TransportRoutes: React.FC = () => {
       <Route path="add-faculty" element={<AddFaculty />} />
       <Route path="inbox" element={<Inbox />} />
       <Route path="add-student" element={<AddStudent />} />
+      <Route path="edit-student/:id" element={<EditStudent />} />
+      <Route path="view-student/:id" element={<ViewDetailsStudent />} />
 
       {/* Additional routes for your existing components */}
       <Route path="fleet-management" element={<FleetManagement />} />
