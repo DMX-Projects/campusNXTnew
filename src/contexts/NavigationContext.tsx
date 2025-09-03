@@ -539,10 +539,10 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/transport/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
-      { name: 'Bus Details', path: '/transport/bus-details', icon: 'Bus' },
-      { name: 'Fee Details', path: '/transport/fee-details', icon: 'DollarSign' },
-      { name: 'Live Location', path: '/transport/live-location', icon: 'MapPin' },
-      { name: 'Raise Ticket', path: '/transport/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Bus Details', path: '/transport/StuTransport/bus-details', icon: 'Bus' },
+      { name: 'Fee Details', path: '/transport/StuTransport/fee-details', icon: 'DollarSign' },
+      { name: 'Live Location', path: '/transport/StuTransport/live-location', icon: 'MapPin' },
+      { name: 'Raise Ticket', path: '/transport/StuTransport/tickets', icon: 'AlertCircle' }
     ],
     'default': [
       { name: 'Dashboard', path: '/transport/dashboard', icon: 'BarChart3' },
