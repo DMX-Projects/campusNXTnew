@@ -21,7 +21,6 @@ import StudentAppruval from '../pages/Academics/StudentAppruval/StudentAppruval'
 import AcademicFaculty from '../pages/Academics/AcademicFaculty/AcademicFaculty';
 import OnlineTest from '../pages/Academics/OnlineTest/OnlineTest';
 import CodingAssesment from '../pages/Academics/OnlineTest/codingAssesment'
-import CodingAssesment from '../pages/Academics/OnlineTest/codingAssesment';
 import FacultyFeedback from '../pages/Academics/FacultyFeedback/FacultyFeedback';
 import SyllabusTrackingDashboard from '../pages/Academics/SyllabusTracking/SyllabusTracking';
 import ScheduleOnlineClass from '../pages/Academics/Scheduleonlineclass/Scheduleonlineclass';
