@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState ,useEffect} from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-
 interface NavigationContextType {
   activeModule: string;
   setActiveModule: (module: string) => void;
@@ -12,9 +11,7 @@ interface NavigationContextType {
   expandedItems: string[];
   toggleExpanded: (itemPath: string) => void;
 }
-
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
-
 export const useNavigation = () => {
   const context = useContext(NavigationContext);
   if (context === undefined) {
@@ -32,7 +29,7 @@ const MODULE_ACCESS = {
   'HoD': ['Academics', 'Examination', 'Placements', 'LMS', 'Library', 'Communications'],
   'TPO': [ 'Placements', 'Academics', 'Communications'],
   'Controller of Examination': [ 'Examination', 'Academics'],
-  'Faculty': ['Academics', 'LMS', 'Library'],
+  'Faculty': ['Academics', 'LMS', 'Library','Parent'],
   'Lab Assistant': ['Academics', 'LMS'],
   'Lab Technician': ['Academics', 'LMS'],
   'Student': ['LMS', 'Library', 'Transport', 'Hostel'],
@@ -617,13 +614,6 @@ const SIDEBAR_ITEMS = {
   },
   Parent: {
     'Chairperson': [
-      // { name: 'Inbox', path: '/parent/inbox', icon: 'Mail' },
-      // { name: 'Your Child Class Room', path: '/parent/child-classroom', icon: 'Users' },
-      // { name: 'Your Child Hostel Attendance', path: '/parent/child-hostel-attendance', icon: 'CheckCircle' },
-      // { name: 'Your Child Result', path: '/parent/child-result', icon: 'Award' },
-      // { name: 'Notice Board', path: '/parent/notice-board', icon: 'Clipboard' },
-      // { name: 'Fee Details', path: '/parent/fee-details', icon: 'DollarSign' },
-      // { name: 'Talk to Mentor', path: '/parent/talk-to-mentor', icon: 'MessageCircle' }
       {name: 'Ticket Raised', path: '/parent/ticket-raised', icon: 'AlertCircle'}
     ],
     'Parent': [
@@ -635,13 +625,10 @@ const SIDEBAR_ITEMS = {
       { name: 'Fee Details', path: '/parent/fee-details', icon: 'DollarSign' },
       { name: 'Talk to Mentor', path: '/parent/talk-to-mentor', icon: 'MessageCircle' }
     ],
-    'default': [
-      { name: 'Inbox', path: '/parent/inbox', icon: 'Mail' },
-      { name: 'Your Child Class Room', path: '/parent/child-classroom', icon: 'Users' },
-      { name: 'Your Child Result', path: '/parent/child-result', icon: 'Award' },
-      { name: 'Notice Board', path: '/parent/notice-board', icon: 'Clipboard' },
-      { name: 'Fee Details', path: '/parent/fee-details', icon: 'DollarSign' },
-      { name: 'Talk to Mentor', path: '/parent/talk-to-mentor', icon: 'MessageCircle' }
+    'Faculty': [
+      { name: 'Parent Directory', path: '/parent/parent-directory', icon: 'Folder' },
+      { name: 'Parent Messages', path: '/parent/parent-messages', icon: 'MessageCircle' },
+      { name: 'Parent Notifications', path: '/parent/parent-notifications', icon: 'Bell' }
     ]
   },
   Communications: {
