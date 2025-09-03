@@ -11,10 +11,9 @@ import YourChildClassroom from "../pages/parent/Yourchildclassroom";
 import Feedetails from "../pages/parent/Feedetails";
  import TalkToMentor from "../pages/parent/Talktomentor";
  import Ticketraised from "../pages/chairpersonparent/Ticketraised";
-// import { i } from "framer-motion/client";
-// Or, if the file is named 'Dashboard/index.tsx':
-// import ParentDashboard from "../pages/Parent/Dashboard";
-
+import Parentdirectory from "../FacultyModules/Parentdirectory";
+import Parentnotifications from "../FacultyModules/Parentnotificatins";
+import Parentmessages from "../FacultyModules/Parentmessages";
 const ParentRoutes: React.FC = () => {
     return (
         <Routes>
@@ -26,14 +25,9 @@ const ParentRoutes: React.FC = () => {
                 <Route path="fee-details" element={<Feedetails   />} />
                 <Route path="talk-to-mentor" element={<TalkToMentor />} />
                 <Route path="ticket-raised" element={<Ticketraised />} />
-
-            {/* <Route path="/parent/feedetails" element={<Feedetails   />} />
-            <Route path="/parent/noticeboard" element={<Noticeboard />} />
-            <Route path="/parent/child-classroom" element={<YourChildClassroomAttendance />} />
-            <Route path="/parent/your-child-results" element={<YourChildResults />} />
-           
-            <Route path="/parent/talk-to-mentor" element={<TalkToMentor />} /> */}
-            {/* <Route path="*" element={<Navigate to="/parent/inbox" replace />} /> */}
+                <Route path="parent-directory" element={<Parentdirectory />} />
+                <Route path="parent-notifications" element={<Parentnotifications />} />
+                <Route path="parent-messages" element={<Parentmessages />} />
         </Routes>
     );
 };

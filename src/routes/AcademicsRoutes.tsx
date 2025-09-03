@@ -21,6 +21,11 @@ import StudentAppruval from '../pages/Academics/StudentAppruval/StudentAppruval'
 import AcademicFaculty from '../pages/Academics/AcademicFaculty/AcademicFaculty';
 import OnlineTest from '../pages/Academics/OnlineTest/OnlineTest';
 import CodingAssesment from '../pages/Academics/OnlineTest/codingAssesment'
+import FacultyFeedback from '../pages/Academics/FacultyFeedback/FacultyFeedback';
+import SyllabusTrackingDashboard from '../pages/Academics/SyllabusTracking/SyllabusTracking';
+import ScheduleOnlineClass from '../pages/Academics/Scheduleonlineclass/Scheduleonlineclass';
+import Reports from '../pages/Academics/Reports/Reports';
+import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
@@ -53,6 +58,11 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="faculty" element={<AcademicFaculty />} />
       <Route path="online-tests" element={<OnlineTest />} />
       <Route path="coding-assessment" element={<CodingAssesment />} />
+      <Route path="faculty-feedback" element={<FacultyFeedback />} />
+      <Route path="syllabus-tracking" element={<SyllabusTrackingDashboard />} />
+      <Route path="schedule-online-class" element={<ScheduleOnlineClass />} />
+      <Route path="/reports" element={<Reports />} />
+      <Route path="/raise-ticket" element={<RaiseTicket />} />
 
       {/* Users Routes
       <Route path="users" element={<Users />} />

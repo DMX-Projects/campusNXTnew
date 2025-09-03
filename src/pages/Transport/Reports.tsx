@@ -86,7 +86,6 @@ const getReportDetails = (reportType) => {
       ]
     }
   };
-  
   return commonData[reportType] || commonData.daily;
 };
 
@@ -97,7 +96,6 @@ const StatCard = ({ title, value, change, changeType, icon: Icon, color }) => {
     green: 'bg-green-50 text-green-600',
     red: 'bg-red-50 text-red-600'
   };
-
   const changeColors = {
     positive: 'text-green-600',
     negative: 'text-red-600',
@@ -128,7 +126,7 @@ const StatCard = ({ title, value, change, changeType, icon: Icon, color }) => {
 // Report Viewer Component
 const ReportViewer = ({ report, onClose }) => {
   const reportDetails = getReportDetails(report.type);
-  
+
   const MetricCard = ({ metric }) => (
     <div className="bg-white rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between mb-2">
@@ -298,10 +296,11 @@ const ReportViewer = ({ report, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-50 rounded-xl shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
+    <div className="fixed top-0 left-0 right-0 bottom-0 w-screen h-screen bg-black bg-opacity-50 backdrop flex items-center justify-center p-4 z-[99999] m-0" 
+         style={{ margin: 0, padding: '16px', position: 'fixed', inset: '0px' }}>
+      <div className="bg-gray-50 rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden transform transition-all duration-300 scale-100">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="bg-white border-b border-gray-200 px-6 py-4 bg-gray-50 rounded-t-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button 
@@ -531,7 +530,6 @@ export default function Reports() {
             <button className="text-sm font-medium text-blue-600 px-3 py-1 bg-blue-50 rounded">Yearly</button>
           </div>
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           <div className="text-center p-4 bg-green-50 rounded-lg">
             <div className="flex items-center justify-center mb-2">
@@ -540,7 +538,6 @@ export default function Reports() {
             <p className="text-xl sm:text-2xl font-bold text-green-600">₹{totalRevenue.toLocaleString()}</p>
             <p className="text-sm text-gray-600">Total Revenue</p>
           </div>
-
           <div className="text-center p-4 bg-red-50 rounded-lg">
             <div className="flex items-center justify-center mb-2">
               <TrendingDown className="w-6 h-6 text-red-600" />
@@ -548,7 +545,6 @@ export default function Reports() {
             <p className="text-xl sm:text-2xl font-bold text-red-600">₹{totalExpenses.toLocaleString()}</p>
             <p className="text-sm text-gray-600">Total Expenses</p>
           </div>
-
           <div className="text-center p-4 bg-blue-50 rounded-lg">
             <div className="flex items-center justify-center mb-2">
               <DollarSign className="w-6 h-6 text-blue-600" />
@@ -610,8 +606,9 @@ export default function Reports() {
 
       {/* Export All Modal */}
       {showExportModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
+        <div className="fixed top-0 left-0 right-0 bottom-0 w-screen h-screen bg-black bg-opacity-50 backdrop flex items-center justify-center p-4 z-[99999] m-0" 
+             style={{ margin: 0, padding: '16px', position: 'fixed', inset: '0px' }}>
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100">
             <div className="p-6">
               <div className="text-center">
                 <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -626,7 +623,6 @@ export default function Reports() {
                     : 'All reports have been successfully exported and downloaded.'
                   }
                 </p>
-
                 {isExporting && (
                   <div className="mb-6">
                     <div className="w-full bg-gray-200 rounded-full h-2">
@@ -638,14 +634,12 @@ export default function Reports() {
                     <p className="text-sm text-gray-500 mt-2">{exportProgress}% complete</p>
                   </div>
                 )}
-
                 {!isExporting && (
                   <div className="flex items-center justify-center space-x-2 text-green-600 mb-6">
                     <CheckCircle className="w-5 h-5" />
                     <span className="text-sm font-medium">Download Started</span>
                   </div>
                 )}
-
                 {!isExporting && (
                   <button
                     onClick={() => setShowExportModal(false)}
