@@ -500,17 +500,20 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/library/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
-      { name: 'List of Books', path: '/library/list-of-books', icon: 'BookOpen' },
-      { name: 'Book Reservation', path: '/library/book-reservation', icon: 'Bookmark' },
-      { name: 'Late Fee', path: '/library/late-fee', icon: 'DollarSign' },
-      { name: 'Raise Ticket', path: '/library/raise-ticket', icon: 'AlertCircle' }
+     { name: 'Dashboard', path: '/library/faculty/dashboard', icon: 'BookOpen' },
+      { name: 'My Issue Books', path: '/library/faculty/book-issue', icon: 'ArrowRight' },
+      { name: 'Book Reservation', path: '/library/faculty/book-reservation', icon: 'Bookmark' },
+      { name: 'Over Due Books', path: '/library/over-due-books', icon: 'DollarSign' },
+      { name: 'Search Book', path: '/library/Search-book', icon: 'AlertCircle' },
+      { name: 'RequestBookIssue', path: '/library/request-book', icon: 'FileText' }
     ],
     'Faculty': [
-      { name: 'List of Books', path: '/library/list-of-books', icon: 'BookOpen' },
-      { name: 'Book Issue', path: '/library/book-issue', icon: 'ArrowRight' },
-      { name: 'Book Reservation', path: '/library/book-reservation', icon: 'Bookmark' },
-      { name: 'Late Fee', path: '/library/late-fee', icon: 'DollarSign' },
-      { name: 'Raise Ticket', path: '/library/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Dashboard', path: '/library/faculty/dashboard', icon: 'BookOpen' },
+      { name: 'My Issue Books', path: '/library/faculty/book-issue', icon: 'ArrowRight' },
+      { name: 'Book Reservation', path: '/library/faculty/book-reservation', icon: 'Bookmark' },
+      { name: 'Over Due Books', path: '/library/over-due-books', icon: 'DollarSign' },
+      { name: 'Search Book', path: '/library/Search-book', icon: 'AlertCircle' },
+      { name: 'RequestBookIssue', path: '/library/request-book', icon: 'FileText' }
     ],
     'default': [
       { name: 'Dashboard', path: '/library/dashboard', icon: 'BarChart3' },

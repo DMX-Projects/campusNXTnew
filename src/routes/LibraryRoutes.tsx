@@ -17,6 +17,13 @@ import Inbox from "../pages/Library/Inbox";
 import  Reports from "../pages/Library/Reports";
 import BookReservation from "../pages/Library/BookReservation";
 
+import SearchBook from "../StudentModules/Library/Faculty/SearchBook";
+import RequestBookIssue from "../StudentModules/Library/Faculty/RequestBookIssue";
+import OverdueBooks from "../StudentModules/Library/Faculty/OverDueBooks";
+import BookReservationStatus from "../StudentModules/Library/Faculty/BookReservationStatus";
+import FacultyDashboard from "../StudentModules/Library/Faculty/FacultyDashboard";
+import MyIssuedBooks from "../StudentModules/Library/Faculty/MyIssueBooks";
+
 
 
 const LibraryRoutes: React.FC = () => {
@@ -40,6 +47,16 @@ const LibraryRoutes: React.FC = () => {
         <Route path="inbox" element={<Inbox/>} />
         <Route path="reports" element={<Reports/>}/>
         <Route path="book-reservation" element={<BookReservation/>}/>
+        <Route path="Search-book" element={<SearchBook/>}/>
+        <Route  path="request-book" element={<RequestBookIssue/>}/>
+        <Route path="over-due-books" element={<OverdueBooks/>}/>
+        <Route path="faculty/book-reservation" element={<BookReservationStatus/>}/>
+        <Route path="faculty/dashboard" element={<FacultyDashboard/>}/>
+        <Route path="faculty/book-issue" element={<MyIssuedBooks/>}/>
+
+
+
+       
 
       {/* Catch all for invalid administration routes */}
       <Route path="*" element={<Navigate to="/library" replace />} />
