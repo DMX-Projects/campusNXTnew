@@ -32,6 +32,9 @@ const AppRoutes: React.FC = () => {
     if (userRole === 'Chairperson' || userRole === 'College Secretary') {
       return '/home';
     }
+    if (userRole === 'Student') {
+    return '/lms';
+  }
     return '/academics';
   };
 
