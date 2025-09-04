@@ -1,407 +1,507 @@
-import React, { useState } from 'react';
-import { Search, Mail, MailOpen, Calendar, User, FileText, AlertCircle, CheckCircle, Clock, GraduationCap } from 'lucide-react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import {
+  Search,
+  Mail,
+  MailOpen,
+  User,
+  Calendar,
+  ClipboardList,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  GraduationCap,
+} from "lucide-react";
 
 interface ExamMessage {
-  id: string;
+  id: number;
   sender: string;
-  senderRole: 'faculty' | 'student' | 'admin' | 'system';
+  recipient?: string;
   subject: string;
-  content: string;
-  timestamp: Date;
-  isRead: boolean;
-  priority: 'low' | 'medium' | 'high';
-  category: 'exam_schedule' | 'grade_submission' | 'revaluation' | 'postponement' | 'general' | 'urgent';
+  date: string; // ISO or string date
+  body: string;
+  read: boolean;
+  attachments?: File[];
+  priority: "low" | "medium" | "high";
+  category: "exam_schedule" | "grade_submission" | "revaluation" | "postponement" | "general" | "urgent";
+  senderRole: "faculty" | "student" | "admin" | "system";
 }
 
-const ExamInbox: React.FC = () => {
-  const [messages, setMessages] = useState<ExamMessage[]>([
-    {
-      id: '1',
-      sender: 'Dr. Sarah Williams',
-      senderRole: 'faculty',
-      subject: 'Grade Submission Deadline Extension Request',
-      content: 'I need a 2-day extension for submitting grades for CSE-301 due to unforeseen circumstances. The current deadline is September 5th.',
-      timestamp: new Date('2025-09-02T09:30:00'),
-      isRead: false,
-      priority: 'high',
-      category: 'grade_submission'
-    },
-    {
-      id: '2',
-      sender: 'System',
-      senderRole: 'system',
-      subject: 'Exam Schedule Conflict Alert - Room 203',
-      content: 'Schedule conflict detected: Two exams are scheduled in Room 203 on September 8th at 10:00 AM. Please resolve this conflict.',
-      timestamp: new Date('2025-09-02T08:15:00'),
-      isRead: false,
-      priority: 'high',
-      category: 'exam_schedule'
-    },
-    {
-      id: '3',
-      sender: 'John Mitchell',
-      senderRole: 'student',
-      subject: 'Revaluation Request - ENG-202',
-      content: 'I would like to request revaluation for my ENG-202 exam. Student ID: 2021CS001. I believe there may have been an error in grading.',
-      timestamp: new Date('2025-09-01T16:45:00'),
-      isRead: true,
-      priority: 'medium',
-      category: 'revaluation'
-    },
-    {
-      id: '4',
-      sender: 'Prof. Michael Brown',
-      senderRole: 'faculty',
-      subject: 'Medical Emergency - Exam Postponement',
-      content: 'I have a medical emergency and need to postpone the MATH-301 exam scheduled for September 6th. Please advise on rescheduling.',
-      timestamp: new Date('2025-09-01T14:20:00'),
-      isRead: false,
-      priority: 'high',
-      category: 'postponement'
-    },
-    {
-      id: '5',
-      sender: 'Admin Office',
-      senderRole: 'admin',
-      subject: 'Semester Exam Schedule Released',
-      content: 'The complete semester examination schedule has been released and is available on the portal. Please review and confirm.',
-      timestamp: new Date('2025-08-31T11:30:00'),
-      isRead: true,
-      priority: 'medium',
-      category: 'exam_schedule'
-    }
-  ]);
+const MOCK_INBOX: ExamMessage[] = [
+  {
+    id: 1,
+    sender: "Dr. Sarah Williams",
+    recipient: "Chairperson",
+    senderRole: "faculty",
+    subject: "Grade Submission Extension Request",
+    date: "2025-09-02T09:30",
+    body:
+      "I need a 2-day extension for submitting grades for CSE301 due to unforeseen circumstances. The current deadline is Sept 5.",
+    read: false,
+    priority: "high",
+    category: "grade_submission",
+    attachments: [],
+  },
+  {
+    id: 2,
+    sender: "System",
+    recipient: "Chairperson",
+    senderRole: "system",
+    subject: "Exam Schedule Conflict - Room 203",
+    date: "2025-09-02T08:15",
+    body:
+      "Schedule conflict detected: Two exams scheduled in Room 203 on Sept 8 at 10:00 AM. Please resolve.",
+    read: false,
+    priority: "high",
+    category: "exam_schedule",
+    attachments: [],
+  },
+  {
+    id: 3,
+    sender: "John Mitchell",
+    recipient: "Chairperson",
+    senderRole: "student",
+    subject: "Revaluation Request - ENG202",
+    date: "2025-09-01T16:45",
+    body: "Request for reevaluation: ENG202. Student ID: 2021CS001. Possible grading error.",
+    read: true,
+    priority: "medium",
+    category: "revaluation",
+    attachments: [],
+  },
+];
 
-  const [selectedMessage, setSelectedMessage] = useState<ExamMessage | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState<string>('all');
+const MOCK_SENT: ExamMessage[] = [
+  {
+    id: 101,
+    sender: "Chairperson",
+    recipient: "Placement Cell",
+    senderRole: "admin",
+    subject: "Upcoming Exam Schedule Confirmation",
+    date: "2025-08-31T12:00",
+    body:
+      "Please confirm the finalized exam schedule for the upcoming semester by end of this week.",
+    read: true,
+    priority: "medium",
+    category: "exam_schedule",
+    attachments: [],
+  },
+  {
+    id: 102,
+    sender: "Chairperson",
+    recipient: "Finance Office",
+    senderRole: "admin",
+    subject: "Grade Submission Budget Needs",
+    date: "2025-08-29T09:30",
+    body:
+      "Requesting additional budget for proctoring services during final exams.",
+    read: true,
+    priority: "low",
+    category: "general",
+    attachments: [],
+  },
+];
 
-  const filteredMessages = messages.filter(message => {
-    const matchesSearch = message.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         message.sender.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || message.category === filterCategory;
+const formatDateTime = (isoString: string) => {
+  const d = new Date(isoString);
+  return d.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const getCategoryStyle = (category: string) => {
+  switch (category) {
+    case "exam_schedule":
+      return "bg-blue-100 text-blue-800";
+    case "grade_submission":
+      return "bg-green-100 text-green-800";
+    case "revaluation":
+      return "bg-purple-100 text-purple-800";
+    case "postponement":
+      return "bg-orange-100 text-orange-800";
+    case "urgent":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+const getPriorityIcon = (priority: string) => {
+  switch (priority) {
+    case "high":
+      return <AlertCircle className="w-4 h-4 text-red-500" aria-label="High priority" />;
+    case "medium":
+      return <Clock className="w-4 h-4 text-yellow-500" aria-label="Medium priority" />;
+    case "low":
+      return <CheckCircle className="w-4 h-4 text-green-500" aria-label="Low priority" />;
+    default:
+      return null;
+  }
+};
+
+const Inbox: React.FC = () => {
+  const [inboxMessages, setInboxMessages] = useState<ExamMessage[]>([]);
+  const [sentMessages, setSentMessages] = useState<ExamMessage[]>([]);
+  const [selectedMsg, setSelectedMsg] = useState<ExamMessage | null>(null);
+  const [loadingInbox, setLoadingInbox] = useState(true);
+  const [loadingSent, setLoadingSent] = useState(true);
+
+  const [tab, setTab] = useState<"inbox" | "sent">("inbox");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState<"all" | string>("all");
+
+  // Compose mail state
+  const [composing, setComposing] = useState(false);
+  const [composeData, setComposeData] = useState({
+    recipient: "",
+    subject: "",
+    body: "",
+    attachments: [] as File[],
+  });
+  const [errors, setErrors] = useState<{
+    recipient?: string;
+    subject?: string;
+    body?: string;
+  }>({});
+
+  useEffect(() => {
+    setLoadingInbox(true);
+    setLoadingSent(true);
+    // Simulate API loading
+    setTimeout(() => {
+      setInboxMessages(MOCK_INBOX);
+      setSentMessages(MOCK_SENT);
+      setLoadingInbox(false);
+      setLoadingSent(false);
+    }, 1000);
+  }, []);
+
+  // Choose messages based on tab
+  const currentMessages = tab === "inbox" ? inboxMessages : sentMessages;
+
+  // Filter and search
+  const filteredMessages = currentMessages.filter((msg) => {
+    const term = searchTerm.toLowerCase();
+    const matchesSearch =
+      msg.subject.toLowerCase().includes(term) || msg.sender.toLowerCase().includes(term);
+    const matchesCategory = filterCategory === "all" || msg.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const markAsRead = (messageId: string) => {
-    setMessages(prev => prev.map(msg => 
-      msg.id === messageId ? { ...msg, isRead: true } : msg
-    ));
+  const unreadCount = inboxMessages.filter((m) => !m.read).length;
+  const highPriorityCount = inboxMessages.filter((m) => m.priority === "high").length;
+
+  const markAsRead = (id: number) => {
+    setInboxMessages((msgs) =>
+      msgs.map((m) => (m.id === id ? { ...m, read: true } : m))
+    );
   };
 
-  const getPriorityIcon = (priority: string) => {
-    switch (priority) {
-      case 'high': return <AlertCircle className="w-4 h-4 text-red-500" />;
-      case 'medium': return <Clock className="w-4 h-4 text-yellow-500" />;
-      case 'low': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      default: return null;
+  const handleComposeChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setComposeData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setComposeData((prev) => ({ ...prev, attachments: Array.from(e.target.files!) }));
     }
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'exam_schedule': return 'bg-blue-100 text-blue-800';
-      case 'grade_submission': return 'bg-green-100 text-green-800';
-      case 'revaluation': return 'bg-purple-100 text-purple-800';
-      case 'postponement': return 'bg-orange-100 text-orange-800';
-      case 'urgent': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+  const validateEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  const validateCompose = () => {
+    const errs: typeof errors = {};
+    if (!composeData.recipient.trim()) errs.recipient = "Recipient is required";
+    else if (!validateEmail(composeData.recipient)) errs.recipient = "Invalid email format";
+    if (!composeData.subject.trim()) errs.subject = "Subject is required";
+    if (!composeData.body.trim()) errs.body = "Message body is required";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   };
 
-  const unreadCount = messages.filter(msg => !msg.isRead).length;
-  const highPriorityCount = messages.filter(msg => msg.priority === 'high').length;
+  const sendMail = () => {
+    if (!validateCompose()) return;
+
+    const newMessage: ExamMessage = {
+      id: Date.now(),
+      sender: "Chairperson",
+      recipient: composeData.recipient,
+      senderRole: "admin",
+      subject: composeData.subject,
+      date: new Date().toISOString(),
+      body: composeData.body,
+      read: true,
+      attachments: composeData.attachments,
+      priority: "medium",
+      category: "general",
+    };
+    setSentMessages((msgs) => [newMessage, ...msgs]);
+    setComposeData({ recipient: "", subject: "", body: "", attachments: [] });
+    setErrors({});
+    setComposing(false);
+    alert("Message sent successfully");
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 md:px-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <nav className="w-80 border-r border-gray-200 bg-white flex flex-col shadow-md">
+        <header className="flex items-center justify-between p-4 border-b border-gray-200">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
             <GraduationCap className="w-6 h-6 text-blue-600" />
             Examination Inbox
-          </h1>
-          <div className="flex items-center gap-4">
-            {unreadCount > 0 && (
-              <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-full">
-                {unreadCount} unread
-              </span>
-            )}
-            {highPriorityCount > 0 && (
-              <span className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full">
-                {highPriorityCount} urgent
-              </span>
-            )}
-          </div>
+          </h2>
+          <button
+            onClick={() => setComposing(true)}
+            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Compose
+          </button>
+        </header>
+
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200">
+          <button
+            className={`flex-1 py-2 border-b-2 ${
+              tab === "inbox" ? "border-blue-600 font-bold" : "border-transparent"
+            }`}
+            onClick={() => setTab("inbox")}
+          >
+            Inbox {unreadCount > 0 && <span className="text-red-600">({unreadCount})</span>}
+          </button>
+          <button
+            className={`flex-1 py-2 border-b-2 ${
+              tab === "sent" ? "border-blue-600 font-bold" : "border-transparent"
+            }`}
+            onClick={() => setTab("sent")}
+          >
+            Sent
+          </button>
         </div>
-      </div>
 
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)]">
-        {/* Sidebar - Messages List */}
-        <div className={`w-full lg:w-96 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 flex flex-col ${selectedMessage ? 'hidden lg:flex' : 'flex'}`}>
-          {/* Search and Filter */}
-          <div className="p-4 space-y-3 border-b border-gray-200">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search messages..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            
-            <select
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-            >
-              <option value="all">All Categories</option>
-              <option value="exam_schedule">Exam Schedule</option>
-              <option value="grade_submission">Grade Submission</option>
-              <option value="revaluation">Revaluation</option>
-              <option value="postponement">Postponement</option>
-              <option value="general">General</option>
-              <option value="urgent">Urgent</option>
-            </select>
+        <div className="p-4 space-y-2 border-b border-gray-200">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search messages"
+              className="w-full pl-10 py-2 border rounded"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Search messages"
+            />
           </div>
+          <select
+            className="w-full p-2 border rounded"
+            aria-label="Filter messages by category"
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+          >
+            <option value="all">All Categories</option>
+            <option value="exam_schedule">Exam Schedule</option>
+            <option value="grade_submission">Grade Submission</option>
+            <option value="revaluation">Revaluation</option>
+            <option value="postponement">Postponement</option>
+            <option value="general">General</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
 
-          {/* Messages List */}
-          <div className="flex-1 overflow-y-auto">
-            {filteredMessages.map((message) => (
-              <div
-                key={message.id}
-                className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
-                  selectedMessage?.id === message.id ? 'bg-blue-50 border-blue-200' : ''
-                } ${!message.isRead ? 'bg-blue-25 border-l-4 border-l-blue-500' : ''}`}
+        <section className="overflow-y-auto flex-grow">
+          {filteredMessages.length === 0 ? (
+            <p className="p-6 text-center text-gray-500">No messages found.</p>
+          ) : (
+            filteredMessages.map((msg) => (
+              <button
+                key={msg.id}
+                className={`flex w-full items-center p-3 gap-3 cursor-pointer ${
+                  selectedMsg?.id === msg.id ? "bg-blue-100 border-l-4 border-blue-600" : ""
+                } ${!msg.read ? "font-semibold bg-blue-50 border-l-4 border-blue-400" : ""}`}
                 onClick={() => {
-                  setSelectedMessage(message);
-                  if (!message.isRead) {
-                    markAsRead(message.id);
+                  setSelectedMsg(msg);
+                  if (!msg.read && tab === "inbox") {
+                    markAsRead(msg.id);
                   }
                 }}
+                aria-pressed={selectedMsg?.id === msg.id}
               >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    {!message.isRead ? (
-                      <Mail className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                    ) : (
-                      <MailOpen className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    )}
-                    <span className={`font-medium truncate text-sm ${!message.isRead ? 'text-gray-900' : 'text-gray-600'}`}>
-                      {message.sender}
-                    </span>
-                  </div>
-                  {getPriorityIcon(message.priority)}
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-300 text-white flex items-center justify-center font-semibold">
+                  {msg.sender
+                    .split(" ")
+                    .map((w) => w[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()}
                 </div>
-                
-                <h3 className={`text-sm mb-1 truncate ${!message.isRead ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
-                  {message.subject}
-                </h3>
-                
-                <div className="flex items-center justify-between mt-2">
-                  <span className={`text-xs px-2 py-1 rounded-full ${getCategoryColor(message.category)}`}>
-                    {message.category.replace('_', ' ')}
-                  </span>
-                  <span className="text-xs text-gray-400">
-                    {message.timestamp.toLocaleDateString()}
+                <div className="flex flex-col truncate min-w-0">
+                  <span className="text-gray-900 truncate">{msg.sender}</span>
+                  <span className="text-gray-600 text-sm truncate">{msg.subject}</span>
+                  <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded ${getCategoryStyle(msg.category)}`}>
+                    {msg.category.replace("_", " ").toUpperCase()}
                   </span>
                 </div>
-              </div>
-            ))}
-            
-            {filteredMessages.length === 0 && (
-              <div className="p-8 text-center text-gray-500">
-                <Mail className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>No messages found</p>
-              </div>
-            )}
-          </div>
-        </div>
+                <time className="ml-auto text-gray-400 text-xs whitespace-nowrap">
+                  {new Date(msg.date).toLocaleDateString()}
+                </time>
+              </button>
+            ))
+          )}
+        </section>
+      </nav>
 
-        {/* Main Content */}
-        <div className={`flex-1 flex flex-col ${selectedMessage ? 'flex' : 'hidden lg:flex'}`}>
-          {selectedMessage ? (
-            <>
-              {/* Back button for mobile */}
-              <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-2">
+      {/* Main Content */}
+      <main className="flex-grow flex flex-col relative">
+        {composing && (
+          <div className="fixed inset-0 z-40 bg-black bg-opacity-30 flex items-center justify-center p-4">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendMail();
+              }}
+              className="bg-white rounded shadow-lg max-w-3xl w-full p-6 relative"
+              aria-label="Compose new message"
+            >
+              <button
+                type="button"
+                onClick={() => setComposing(false)}
+                aria-label="Close compose form"
+                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none text-2xl leading-none"
+              >
+                ×
+              </button>
+              <h2 className="text-xl font-bold mb-4">Compose New Message</h2>
+
+              <div className="mb-4">
+                <label htmlFor="recipient" className="block font-semibold mb-1">
+                  To
+                </label>
+                <input
+                  id="recipient"
+                  name="recipient"
+                  type="email"
+                  value={composeData.recipient}
+                  onChange={(e) => setComposeData(prev => ({ ...prev, recipient: e.target.value }))}
+                  required
+                  className="w-full p-2 border rounded"
+                  placeholder="recipient@example.com"
+                />
+                {errors.recipient && <p className="text-red-600 text-sm">{errors.recipient}</p>}
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="subject" className="block font-semibold mb-1">
+                  Subject
+                </label>
+                <input
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  value={composeData.subject}
+                  onChange={(e) => setComposeData(prev => ({ ...prev, subject: e.target.value }))}
+                  required
+                  className="w-full p-2 border rounded"
+                  placeholder="Subject"
+                />
+                {errors.subject && <p className="text-red-600 text-sm">{errors.subject}</p>}
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="body" className="block font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="body"
+                  name="body"
+                  value={composeData.body}
+                  onChange={(e) => setComposeData(prev => ({ ...prev, body: e.target.value }))}
+                  required
+                  className="w-full p-2 border rounded min-h-[150px]"
+                  placeholder="Write your message here"
+                />
+                {errors.body && <p className="text-red-600 text-sm">{errors.body}</p>}
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="attachments" className="block font-semibold mb-1">
+                  Attachments
+                </label>
+                <input
+                  id="attachments"
+                  name="attachments"
+                  type="file"
+                  multiple
+                  onChange={(e) => {
+                    if(e.target.files){
+                      setComposeData(prev => ({ ...prev, attachments: Array.from(e.target.files) }))
+                    }
+                  }}
+                />
+                {composeData.attachments.length > 0 && (
+                  <ul className="text-sm mt-2 max-h-20 overflow-auto">
+                    {composeData.attachments.map((f, i) => (
+                      <li key={i}>{f.name}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div className="flex justify-end space-x-2">
                 <button
-                  onClick={() => setSelectedMessage(null)}
-                  className="text-blue-600 text-sm font-medium"
+                  type="button"
+                  className="px-4 py-2 rounded border hover:bg-gray-100"
+                  onClick={() => setComposing(false)}
                 >
-                  ← Back to Messages
+                  Cancel
+                </button>
+                <button type="submit" className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+                  Send
                 </button>
               </div>
+            </form>
+          </div>
+        )}
 
-              {/* Message Header */}
-              <div className="bg-white border-b border-gray-200 p-4 md:p-6">
-                <div className="mb-4">
-                  <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
-                    {selectedMessage.subject}
-                  </h2>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      <span>{selectedMessage.sender}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        selectedMessage.senderRole === 'admin' ? 'bg-purple-100 text-purple-800' :
-                        selectedMessage.senderRole === 'faculty' ? 'bg-blue-100 text-blue-800' :
-                        selectedMessage.senderRole === 'system' ? 'bg-gray-100 text-gray-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {selectedMessage.senderRole}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      <span>{selectedMessage.timestamp.toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  {getPriorityIcon(selectedMessage.priority)}
-                  <span className={`text-xs px-2 py-1 rounded-full ${getCategoryColor(selectedMessage.category)}`}>
-                    {selectedMessage.category.replace('_', ' ')}
-                  </span>
-                </div>
-              </div>
-
-              {/* Message Content */}
-              <div className="flex-1 bg-white p-4 md:p-6 overflow-y-auto">
-                <div className="max-w-4xl">
-                  <p className="text-gray-700 leading-relaxed mb-6">
-                    {selectedMessage.content}
-                  </p>
-
-                  {/* Quick Actions based on category */}
-                  {selectedMessage.category === 'grade_submission' && (
-                    <div className="mt-6 p-4 bg-green-50 rounded-lg">
-                      <h4 className="text-sm font-medium text-green-900 mb-3">Grade Submission Actions</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                          Approve Extension
-                        </button>
-                        <button className="px-4 py-2 border border-green-300 text-green-600 rounded-lg hover:bg-green-50 transition-colors text-sm">
-                          Request Details
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedMessage.category === 'exam_schedule' && (
-                    <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                      <h4 className="text-sm font-medium text-blue-900 mb-3">Schedule Actions</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                          Resolve Conflict
-                        </button>
-                        <button className="px-4 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm">
-                          View Schedule
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedMessage.category === 'revaluation' && (
-                    <div className="mt-6 p-4 bg-purple-50 rounded-lg">
-                      <h4 className="text-sm font-medium text-purple-900 mb-3">Revaluation Actions</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">
-                          Approve Request
-                        </button>
-                        <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
-                          Assign Evaluator
-                        </button>
-                        <button className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors text-sm">
-                          Reject
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedMessage.category === 'postponement' && (
-                    <div className="mt-6 p-4 bg-orange-50 rounded-lg">
-                      <h4 className="text-sm font-medium text-orange-900 mb-3">Postponement Actions</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                          Approve & Reschedule
-                        </button>
-                        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                          Check Availability
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </>
-          ) : (
-            /* No Message Selected */
-            <div className="flex-1 flex items-center justify-center bg-white">
-              <div className="text-center text-gray-500">
-                <GraduationCap className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                <h3 className="text-lg font-medium mb-2">Select a message to view</h3>
-                <p className="text-sm">Choose a message from the inbox to read its contents</p>
-              </div>
+        <div className="flex flex-col h-full overflow-auto p-6">
+          {!selectedMsg ? (
+            <div className="m-auto text-center text-gray-400">
+              <GraduationCap className="mx-auto w-24 h-24 mb-4" />
+              <p className="text-lg">Select a message to read</p>
             </div>
+          ) : (
+            <article className="max-w-3xl mx-auto bg-white rounded shadow p-6 space-y-4">
+              <h2 className="text-2xl font-semibold">{selectedMsg.subject}</h2>
+              <div className="text-gray-600 flex flex-wrap gap-4">
+                <span className="flex items-center gap-1"><User className="w-4 h-4" /> {selectedMsg.sender} ({selectedMsg.senderRole})</span>
+                <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDateTime(selectedMsg.date)}</span>
+                <span className={`px-2 py-0.5 rounded text-xs font-semibold ${getCategoryStyle(selectedMsg.category)}`}>
+                  {selectedMsg.category.toUpperCase()}
+                </span>
+                <span>{getPriorityIcon(selectedMsg.priority)}</span>
+              </div>
+              <hr />
+              <p className="whitespace-pre-wrap text-gray-700">{selectedMsg.body}</p>
+              {selectedMsg.attachments && selectedMsg.attachments.length > 0 && (
+                <section>
+                  <h3 className="font-semibold mb-1">Attachments</h3>
+                  <ul>
+                    {selectedMsg.attachments.map((att, i) => (
+                      <li key={i} className="text-blue-600 underline cursor-pointer">{att.name}</li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              {/* Actions placeholder */}
+            </article>
           )}
         </div>
-
-        {/* Stats Panel - Hidden on mobile when message is selected */}
-        <div className={`w-full lg:w-64 bg-white border-t lg:border-t-0 lg:border-l border-gray-200 p-4 ${selectedMessage ? 'hidden lg:block' : 'block'}`}>
-          <h3 className="font-semibold text-gray-800 mb-4">Quick Stats</h3>
-          
-          <div className="space-y-3">
-            <div className="bg-blue-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-blue-700">Unread</span>
-                <span className="font-semibold text-blue-900">{unreadCount}</span>
-              </div>
-            </div>
-            
-            <div className="bg-red-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-red-700">High Priority</span>
-                <span className="font-semibold text-red-900">{highPriorityCount}</span>
-              </div>
-            </div>
-            
-            <div className="bg-green-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-green-700">Grade Submissions</span>
-                <span className="font-semibold text-green-900">
-                  {messages.filter(m => m.category === 'grade_submission').length}
-                </span>
-              </div>
-            </div>
-            
-            <div className="bg-purple-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-purple-700">Revaluations</span>
-                <span className="font-semibold text-purple-900">
-                  {messages.filter(m => m.category === 'revaluation').length}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <h4 className="font-medium text-gray-800 mb-3">Quick Actions</h4>
-            <div className="space-y-2">
-              <button className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                View Schedule
-              </button>
-              <button className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                Generate Report
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      </main>
     </div>
   );
-};
+}
 
-export default ExamInbox;
+export default Inbox;

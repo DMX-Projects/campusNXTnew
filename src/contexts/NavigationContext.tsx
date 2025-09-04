@@ -246,6 +246,12 @@ const SIDEBAR_ITEMS = {
         ]
       }
     ],
+    'Student': [
+      { name: 'Profile', path: '/administration/student-form', icon: 'Users' },
+      { name: 'Fee Management', path: '/administration/fee-management', icon: 'DollarSign' },
+      { name: 'My Certificates', path: '/administration/my-certificates', icon: 'HelpCircle' },
+      
+    ],
     'Principal': [
       { name: 'Upload Student List', path: '/administration/upload-student-list', icon: 'Upload' },
       { name: 'Student Details', path: '/administration/student-details', icon: 'Users' },
