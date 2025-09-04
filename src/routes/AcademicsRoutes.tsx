@@ -27,6 +27,20 @@ import ScheduleOnlineClass from '../pages/Academics/Scheduleonlineclass/Schedule
 import Reports from '../pages/Academics/Reports/Reports';
 import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
 
+import FacultyInbox from '../FacultyModules/FacultyAcademic/FacultyInbox';
+import Announcement from '../FacultyModules/FacultyAcademic/Announcement';
+import FacultyStudentAttendance from '../FacultyModules/FacultyAcademic/StudentAttendence';
+import TimeTableFaculty from '../FacultyModules/FacultyAcademic/TimeTableFaculty';
+import FacultyCalender from '../FacultyModules/FacultyAcademic/calenderFaculty';
+import FacultySubjectsSyllabus from '../FacultyModules/FacultyAcademic/FacultySubjectsSyllabus';
+import FacultyStudyMaterial from '../FacultyModules/FacultyAcademic/FacultyStudyMaterial';
+import FacultyStudentProject from '../FacultyModules/FacultyAcademic/StudentProject';
+import FacultyOnlineTest from '../FacultyModules/FacultyAcademic/FacultyOnlineTest';
+import ScheduleOnlinclass from '../FacultyModules/FacultyAcademic/ScheduleOnlinclass';
+import FacultyReports from '../FacultyModules/FacultyAcademic/FacultyReports';
+import FacultyRiseTicket  from '../FacultyModules/FacultyAcademic/FacultyRiseticket'
+// import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
+
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
 
@@ -34,16 +48,6 @@ const AcademicsRoutes: React.FC = () => {
   return (
     <Routes>
       {/* Default Home Route */}
-
-      <Route index element={<UsersPage />} />
-      <Route path = 'users' element = {<UsersPage />} />
-      <Route path = '/editUserPage' element = {<EditUserPage />} />
-      <Route path = '/addUserPage' element = {<AddUserPage />} />
-      <Route path = '/institutions' element = {<InstitutionsPage />} />
-      <Route path = '/programs' element = {<ProgramsPage />} />
-      <Route path = '/roles' element = {<RolesPage />} />
-      <Route path="/courses" element={<Course />} />
-      <Route path="/faculty-leaves" element={<FacultyLeaves />} />
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/student-attendance" element={<StudentAttendance />} />
       <Route path="/timetable" element={<Timetable />} />
@@ -63,6 +67,28 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="schedule-online-class" element={<ScheduleOnlineClass />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/raise-ticket" element={<RaiseTicket />} />
+
+
+      {/* Academic login Faculty Routes */}
+
+
+
+
+      <Route path="/faculty-inbox" element={<FacultyInbox />} />
+      <Route path="/announcement" element={<Announcement />} />
+      <Route path="/faculty-studentattendance" element={<FacultyStudentAttendance />} />
+      <Route path='/faculty-timetable' element ={<TimeTableFaculty />} />
+      <Route path='/faculty-calendar' element ={<FacultyCalender />} />
+      <Route path='/faculty-subjects-syllabus' element ={<FacultySubjectsSyllabus />} />
+      <Route path='/faculty-StudyMaterial' element ={<FacultyStudyMaterial/>}/>
+      <Route path='/faculty-studentprojects' element ={<FacultyStudentProject/>}/>
+      <Route path='/faculty-FacultyOnlineTest' element ={<FacultyOnlineTest/>}/>
+      <Route path='/faculty-schedule-onlineclass' element ={<ScheduleOnlinclass/>}/>
+      <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
+      <Route path='/faculty-raiseticket' element={<FacultyRiseTicket />} />
+
+
+      {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 
       {/* Users Routes
       <Route path="users" element={<Users />} />
