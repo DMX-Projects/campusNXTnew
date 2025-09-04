@@ -497,7 +497,10 @@ const SIDEBAR_ITEMS = {
       { name: 'Book Reservation', path: '/library/faculty/book-reservation', icon: 'Bookmark' },
       { name: 'Over Due Books', path: '/library/over-due-books', icon: 'DollarSign' },
       { name: 'Search Book', path: '/library/Search-book', icon: 'AlertCircle' },
-      { name: 'RequestBookIssue', path: '/library/request-book', icon: 'FileText' }
+      { name: 'RequestBookIssue', path: '/library/request-book', icon: 'FileText' },
+       { name: 'MyBorrowedBooks', path: '/library/faculty/myborrowed-books', icon: 'ArrowRight' },
+      { name: 'Renewal Request', path: '/library/faculty/renewal-request', icon: 'Bookmark' },
+
     ],
     'Faculty': [
       { name: 'Dashboard', path: '/library/faculty/dashboard', icon: 'BookOpen' },

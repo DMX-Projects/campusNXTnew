@@ -23,6 +23,8 @@ import OverdueBooks from "../StudentModules/Library/Faculty/OverDueBooks";
 import BookReservationStatus from "../StudentModules/Library/Faculty/BookReservationStatus";
 import FacultyDashboard from "../StudentModules/Library/Faculty/FacultyDashboard";
 import MyIssuedBooks from "../StudentModules/Library/Faculty/MyIssueBooks";
+import RenewalRequests from "../StudentModules/Library/Faculty/RenewalRequests";
+import MyBorrowedBooks from "../StudentModules/Library/Faculty/MyBorrowedBooks";
 
 
 
@@ -53,6 +55,8 @@ const LibraryRoutes: React.FC = () => {
         <Route path="faculty/book-reservation" element={<BookReservationStatus/>}/>
         <Route path="faculty/dashboard" element={<FacultyDashboard/>}/>
         <Route path="faculty/book-issue" element={<MyIssuedBooks/>}/>
+        <Route path="faculty/renewal-request" element={<RenewalRequests/>}/>
+        <Route path="faculty/myborrowed-books" element={<MyBorrowedBooks/>}/>
 
 
 

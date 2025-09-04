@@ -194,8 +194,8 @@ const FacultyLibraryOverdue = () => {
             <div className="flex items-center space-x-3">
               <Book className="w-8 h-8 text-blue-600" />
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Faculty Library</h1>
-                <p className="text-gray-600">Overdue Books Management</p>
+                <h1 className="text-3xl font-bold text-gray-900">Overdue Books </h1>
+                
               </div>
             </div>
             <div className="text-right">
