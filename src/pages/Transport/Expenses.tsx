@@ -297,9 +297,7 @@ export default function Expenses() {
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-2xl flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-blue-600" />
-                </div>
+               
                 <h2 className="text-xl font-bold text-gray-900">
                   {showAddModal ? 'Add Expense' : 'Edit Expense'}
                 </h2>
@@ -401,7 +399,7 @@ export default function Expenses() {
                   onClick={showAddModal ? handleAddExpense : handleUpdateExpense}
                   className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium text-base flex items-center justify-center space-x-2"
                 >
-                  <DollarSign className="w-5 h-5" />
+                 
                   <span>{showAddModal ? 'Add' : 'Update'}</span>
                 </button>
               </div>
