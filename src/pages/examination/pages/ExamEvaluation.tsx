@@ -1,5 +1,16 @@
-import React, { useState } from 'react';
-import { Search, Filter, FileText, CheckCircle, Clock, AlertTriangle, User, Calendar, GraduationCap, Eye, Edit3, Download, Upload } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Search,
+  FileText,
+  CheckCircle,
+  Clock,
+  AlertTriangle,
+  User,
+  Calendar,
+  GraduationCap,
+  Eye,
+  Download,
+} from "lucide-react";
 
 interface EvaluationTask {
   id: string;
@@ -10,8 +21,8 @@ interface EvaluationTask {
   evaluatedPapers: number;
   evaluator: string;
   evaluatorId: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'overdue' | 'under_review';
-  priority: 'low' | 'medium' | 'high';
+  status: "pending" | "in_progress" | "completed" | "overdue" | "under_review";
+  priority: "low" | "medium" | "high";
   deadline: Date;
   submittedDate?: Date;
   remarks?: string;
@@ -19,540 +30,364 @@ interface EvaluationTask {
   department: string;
 }
 
+const EvaluationStatusIcons = {
+  completed: CheckCircle,
+  in_progress: Clock,
+  pending: Clock,
+  overdue: AlertTriangle,
+  under_review: Eye,
+};
+
+const EvaluationStatusColors = {
+  completed: "bg-green-100 text-green-800",
+  in_progress: "bg-blue-100 text-blue-800",
+  pending: "bg-gray-100 text-gray-800",
+  overdue: "bg-red-100 text-red-800",
+  under_review: "bg-orange-100 text-orange-800",
+};
+
+const PriorityColors = {
+  high: "bg-red-500",
+  medium: "bg-yellow-500",
+  low: "bg-green-500",
+};
+
 const ExamEvaluation: React.FC = () => {
   const [evaluations, setEvaluations] = useState<EvaluationTask[]>([
     {
-      id: '1',
-      examCode: 'CSE301-MID',
-      subject: 'Data Structures and Algorithms',
-      examDate: new Date('2025-08-25'),
+      id: "1",
+      examCode: "CSE301-MID",
+      subject: "Data Structures and Algorithms",
+      examDate: new Date("2025-08-25"),
       totalPapers: 85,
       evaluatedPapers: 85,
-      evaluator: 'Dr. Sarah Williams',
-      evaluatorId: 'FAC001',
-      status: 'completed',
-      priority: 'medium',
-      deadline: new Date('2025-09-01'),
-      submittedDate: new Date('2025-08-31'),
-      semester: 'Fall 2025',
-      department: 'Computer Science'
+      evaluator: "Dr. Sarah Williams",
+      evaluatorId: "FAC001",
+      status: "completed",
+      priority: "medium",
+      deadline: new Date("2025-09-01"),
+      submittedDate: new Date("2025-08-31"),
+      semester: "Fall 2025",
+      department: "Computer Science",
     },
     {
-      id: '2',
-      examCode: 'MAT201-FINAL',
-      subject: 'Calculus II',
-      examDate: new Date('2025-08-28'),
+      id: "2",
+      examCode: "MAT201-FINAL",
+      subject: "Calculus",
+      examDate: new Date("2025-08-28"),
       totalPapers: 92,
       evaluatedPapers: 67,
-      evaluator: 'Prof. Michael Brown',
-      evaluatorId: 'FAC002',
-      status: 'in_progress',
-      priority: 'high',
-      deadline: new Date('2025-09-03'),
-      semester: 'Fall 2025',
-      department: 'Mathematics'
+      evaluator: "Prof. Michael Brown",
+      evaluatorId: "FAC002",
+      status: "in_progress",
+      priority: "high",
+      deadline: new Date("2025-09-03"),
+      semester: "Fall 2025",
+      department: "Mathematics",
     },
     {
-      id: '3',
-      examCode: 'PHY101-MID',
-      subject: 'Physics Fundamentals',
-      examDate: new Date('2025-08-30'),
+      id: "3",
+      examCode: "PHY101",
+      subject: "Physics",
+      examDate: new Date("2025-08-30"),
       totalPapers: 78,
       evaluatedPapers: 0,
-      evaluator: 'Dr. Emily Davis',
-      evaluatorId: 'FAC003',
-      status: 'pending',
-      priority: 'medium',
-      deadline: new Date('2025-09-05'),
-      semester: 'Fall 2025',
-      department: 'Physics'
+      evaluator: "Dr. Emily Davis",
+      evaluatorId: "FAC003",
+      status: "pending",
+      priority: "medium",
+      deadline: new Date("2025-09-05"),
+      semester: "Fall 2025",
+      department: "Physics",
     },
     {
-      id: '4',
-      examCode: 'ENG202-FINAL',
-      subject: 'English Literature',
-      examDate: new Date('2025-08-26'),
+      id: "4",
+      examCode: "ENG101",
+      subject: "English",
+      examDate: new Date("2025-08-26"),
       totalPapers: 65,
       evaluatedPapers: 45,
-      evaluator: 'Dr. Lisa Wilson',
-      evaluatorId: 'FAC004',
-      status: 'overdue',
-      priority: 'high',
-      deadline: new Date('2025-09-01'),
-      semester: 'Fall 2025',
-      department: 'English'
+      evaluator: "Dr. Lisa Wilson",
+      evaluatorId: "FAC004",
+      status: "overdue",
+      priority: "high",
+      deadline: new Date("2025-09-01"),
+      semester: "Fall 2025",
+      department: "English",
     },
     {
-      id: '5',
-      examCode: 'CHE301-MID',
-      subject: 'Organic Chemistry',
-      examDate: new Date('2025-08-29'),
+      id: "5",
+      examCode: "CHE101",
+      subject: "Chemistry",
+      examDate: new Date("2025-08-29"),
       totalPapers: 88,
       evaluatedPapers: 88,
-      evaluator: 'Prof. John Mitchell',
-      evaluatorId: 'FAC005',
-      status: 'under_review',
-      priority: 'medium',
-      deadline: new Date('2025-09-04'),
-      submittedDate: new Date('2025-09-02'),
-      remarks: 'Grade distribution seems unusual, requires review',
-      semester: 'Fall 2025',
-      department: 'Chemistry'
-    }
+      evaluator: "Prof. John Mitchell",
+      evaluatorId: "FAC005",
+      status: "under_review",
+      priority: "medium",
+      deadline: new Date("2025-09-04"),
+      submittedDate: new Date("2025-09-02"),
+      remarks: "Grade distribution seems unusual, requires review",
+      semester: "Fall 2025",
+      department: "Chemistry",
+    },
   ]);
 
-  const [selectedEvaluation, setSelectedEvaluation] = useState<EvaluationTask | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [filterDepartment, setFilterDepartment] = useState<string>('all');
+  const [selectedEvaluation, setSelectedEvaluation] = React.useState<EvaluationTask | null>(null);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filterStatus, setFilterStatus] = React.useState("all");
+  const [filterDepartment, setFilterDepartment] = React.useState("all");
 
-  const filteredEvaluations = evaluations.filter(evaluation => {
-    const matchesSearch = evaluation.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         evaluation.examCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         evaluation.evaluator.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || evaluation.status === filterStatus;
-    const matchesDepartment = filterDepartment === 'all' || evaluation.department === filterDepartment;
+  const filteredEvaluations = evaluations.filter((evaluation) => {
+    const matchesSearch =
+      evaluation.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      evaluation.examCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      evaluation.evaluator.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === "all" || evaluation.status === filterStatus;
+    const matchesDepartment = filterDepartment === "all" || evaluation.department === filterDepartment;
     return matchesSearch && matchesStatus && matchesDepartment;
   });
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'in_progress': return <Clock className="w-4 h-4 text-blue-500" />;
-      case 'pending': return <Clock className="w-4 h-4 text-gray-500" />;
-      case 'overdue': return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case 'under_review': return <Eye className="w-4 h-4 text-orange-500" />;
-      default: return null;
-    }
+  const getIconComponent = (status: string) => {
+    const Icon = (EvaluationStatusIcons as any)[status];
+    return Icon ? <Icon className="w-4 h-4" /> : null;
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'in_progress': return 'bg-blue-100 text-blue-800';
-      case 'pending': return 'bg-gray-100 text-gray-800';
-      case 'overdue': return 'bg-red-100 text-red-800';
-      case 'under_review': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+    return (EvaluationStatusColors as any)[status] || "bg-gray-100 text-gray-800";
   };
 
   const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'bg-red-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
-    }
+    return (PriorityColors as any)[priority] || "bg-gray-500";
   };
 
-  const getProgressPercentage = (evaluated: number, total: number) => {
-    return total > 0 ? Math.round((evaluated / total) * 100) : 0;
+  const progressPercentage = (task: EvaluationTask) => {
+    if (task.totalPapers === 0) return 0;
+    return Math.round((task.evaluatedPapers / task.totalPapers) * 100);
   };
 
-  const updateEvaluationStatus = (id: string, newStatus: string) => {
-    setEvaluations(prev => prev.map(evaluation => 
-      evaluation.id === id ? { ...evaluation, status: newStatus as any } : evaluation
-    ));
+  // Generate JSON report
+  const generateReport = () => {
+    const report = {
+      generatedAt: new Date().toISOString(),
+      totalEvaluations: evaluations.length,
+      summary: {
+        pending: evaluations.filter((e) => e.status === "pending").length,
+        in_progress: evaluations.filter((e) => e.status === "in_progress").length,
+        completed: evaluations.filter((e) => e.status === "completed").length,
+        overdue: evaluations.filter((e) => e.status === "overdue").length,
+        under_review: evaluations.filter((e) => e.status === "under_review").length,
+      },
+    };
+
+    const filename = "evaluation_report.json";
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
-  const pendingCount = evaluations.filter(evaluation => evaluation.status === 'pending').length;
-  const overdueCount = evaluations.filter(evaluation => evaluation.status === 'overdue').length;
-  const completedCount = evaluations.filter(evaluation => evaluation.status === 'completed').length;
-  const underReviewCount = evaluations.filter(evaluation => evaluation.status === 'under_review').length;
+  // Export all evaluation data
+  const exportData = () => {
+    const filename = "evaluations_data.json";
+    const blob = new Blob([JSON.stringify(evaluations, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const departmentOptions = Array.from(new Set(evaluations.map((e) => e.department)));
+  const statusOptions = Array.from(new Set(evaluations.map((e) => e.status)));
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 p-4">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 md:px-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <GraduationCap className="w-6 h-6 text-blue-600" />
-            Exam Evaluation Management
-          </h1>
-          <div className="flex items-center gap-4">
-            {overdueCount > 0 && (
-              <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-full">
-                {overdueCount} overdue
-              </span>
-            )}
-            {underReviewCount > 0 && (
-              <span className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full">
-                {underReviewCount} under review
-              </span>
-            )}
-          </div>
+      <div className="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <GraduationCap className="w-6 h-6 text-blue-600" />
+          <h1 className="text-xl font-bold text-gray-800">Exam Evaluation Management</h1>
+        </div>
+
+        <div className="flex gap-4">
+          {evaluations.filter((e) => e.status === "overdue").length > 0 && (
+            <span className="rounded-full bg-red-600 text-white px-3 py-1 text-xs">Overdue evaluations</span>
+          )}
+          {evaluations.filter((e) => e.status === "under_review").length > 0 && (
+            <span className="rounded-full bg-orange-600 text-white px-3 py-1 text-xs">Under Review</span>
+          )}
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)]">
-        {/* Sidebar - Evaluation List */}
-        <div className={`w-full lg:w-96 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 flex flex-col ${selectedEvaluation ? 'hidden lg:flex' : 'flex'}`}>
-          {/* Search and Filters */}
-          <div className="p-4 space-y-3 border-b border-gray-200">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search evaluations..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            
-            <div className="flex gap-2">
-              <select
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-              >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-                <option value="overdue">Overdue</option>
-                <option value="under_review">Under Review</option>
-              </select>
-              
-              <select
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                value={filterDepartment}
-                onChange={(e) => setFilterDepartment(e.target.value)}
-              >
-                <option value="all">All Departments</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Mathematics">Mathematics</option>
-                <option value="Physics">Physics</option>
-                <option value="English">English</option>
-                <option value="Chemistry">Chemistry</option>
-              </select>
-            </div>
-          </div>
+      {/* Filters and Search */}
+      <div className="bg-white p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-4 items-center">
+        <div className="flex-1 relative w-full sm:max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input
+            className="w-full pl-10 pr-3 py-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500"
+            placeholder="Search by subject, code, evaluator"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <select
+          className="border rounded-md border-gray-300 p-2"
+          aria-label="Filter by status"
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+        >
+          <option value="all">All Statuses</option>
+          {statusOptions.map((status) => (
+            <option key={status} value={status}>
+              {status.charAt(0).toUpperCase() + status.slice(1).replace("_", " ")}
+            </option>
+          ))}
+        </select>
+        <select
+          className="border rounded-md border-gray-300 p-2"
+          aria-label="Filter by department"
+          value={filterDepartment}
+          onChange={(e) => setFilterDepartment(e.target.value)}
+        >
+          <option value="all">All Departments</option>
+          {departmentOptions.map((dept) => (
+            <option key={dept} value={dept}>
+              {dept}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          {/* Evaluations List */}
-          <div className="flex-1 overflow-y-auto">
-            {filteredEvaluations.map((evaluation) => {
-              const progressPercentage = getProgressPercentage(evaluation.evaluatedPapers, evaluation.totalPapers);
-              
+      {/* Main Content */}
+      <div className="flex gap-4 mt-4" style={{ height: 'calc(100vh - 170px)' }}>
+        {/* List */}
+        <div className="bg-white flex-1 overflow-y-auto rounded-md shadow-sm p-4">
+          {filteredEvaluations.length === 0 ? (
+            <p className="text-center text-gray-500">No evaluations found.</p>
+          ) : (
+            filteredEvaluations.map((evalTask) => {
+              const ProgressBarWidth = `${Math.min(100, (evalTask.evaluatedPapers / evalTask.totalPapers) * 100)}%`;
+
               return (
                 <div
-                  key={evaluation.id}
-                  className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
-                    selectedEvaluation?.id === evaluation.id ? 'bg-blue-50 border-blue-200' : ''
-                  }`}
-                  onClick={() => setSelectedEvaluation(evaluation)}
+                  key={evalTask.id}
+                  className={`border-b last:border-b-0 border-gray-200 p-4 cursor-pointer hover:bg-gray-50 transition`}
+                  onClick={() => setSelectedEvaluation(evalTask)}
+                  tabIndex={0}
+                  role="button"
+                  aria-pressed={selectedEvaluation?.id === evalTask.id}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className={`w-3 h-3 rounded-full ${getPriorityColor(evaluation.priority)} flex-shrink-0`}></div>
-                      <span className="font-medium text-sm text-gray-900 truncate">
-                        {evaluation.examCode}
-                      </span>
-                      {getStatusIcon(evaluation.status)}
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(evaluation.status)}`}>
-                      {evaluation.status.replace('_', ' ')}
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900">{evalTask.subject}</h3>
+                    <span className={`px-2 py-0.5 rounded text-xs font-semibold ${getStatusColor(evalTask.status)}`}>
+                      {evalTask.status.charAt(0).toUpperCase() + evalTask.status.slice(1).replace("_", " ")}
                     </span>
                   </div>
-                  
-                  <h3 className="text-sm font-semibold text-gray-900 mb-1 truncate">
-                    {evaluation.subject}
-                  </h3>
-                  
-                  <p className="text-xs text-gray-600 mb-2">
-                    {evaluation.evaluator} • {evaluation.department}
-                  </p>
-                  
-                  {/* Progress Bar */}
-                  <div className="mb-2">
-                    <div className="flex justify-between text-xs text-gray-600 mb-1">
-                      <span>Progress</span>
-                      <span>{evaluation.evaluatedPapers}/{evaluation.totalPapers} ({progressPercentage}%)</span>
+
+                  <div className="flex gap-4 mb-2 flex-wrap">
+                    <div className="flex items-center gap-1 text-gray-600 text-sm">
+                      <FileText className="w-4 h-4" />
+                      <span>{`Papers: ${evalTask.evaluatedPapers} / ${evalTask.totalPapers}`}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all ${
-                          evaluation.status === 'completed' ? 'bg-green-500' :
-                          evaluation.status === 'overdue' ? 'bg-red-500' :
-                          'bg-blue-500'
-                        }`}
-                        style={{ width: `${progressPercentage}%` }}
-                      ></div>
+                    <div className="flex items-center gap-1 text-gray-600 text-sm">
+                      <User className="w-4 h-4" />
+                      <span>{evalTask.evaluator}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-gray-600 text-sm">
+                      <Calendar className="w-4 h-4" />
+                      <span>{evalTask.examDate.toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-gray-600 text-sm">
+                      <Clock className="w-4 h-4" />
+                      <span>{`Deadline: ${evalTask.deadline.toLocaleDateString()}`}</span>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span>Due: {evaluation.deadline.toLocaleDateString()}</span>
-                    <span>{evaluation.semester}</span>
+                  <div className="bg-gray-200 rounded-full h-2 mb-1">
+                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: ProgressBarWidth }}></div>
+                  </div>
+
+                  <div className={`inline-block px-2 py-0.5 rounded-full text-white text-xs font-semibold ${PriorityColors[evalTask.priority]}`}>
+                    {evalTask.priority.charAt(0).toUpperCase() + evalTask.priority.slice(1)}
                   </div>
                 </div>
               );
-            })}
-            
-            {filteredEvaluations.length === 0 && (
-              <div className="p-8 text-center text-gray-500">
-                <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>No evaluations found</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className={`flex-1 flex flex-col ${selectedEvaluation ? 'flex' : 'hidden lg:flex'}`}>
-          {selectedEvaluation ? (
-            <>
-              {/* Back button for mobile */}
-              <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-2">
-                <button
-                  onClick={() => setSelectedEvaluation(null)}
-                  className="text-blue-600 text-sm font-medium"
-                >
-                  ← Back to Evaluations
-                </button>
-              </div>
-
-              {/* Evaluation Details Header */}
-              <div className="bg-white border-b border-gray-200 p-4 md:p-6">
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-lg md:text-xl font-semibold text-gray-900">
-                      {selectedEvaluation.subject}
-                    </h2>
-                    <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(selectedEvaluation.status)}`}>
-                      {selectedEvaluation.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-3">{selectedEvaluation.examCode}</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-gray-500" />
-                      <span><strong>Evaluator:</strong> {selectedEvaluation.evaluator}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-gray-500" />
-                      <span><strong>Exam Date:</strong> {selectedEvaluation.examDate.toLocaleDateString()}</span>
-                    </div>
-                    <div>
-                      <strong>Department:</strong> {selectedEvaluation.department}
-                    </div>
-                    <div>
-                      <strong>Semester:</strong> {selectedEvaluation.semester}
-                    </div>
-                    <div>
-                      <strong>Deadline:</strong> {selectedEvaluation.deadline.toLocaleDateString()}
-                    </div>
-                    {selectedEvaluation.submittedDate && (
-                      <div>
-                        <strong>Submitted:</strong> {selectedEvaluation.submittedDate.toLocaleDateString()}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Progress Section */}
-                <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                  <h3 className="font-medium text-gray-900 mb-3">Evaluation Progress</h3>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Papers Evaluated</span>
-                    <span className="text-sm font-medium">
-                      {selectedEvaluation.evaluatedPapers} / {selectedEvaluation.totalPapers}
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                    <div 
-                      className={`h-3 rounded-full transition-all ${
-                        selectedEvaluation.status === 'completed' ? 'bg-green-500' :
-                        selectedEvaluation.status === 'overdue' ? 'bg-red-500' :
-                        'bg-blue-500'
-                      }`}
-                      style={{ width: `${getProgressPercentage(selectedEvaluation.evaluatedPapers, selectedEvaluation.totalPapers)}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    {getProgressPercentage(selectedEvaluation.evaluatedPapers, selectedEvaluation.totalPapers)}% Complete
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-2">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                    <Eye className="w-4 h-4" />
-                    View Details
-                  </button>
-                  <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                    <Download className="w-4 h-4" />
-                    Download Report
-                  </button>
-                  <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                    <Edit3 className="w-4 h-4" />
-                    Add Remarks
-                  </button>
-                </div>
-              </div>
-
-              {/* Evaluation Content */}
-              <div className="flex-1 bg-white p-4 md:p-6 overflow-y-auto">
-                <div className="max-w-4xl space-y-6">
-                  {/* Remarks Section */}
-                  {selectedEvaluation.remarks && (
-                    <div className="bg-yellow-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-yellow-900 mb-2">Remarks</h4>
-                      <p className="text-sm text-yellow-800">{selectedEvaluation.remarks}</p>
-                    </div>
-                  )}
-
-                  {/* Status-specific Actions */}
-                  {selectedEvaluation.status === 'pending' && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-gray-900 mb-3">Pending Actions</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button 
-                          onClick={() => updateEvaluationStatus(selectedEvaluation.id, 'in_progress')}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                        >
-                          Start Evaluation
-                        </button>
-                        <button className="px-4 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm">
-                          Assign Different Evaluator
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedEvaluation.status === 'in_progress' && (
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-blue-900 mb-3">Evaluation in Progress</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                          Send Reminder
-                        </button>
-                        <button className="px-4 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm">
-                          Check Progress
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedEvaluation.status === 'under_review' && (
-                    <div className="bg-orange-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-orange-900 mb-3">Under Review</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button 
-                          onClick={() => updateEvaluationStatus(selectedEvaluation.id, 'completed')}
-                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
-                        >
-                          Approve Results
-                        </button>
-                        <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
-                          Request Revision
-                        </button>
-                        <button className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors text-sm">
-                          Reject & Reassign
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedEvaluation.status === 'overdue' && (
-                    <div className="bg-red-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-red-900 mb-3">Overdue Actions</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
-                          Send Urgent Reminder
-                        </button>
-                        <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
-                          Reassign Evaluator
-                        </button>
-                        <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                          Extend Deadline
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedEvaluation.status === 'completed' && (
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <h4 className="font-medium text-green-900 mb-3">Evaluation Completed</h4>
-                      <div className="flex flex-wrap gap-2">
-                        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                          View Final Report
-                        </button>
-                        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
-                          Publish Results
-                        </button>
-                        <button className="px-4 py-2 border border-green-300 text-green-600 rounded-lg hover:bg-green-50 transition-colors text-sm">
-                          Generate Statistics
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </>
-          ) : (
-            /* No Evaluation Selected */
-            <div className="flex-1 flex items-center justify-center bg-white">
-              <div className="text-center text-gray-500">
-                <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                <h3 className="text-lg font-medium mb-2">Select an evaluation to manage</h3>
-                <p className="text-sm">Choose an evaluation from the list to view details and take actions</p>
-              </div>
-            </div>
+            })
           )}
         </div>
 
-        {/* Stats Panel */}
-        <div className={`w-full lg:w-64 bg-white border-t lg:border-t-0 lg:border-l border-gray-200 p-4 ${selectedEvaluation ? 'hidden lg:block' : 'block'}`}>
-          <h3 className="font-semibold text-gray-800 mb-4">Evaluation Stats</h3>
-          
-          <div className="space-y-3">
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Pending</span>
-                <span className="font-semibold text-gray-900">{pendingCount}</span>
+        {/* Details Side Panel */}
+        <aside className="w-96 bg-white rounded-md shadow-sm p-4 overflow-auto" style={{ maxHeight: 'calc(100vh - 170px)' }}>
+          {selectedEvaluation ? (
+            <>
+              <h2 className="text-xl font-semibold mb-2">{selectedEvaluation.subject} - {selectedEvaluation.examCode}</h2>
+              <div className="mb-2 text-gray-600 text-sm">
+                <strong>Evaluator:</strong> {selectedEvaluation.evaluator} ({selectedEvaluation.evaluatorId})
               </div>
-            </div>
-            
-            <div className="bg-red-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-red-700">Overdue</span>
-                <span className="font-semibold text-red-900">{overdueCount}</span>
+              <div className="mb-2 text-gray-600 text-sm">
+                <strong>Department:</strong> {selectedEvaluation.department}
               </div>
-            </div>
-            
-            <div className="bg-green-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-green-700">Completed</span>
-                <span className="font-semibold text-green-900">{completedCount}</span>
+              <div className="mb-2 text-gray-600 text-sm">
+                <strong>Semester:</strong> {selectedEvaluation.semester}
               </div>
-            </div>
-            
-            <div className="bg-orange-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-orange-700">Under Review</span>
-                <span className="font-semibold text-orange-900">{underReviewCount}</span>
+              <div className="mb-2 text-gray-600 text-sm">
+                <strong>Exam Date:</strong> {selectedEvaluation.examDate.toLocaleDateString()}
               </div>
+              <div className="mb-2 text-gray-600 text-sm">
+                <strong>Deadline:</strong> {selectedEvaluation.deadline.toLocaleDateString()}
+              </div>
+              {selectedEvaluation.submittedDate && (
+                <div className="mb-2 text-gray-600 text-sm">
+                  <strong>Submitted:</strong> {selectedEvaluation.submittedDate.toLocaleDateString()}
+                </div>
+              )}
+              <div className="mb-2 text-gray-600 text-sm">
+                <strong>Status:</strong> 
+                <span className={`ml-2 px-2 py-0.5 rounded text-white text-xs font-semibold ${EvaluationStatusColors[selectedEvaluation.status]}`}>
+                  {selectedEvaluation.status.charAt(0).toUpperCase() + selectedEvaluation.status.slice(1).replace("_", " ")}
+                </span>
+              </div>
+              <div className="mb-2 text-gray-600 text-sm">
+                <strong>Priority:</strong> 
+                <span className={`ml-2 px-2 py-0.5 rounded text-white text-xs font-semibold ${PriorityColors[selectedEvaluation.priority]}`}>
+                  {selectedEvaluation.priority.charAt(0).toUpperCase() + selectedEvaluation.priority.slice(1)}
+                </span>
+              </div>
+              {selectedEvaluation.remarks && (
+                <div className="mb-2 text-gray-600 text-sm">
+                  <strong>Remarks:</strong> {selectedEvaluation.remarks}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center text-gray-400 mt-10">
+              <GraduationCap className="mx-auto mb-4 w-16 h-16" />
+              <p>Select an evaluation task to see details</p>
             </div>
-          </div>
+          )}
 
+          {/* Actions */}
           <div className="mt-6">
-            <h4 className="font-medium text-gray-800 mb-3">Quick Actions</h4>
-            <div className="space-y-2">
-              <button className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                Generate Report
-              </button>
-              <button className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                Export Data
-              </button>
-              <button className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                Send Reminders
-              </button>
-            </div>
+            <button
+              className="w-full mb-2 px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
+              onClick={generateReport}
+            >
+              Generate Report
+            </button>
+
+            <button
+              className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded shadow hover:bg-gray-300 transition"
+              onClick={exportData}
+            >
+              Export Data
+            </button>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );

@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
-import { Search, Filter, Download, UserCheck, UserX, Users, Clock } from 'lucide-react';
+import { Search, Download, UserCheck, UserX, Users, Clock } from 'lucide-react';
+
+interface AttendanceRecord {
+  id: string;
+  studentId: string;
+  rollNo: string;
+  studentName: string;
+  examId: string;
+  subject: string;
+  checkInTime: string;
+  checkOutTime: string;
+  status: 'present' | 'absent' | 'late';
+  seatNo: string;
+}
 
 const StudentAttendance: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedExam, setSelectedExam] = useState('EX001');
   const [attendanceFilter, setAttendanceFilter] = useState('all');
-
-  const attendanceData = [
+  const [attendanceData, setAttendanceData] = useState<AttendanceRecord[]>([
     {
       id: '1',
       studentId: 'CSE001',
@@ -17,7 +29,7 @@ const StudentAttendance: React.FC = () => {
       checkInTime: '08:45 AM',
       checkOutTime: '12:15 PM',
       status: 'present',
-      seatNo: 'A1'
+      seatNo: 'A1',
     },
     {
       id: '2',
@@ -29,7 +41,7 @@ const StudentAttendance: React.FC = () => {
       checkInTime: '08:50 AM',
       checkOutTime: '12:10 PM',
       status: 'present',
-      seatNo: 'A2'
+      seatNo: 'A2',
     },
     {
       id: '3',
@@ -41,30 +53,51 @@ const StudentAttendance: React.FC = () => {
       checkInTime: '-',
       checkOutTime: '-',
       status: 'absent',
-      seatNo: 'A3'
-    }
-  ];
+      seatNo: 'A3',
+    },
+  ]);
 
-  const filteredAttendance = attendanceData.filter(record => {
-    const matchesSearch = record.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         record.rollNo.toLowerCase().includes(searchTerm.toLowerCase());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingRecord, setEditingRecord] = useState<AttendanceRecord | null>(null);
+
+  const filteredAttendance = attendanceData.filter((record) => {
+    const matchesSearch =
+      record.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      record.rollNo.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = attendanceFilter === 'all' || record.status === attendanceFilter;
     return matchesSearch && matchesFilter;
   });
 
   const attendanceStats = {
     total: attendanceData.length,
-    present: attendanceData.filter(r => r.status === 'present').length,
-    absent: attendanceData.filter(r => r.status === 'absent').length,
-    late: attendanceData.filter(r => r.status === 'late').length
+    present: attendanceData.filter((r) => r.status === 'present').length,
+    absent: attendanceData.filter((r) => r.status === 'absent').length,
+    late: attendanceData.filter((r) => r.status === 'late').length,
+  };
+
+  const handleUpdateClick = (record: AttendanceRecord) => {
+    setEditingRecord(record);
+    setIsModalOpen(true);
+  };
+
+  const handleSave = () => {
+    if (!editingRecord) return;
+    setAttendanceData((prev) =>
+      prev.map((r) => (r.id === editingRecord.id ? editingRecord : r))
+    );
+    setIsModalOpen(false);
+    setEditingRecord(null);
   };
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">STUDENT ATTENDANCE</h1>
-          <p className="text-gray-600">Track and manage student attendance for examinations</p>
+          <p className="text-gray-600">
+            Track and manage student attendance for examinations
+          </p>
         </div>
         <button className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors">
           <Download className="h-4 w-4" />
@@ -72,6 +105,7 @@ const StudentAttendance: React.FC = () => {
         </button>
       </div>
 
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center space-x-3">
@@ -84,7 +118,7 @@ const StudentAttendance: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -96,7 +130,7 @@ const StudentAttendance: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
@@ -108,20 +142,23 @@ const StudentAttendance: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
               <Clock className="h-5 w-5 text-yellow-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{Math.round((attendanceStats.present / attendanceStats.total) * 100)}%</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {Math.round((attendanceStats.present / attendanceStats.total) * 100)}%
+              </p>
               <p className="text-sm text-gray-600">Attendance Rate</p>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Filters + Table */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -135,8 +172,8 @@ const StudentAttendance: React.FC = () => {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            
-            <select 
+
+            <select
               value={selectedExam}
               onChange={(e) => setSelectedExam(e.target.value)}
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -145,8 +182,8 @@ const StudentAttendance: React.FC = () => {
               <option value="EX002">Database Management - Final</option>
               <option value="EX003">Operating Systems - Mid Sem</option>
             </select>
-            
-            <select 
+
+            <select
               value={attendanceFilter}
               onChange={(e) => setAttendanceFilter(e.target.value)}
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -181,18 +218,23 @@ const StudentAttendance: React.FC = () => {
                   <td className="py-3 px-4 text-sm text-gray-600">{record.checkInTime}</td>
                   <td className="py-3 px-4 text-sm text-gray-600">{record.checkOutTime}</td>
                   <td className="py-3 px-4">
-                    <span className={`inline-flex px-2 py-1 text-xs rounded-full font-medium ${
-                      record.status === 'present' 
-                        ? 'bg-green-100 text-green-800'
-                        : record.status === 'absent'
-                        ? 'bg-red-100 text-red-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs rounded-full font-medium ${
+                        record.status === 'present'
+                          ? 'bg-green-100 text-green-800'
+                          : record.status === 'absent'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}
+                    >
                       {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
                     </span>
                   </td>
                   <td className="py-3 px-4">
-                    <button className="text-blue-600 hover:text-blue-800 text-sm">
+                    <button
+                      onClick={() => handleUpdateClick(record)}
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
                       Update
                     </button>
                   </td>
@@ -202,6 +244,85 @@ const StudentAttendance: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Update Modal */}
+      {isModalOpen && editingRecord && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+            <h2 className="text-lg font-bold mb-4">Update Attendance</h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Student</label>
+                <input
+                  type="text"
+                  value={editingRecord.studentName}
+                  readOnly
+                  className="mt-1 w-full border rounded-lg px-3 py-2 bg-gray-100"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Status</label>
+                <select
+                  value={editingRecord.status}
+                  onChange={(e) =>
+                    setEditingRecord({ ...editingRecord, status: e.target.value as AttendanceRecord['status'] })
+                  }
+                  className="mt-1 w-full border rounded-lg px-3 py-2"
+                >
+                  <option value="present">Present</option>
+                  <option value="absent">Absent</option>
+                  <option value="late">Late</option>
+                </select>
+              </div>
+
+              <div className="flex space-x-2">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">Check In</label>
+                  <input
+                    type="text"
+                    value={editingRecord.checkInTime}
+                    onChange={(e) =>
+                      setEditingRecord({ ...editingRecord, checkInTime: e.target.value })
+                    }
+                    className="mt-1 w-full border rounded-lg px-3 py-2"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">Check Out</label>
+                  <input
+                    type="text"
+                    value={editingRecord.checkOutTime}
+                    onChange={(e) =>
+                      setEditingRecord({ ...editingRecord, checkOutTime: e.target.value })
+                    }
+                    className="mt-1 w-full border rounded-lg px-3 py-2"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setEditingRecord(null);
+                }}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
