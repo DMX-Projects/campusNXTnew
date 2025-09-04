@@ -603,11 +603,8 @@ const SIDEBAR_ITEMS = {
         { name: 'Permissions', path: '/hostel/student/student-permissions', icon: 'UserCheck' }, 
         { name: 'Fees & Payments', path: '/hostel/student/fee-details', icon: 'DollarSign' },   
         { name: 'Mess Services', path: '/hostel/student/mess-services', icon: 'Coffee' },         
-        { name: 'Attendance', path: '/hostel/student/attendance', icon: 'Clock' },               
-        { name: 'Support Tickets', path: '/hostel/student/raise-ticket', icon: 'AlertCircle' },  
-        { name: 'My Profile', path: '/hostel/student/my-profile', icon: 'User' },                
-        { name: 'Notices', path: '/hostel/student/notices', icon: 'Speaker' },                   
-        { name: 'Reports', path: '/hostel/student/reports', icon: 'FileText' }                   
+        { name: 'Attendance', path: '/hostel/student/attendance', icon: 'Clock' },                           
+        { name: 'Notices', path: '/hostel/student/notices', icon: 'Speaker' },                                 
 
     ],
     'default': [
