@@ -3,12 +3,7 @@ import Course from '../pages/Academics/Courses/CoursesPage';
 import FacultyLeaves from '../pages/Academics/Courses/FacultyLeaves';
 import Inbox from '../pages/Academics/Courses/inbox';
 import StudentAttendance from '../pages/Academics/Courses/Studentsattendence'
-import { UsersPage } from '../pages/Academics/Users/UsersPage';
-import { EditUserPage } from '../pages/Academics/Users/EditUserPage';
-import { AddUserPage } from '../pages/Academics/Users/AddUserPage';
-import { InstitutionsPage } from '../pages/Academics/Institutions/InstitutionsPage';
-import { ProgramsPage } from '../pages/Academics/Programs/ProgramsPage';
-import { RolesPage } from '../pages/Academics/Roles/RolesPage';
+ 
 import Timetable from '../pages/Academics/timetable/TimeTable';
 import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
 import AcademicCalender from '../pages/Academics/AcademicCalender/AcademicCalender';
@@ -40,6 +35,19 @@ import ScheduleOnlinclass from '../FacultyModules/FacultyAcademic/ScheduleOnlinc
 import FacultyReports from '../FacultyModules/FacultyAcademic/FacultyReports';
 import FacultyRiseTicket  from '../FacultyModules/FacultyAcademic/FacultyRiseticket'
 // import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
+
+
+// student login 
+
+import AcademicstudentDashboard from '../FacultyModules/FacultyAcademic/StudentDashboard'
+import StudentfeeManagement from '../FacultyModules/FacultyAcademic/studentFeeManagement';
+import StudentRecordsResults from '../FacultyModules/FacultyAcademic/StudentRecords&Results';
+import StudentClassSchedule from '../FacultyModules/FacultyAcademic/StudentClassSchedule';
+import StudentCourseAcademic from '../FacultyModules/FacultyAcademic/StudentCourse';
+import StudentAssigment from '../FacultyModules/FacultyAcademic/StudentAssigment';
+import StudentExam from '../FacultyModules/FacultyAcademic/StudentExam';
+import StudentProfile from '../FacultyModules/FacultyAcademic/StudentProfile';
+import StudentStudyMaterial from '../FacultyModules/FacultyAcademic/StudentStudyMaterial';
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
@@ -87,6 +95,24 @@ const AcademicsRoutes: React.FC = () => {
       <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
       <Route path='/faculty-raiseticket' element={<FacultyRiseTicket />} />
 
+
+
+
+
+
+
+    {/* //student login */}
+
+
+    <Route path="/student-dashboard" element={<AcademicstudentDashboard />} />
+    <Route path="/student-feemanagement" element={<StudentfeeManagement />} />
+    <Route path="/student-recordsresults" element={<StudentRecordsResults />} />
+    <Route path="/student-classschedule" element={<StudentClassSchedule />} />
+    <Route path="/student-courses" element={<StudentCourseAcademic />} />
+    <Route path="/student-assignments" element={<StudentAssigment />} />
+    <Route path="/student-exams" element={<StudentExam />} />
+    <Route path="/student-profile" element={<StudentProfile />} />
+    <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
 
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 
