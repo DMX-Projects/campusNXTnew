@@ -63,7 +63,7 @@ export default function Dashboard() {
                 <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
                   <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                  <p className={`text-sm mt-2 flex items-center gap-1 ${
+                  <p className={`text-sm mt-2 flex items-center gap-1 ₹{
                     stat.change.startsWith('+') ? 'text-green-600' : 'text-red-600'
                   }`}>
                     <TrendingUp className="h-4 w-4" />
@@ -116,7 +116,7 @@ export default function Dashboard() {
                     <p className="font-medium text-gray-800">{book?.title}</p>
                     <p className="text-sm text-gray-600">by {member?.name}</p>
                   </div>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ₹{
                     issue.status === 'Issued' ? 'bg-green-100 text-green-800' :
                     issue.status === 'Overdue' ? 'bg-red-100 text-red-800' :
                     'bg-gray-100 text-gray-800'

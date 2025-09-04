@@ -30,14 +30,14 @@ export default function LateFee() {
 
   const handleMarkPaid = (fineId: string) => {
     if (window.confirm('Are you sure you want to mark this fine as Paid?')) {
-      alert(`Fine ID ${fineId} marked as Paid.`);
+      alert(`Fine ID ₹{fineId} marked as Paid.`);
    
     }
   };
 
   const handleWaive = (fineId: string) => {
     if (window.confirm('Are you sure you want to waive this fine?')) {
-      alert(`Fine ID ${fineId} has been waived.`);
+      alert(`Fine ID ₹{fineId} has been waived.`);
      
     }
   };

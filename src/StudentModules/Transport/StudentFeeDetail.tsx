@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Bus, CreditCard, Calendar, MapPin, AlertCircle, CheckCircle, Clock, Receipt, X, Printer, Download, Eye, Smartphone, Banknote, Building, QrCode, IndianRupee, TrendingUp, Award, Target } from 'lucide-react';
 
 const StudentFeeDetail = () => {
-  const [activeModal, setActiveModal] = useState(null);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
   
   // Student fee data with semester-wise structure
   const feeData = {
@@ -253,6 +253,11 @@ Next Due: ${feeData.feeStructure.nextDueDate}
   const currentSemesterForPayment = feeData.semesterFees.find(sem => 
     activeModal?.includes('payment-') && activeModal.split('-')[1] == sem.id
   );
+
+  function handlePaymentHistory(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    alert('Payment history feature is coming soon!');
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-3 sm:p-6 bg-gradient-to-br from-blue-50 via-white to-indigo-50 min-h-screen">
@@ -553,7 +558,7 @@ Next Due: ${feeData.feeStructure.nextDueDate}
               <span className="sm:hidden">Download</span>
             </button>
             <button 
-              onClick={() => setActiveModal('history')}
+              onClick={handlePaymentHistory}
               className="px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl"
             >
               <Eye className="w-5 h-5" />
@@ -568,7 +573,7 @@ Next Due: ${feeData.feeStructure.nextDueDate}
               <span className="hidden sm:inline">Print Statement</span>
               <span className="sm:hidden">Print</span>
             </button>
-            <button 
+            <button onClick={handlePayment}
               className="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl"
             >
               <CreditCard className="w-5 h-5" />

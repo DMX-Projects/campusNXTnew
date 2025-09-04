@@ -39,13 +39,27 @@ export default function BookReservation() {
   const [purpose, setPurpose] = useState<string>("");
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState<string>("");
+
+  const validateEmail = (email: string): boolean => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
 
   const handleReservation = () => {
+    // Check if all fields are filled
     if (!selectedBook || !reservationDate || !returnDate || !facultyName || !department || !email || !purpose) {
       alert("Please fill in all required fields.");
       return;
     }
 
+    // Check email format
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address (e.g., user@example.com)");
+      return;
+    }
+
+    // Check if return date is after reservation date
     if (new Date(returnDate) <= new Date(reservationDate)) {
       alert("Return date must be after reservation date.");
       return;
@@ -55,7 +69,10 @@ export default function BookReservation() {
 
     setTimeout(() => {
       const book = availableBooks.find((b) => b.id === selectedBook);
-      if (!book) return;
+      if (!book) {
+        setIsSubmitting(false);
+        return;
+      }
 
       const newReservation: Reservation = {
         bookId: book.id,
@@ -70,6 +87,8 @@ export default function BookReservation() {
       };
 
       setReservations([...reservations, newReservation]);
+      
+      // Reset form
       setSelectedBook(null);
       setReservationDate("");
       setReturnDate("");
@@ -78,11 +97,12 @@ export default function BookReservation() {
       setDepartment("");
       setEmail("");
       setPurpose("");
+      setEmailError("");
       setIsSubmitting(false);
+      
+      alert("Book reservation successful!");
     }, 1000);
   };
-
-  
 
   const getStatusColor = (status: "Pending" | "Reserved" | "Returned") => {
     switch (status) {
@@ -93,11 +113,24 @@ export default function BookReservation() {
     }
   };
 
+  const getStatusIcon = (status: "Pending" | "Reserved" | "Returned") => {
+    switch (status) {
+      case "Pending": return <Clock className="w-4 h-4" />;
+      case "Reserved": return <AlertCircle className="w-4 h-4" />;
+      case "Returned": return <CheckCircle className="w-4 h-4" />;
+      default: return <Clock className="w-4 h-4" />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-       
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Book Reservation System</h1>
+          <p className="text-gray-600">Reserve books for your academic needs</p>
+        </div>
+        
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Reservation Form */}
           <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
@@ -108,7 +141,18 @@ export default function BookReservation() {
 
             <div className="space-y-6">
               {/* Faculty Name */}
-             
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Faculty Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={facultyName}
+                  onChange={(e) => setFacultyName(e.target.value)}
+                  placeholder="Enter your full name"
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                />
+              </div>
 
               {/* Department */}
               <div>
@@ -119,6 +163,7 @@ export default function BookReservation() {
                   type="text"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
+                  placeholder="Enter your department"
                   className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
                 />
               </div>
@@ -131,9 +176,28 @@ export default function BookReservation() {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    // Validate email format
+                    if (e.target.value && !validateEmail(e.target.value)) {
+                      setEmailError("Please enter a valid email address (e.g., user@example.com)");
+                    } else {
+                      setEmailError("");
+                    }
+                  }}
+                  placeholder="Enter your email address (e.g., john@university.edu)"
+                  className={`w-full border-2 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${
+                    emailError 
+                      ? 'border-red-300 focus:border-red-500' 
+                      : 'border-gray-200 focus:border-indigo-500'
+                  }`}
                 />
+                {emailError && (
+                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                    <AlertCircle className="w-4 h-4 mr-1" />
+                    {emailError}
+                  </p>
+                )}
               </div>
 
               {/* Purpose */}
@@ -145,6 +209,7 @@ export default function BookReservation() {
                   type="text"
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
+                  placeholder="Enter purpose of reservation"
                   className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
                 />
               </div>
@@ -203,12 +268,10 @@ export default function BookReservation() {
                 </div>
               </div>
 
-              
-
               {/* Submit Button */}
               <button
                 onClick={handleReservation}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !!emailError}
                 className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isSubmitting ? (

@@ -272,6 +272,12 @@ const StudentTicketSystem = () => {
     </div>
   );
   
+  // Dummy handler for Add Attachment button to prevent error
+  const handleAddAttachment = () => {
+
+    alert('Attachment feature is coming soon!');
+  };
+
   // Main component render
   if (showDetailView && selectedTicket) {
     return <TicketDetailView ticket={selectedTicket} />;
@@ -478,7 +484,7 @@ const StudentTicketSystem = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     required
                   />
-                  <div className="mt-2 text-right">
+                  <div onClick={handleAddAttachment} className="mt-2 text-right">
                     <button type="button" className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
                       + Add Attachment
                     </button>
