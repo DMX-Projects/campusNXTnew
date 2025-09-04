@@ -69,7 +69,7 @@ const OutTimeManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Current active out/in entries
-  const currentEntries: OutTimeEntry[] = [
+  const [currentEntries, setCurrentEntries] = useState<OutTimeEntry[]>([
     {
       id: 'OUT001',
       student: {
@@ -151,10 +151,10 @@ const OutTimeManagement: React.FC = () => {
       guardianConsent: true,
       biometricOut: { timestamp: '2025-08-31T05:00:00Z', deviceId: 'BIO_GATE_01' }
     }
-  ];
+  ]);
 
   // Out Pass Requests (Pending/Recent approvals)
-  const outPassRequests: OutTimeEntry[] = [
+  const [outPassRequests, setOutPassRequests] = useState<OutTimeEntry[]>([
     {
       id: 'REQ001',
       student: {
@@ -288,7 +288,7 @@ const OutTimeManagement: React.FC = () => {
       guardianConsent: false,
       remarks: 'Parent consent required for local outings'
     }
-  ];
+  ]);
 
   // Historical Records (Past 6 months)
   const historicalRecords: OutTimeEntry[] = [
@@ -350,129 +350,125 @@ const OutTimeManagement: React.FC = () => {
       biometricOut: { timestamp: '2025-01-10T11:00:00Z', deviceId: 'BIO_GATE_01' },
       biometricIn: { timestamp: '2025-01-11T02:00:00Z', deviceId: 'BIO_GATE_01' },
       violations: ['Returned 4 hours late due to medical emergency - No penalty applied']
-    },
-    {
-      id: 'HIST003',
-      student: {
-        id: 'STU014', name: 'Kavya Nair', rollNumber: '2023IT045', block: 'C Block', roomNumber: 'C-102',
-        branch: 'Information Technology', semester: 4, parentContact: '+91-9876543236',
-        parentEmail: 'kavya.parent@email.com', emergencyContact: '+91-9876543237'
-      },
-      requestedDate: '2024-12-20T14:00:00Z',
-      outTime: '2024-12-21T06:00:00Z',
-      expectedReturnTime: '2025-01-02T20:00:00Z',
-      actualReturnTime: '2025-01-02T18:30:00Z',
-      destination: 'Home - Kerala (Kochi)',
-      purpose: 'Winter vacation and New Year celebrations',
-      outPassType: 'Outstation',
-      status: 'Approved',
-      currentStatus: 'Returned',
-      approvals: {
-        parentApproval: { status: true, timestamp: '2024-12-19T16:00:00Z', contactNumber: '+91-9876543236' },
-        wardenApproval: { status: true, timestamp: '2024-12-19T18:00:00Z', approvedBy: 'Dr. Rajesh Sharma' },
-        hodApproval: { status: true, timestamp: '2024-12-19T17:00:00Z', approvedBy: 'Dr. IT HOD' }
-      },
-      contactDuringOut: '+91-9876543236',
-      accompaniedBy: 'Parents came to pick up',
-      vehicleDetails: 'Private Car - KL 07 AB 5678',
-      expectedRoute: 'Hostel -> Kochi -> Hostel',
-      guardianConsent: true,
-      biometricOut: { timestamp: '2024-12-21T06:00:00Z', deviceId: 'BIO_GATE_01' },
-      biometricIn: { timestamp: '2025-01-02T18:30:00Z', deviceId: 'BIO_GATE_01' },
-      violations: []
-    },
-    {
-      id: 'HIST004',
-      student: {
-        id: 'STU015', name: 'Rohit Gupta', rollNumber: '2022CSE156', block: 'D Block', roomNumber: 'D-307',
-        branch: 'Computer Science Engineering', semester: 6, parentContact: '+91-9876543238',
-        parentEmail: 'rohit.parent@email.com', emergencyContact: '+91-9876543239'
-      },
-      requestedDate: '2024-11-15T08:00:00Z',
-      outTime: '2024-11-15T09:00:00Z',
-      expectedReturnTime: '2024-11-15T21:00:00Z',
-      actualReturnTime: '2024-11-16T01:30:00Z',
-      destination: 'Microsoft Office - Hyderabad',
-      purpose: 'Campus placement final interview and assessment',
-      outPassType: 'Official',
-      status: 'Approved',
-      currentStatus: 'Returned',
-      approvals: {
-        parentApproval: { status: true, timestamp: '2024-11-14T20:00:00Z', contactNumber: '+91-9876543238' },
-        wardenApproval: { status: true, timestamp: '2024-11-14T22:00:00Z', approvedBy: 'Dr. Kavitha Rao' },
-        hodApproval: { status: true, timestamp: '2024-11-14T21:00:00Z', approvedBy: 'Dr. CSE HOD' }
-      },
-      contactDuringOut: '+91-9876543238',
-      accompaniedBy: 'Fellow placement candidates',
-      vehicleDetails: 'Flight + Cab booking',
-      expectedRoute: 'Hostel -> Airport -> Hyderabad -> Hostel',
-      guardianConsent: true,
-      biometricOut: { timestamp: '2024-11-15T09:00:00Z', deviceId: 'BIO_GATE_01' },
-      biometricIn: { timestamp: '2024-11-16T01:30:00Z', deviceId: 'BIO_GATE_01' },
-      violations: ['Very late return - 4.5 hours past expected time due to flight delay'],
-      remarks: 'Got selected in Microsoft - celebration delayed return'
-    },
-    {
-      id: 'HIST005',
-      student: {
-        id: 'STU016', name: 'Anita Joshi', rollNumber: '2023EEE078', block: 'E Block', roomNumber: 'E-204',
-        branch: 'Electrical & Electronics', semester: 4, parentContact: '+91-9876543240',
-        parentEmail: 'anita.parent@email.com', emergencyContact: '+91-9876543241'
-      },
-      requestedDate: '2024-10-25T12:00:00Z',
-      outTime: '2024-10-25T15:00:00Z',
-      expectedReturnTime: '2024-10-25T21:00:00Z',
-      actualReturnTime: '2024-10-25T20:45:00Z',
-      destination: 'Commercial Street + Forum Mall',
-      purpose: 'Diwali shopping for family and festival preparations',
-      outPassType: 'Local',
-      status: 'Approved',
-      currentStatus: 'Returned',
-      approvals: {
-        parentApproval: { status: true, timestamp: '2024-10-25T12:30:00Z', contactNumber: '+91-9876543240' },
-        wardenApproval: { status: true, timestamp: '2024-10-25T13:00:00Z', approvedBy: 'Mrs. Kavitha Rao' }
-      },
-      contactDuringOut: '+91-9876543240',
-      accompaniedBy: 'Three roommates and senior students',
-      vehicleDetails: 'Metro + Auto Rickshaw',
-      expectedRoute: 'Hostel -> Metro -> Commercial Street -> Forum Mall -> Hostel',
-      guardianConsent: true,
-      biometricOut: { timestamp: '2024-10-25T15:00:00Z', deviceId: 'BIO_GATE_01' },
-      biometricIn: { timestamp: '2024-10-25T20:45:00Z', deviceId: 'BIO_GATE_01' },
-      violations: []
-    },
-    {
-      id: 'HIST006',
-      student: {
-        id: 'STU017', name: 'Suresh Babu', rollNumber: '2021CIVIL025', block: 'B Block', roomNumber: 'B-405',
-        branch: 'Civil Engineering', semester: 8, parentContact: '+91-9876543242',
-        parentEmail: 'suresh.parent@email.com', emergencyContact: '+91-9876543243'
-      },
-      requestedDate: '2024-09-10T07:00:00Z',
-      outTime: '2024-09-10T08:00:00Z',
-      expectedReturnTime: '2024-09-12T19:00:00Z',
-      actualReturnTime: '2024-09-12T18:30:00Z',
-      destination: 'L&T Construction Site - Mysore',
-      purpose: 'Industrial training and project work supervision',
-      outPassType: 'Official',
-      status: 'Approved',
-      currentStatus: 'Returned',
-      approvals: {
-        parentApproval: { status: true, timestamp: '2024-09-09T19:00:00Z', contactNumber: '+91-9876543242' },
-        wardenApproval: { status: true, timestamp: '2024-09-09T20:00:00Z', approvedBy: 'Dr. Rajesh Sharma' },
-        hodApproval: { status: true, timestamp: '2024-09-09T21:00:00Z', approvedBy: 'Dr. Civil HOD' }
-      },
-      contactDuringOut: '+91-9876543242',
-      accompaniedBy: 'Project guide and fellow students',
-      vehicleDetails: 'College Transport + Site Vehicle',
-      expectedRoute: 'College -> Mysore L&T Site -> College',
-      guardianConsent: true,
-      biometricOut: { timestamp: '2024-09-10T08:00:00Z', deviceId: 'BIO_GATE_01' },
-      biometricIn: { timestamp: '2024-09-12T18:30:00Z', deviceId: 'BIO_GATE_01' },
-      violations: [],
-      remarks: 'Successful completion of industrial training module'
     }
   ];
+
+  // Action Handlers
+  const handleSendSMS = (entry: OutTimeEntry) => {
+    const message = `Alert: Your child ${entry.student.name} (${entry.student.rollNumber}) is currently ${entry.currentStatus.toLowerCase()}. Out time: ${formatDateTime(entry.outTime)}. Expected return: ${formatDateTime(entry.expectedReturnTime)}.`;
+    console.log(`Sending SMS to ${entry.student.parentContact}: ${message}`);
+    alert(`SMS sent to parent: ${entry.student.parentContact}`);
+  };
+
+  const handleMarkAsReturned = (entry: OutTimeEntry) => {
+    const updatedEntry = {
+      ...entry,
+      currentStatus: 'Returned' as const,
+      actualReturnTime: new Date().toISOString(),
+      biometricIn: {
+        timestamp: new Date().toISOString(),
+        deviceId: 'BIO_GATE_01'
+      }
+    };
+
+    // Update in currentEntries
+    setCurrentEntries(prev => 
+      prev.map(e => e.id === entry.id ? updatedEntry : e)
+    );
+
+    // Update selectedEntry if it's the same
+    if (selectedEntry?.id === entry.id) {
+      setSelectedEntry(updatedEntry);
+    }
+
+    alert(`${entry.student.name} marked as returned successfully!`);
+  };
+
+  const handleGenerateReport = (entry: OutTimeEntry) => {
+    const reportData = {
+      studentName: entry.student.name,
+      rollNumber: entry.student.rollNumber,
+      outTime: entry.outTime,
+      returnTime: entry.actualReturnTime || 'Not returned',
+      destination: entry.destination,
+      purpose: entry.purpose,
+      status: entry.status
+    };
+    
+    console.log('Generating report for:', reportData);
+    alert(`Report generated for ${entry.student.name}`);
+  };
+
+  const handleSendOverdueAlert = (entry: OutTimeEntry) => {
+    const currentTime = new Date();
+    const expectedReturn = new Date(entry.expectedReturnTime);
+    const overdueHours = Math.ceil((currentTime.getTime() - expectedReturn.getTime()) / (1000 * 60 * 60));
+    
+    const alertMessage = `URGENT: ${entry.student.name} is overdue by ${overdueHours} hours. Please contact immediately.`;
+    
+    console.log(`Sending overdue alert: ${alertMessage}`);
+    alert(`Overdue alert sent to parent, warden, and emergency contacts`);
+  };
+
+  const handleApproveRequest = (entry: OutTimeEntry) => {
+    const updatedEntry = {
+      ...entry,
+      status: 'Approved' as const,
+      approvals: {
+        ...entry.approvals,
+        wardenApproval: {
+          status: true,
+          timestamp: new Date().toISOString(),
+          approvedBy: 'Current Warden',
+          remarks: 'Approved via management system'
+        }
+      }
+    };
+    
+    setOutPassRequests(prev => 
+      prev.map(e => e.id === entry.id ? updatedEntry : e)
+    );
+
+    if (selectedEntry?.id === entry.id) {
+      setSelectedEntry(updatedEntry);
+    }
+
+    alert(`Request approved for ${entry.student.name}`);
+  };
+
+  const handleDenyRequest = (entry: OutTimeEntry) => {
+    const reason = prompt('Please enter reason for denial:');
+    if (reason) {
+      const updatedEntry = {
+        ...entry,
+        status: 'Denied' as const,
+        approvals: {
+          ...entry.approvals,
+          wardenApproval: {
+            status: false,
+            timestamp: new Date().toISOString(),
+            approvedBy: 'Current Warden',
+            remarks: reason
+          }
+        }
+      };
+      
+      setOutPassRequests(prev => 
+        prev.map(e => e.id === entry.id ? updatedEntry : e)
+      );
+
+      if (selectedEntry?.id === entry.id) {
+        setSelectedEntry(updatedEntry);
+      }
+
+      alert(`Request denied for ${entry.student.name}`);
+    }
+  };
+
+  const handleEditRequest = (entry: OutTimeEntry) => {
+    console.log('Opening edit form for:', entry);
+    alert(`Edit form opened for ${entry.student.name}`);
+  };
 
   // Combine all entries based on active tab
   const getAllEntries = () => {
@@ -864,7 +860,7 @@ const OutTimeManagement: React.FC = () => {
           </div>
         )}
 
-        {/* Detailed Modal - Same as before */}
+        {/* Detailed Modal */}
         {isModalOpen && selectedEntry && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto">
@@ -1089,35 +1085,94 @@ const OutTimeManagement: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
+                {/* Responsive Action Buttons */}
                 <div className="flex flex-wrap gap-3 mt-8 pt-6 border-t border-gray-200">
-                  <button className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300">
+                  {/* Always show SMS button */}
+                  <button 
+                    onClick={() => handleSendSMS(selectedEntry)}
+                    className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
                     Send SMS to Parent
                   </button>
-                  <button className="bg-secondary-500 hover:bg-secondary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300">
-                    Mark as Returned
-                  </button>
-                  <button className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300">
+
+                  {/* Show Mark as Returned only if student is currently out */}
+                  {selectedEntry.currentStatus === 'Out' && (
+                    <button 
+                      onClick={() => handleMarkAsReturned(selectedEntry)}
+                      className="bg-secondary-500 hover:bg-secondary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Mark as Returned
+                    </button>
+                  )}
+
+                  {/* Always show Generate Report */}
+                  <button 
+                    onClick={() => handleGenerateReport(selectedEntry)}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
                     Generate Report
                   </button>
-                  {selectedEntry.currentStatus === 'Out' && (
-                    <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300">
+
+                  {/* Show Overdue Alert only if student is overdue */}
+                  {(selectedEntry.currentStatus === 'Overdue' || 
+                   (selectedEntry.currentStatus === 'Out' && new Date() > new Date(selectedEntry.expectedReturnTime))) && (
+                    <button 
+                      onClick={() => handleSendOverdueAlert(selectedEntry)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                      </svg>
                       Send Overdue Alert
                     </button>
                   )}
+
+                  {/* Show approval buttons only for pending requests */}
                   {selectedEntry.status === 'Pending' && (
                     <>
-                      <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300">
+                      <button 
+                        onClick={() => handleApproveRequest(selectedEntry)}
+                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
                         Approve Request
                       </button>
-                      <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300">
+                      <button 
+                        onClick={() => handleDenyRequest(selectedEntry)}
+                        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                         Deny Request
                       </button>
                     </>
                   )}
-                  <button className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors duration-300">
-                    Edit Request
-                  </button>
+
+                  {/* Show Edit button only for pending or approved requests that haven't started */}
+                  {(selectedEntry.status === 'Pending' || 
+                    (selectedEntry.status === 'Approved' && selectedEntry.currentStatus === 'In Hostel')) && (
+                    <button 
+                      onClick={() => handleEditRequest(selectedEntry)}
+                      className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      Edit Request
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
