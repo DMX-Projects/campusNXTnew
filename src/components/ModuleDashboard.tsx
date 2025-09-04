@@ -21,6 +21,7 @@ import SecurityDashboard from './Dashboard/SecurityDashboard';
 import ITDashboard from './Dashboard/ITDashboard';
 import MaintenanceDashboard from './Dashboard/MaintenanceDashboard';
 import HostelDashboardforadmin from '../pages/Hostel/HostelDashboard';
+import FacultyAcademicDashboard from '../FacultyModules/FacultyAcademic/FacultyAcademicDashboard'
 
 interface ModuleDashboardProps {
   module: string;
@@ -45,7 +46,7 @@ const ModuleDashboard: React.FC<ModuleDashboardProps> = ({ module }) => {
           case 'HoD':
             return <HoDDashboard />;
           case 'Faculty':
-            return <FacultyDashboard />;
+            return <FacultyAcademicDashboard />;
           case 'Student':
             return <StudentDashboard />;
           default:
