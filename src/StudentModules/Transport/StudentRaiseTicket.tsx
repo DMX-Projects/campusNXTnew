@@ -622,11 +622,7 @@ const StudentTicketSystem = () => {
                             <span className="hidden xs:inline">View Details</span>
                             <span className="xs:hidden">Details</span>
                           </button>
-                          <button className="w-full xs:w-auto px-4 py-2 text-gray-600 hover:text-gray-800 text-sm font-medium bg-gray-50 rounded hover:bg-gray-100 transition-all flex items-center justify-center">
-                            <Edit className="w-4 h-4 mr-1" />
-                            <span className="hidden xs:inline">Update</span>
-                            <span className="xs:hidden">Update</span>
-                          </button>
+                         
                         </div>
                       </div>
                     </div>

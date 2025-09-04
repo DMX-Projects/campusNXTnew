@@ -283,7 +283,7 @@ export default function Dashboard() {
             </div>
 
             {/* Search and Filter */}
-            <div className="px-6 py-4 border-b-2 border-gray-200 bg-gray-50">
+            <div className="px-6 py-2 border-b-2 border-gray-200 bg-gray-50">
               <div className="flex items-center gap-4">
                 <div className="flex-1 relative">
                   <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -386,7 +386,7 @@ export default function Dashboard() {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t-2 border-gray-200 bg-gray-50">
+            <div className="px-6 border-2 border-gray-200 bg-gray-50">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-600 font-medium">
                   Showing {filteredVehicles.length} of {vehicles.length} vehicles
