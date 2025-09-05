@@ -458,7 +458,10 @@ export default function Documents() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Document File
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+                  <div onClick={() => {
+                    const fileInput = document.querySelector('input[type=file]');
+                    if (fileInput) (fileInput as HTMLInputElement).click();
+                  }} className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
                     <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                     <p className="text-sm text-gray-500">Click to upload or drag and drop</p>
                     <p className="text-xs text-gray-400">PDF, JPG, PNG up to 10MB</p>
