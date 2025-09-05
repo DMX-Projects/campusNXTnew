@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import { Calendar as BigCalendar, momentLocalizer, View } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -15,7 +16,6 @@ type Exam = {
 };
 
 const examsSample: Exam[] = [
-  // CSE branch subjects only (filtered)
   {
     id: 1,
     branch: "CSE",
@@ -66,34 +66,30 @@ const examsSample: Exam[] = [
   },
 ];
 
-// Map subject to color for calendar event styling (CSE subjects)
 const subjectColors: Record<string, string> = {
-  "Data Structures": "#3b82f6", // blue
-  "Computer Networks": "#ef4444", // red
-  Algorithms: "#f59e0b", // amber
-  "Operating Systems": "#10b981", // green
-  "Database Management": "#8b5cf6", // purple
+  "Data Structures": "#3b82f6",
+  "Computer Networks": "#ef4444",
+  Algorithms: "#f59e0b",
+  "Operating Systems": "#10b981",
+  "Database Management": "#8b5cf6",
 };
 
 const localizer = momentLocalizer(moment);
 
-export default function ExamSchedule() {
-  type FilterType = "all" | "upcoming" | "completed";
+type FilterType = "all" | "upcoming" | "completed";
 
+export default function ExamSchedule() {
   const [view, setView] = useState<View>("month");
   const [filter, setFilter] = useState<FilterType>("all");
-  const [branchFilter, setBranchFilter] = useState<string>("CSE"); // student's branch default
+  const [branchFilter, setBranchFilter] = useState<string>("CSE");
   const [subjectFilter, setSubjectFilter] = useState<string>("");
 
   const now = new Date();
 
-  // Filter exams by branch first
   const examsForBranch = examsSample.filter((e) => e.branch === branchFilter);
 
-  // Get the list of subjects relevant for selected branch and filtered exams
   const allSubjects = [...new Set(examsForBranch.map((e) => e.subject))];
 
-  // Filter exams by upcoming/completed/all and by subject
   const filteredExams = examsForBranch.filter((exam) => {
     const isUpcoming = exam.end >= now;
     if (filter === "upcoming" && !isUpcoming) return false;
@@ -102,7 +98,6 @@ export default function ExamSchedule() {
     return true;
   });
 
-  // Events for react-big-calendar
   const events = filteredExams.map((exam) => ({
     id: exam.id,
     title: exam.subject,
@@ -112,32 +107,36 @@ export default function ExamSchedule() {
   }));
 
   // Export calendar events as iCal (.ics)
-  const handleExportICal = () => {
-    let ical = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Student Exam Schedule//EN\n`;
-    filteredExams.forEach((exam) => {
-      ical +=
-        `BEGIN:VEVENT\n` +
-        `UID:${exam.id}@exam-schedule\n` +
-        `DTSTAMP:${moment().utc().format("YYYYMMDDTHHmmss")}Z\n` +
-        `DTSTART:${moment(exam.start).utc().format("YYYYMMDDTHHmmss")}Z\n` +
-        `DTEND:${moment(exam.end).utc().format("YYYYMMDDTHHmmss")}Z\n` +
-        `SUMMARY:${exam.subject} Exam\n` +
-        `DESCRIPTION:Mode: ${exam.mode}${exam.mode === "Offline" ? `; Venue: ${exam.venue ?? "TBD"}` : ""}\n` +
-        `END:VEVENT\n`;
-    });
-    ical += `END:VCALENDAR`;
+const handleExportICal = () => {
+  let ical = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Student Exam Schedule//EN\n`;
+  filteredExams.forEach((exam) => {
+    ical +=
+      `BEGIN:VEVENT\n` +
+      `UID:${exam.id}@exam-schedule\n` +
+      `DTSTAMP:${moment().utc().format("YYYYMMDDTHHmmss")}Z\n` +
+      `DTSTART:${moment(exam.start).utc().format("YYYYMMDDTHHmmss")}Z\n` +
+      `DTEND:${moment(exam.end).utc().format("YYYYMMDDTHHmmss")}Z\n` +
+      `SUMMARY:${exam.subject} Exam\n` +
+      `DESCRIPTION:Mode: ${exam.mode}${exam.mode === "Offline" ? `; Venue: ${exam.venue ?? "TBD"}` : ""}\n` +
+      `END:VEVENT\n`;
+  });
+  ical += `END:VCALENDAR`;
 
-    const blob = new Blob([ical], { type: "text/calendar" });
-    const url = URL.createObjectURL(blob);
+  const blob = new Blob([ical], { type: "text/calendar" });
+  const url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${branchFilter}_exam_schedule.ics`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  // FIX: append <a> to document before clicking, then remove it after
+  const a = document.createElement("a");
+  a.style.display = "none";                // Not visible to user
+  a.href = url;
+  a.setAttribute("download", `${branchFilter}_exam_schedule.ics`);
+  document.body.appendChild(a);            // REQUIRED for some browsers
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 500); // Clean up after click
+};
 
-  // Event styling by subject color
+
   const eventStyleGetter = (event: any) => {
     const color = subjectColors[event.title] || "#6b7280";
     const style = {
@@ -151,7 +150,6 @@ export default function ExamSchedule() {
     return { style };
   };
 
-  // Tooltip content for events
   const EventTooltip = ({ event }: { event: any }) => {
     const exam: Exam = event.resource;
     return (
@@ -198,7 +196,6 @@ export default function ExamSchedule() {
           aria-label="Filter exams by branch"
         >
           <option value="CSE">Computer Science (CSE)</option>
-          {/* Add other branches as needed */}
         </select>
 
         {/* View Selector */}
@@ -253,8 +250,9 @@ export default function ExamSchedule() {
           style={{ height: "100%" }}
           eventPropGetter={eventStyleGetter}
           views={["month", "week", "agenda"]}
+          view={view}
+          onView={setView} // <-- This makes view switching work!
           defaultView={view}
-          onView={setView}
           components={{
             event: ({ event }) => (
               <div
@@ -285,8 +283,6 @@ export default function ExamSchedule() {
     </div>
   );
 }
-
-type FilterType = "all" | "upcoming" | "completed";
 
 function ViewSelector({ view, onChange }: { view: View; onChange: (v: View) => void }) {
   return (

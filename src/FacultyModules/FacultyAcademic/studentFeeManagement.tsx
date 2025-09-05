@@ -1,4 +1,6 @@
- // StudentFeeManagement.tsx
+
+
+
 import React, { useState, useMemo } from 'react';
 import { 
   CreditCard, 
@@ -15,7 +17,12 @@ import {
   Bell,
   Wallet,
   Building,
-  Smartphone
+  Smartphone,
+  X,
+  FileText,
+  User,
+  BookOpen,
+  MapPin
 } from 'lucide-react';
 
 interface FeeDetail {
@@ -134,6 +141,8 @@ const StudentFeeManagement: React.FC = () => {
 
   const [selectedFee, setSelectedFee] = useState<FeeDetail | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [detailsFee, setDetailsFee] = useState<FeeDetail | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState<'all' | string>('all');
   const [filterStatus, setFilterStatus] = useState<'all' | string>('all');
@@ -236,6 +245,11 @@ const StudentFeeManagement: React.FC = () => {
     }, 2000);
   };
 
+  const handleViewDetails = (fee: FeeDetail) => {
+    setDetailsFee(fee);
+    setShowDetailsModal(true);
+  };
+
   const downloadReceipt = (fee: FeeDetail) => {
     if (fee.receiptNumber) {
       // Simulate receipt download
@@ -245,6 +259,10 @@ const StudentFeeManagement: React.FC = () => {
 
   const isOverdue = (dueDate: string) => {
     return new Date(dueDate) < new Date() && Date.now() > new Date(dueDate).getTime();
+  };
+
+  const getPaymentHistoryForFee = (feeId: string) => {
+    return paymentHistory.filter(payment => payment.feeId === feeId);
   };
 
   return (
@@ -443,7 +461,11 @@ const StudentFeeManagement: React.FC = () => {
                           </button>
                         </div>
                       )}
-                      <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                      <button 
+                        onClick={() => handleViewDetails(fee)} 
+                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        aria-label="View details"
+                      >
                         <Eye className="w-4 h-4" />
                       </button>
                     </div>
@@ -454,6 +476,225 @@ const StudentFeeManagement: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {/* Fee Details Modal */}
+      {showDetailsModal && detailsFee && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-900">Fee Details</h2>
+                <button
+                  onClick={() => setShowDetailsModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6">
+              {/* Basic Information */}
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <FileText className="w-6 h-6 text-blue-600" />
+                  <h3 className="text-xl font-semibold text-gray-900">{detailsFee.feeHead}</h3>
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-1">Fee ID</label>
+                      <div className="text-gray-900 font-mono">{detailsFee.id}</div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-1">Category</label>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${getCategoryColor(detailsFee.category)}`}>
+                        {detailsFee.category}
+                      </span>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-1">Amount</label>
+                      <div className="text-2xl font-bold text-gray-900">₹{detailsFee.amount.toLocaleString()}</div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-1">Status</label>
+                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(detailsFee.status)}`}>
+                        {getStatusIcon(detailsFee.status)}
+                        {detailsFee.status.charAt(0).toUpperCase() + detailsFee.status.slice(1)}
+                      </span>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-600 mb-1">Due Date</label>
+                      <div className={`${isOverdue(detailsFee.dueDate) && detailsFee.status !== 'paid' ? 'text-red-600 font-semibold' : 'text-gray-900'}`}>
+                        {new Date(detailsFee.dueDate).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                        {isOverdue(detailsFee.dueDate) && detailsFee.status !== 'paid' && (
+                          <div className="text-sm text-red-600 mt-1">
+                            <AlertCircle className="w-4 h-4 inline mr-1" />
+                            Overdue by {Math.ceil((Date.now() - new Date(detailsFee.dueDate).getTime()) / (1000 * 60 * 60 * 24))} days
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {detailsFee.paymentDate && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-600 mb-1">Payment Date</label>
+                        <div className="text-gray-900">
+                          {new Date(detailsFee.paymentDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Academic Information */}
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <BookOpen className="w-6 h-6 text-green-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">Academic Information</h3>
+                </div>
+                
+                <div className="bg-green-50 rounded-lg p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-green-700 mb-1">Academic Year</label>
+                      <div className="text-green-900 font-medium">{detailsFee.academicYear}</div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-green-700 mb-1">Semester</label>
+                      <div className="text-green-900 font-medium">{detailsFee.semester}</div>
+                    </div>
+                    {detailsFee.installmentNumber && (
+                      <div>
+                        <label className="block text-sm font-medium text-green-700 mb-1">Installment</label>
+                        <div className="text-green-900 font-medium">
+                          {detailsFee.installmentNumber} of {detailsFee.totalInstallments}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
+                <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+                  <p className="text-gray-800">{detailsFee.description}</p>
+                </div>
+              </div>
+
+              {/* Payment Information */}
+              {detailsFee.status === 'paid' && detailsFee.receiptNumber && (
+                <div className="mb-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Receipt className="w-6 h-6 text-purple-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Payment Information</h3>
+                  </div>
+                  
+                  <div className="bg-purple-50 rounded-lg p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-purple-700 mb-1">Receipt Number</label>
+                        <div className="text-purple-900 font-mono font-medium">{detailsFee.receiptNumber}</div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-purple-700 mb-1">Payment Status</label>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-green-600 font-medium">Payment Completed</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Student Information */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <User className="w-6 h-6 text-gray-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">Student Information</h3>
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <label className="block text-gray-600 mb-1">Student Name</label>
+                      <div className="text-gray-900 font-medium">{studentInfo.name}</div>
+                    </div>
+                    <div>
+                      <label className="block text-gray-600 mb-1">Roll Number</label>
+                      <div className="text-gray-900 font-medium">{studentInfo.rollNumber}</div>
+                    </div>
+                    <div>
+                      <label className="block text-gray-600 mb-1">Registration Number</label>
+                      <div className="text-gray-900 font-medium">{studentInfo.registrationNumber}</div>
+                    </div>
+                    <div>
+                      <label className="block text-gray-600 mb-1">Department</label>
+                      <div className="text-gray-900 font-medium">{studentInfo.department}</div>
+                    </div>
+                    <div>
+                      <label className="block text-gray-600 mb-1">Current Semester</label>
+                      <div className="text-gray-900 font-medium">{studentInfo.semester}</div>
+                    </div>
+                    <div>
+                      <label className="block text-gray-600 mb-1">Batch</label>
+                      <div className="text-gray-900 font-medium">{studentInfo.batch}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 flex justify-between items-center">
+              <div className="text-sm text-gray-600">
+                Fee ID: {detailsFee.id} | Generated on {new Date().toLocaleDateString()}
+              </div>
+              <div className="flex gap-3">
+                {detailsFee.status === 'paid' && detailsFee.receiptNumber && (
+                  <button
+                    onClick={() => downloadReceipt(detailsFee)}
+                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download Receipt
+                  </button>
+                )}
+                {detailsFee.status !== 'paid' && (
+                  <button
+                    onClick={() => {
+                      setShowDetailsModal(false);
+                      handlePayment(detailsFee);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    Pay Now
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowDetailsModal(false)}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Payment Modal */}
       {showPaymentModal && selectedFee && (
@@ -466,7 +707,7 @@ const StudentFeeManagement: React.FC = () => {
                   onClick={() => setShowPaymentModal(false)}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  ×
+                  <X className="w-6 h-6" />
                 </button>
               </div>
             </div>

@@ -437,12 +437,7 @@ const StudentDashboard: React.FC = () => {
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold text-gray-900">Recent Notifications</h3>
-                  <button
-                    onClick={markAllAsRead}
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                  >
-                    Mark All as Read
-                  </button>
+                 
                 </div>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {notifications.slice(0, 5).map(notification => (

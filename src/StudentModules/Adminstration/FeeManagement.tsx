@@ -1,3 +1,5 @@
+
+
 import React, { useState } from 'react';
 import {
   CreditCard, Receipt, Download, Calendar, AlertCircle,
@@ -66,6 +68,7 @@ const feeStructure: AcademicFeeItem[] = [
   { type: 'Library Fee', amount: 800, frequency: 'Annual', dueDate: '2025-08-01', description: 'Library access', mandatory: false },
   { type: 'Miscellaneous', amount: 700, frequency: 'Semester', dueDate: '2025-07-20', description: 'ID, events, misc.', mandatory: false }
 ];
+
 const [initialOutstanding, initialTransactions, initialDelayRequests] = (() => {
   // Outstanding fees
   const outstanding: AcademicOutstandingFee[] = [
@@ -165,6 +168,7 @@ const [initialOutstanding, initialTransactions, initialDelayRequests] = (() => {
   ];
   return [outstanding, payments, requests];
 })();
+
 const monthlyAcademicPayments = [
   { month: 'Jan', amount: 48500 },
   { month: 'Feb', amount: 0 },
@@ -174,6 +178,7 @@ const monthlyAcademicPayments = [
   { month: 'Jun', amount: 0 },
   { month: 'Jul', amount: 0 },
 ];
+
 const academicBreakdown = [
   { type: 'Tuition Fee', amount: 85000, percentage: 69.2, color: '#3B82F6' },
   { type: 'Lab Fee', amount: 7000, percentage: 5.7, color: '#6366F1' },
@@ -181,11 +186,13 @@ const academicBreakdown = [
   { type: 'Exam Fee', amount: 3000, percentage: 2.4, color: '#F59E0B' },
   { type: 'Others', amount: 15000, percentage: 12.2, color: '#EF4444' }
 ];
+
 // Util
 const formatDate = (d: string) =>
   new Date(d).toLocaleDateString('en-IN', { year: "numeric", month: "short", day: "numeric" });
 const formatDateTime = (d: string) =>
   new Date(d).toLocaleString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'Paid': return 'bg-green-100 text-green-800';
@@ -199,6 +206,7 @@ const getStatusColor = (status: string) => {
     default: return 'bg-gray-100 text-gray-800';
   }
 };
+
 const getPriorityColor = (priority: string) => {
   switch (priority) {
     case 'High': return 'bg-red-100 text-red-800';
@@ -303,6 +311,30 @@ const TuitionFeeManagement: React.FC = () => {
   const totalPaid = paymentHistory.filter(p => p.status === 'Paid').reduce((sum, p) => sum + p.amount, 0);
   const totalOutstanding = outstandingFees.reduce((sum, of) => sum + of.totalAmount, 0);
   const totalOverdue = outstandingFees.filter(of => of.daysOverdue > 0).reduce((sum, of) => sum + of.totalAmount, 0);
+
+  // Download function - Fixed to work properly
+  const handleDownloadPDF = (receiptData?: any) => {
+    // Create a simple receipt document
+    const receiptContent = receiptData ? `
+      Fee Receipt
+      -----------
+      Transaction ID: ${receiptData.transactionId}
+      Fee Type: ${receiptData.feeType}
+      Amount: ₹${receiptData.amount.toLocaleString()}
+      Payment Date: ${formatDateTime(receiptData.paymentDate)}
+      Payment Method: ${receiptData.paymentMethod}
+      Receipt Number: ${receiptData.receiptNumber}
+      Status: ${receiptData.status}
+    ` : 'Fee Management Report';
+    
+    const blob = new Blob([receiptContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = receiptData ? `receipt-${receiptData.receiptNumber}.txt` : 'fee-report.txt';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   // Payment
   const handlePayNow = (fee: AcademicOutstandingFee) => {
@@ -582,7 +614,7 @@ const TuitionFeeManagement: React.FC = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <button className="text-blue-600 hover:text-blue-900 flex items-center gap-1">
+                        <button onClick={() => handleDownloadPDF(payment)} className="text-blue-600 hover:text-blue-900 flex items-center gap-1">
                           <Download className="w-4 h-4" /> Download
                         </button>
                       </td>
@@ -615,7 +647,7 @@ const TuitionFeeManagement: React.FC = () => {
                     <span className="text-gray-600">Date:</span>
                     <span>{formatDate(paid.paymentDate)}</span>
                   </div>
-                  <button className="mt-3 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2">
+                  <button onClick={() => handleDownloadPDF(paid)} className="mt-3 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2">
                     <Download className="w-4 h-4" /> Download Receipt
                   </button>
                 </div>

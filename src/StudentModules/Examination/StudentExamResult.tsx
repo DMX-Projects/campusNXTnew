@@ -257,28 +257,18 @@ export default function ResultsPerformance() {
       </section>
 
       {/* Download Button */}
-      <section>
+     <section>
         <button
-          onClick={() => {
-            let csv =
-              "Subject,Exam Date,Session,Semester,Marks Obtained,Max Marks,Grade,Result\n";
-            filteredResults.forEach((r) => {
-              csv += `${r.subjectName},${new Date(r.examDate).toLocaleDateString()},${r.session},${r.examDate},${r.marksObtained},${r.maxMarks},${r.grade},${r.passFail}\n`;
-            });
-            const blob = new Blob([csv], { type: "text/csv" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `${selectedExam}_results.csv`;
-            a.click();
-            URL.revokeObjectURL(url);
-          }}
-          className="mt-6 flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-md"
+          onClick={handleDownload}
+          className="mt-6 flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-md transition-colors duration-200 shadow-lg hover:shadow-xl"
           aria-label="Download results report"
         >
           <Download className="w-5 h-5" />
           Download Results Report
         </button>
+        <p className="text-sm text-gray-600 mt-2">
+          Downloads a comprehensive CSV file with all exam results and summary statistics
+        </p>
       </section>
     </main>
   );
