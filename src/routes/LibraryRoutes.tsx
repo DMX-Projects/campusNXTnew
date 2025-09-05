@@ -25,6 +25,7 @@ import FacultyDashboard from "../StudentModules/Library/Faculty/FacultyDashboard
 import MyIssuedBooks from "../StudentModules/Library/Faculty/MyIssueBooks";
 import RenewalRequests from "../StudentModules/Library/Faculty/RenewalRequests";
 import MyBorrowedBooks from "../StudentModules/Library/Faculty/MyBorrowedBooks";
+import RequestBookIssue from "../StudentModules/Library/Faculty/RequestBookIssue";
 
 
 
