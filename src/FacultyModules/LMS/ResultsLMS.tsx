@@ -119,6 +119,10 @@ const Results: React.FC = () => {
   const [selectedSubject, setSelectedSubject] = useState('1');
   const [isAddResultModalOpen, setIsAddResultModalOpen] = useState(false);
   const [isAnalyticsModalOpen, setIsAnalyticsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedResult, setSelectedResult] = useState<Result | null>(null);
+  const [editingResult, setEditingResult] = useState<Result | null>(null);
   const [newResult, setNewResult] = useState<Partial<Result>>({});
 
   const departments = ['CSE', 'ECE', 'ME', 'CE', 'EE', 'IT'];
@@ -168,6 +172,33 @@ const Results: React.FC = () => {
   };
 
   const stats = calculateStats();
+
+  const handleViewResult = (result: Result) => {
+    setSelectedResult(result);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEditResult = (result: Result) => {
+    setEditingResult({...result});
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingResult) {
+      const percentage = (editingResult.marksObtained / editingResult.maxMarks) * 100;
+      const updatedResult = {
+        ...editingResult,
+        grade: getGrade(percentage)
+      };
+      
+      const updatedResults = results.map(result => 
+        result.id === editingResult.id ? updatedResult : result
+      );
+      setResults(updatedResults);
+      setIsEditModalOpen(false);
+      setEditingResult(null);
+    }
+  };
 
   const handleAddResult = () => {
     if (newResult.studentId && newResult.marksObtained !== undefined) {
@@ -457,10 +488,19 @@ const Results: React.FC = () => {
                         </td>
                         <td className="p-3">
                           <div className="flex gap-1">
-                            <button className="bg-blue-100 hover:bg-blue-200 text-blue-700 p-1 rounded transition-colors">
+                            <button 
+                              onClick={() => handleViewResult(result)}
+                              className="bg-blue-100 hover:bg-blue-200 text-blue-700 p-1 rounded transition-colors"
+                              title="View Details"
+                            >
                               <EyeIcon size={16} />
                             </button>
-                            <button className="bg-orange-100 hover:bg-orange-200 text-orange-700 p-1 rounded transition-colors">
+                            <button 
+                              onClick={() => handleEditResult(result)}
+                              className="bg-orange-100 hover:bg-orange-200 text-orange-700 p-1 rounded transition-colors"
+                              title="Edit Result"
+                              disabled={result.status === 'locked'}
+                            >
                               <EditIcon size={16} />
                             </button>
                           </div>
@@ -473,6 +513,189 @@ const Results: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* View Result Modal */}
+        {isViewModalOpen && selectedResult && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-gray-900">Result Details</h2>
+                <button
+                  onClick={() => setIsViewModalOpen(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-3 overflow-y-auto" style={{maxHeight: 'calc(100vh - 8rem)'}}>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2 text-sm">Student Information</h3>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <span className="text-gray-600">Roll Number:</span>
+                      <p className="font-medium">{students.find(s => s.id === selectedResult.studentId)?.rollNumber}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Name:</span>
+                      <p className="font-medium">{students.find(s => s.id === selectedResult.studentId)?.name}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Department:</span>
+                      <p className="font-medium">{students.find(s => s.id === selectedResult.studentId)?.department}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Semester:</span>
+                      <p className="font-medium">{selectedResult.semester}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2 text-sm">Exam Information</h3>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <span className="text-gray-600">Subject:</span>
+                      <p className="font-medium">{subjects.find(s => s.id === selectedResult.subjectId)?.name}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Subject Code:</span>
+                      <p className="font-medium">{subjects.find(s => s.id === selectedResult.subjectId)?.code}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Exam Type:</span>
+                      <p className="font-medium">{selectedResult.examType.charAt(0).toUpperCase() + selectedResult.examType.slice(1)}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Academic Year:</span>
+                      <p className="font-medium">{selectedResult.academicYear}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2 text-sm">Performance</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <span className="text-gray-600 text-sm">Marks Obtained:</span>
+                      <p className="text-xl font-bold text-blue-600">{selectedResult.marksObtained}/{selectedResult.maxMarks}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 text-sm">Grade:</span>
+                      <span className={`inline-block px-2 py-1 rounded-full text-sm font-bold mt-1 ${getGradeColor(selectedResult.grade)}`}>
+                        {selectedResult.grade}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 text-sm">Percentage:</span>
+                      <p className="text-lg font-bold text-purple-600">{((selectedResult.marksObtained / selectedResult.maxMarks) * 100).toFixed(1)}%</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600 text-sm">Status:</span>
+                      <span className={`inline-block px-2 py-1 rounded-full text-sm font-medium mt-1 ${
+                        selectedResult.status === 'published' ? 'bg-green-100 text-green-800' :
+                        selectedResult.status === 'locked' ? 'bg-red-100 text-red-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {selectedResult.status.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2 text-sm">Additional Information</h3>
+                  <div className="grid grid-cols-1 gap-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Published Date:</span>
+                      <span className="font-medium">{selectedResult.publishedDate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Credits:</span>
+                      <span className="font-medium">{subjects.find(s => s.id === selectedResult.subjectId)?.credits}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Result Modal */}
+        {isEditModalOpen && editingResult && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-gray-900">Edit Result</h2>
+                <button
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-gray-700 mb-2">Student</h3>
+                  <p className="font-medium">{students.find(s => s.id === editingResult.studentId)?.name} ({students.find(s => s.id === editingResult.studentId)?.rollNumber})</p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Marks Obtained</label>
+                  <input
+                    type="number"
+                    value={editingResult.marksObtained}
+                    onChange={(e) => setEditingResult({...editingResult, marksObtained: Number(e.target.value)})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                    min="0"
+                    max={editingResult.maxMarks}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Max Marks</label>
+                  <input
+                    type="number"
+                    value={editingResult.maxMarks}
+                    onChange={(e) => setEditingResult({...editingResult, maxMarks: Number(e.target.value)})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                    min="1"
+                  />
+                </div>
+                
+                {editingResult.marksObtained !== undefined && editingResult.maxMarks && (
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-700">Updated Grade:</span>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getGradeColor(getGrade((editingResult.marksObtained / editingResult.maxMarks) * 100))}`}>
+                        {getGrade((editingResult.marksObtained / editingResult.maxMarks) * 100)}
+                      </span>
+                    </div>
+                    <div className="mt-1 text-sm text-gray-600">
+                      Percentage: {((editingResult.marksObtained / editingResult.maxMarks) * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Add Result Modal */}
         {isAddResultModalOpen && (
@@ -555,8 +778,8 @@ const Results: React.FC = () => {
 
         {/* Analytics Modal */}
         {isAnalyticsModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-6 w-full max-w-4xl mx-4 max-h-[80vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-gray-900">Result Analytics</h2>
                 <button

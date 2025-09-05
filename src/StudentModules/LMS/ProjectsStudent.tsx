@@ -1114,7 +1114,7 @@ const ProjectsStu: React.FC = () => {
                             <UploadIcon size={14} />
                             Submit Work
                           </button>
-                          {project.repository && (
+                         {/* {project.repository && (
                             <button
                               onClick={() => openRepository(project.repository)}
                               className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-1"
@@ -1138,7 +1138,7 @@ const ProjectsStu: React.FC = () => {
                           >
                             <MessageCircleIcon size={14} />
                             Chat
-                          </button>
+                          </button>*/}
                           <button
                             onClick={() => deleteProject(project.id)}
                             className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-sm transition-colors"
@@ -1196,7 +1196,7 @@ const ProjectsStu: React.FC = () => {
                                     <p className="text-gray-700 line-clamp-2">{submission.feedback}</p>
                                   </div>
                                 )}
-                                
+                               {/* 
                                 <div className="flex gap-1 mt-2">
                                   <button 
                                     onClick={() => downloadSubmission(submission)}
@@ -1212,7 +1212,7 @@ const ProjectsStu: React.FC = () => {
                                     <EyeIcon size={10} />
                                     View
                                   </button>
-                                </div>
+                                </div>*/}
                               </div>
                             );
                           })}
