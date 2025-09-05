@@ -10,7 +10,6 @@ import Projects from '../pages/LMS/Projects';
 import PlacementCorner from '../pages/LMS/PlacementCorner';
 import OnlineTest from '../pages/LMS/OnlineTest';
 import Timetable from '../pages/LMS/Timetable';
-import Attendance from '../pages/LMS/Attendance';
 import Results from '../pages/LMS/ResultsLMS';
 import ChatWithMentor from '../pages/LMS/ChatWithMentor';
 import ApprovalLMS from '../pages/LMS/ApprovalLMS';
@@ -72,7 +71,6 @@ const PlacementsRoutes: React.FC = () => {
       <Route path="placement-corner" element={<PlacementCorner />} />
       <Route path="online-test" element={<OnlineTest />} />
       <Route path="time-table" element={<Timetable />} />
-      <Route path="attendance" element={<Attendance />} />
       <Route path="results" element={<Results />} />
       <Route path="chat-mentor" element={<ChatWithMentor />} />
       <Route path="approval" element={<ApprovalLMS />} />
