@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Search, Calendar, Clock, MapPin, Users } from 'lucide-react';
-import Modal from '../components/Modal';
+import { Plus, Search, Calendar, Clock, MapPin, Users, X } from 'lucide-react';
 import TimeTableForm from '../components/TimeTableForm';
 
 interface ExamSchedule {
@@ -16,7 +15,8 @@ interface ExamSchedule {
 }
 
 const ExamTimeTable: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState('current');
   const [searchTerm, setSearchTerm] = useState('');
   const [examSchedules, setExamSchedules] = useState<ExamSchedule[]>([
@@ -62,14 +62,14 @@ const ExamTimeTable: React.FC = () => {
   // -----------------------------
   const openAddModal = () => {
     setSelectedSchedule(null);
-    setIsModalOpen(true);
+    setShowAddModal(true);
   };
 
   const handleEdit = (id: string) => {
     const schedule = examSchedules.find((s) => s.id === id);
     if (!schedule) return;
     setSelectedSchedule(schedule);
-    setIsModalOpen(true);
+    setShowEditModal(true);
   };
 
   const handleDelete = (id: string) => {
@@ -80,7 +80,8 @@ const ExamTimeTable: React.FC = () => {
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setShowAddModal(false);
+    setShowEditModal(false);
     setSelectedSchedule(null);
   };
 
@@ -103,10 +104,7 @@ const ExamTimeTable: React.FC = () => {
     <div className="space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">EXAM TIME TABLE</h1>
-          <p className="text-gray-600">Schedule and manage examination timetables</p>
-        </div>
+      
         <button
           onClick={openAddModal}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700"
@@ -207,15 +205,55 @@ const ExamTimeTable: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          title={selectedSchedule ? 'Edit Exam Schedule' : 'Add Exam Schedule'}
-        >
-          <TimeTableForm examData={selectedSchedule} onClose={closeModal} />
-        </Modal>
+      {/* FULL SCREEN MODAL OVERLAY - COVERS EVERYTHING */}
+      {(showAddModal || showEditModal) && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center p-4 z-[99999] m-0" 
+             style={{ margin: 0, padding: '16px', position: 'fixed', inset: '0px' }}>
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {selectedSchedule ? 'Edit Exam Schedule' : 'Add Exam Schedule'}
+                </h2>
+                <button
+                  onClick={closeModal}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+              <TimeTableForm 
+                examData={selectedSchedule} 
+                onClose={closeModal}
+                onSubmit={(data) => {
+                  if (selectedSchedule) {
+                    // Update existing schedule
+                    setExamSchedules(prev => 
+                      prev.map(schedule => 
+                        schedule.id === selectedSchedule.id 
+                          ? { ...schedule, ...data }
+                          : schedule
+                      )
+                    );
+                  } else {
+                    // Add new schedule
+                    const newSchedule: ExamSchedule = {
+                      id: `EX${String(examSchedules.length + 1).padStart(3, '0')}`,
+                      ...data
+                    };
+                    setExamSchedules(prev => [...prev, newSchedule]);
+                  }
+                  closeModal();
+                }}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

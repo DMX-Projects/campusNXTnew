@@ -18,7 +18,7 @@ import  Reports from "../pages/Library/Reports";
 import BookReservation from "../pages/Library/BookReservation";
 
 import SearchBook from "../StudentModules/Library/Faculty/SearchBook";
-import RequestBookIssue from "../StudentModules/Library/Faculty/RequestBookIssue";
+// import RequestBookIssue from "../StudentModules/Library/Faculty/RequestBookIssue";
 import OverdueBooks from "../StudentModules/Library/Faculty/OverDueBooks";
 import BookReservationStatus from "../StudentModules/Library/Faculty/BookReservationStatus";
 import FacultyDashboard from "../StudentModules/Library/Faculty/FacultyDashboard";
