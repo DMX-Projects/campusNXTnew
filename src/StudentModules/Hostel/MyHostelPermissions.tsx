@@ -274,6 +274,23 @@ const MyPermissionsPage: React.FC = () => {
     setIsDetailModalOpen(false);
     setSelectedPermission(null);
   };
+  const handleDownload = (permission: PermissionRequest) => {
+  if (!permission.qrCode) {
+    alert('No permission pass available to download.');
+    return;
+  }
+  const content = `Permission ID: ${permission.id}\nTitle: ${permission.title}\nQR Code: ${permission.qrCode}`;
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${permission.title.replace(/\s+/g, '_')}_${permission.id}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -438,10 +455,14 @@ const MyPermissionsPage: React.FC = () => {
                   </button>
                   
                   {permission.status === 'Active' && permission.qrCode && (
-                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 flex items-center gap-2">
-                      <Download className="w-4 h-4" />
-                      Download Pass
-                    </button>
+                    <button
+  onClick={() => handleDownload(permission)}
+  className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 flex items-center gap-2"
+>
+  <Download className="w-4 h-4" />
+  Download Pass
+</button>
+
                   )}
                   
                   {permission.attachments && permission.attachments.length > 0 && (

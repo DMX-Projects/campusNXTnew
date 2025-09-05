@@ -1,12 +1,35 @@
+
+
+
 import React, { useState } from 'react';
-import { 
-  CheckCircle, XCircle, Clock, Calendar, TrendingUp, 
-  AlertCircle, Users, Download, Filter, Eye
+import {
+  CheckCircle,
+  XCircle,
+  Clock,
+  Calendar,
+  TrendingUp,
+  AlertCircle,
+  Users,
+  Download,
+  Filter,
+  Eye,
 } from 'lucide-react';
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, AreaChart, Area,
-  CartesianGrid, Legend
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  AreaChart,
+  Area,
+  CartesianGrid,
+  Legend,
 } from 'recharts';
 
 interface AttendanceRecord {
@@ -37,7 +60,7 @@ const MyAttendancePage: React.FC = () => {
     rollNumber: '2023CSE001',
     block: 'A Block',
     roomNumber: 'A-205',
-    currentStatus: 'Present'
+    currentStatus: 'Present',
   };
 
   // Recent attendance data (simple presence/absence)
@@ -48,14 +71,14 @@ const MyAttendancePage: React.FC = () => {
       status: 'Present',
       checkInTime: '11:45 AM',
       markedBy: 'Warden',
-      remarks: 'Late arrival from home'
+      remarks: 'Late arrival from home',
     },
     {
       date: '2025-09-02',
-      day: 'Tuesday', 
+      day: 'Tuesday',
       status: 'Present',
       checkInTime: '7:30 AM',
-      markedBy: 'Security'
+      markedBy: 'Security',
     },
     {
       date: '2025-09-01',
@@ -63,14 +86,14 @@ const MyAttendancePage: React.FC = () => {
       status: 'Present',
       checkInTime: '8:15 AM',
       markedBy: 'Warden',
-      remarks: 'Late morning return'
+      remarks: 'Late morning return',
     },
     {
       date: '2025-08-31',
       day: 'Sunday',
       status: 'Absent',
       markedBy: 'Auto',
-      remarks: 'Weekend home visit - Gate pass approved'
+      remarks: 'Weekend home visit - Gate pass approved',
     },
     {
       date: '2025-08-30',
@@ -78,7 +101,7 @@ const MyAttendancePage: React.FC = () => {
       status: 'Present',
       checkInTime: '6:45 PM',
       markedBy: 'Security',
-      remarks: 'Returned from college late'
+      remarks: 'Returned from college late',
     },
     {
       date: '2025-08-29',
@@ -86,7 +109,7 @@ const MyAttendancePage: React.FC = () => {
       status: 'Present',
       checkInTime: '9:30 PM',
       markedBy: 'Warden',
-      remarks: 'Late return - Permission taken'
+      remarks: 'Late return - Permission taken',
     },
     {
       date: '2025-08-28',
@@ -94,8 +117,8 @@ const MyAttendancePage: React.FC = () => {
       status: 'Half Day',
       checkInTime: '2:15 PM',
       markedBy: 'Security',
-      remarks: 'Morning at hospital - Medical'
-    }
+      remarks: 'Morning at hospital - Medical',
+    },
   ];
 
   // Monthly statistics for the year
@@ -107,7 +130,7 @@ const MyAttendancePage: React.FC = () => {
     { month: 'May', totalDays: 31, presentDays: 15, absentDays: 16, lateDays: 1, attendancePercentage: 48 },
     { month: 'Jun', totalDays: 30, presentDays: 30, absentDays: 0, lateDays: 0, attendancePercentage: 100 },
     { month: 'Jul', totalDays: 31, presentDays: 28, absentDays: 3, lateDays: 4, attendancePercentage: 90 },
-    { month: 'Aug', totalDays: 31, presentDays: 29, absentDays: 2, lateDays: 3, attendancePercentage: 94 }
+    { month: 'Aug', totalDays: 31, presentDays: 29, absentDays: 2, lateDays: 3, attendancePercentage: 94 },
   ];
 
   // Current month summary
@@ -117,42 +140,83 @@ const MyAttendancePage: React.FC = () => {
     absentDays: 3,
     lateDays: 2,
     attendancePercentage: 83,
-    daysPassed: 3
+    daysPassed: 3,
   };
 
   // Attendance pattern for chart
-  const attendancePattern = monthlyStats.map(stat => ({
+  const attendancePattern = monthlyStats.map((stat) => ({
     month: stat.month,
     present: stat.presentDays,
     absent: stat.absentDays,
-    percentage: stat.attendancePercentage
+    percentage: stat.attendancePercentage,
   }));
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Present': return 'bg-green-100 text-green-800';
-      case 'Absent': return 'bg-red-100 text-red-800';
-      case 'Late': return 'bg-yellow-100 text-yellow-800';
-      case 'Half Day': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Present':
+        return 'bg-green-100 text-green-800';
+      case 'Absent':
+        return 'bg-red-100 text-red-800';
+      case 'Late':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Half Day':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'Present': return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'Absent': return <XCircle className="w-5 h-5 text-red-500" />;
-      case 'Late': return <Clock className="w-5 h-5 text-yellow-500" />;
-      case 'Half Day': return <AlertCircle className="w-5 h-5 text-blue-500" />;
-      default: return <Users className="w-5 h-5 text-gray-500" />;
+      case 'Present':
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case 'Absent':
+        return <XCircle className="w-5 h-5 text-red-500" />;
+      case 'Late':
+        return <Clock className="w-5 h-5 text-yellow-500" />;
+      case 'Half Day':
+        return <AlertCircle className="w-5 h-5 text-blue-500" />;
+      default:
+        return <Users className="w-5 h-5 text-gray-500" />;
     }
+  };
+
+  // Export function to download attendance data as CSV
+  const handleExport = () => {
+    // Convert attendance data to CSV format
+    const headers = ['Date', 'Day', 'Status', 'Check-in Time', 'Marked By', 'Remarks'];
+    const rows = attendanceData.map((record) => [
+      record.date,
+      record.day,
+      record.status,
+      record.checkInTime || '',
+      record.markedBy,
+      record.remarks ? record.remarks.replace(/(\r\n|\n|\r)/gm, ' ') : '',
+    ]);
+
+    // Create CSV string
+    const csvContent =
+      [headers, ...rows]
+        .map((e) => e.map((cell) => `"${cell}"`).join(','))
+        .join('\n');
+
+    // Create a blob and generate a download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Create temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `attendance_${selectedMonth}_${selectedYear}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className=" mx-auto">
-        
-
+      <div className="mx-auto">
         {/* Student Info Card */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
@@ -162,7 +226,9 @@ const MyAttendancePage: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-800">{currentStudent.name}</h3>
-                <p className="text-sm text-gray-600">{currentStudent.rollNumber} • {currentStudent.block} - {currentStudent.roomNumber}</p>
+                <p className="text-sm text-gray-600">
+                  {currentStudent.rollNumber} • {currentStudent.block} - {currentStudent.roomNumber}
+                </p>
               </div>
             </div>
             <div className="text-right">
@@ -187,7 +253,9 @@ const MyAttendancePage: React.FC = () => {
                 <TrendingUp className="w-6 h-6 text-green-600" />
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">This month ({currentMonthSummary.daysPassed}/{currentMonthSummary.totalDays} days)</p>
+            <p className="text-xs text-gray-500 mt-2">
+              This month ({currentMonthSummary.daysPassed}/{currentMonthSummary.totalDays} days)
+            </p>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm p-6">
@@ -232,7 +300,6 @@ const MyAttendancePage: React.FC = () => {
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          
           {/* Monthly Attendance Trend */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="text-lg font-bold text-gray-800 mb-4">Monthly Attendance Trend</h3>
@@ -242,10 +309,10 @@ const MyAttendancePage: React.FC = () => {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line 
-                  type="monotone" 
-                  dataKey="percentage" 
-                  stroke="#3B82F6" 
+                <Line
+                  type="monotone"
+                  dataKey="percentage"
+                  stroke="#3B82F6"
                   strokeWidth={3}
                   dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
                 />
@@ -262,14 +329,18 @@ const MyAttendancePage: React.FC = () => {
                   data={[
                     { name: 'Present', value: currentMonthSummary.presentDays, color: '#10B981' },
                     { name: 'Absent', value: currentMonthSummary.absentDays, color: '#EF4444' },
-                    { name: 'Remaining', value: currentMonthSummary.totalDays - currentMonthSummary.daysPassed, color: '#E5E7EB' }
+                    {
+                      name: 'Remaining',
+                      value: currentMonthSummary.totalDays - currentMonthSummary.daysPassed,
+                      color: '#E5E7EB',
+                    },
                   ]}
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
-                  label={({name, value}) => `${name}: ${value}`}
+                  label={({ name, value }) => `${name}: ${value}`}
                 >
                   <Cell fill="#10B981" />
                   <Cell fill="#EF4444" />
@@ -280,7 +351,8 @@ const MyAttendancePage: React.FC = () => {
             </ResponsiveContainer>
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-600">
-                <span className="font-semibold">{currentMonthSummary.daysPassed}</span> days completed out of <span className="font-semibold">{currentMonthSummary.totalDays}</span>
+                <span className="font-semibold">{currentMonthSummary.daysPassed}</span> days completed out of{' '}
+                <span className="font-semibold">{currentMonthSummary.totalDays}</span>
               </p>
             </div>
           </div>
@@ -291,7 +363,7 @@ const MyAttendancePage: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-800">Recent Attendance Records</h2>
             <div className="flex gap-3">
-              <select 
+              <select
                 value={`${selectedMonth} ${selectedYear}`}
                 onChange={(e) => {
                   const [month, year] = e.target.value.split(' ');
@@ -304,7 +376,11 @@ const MyAttendancePage: React.FC = () => {
                 <option value="August 2025">August 2025</option>
                 <option value="July 2025">July 2025</option>
               </select>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 flex items-center gap-2">
+
+              <button
+                onClick={handleExport}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 flex items-center gap-2"
+              >
                 <Download className="w-4 h-4" />
                 Export
               </button>
@@ -328,10 +404,10 @@ const MyAttendancePage: React.FC = () => {
                     <td className="py-4 px-4">
                       <div>
                         <div className="font-medium text-gray-900">
-                          {new Date(record.date).toLocaleDateString('en-IN', { 
-                            day: 'numeric', 
+                          {new Date(record.date).toLocaleDateString('en-IN', {
+                            day: 'numeric',
                             month: 'short',
-                            year: 'numeric'
+                            year: 'numeric',
                           })}
                         </div>
                         <div className="text-sm text-gray-500">{record.day}</div>
@@ -345,17 +421,13 @@ const MyAttendancePage: React.FC = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="py-4 px-4 text-gray-700">
-                      {record.checkInTime || '—'}
-                    </td>
+                    <td className="py-4 px-4 text-gray-700">{record.checkInTime || '—'}</td>
                     <td className="py-4 px-4">
                       <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
                         {record.markedBy}
                       </span>
                     </td>
-                    <td className="py-4 px-4 text-gray-600 text-sm">
-                      {record.remarks || '—'}
-                    </td>
+                    <td className="py-4 px-4 text-gray-600 text-sm">{record.remarks || '—'}</td>
                   </tr>
                 ))}
               </tbody>

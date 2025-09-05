@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   User, Users, Bed, MapPin, Wifi, Snowflake, 
@@ -5,6 +6,7 @@ import {
   Phone, Mail, Calendar, Clock, CheckCircle,
   FileText, Camera, MessageSquare, Settings
 } from 'lucide-react';
+
 
 interface Student {
   id: string;
@@ -19,6 +21,7 @@ interface Student {
   bloodGroup: string;
   hometown: string;
 }
+
 
 interface Room {
   roomNumber: string;
@@ -37,6 +40,7 @@ interface Room {
   allocatedDate: string;
 }
 
+
 interface MaintenanceRequest {
   id: string;
   type: 'Electrical' | 'Plumbing' | 'Furniture' | 'AC/Fan' | 'Cleaning' | 'Other';
@@ -48,6 +52,7 @@ interface MaintenanceRequest {
   assignedTo?: string;
   remarks?: string;
 }
+
 
 interface RoomTransferRequest {
   id: string;
@@ -61,10 +66,17 @@ interface RoomTransferRequest {
   remarks?: string;
 }
 
+
 const MyRoomPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'roommates' | 'maintenance' | 'transfer'>('overview');
   const [showMaintenanceForm, setShowMaintenanceForm] = useState(false);
   const [showTransferForm, setShowTransferForm] = useState(false);
+
+  // Modals for messaging and profile viewing roommates
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedRoommate, setSelectedRoommate] = useState<Student | null>(null);
+  const [messageText, setMessageText] = useState("");
 
   // Sample data - would come from API in real application
   const currentStudent: Student = {
@@ -79,6 +91,7 @@ const MyRoomPage: React.FC = () => {
     bloodGroup: 'B+',
     hometown: 'Bangalore, Karnataka'
   };
+
 
   const myRoom: Room = {
     roomNumber: 'A-205',
@@ -97,6 +110,7 @@ const MyRoomPage: React.FC = () => {
     allocatedDate: '2023-07-15'
   };
 
+
   const roommates: Student[] = [
     {
       id: 'STU002',
@@ -111,6 +125,7 @@ const MyRoomPage: React.FC = () => {
       hometown: 'Ahmedabad, Gujarat'
     }
   ];
+
 
   const maintenanceRequests: MaintenanceRequest[] = [
     {
@@ -136,6 +151,7 @@ const MyRoomPage: React.FC = () => {
     }
   ];
 
+
   const transferRequests: RoomTransferRequest[] = [
     {
       id: 'TR001',
@@ -149,11 +165,13 @@ const MyRoomPage: React.FC = () => {
     }
   ];
 
+
   const [maintenanceForm, setMaintenanceForm] = useState({
     type: 'Electrical' as MaintenanceRequest['type'],
     description: '',
     priority: 'Medium' as MaintenanceRequest['priority']
   });
+
 
   const [transferForm, setTransferForm] = useState({
     requestedRoom: '',
@@ -161,6 +179,7 @@ const MyRoomPage: React.FC = () => {
     roomType: '',
     reason: ''
   });
+
 
   const handleMaintenanceSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,6 +189,7 @@ const MyRoomPage: React.FC = () => {
     setMaintenanceForm({ type: 'Electrical', description: '', priority: 'Medium' });
   };
 
+
   const handleTransferSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle transfer request submission
@@ -178,10 +198,32 @@ const MyRoomPage: React.FC = () => {
     setTransferForm({ requestedRoom: '', requestedBlock: '', roomType: '', reason: '' });
   };
 
+  // Send message modal submission
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedRoommate) return;
+    console.log(`Message to ${selectedRoommate.name}:`, messageText);
+    alert(`Message sent to ${selectedRoommate.name}`);
+    setShowMessageModal(false);
+    setMessageText("");
+  };
+
+  // Handlers for buttons
+  const openMessageModal = (roommate: Student) => {
+    setSelectedRoommate(roommate);
+    setShowMessageModal(true);
+  };
+
+  const openProfileModal = (roommate: Student) => {
+    setSelectedRoommate(roommate);
+    setShowProfileModal(true);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className=" mx-auto">
-        
+       
+
 
         {/* Tab Navigation */}
         <div className="bg-white rounded-lg shadow-sm p-1 mb-6">
@@ -211,6 +253,7 @@ const MyRoomPage: React.FC = () => {
           </nav>
         </div>
 
+
         {/* Room Overview Tab */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
@@ -226,6 +269,7 @@ const MyRoomPage: React.FC = () => {
                   {myRoom.maintenanceStatus}
                 </div>
               </div>
+
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Basic Info */}
@@ -263,6 +307,7 @@ const MyRoomPage: React.FC = () => {
                   </div>
                 </div>
 
+
                 {/* Amenities */}
                 <div className="space-y-4">
                   <h3 className="font-semibold text-gray-800 mb-3">Room Amenities</h3>
@@ -275,6 +320,7 @@ const MyRoomPage: React.FC = () => {
                     ))}
                   </div>
                 </div>
+
 
                 {/* Facilities */}
                 <div className="space-y-4">
@@ -290,6 +336,7 @@ const MyRoomPage: React.FC = () => {
                 </div>
               </div>
             </div>
+
 
             {/* Quick Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -308,6 +355,7 @@ const MyRoomPage: React.FC = () => {
                 </div>
               </div>
 
+
               {/* Monthly Rent */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="flex items-center gap-3 mb-4">
@@ -322,6 +370,7 @@ const MyRoomPage: React.FC = () => {
                   <p className="text-xs text-gray-500">Next due: Oct 5, 2025</p>
                 </div>
               </div>
+
 
               {/* Maintenance Status */}
               <div className="bg-white rounded-xl shadow-sm p-6">
@@ -345,6 +394,7 @@ const MyRoomPage: React.FC = () => {
             </div>
           </div>
         )}
+
 
         {/* Roommates Tab */}
         {activeTab === 'roommates' && (
@@ -388,10 +438,22 @@ const MyRoomPage: React.FC = () => {
                           </div>
                           
                           <div className="flex gap-3 mt-4">
-                            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
+                            <button
+                              onClick={() => {
+                                setSelectedRoommate(roommate);
+                                setShowMessageModal(true);
+                              }}
+                              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+                            >
                               Send Message
                             </button>
-                            <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">
+                            <button
+                              onClick={() => {
+                                setSelectedRoommate(roommate);
+                                setShowProfileModal(true);
+                              }}
+                              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50"
+                            >
                               View Profile
                             </button>
                           </div>
@@ -410,6 +472,7 @@ const MyRoomPage: React.FC = () => {
             </div>
           </div>
         )}
+
 
         {/* Maintenance Tab */}
         {activeTab === 'maintenance' && (
@@ -430,6 +493,7 @@ const MyRoomPage: React.FC = () => {
                 </button>
               </div>
             </div>
+
 
             {/* Maintenance Requests List */}
             <div className="bg-white rounded-xl shadow-sm p-6">
@@ -488,6 +552,7 @@ const MyRoomPage: React.FC = () => {
           </div>
         )}
 
+
         {/* Room Transfer Tab */}
         {activeTab === 'transfer' && (
           <div className="space-y-6">
@@ -507,6 +572,7 @@ const MyRoomPage: React.FC = () => {
                 </button>
               </div>
             </div>
+
 
             {/* Transfer Requests List */}
             <div className="bg-white rounded-xl shadow-sm p-6">
@@ -556,6 +622,7 @@ const MyRoomPage: React.FC = () => {
             </div>
           </div>
         )}
+
 
         {/* Maintenance Request Modal */}
         {showMaintenanceForm && (
@@ -633,6 +700,7 @@ const MyRoomPage: React.FC = () => {
             </div>
           </div>
         )}
+
 
         {/* Transfer Request Modal */}
         {showTransferForm && (
@@ -723,9 +791,121 @@ const MyRoomPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Send Message Modal */}
+        {showMessageModal && selectedRoommate && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-800">Send Message to {selectedRoommate.name}</h3>
+                <button
+                  onClick={() => setShowMessageModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                  aria-label="Close message modal"
+                >
+                  <AlertCircle className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSendMessage} className="space-y-4">
+                <textarea
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  rows={5}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  placeholder="Type your message here..."
+                  required
+                />
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+                  >
+                    Send
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowMessageModal(false)}
+                    className="flex-1 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* View Profile Modal */}
+        {showProfileModal && selectedRoommate && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 overflow-y-auto max-h-[80vh]">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-gray-800">{selectedRoommate.name}'s Profile</h3>
+                <button
+                  onClick={() => setShowProfileModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                  aria-label="Close profile modal"
+                >
+                  <AlertCircle className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center mb-6">
+                {selectedRoommate.profileImage ? (
+                  <img
+                    src={selectedRoommate.profileImage}
+                    alt={`${selectedRoommate.name} profile`}
+                    className="w-24 h-24 rounded-full object-cover mb-4"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                    <User className="w-12 h-12 text-blue-600" />
+                  </div>
+                )}
+                <p className="text-lg font-semibold">{selectedRoommate.name}</p>
+                <p className="text-gray-600 text-sm">{selectedRoommate.rollNumber}</p>
+              </div>
+
+              <div className="space-y-4 text-gray-700 text-sm">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>Hometown: {selectedRoommate.hometown}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <span>Branch: {selectedRoommate.branch}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span>Semester: {selectedRoommate.semester}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4" />
+                  <span>Phone: {selectedRoommate.phoneNumber}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4" />
+                  <span>Email: {selectedRoommate.email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>Blood Group: {selectedRoommate.bloodGroup}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  <span>Emergency Contact: {selectedRoommate.emergencyContact}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
+
 export default MyRoomPage;
+
