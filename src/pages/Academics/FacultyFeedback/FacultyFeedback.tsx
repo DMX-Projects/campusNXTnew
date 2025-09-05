@@ -1,6 +1,6 @@
 // FacultyFeedbackDashboard.tsx
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, Download, Plus, Eye, BarChart3, User, Star, TrendingUp, MessageSquare, Calendar, Users } from 'lucide-react';
+import { Search, Filter, Download, Plus, Eye, BarChart3, User, Star, TrendingUp, MessageSquare, Calendar, Users, X } from 'lucide-react';
 
 interface Faculty {
   id: string;
@@ -49,6 +49,234 @@ interface FeedbackSession {
   targetDepartments: string[];
   totalResponses: number;
 }
+
+interface FeedbackSessionForm {
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  targetSemesters: string[];
+  targetDepartments: string[];
+}
+
+// Create Session Modal Component
+const CreateSessionModal: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (sessionData: FeedbackSessionForm) => void;
+}> = ({ isOpen, onClose, onSubmit }) => {
+  const [formData, setFormData] = useState<FeedbackSessionForm>({
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    targetSemesters: [],
+    targetDepartments: []
+  });
+
+  const allSemesters = ['1st Semester', '2nd Semester', '3rd Semester', '4th Semester', '5th Semester', '6th Semester', '7th Semester', '8th Semester'];
+  const allDepartments = ['Computer Science', 'Mechanical Engineering', 'Electrical Engineering', 'Information Technology', 'Civil Engineering'];
+
+  const handleSemesterToggle = (semester: string) => {
+    setFormData(prev => ({
+      ...prev,
+      targetSemesters: prev.targetSemesters.includes(semester)
+        ? prev.targetSemesters.filter(s => s !== semester)
+        : [...prev.targetSemesters, semester]
+    }));
+  };
+
+  const handleDepartmentToggle = (department: string) => {
+    setFormData(prev => ({
+      ...prev,
+      targetDepartments: prev.targetDepartments.includes(department)
+        ? prev.targetDepartments.filter(d => d !== department)
+        : [...prev.targetDepartments, department]
+    }));
+  };
+
+  const handleSelectAllSemesters = () => {
+    setFormData(prev => ({
+      ...prev,
+      targetSemesters: prev.targetSemesters.length === allSemesters.length ? [] : [...allSemesters]
+    }));
+  };
+
+  const handleSelectAllDepartments = () => {
+    setFormData(prev => ({
+      ...prev,
+      targetDepartments: prev.targetDepartments.length === allDepartments.length ? [] : [...allDepartments]
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+    onClose();
+    setFormData({
+      title: '',
+      description: '',
+      startDate: '',
+      endDate: '',
+      targetSemesters: [],
+      targetDepartments: []
+    });
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Create Feedback Session</h2>
+              <p className="text-gray-600 mt-2">Set up a new feedback collection period</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {/* Basic Information */}
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Session Information</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Session Title *</label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., Mid-Semester Faculty Feedback"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Describe the purpose of this feedback session..."
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Date *</label>
+                  <input
+                    type="date"
+                    value={formData.startDate}
+                    onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">End Date *</label>
+                  <input
+                    type="date"
+                    value={formData.endDate}
+                    onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    min={formData.startDate}
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Target Semesters */}
+          <div className="bg-blue-50 rounded-xl p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Target Semesters</h3>
+              <button
+                type="button"
+                onClick={handleSelectAllSemesters}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                {formData.targetSemesters.length === allSemesters.length ? 'Deselect All' : 'Select All'}
+              </button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {allSemesters.map(semester => (
+                <label key={semester} className="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.targetSemesters.includes(semester)}
+                    onChange={() => handleSemesterToggle(semester)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3"
+                  />
+                  <span className="text-sm font-medium text-gray-700">{semester}</span>
+                </label>
+              ))}
+            </div>
+            {formData.targetSemesters.length === 0 && (
+              <p className="text-sm text-red-600 mt-2">Please select at least one semester</p>
+            )}
+          </div>
+
+          {/* Target Departments */}
+          <div className="bg-green-50 rounded-xl p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Target Departments</h3>
+              <button
+                type="button"
+                onClick={handleSelectAllDepartments}
+                className="text-green-600 hover:text-green-800 text-sm font-medium"
+              >
+                {formData.targetDepartments.length === allDepartments.length ? 'Deselect All' : 'Select All'}
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {allDepartments.map(department => (
+                <label key={department} className="flex items-center p-3 bg-white rounded-lg border hover:bg-gray-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.targetDepartments.includes(department)}
+                    onChange={() => handleDepartmentToggle(department)}
+                    className="rounded border-gray-300 text-green-600 focus:ring-green-500 mr-3"
+                  />
+                  <span className="text-sm font-medium text-gray-700">{department}</span>
+                </label>
+              ))}
+            </div>
+            {formData.targetDepartments.length === 0 && (
+              <p className="text-sm text-red-600 mt-2">Please select at least one department</p>
+            )}
+          </div>
+
+          {/* Submit Buttons */}
+          <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={formData.targetSemesters.length === 0 || formData.targetDepartments.length === 0}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            >
+              Create Session
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 // Feedback Form Modal Component
 const FeedbackFormModal: React.FC<{
@@ -374,7 +602,7 @@ const FacultyDetailModal: React.FC<{
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              ×
+              <X className="w-6 h-6" />
             </button>
           </div>
         </div>
@@ -497,6 +725,7 @@ const FacultyFeedbackDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'faculty' | 'analytics' | 'sessions'>('overview');
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isFacultyDetailOpen, setIsFacultyDetailOpen] = useState(false);
+  const [isCreateSessionModalOpen, setIsCreateSessionModalOpen] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState<Faculty | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDepartment, setFilterDepartment] = useState('all');
@@ -622,7 +851,7 @@ const FacultyFeedbackDashboard: React.FC = () => {
   ]);
 
   // Sample Sessions Data
-  const [sessions] = useState<FeedbackSession[]>([
+  const [sessions, setSessions] = useState<FeedbackSession[]>([
     {
       id: '1',
       title: 'Mid-Semester Faculty Feedback',
@@ -693,6 +922,19 @@ const FacultyFeedbackDashboard: React.FC = () => {
 
   const handleSubmitFeedback = (feedbackData: Partial<FeedbackResponse>) => {
     console.log('Feedback submitted:', feedbackData);
+    // Here you would typically send the data to your backend
+  };
+
+  const handleCreateSession = (sessionData: FeedbackSessionForm) => {
+    const newSession: FeedbackSession = {
+      id: (sessions.length + 1).toString(),
+      ...sessionData,
+      isActive: new Date(sessionData.startDate) <= new Date() && new Date() <= new Date(sessionData.endDate),
+      totalResponses: 0
+    };
+    
+    setSessions(prev => [...prev, newSession]);
+    console.log('Session created:', newSession);
     // Here you would typically send the data to your backend
   };
 
@@ -1104,7 +1346,10 @@ const FacultyFeedbackDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900">Feedback Sessions</h2>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <button 
+                onClick={() => setIsCreateSessionModalOpen(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+              >
                 <Plus className="w-4 h-4" />
                 Create Session
               </button>
@@ -1149,7 +1394,7 @@ const FacultyFeedbackDashboard: React.FC = () => {
                       <div className="text-3xl font-bold text-blue-600">{session.totalResponses}</div>
                       <div className="text-sm text-gray-500">Responses</div>
                       <button className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium underline">
-                        View Details
+                        
                       </button>
                     </div>
                   </div>
@@ -1173,6 +1418,12 @@ const FacultyFeedbackDashboard: React.FC = () => {
         feedbacks={feedbacks}
         isOpen={isFacultyDetailOpen}
         onClose={() => setIsFacultyDetailOpen(false)}
+      />
+
+      <CreateSessionModal
+        isOpen={isCreateSessionModalOpen}
+        onClose={() => setIsCreateSessionModalOpen(false)}
+        onSubmit={handleCreateSession}
       />
     </div>
   );

@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, Download, Plus, Eye, BarChart3, BookOpen, Users, Trophy, TrendingUp, X, Clock, CheckCircle } from 'lucide-react';
 
@@ -45,6 +44,251 @@ interface OnlineTest {
   targetSemesters: string[];
   department: string;
 }
+
+// CreateTestForm component
+const CreateTestForm: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (testData: Partial<OnlineTest>) => void;
+}> = ({ isOpen, onClose, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    subject: '',
+    description: '',
+    totalMarks: '',
+    duration: '',
+    difficulty: 'Medium' as 'Easy' | 'Medium' | 'Hard',
+    totalQuestions: '',
+    department: '',
+    questionTypes: [] as string[],
+    targetSemesters: [] as string[]
+  });
+
+  if (!isOpen) return null;
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckboxChange = (value: string, field: 'questionTypes' | 'targetSemesters') => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].includes(value)
+        ? prev[field].filter(item => item !== value)
+        : [...prev[field], value]
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newTest: Partial<OnlineTest> = {
+      ...formData,
+      totalMarks: parseInt(formData.totalMarks),
+      totalQuestions: parseInt(formData.totalQuestions),
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString().split('T')[0],
+      isActive: true
+    };
+    onSubmit(newTest);
+    onClose();
+    setFormData({
+      title: '', subject: '', description: '', totalMarks: '', duration: '',
+      difficulty: 'Medium', totalQuestions: '', department: '', questionTypes: [], targetSemesters: []
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-900">Create New Test</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <X className="w-6 h-6 text-gray-500" />
+          </button>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {/* Basic Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Test Title*</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter test title"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Subject*</label>
+              <select
+                name="subject"
+                value={formData.subject}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select Subject</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={3}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter test description"
+            />
+          </div>
+
+          {/* Test Configuration */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Total Marks*</label>
+              <input
+                type="number"
+                name="totalMarks"
+                value={formData.totalMarks}
+                onChange={handleInputChange}
+                required
+                min="1"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="100"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Duration*</label>
+              <input
+                type="text"
+                name="duration"
+                value={formData.duration}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="2 hours"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Difficulty*</label>
+              <select
+                name="difficulty"
+                value={formData.difficulty}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Total Questions*</label>
+              <input
+                type="number"
+                name="totalQuestions"
+                value={formData.totalQuestions}
+                onChange={handleInputChange}
+                required
+                min="1"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Department*</label>
+              <select
+                name="department"
+                value={formData.department}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select Department</option>
+                <option value="All Engineering">All Engineering</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+                <option value="Chemical Engineering">Chemical Engineering</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Question Types */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Question Types</label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {['MCQ', 'Short Answer', 'Long Answer', 'Numerical', 'True/False', 'Fill in the blanks'].map(type => (
+                <label key={type} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.questionTypes.includes(type)}
+                    onChange={() => handleCheckboxChange(type, 'questionTypes')}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{type}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Target Semesters */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Target Semesters</label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {['1st Semester', '2nd Semester', '3rd Semester', '4th Semester', '5th Semester', '6th Semester', '7th Semester', '8th Semester'].map(semester => (
+                <label key={semester} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.targetSemesters.includes(semester)}
+                    onChange={() => handleCheckboxChange(semester, 'targetSemesters')}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{semester}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Form Actions */}
+          <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
+            >
+              Create Test
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 // Detail Modal Component for individual student test result details
 const DetailModal: React.FC<{
@@ -370,8 +614,11 @@ const OnlineTestDashboard: React.FC = () => {
   const [selectedTestForResults, setSelectedTestForResults] = useState<OnlineTest | null>(null);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
 
-  // Sample data for online tests
-  const [onlineTests] = useState<OnlineTest[]>([
+  // Create Test Modal state
+  const [isCreateTestFormOpen, setIsCreateTestFormOpen] = useState(false);
+
+  // Sample data for online tests (now using state to allow updates)
+  const [onlineTests, setOnlineTests] = useState<OnlineTest[]>([
     {
       id: '1',
       title: 'Engineering Mathematics - Unit 1',
@@ -544,7 +791,19 @@ const OnlineTestDashboard: React.FC = () => {
 
   // Handler for Create New Test button
   const handleCreateNewTest = () => {
+    setIsCreateTestFormOpen(true);
+  };
+  const handleCloseCreateTestForm = () => {
+    setIsCreateTestFormOpen(false);
+  };
 
+  const handleCreateTest = (testData: Partial<OnlineTest>) => {
+    // Add the new test to the existing tests
+    setOnlineTests(prev => [...prev, testData as OnlineTest]);
+    
+    // Show success message
+    alert('Test created successfully!');
+    console.log('New test created:', testData);
   };
 
   return (
@@ -984,6 +1243,13 @@ const OnlineTestDashboard: React.FC = () => {
         results={selectedTestForResults ? testResults.filter(r => r.testId === selectedTestForResults.id) : []}
         isOpen={isResultsModalOpen}
         onClose={handleCloseResultsModal}
+      />
+
+      {/* Create Test Form Modal */}
+      <CreateTestForm
+        isOpen={isCreateTestFormOpen}
+        onClose={handleCloseCreateTestForm}
+        onSubmit={handleCreateTest}
       />
     </div>
   );

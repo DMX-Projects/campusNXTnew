@@ -526,7 +526,7 @@ export default function Reports() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
           <h4 className="text-lg font-semibold text-gray-800">Financial Overview</h4>
           <div className="flex space-x-2">
-            <button className="text-sm text-gray-600 hover:text-gray-800 px-3 py-1 rounded">Monthly</button>
+
             <button className="text-sm font-medium text-blue-600 px-3 py-1 bg-blue-50 rounded">Yearly</button>
           </div>
         </div>
