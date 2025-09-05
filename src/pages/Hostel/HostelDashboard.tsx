@@ -5,7 +5,7 @@ import {
   RadialBarChart, RadialBar, ScatterChart, Scatter, ComposedChart,
   CartesianGrid
 } from "recharts";
-import { Search, Filter, Users, MapPin, Package, FileText, AlertCircle, Shield, Clock, Bed, Utensils, Wifi, Zap, Droplets } from "lucide-react";
+import { Search, Filter, Users, MapPin, Package, FileText, AlertCircle, Shield, Clock, Bed, Utensils, Wifi, Zap, Droplets, Download } from "lucide-react";
 
 const HostelAdminDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -146,10 +146,149 @@ const HostelAdminDashboard: React.FC = () => {
 
   const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#14B8A6"];
 
+  // Function to convert data to CSV format
+  const convertToCSV = (data: any[], filename: string) => {
+    if (!data || data.length === 0) return '';
+    
+    const headers = Object.keys(data[0]);
+    const csvContent = [
+      headers.join(','),
+      ...data.map(row => 
+        headers.map(header => {
+          const value = row[header];
+          // Handle values that might contain commas
+          return typeof value === 'string' && value.includes(',') 
+            ? `"${value}"` 
+            : value;
+        }).join(',')
+      )
+    ].join('\n');
+    
+    return csvContent;
+  };
+
+  // Function to download CSV file
+  const downloadCSV = (csvContent: string, filename: string) => {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Main export function
+  const handleExportReport = () => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    const reportType = timeFilter;
+    const blockFilter = selectedFilter;
+    
+    try {
+      // Create a comprehensive report based on current filters
+      const reportData = {
+        reportInfo: {
+          generatedDate: currentDate,
+          reportType: reportType,
+          blockFilter: blockFilter,
+          totalStudents: 1247,
+          occupancyRate: '91.9%'
+        },
+        
+        // Summary Statistics
+        summary: {
+          studentsPresent: 1247,
+          occupancyRate: 91.9,
+          openTickets: 27,
+          lateEntries: 48,
+          securityIncidents: 0,
+          messAttendance: 1143,
+          staffPresent: 68,
+          staffTotal: 72,
+          monthlyPermissions: 398
+        }
+      };
+
+      // Generate multiple CSV files for different data sets
+      const exports = [
+        { data: entryExitData, filename: `entry-exit-data-${currentDate}.csv` },
+        { data: blockOccupancy, filename: `block-occupancy-${currentDate}.csv` },
+        { data: roomTypes, filename: `room-revenue-${currentDate}.csv` },
+        { data: ticketsByCategory, filename: `support-tickets-${currentDate}.csv` },
+        { data: permissionTrends, filename: `permission-trends-${currentDate}.csv` },
+        { data: inventoryStatus, filename: `inventory-status-${currentDate}.csv` },
+        { data: messUtilization, filename: `mess-utilization-${currentDate}.csv` },
+        { data: staffAttendance, filename: `staff-attendance-${currentDate}.csv` },
+        { data: utilityConsumption, filename: `utility-consumption-${currentDate}.csv` },
+        { data: securityIncidents, filename: `security-incidents-${currentDate}.csv` },
+        { data: feeCollection, filename: `fee-collection-${currentDate}.csv` },
+        { data: revenueTrends, filename: `revenue-trends-${currentDate}.csv` },
+        { data: geofencingStatus, filename: `student-locations-${currentDate}.csv` }
+      ];
+
+      // Create a comprehensive summary report
+      const summaryReport = [
+        { metric: 'Students Present', value: 1247, category: 'Occupancy' },
+        { metric: 'Occupancy Rate (%)', value: 91.9, category: 'Occupancy' },
+        { metric: 'Open Support Tickets', value: 27, category: 'Support' },
+        { metric: 'Late Entries (Current Month)', value: 48, category: 'Security' },
+        { metric: 'Security Incidents (Current Month)', value: 0, category: 'Security' },
+        { metric: 'Mess Attendance Average', value: 1143, category: 'Food Services' },
+        { metric: 'Staff Present', value: 68, category: 'Staff Management' },
+        { metric: 'Staff Total', value: 72, category: 'Staff Management' },
+        { metric: 'Staff Attendance Rate (%)', value: 94.4, category: 'Staff Management' },
+        { metric: 'Monthly Permissions', value: 398, category: 'Permissions' },
+        { metric: 'Revenue Current Month (₹)', value: 3431000, category: 'Finance' },
+        { metric: 'Fee Collection Rate (%)', value: 87.3, category: 'Finance' }
+      ];
+
+      // Download summary report first
+      const summaryCSV = convertToCSV(summaryReport, 'summary-report');
+      downloadCSV(summaryCSV, `hostel-summary-report-${currentDate}.csv`);
+
+      // Download individual data exports with a slight delay to avoid browser blocking
+      exports.forEach((exportItem, index) => {
+        setTimeout(() => {
+          const csvContent = convertToCSV(exportItem.data, exportItem.filename);
+          if (csvContent) {
+            downloadCSV(csvContent, exportItem.filename);
+          }
+        }, index * 200); // 200ms delay between downloads
+      });
+
+      // Show success message
+      alert(`Report exported successfully! ${exports.length + 1} files have been downloaded.`);
+      
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('There was an error exporting the report. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       {/* Header */}
-     
+      <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">Hostel Administration Dashboard</h1>
+            <p className="text-gray-600 text-sm">Comprehensive hostel management overview</p>
+          </div>
+          <div className="text-right">
+            <div className="text-sm text-gray-500">Last Updated</div>
+            <div className="text-lg font-semibold text-blue-600">
+              {new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Search and Filters */}
       <div className="bg-white rounded-lg shadow-sm p-3 mb-4">
@@ -190,8 +329,11 @@ const HostelAdminDashboard: React.FC = () => {
               <option value="quarterly">This Quarter</option>
             </select>
             
-            <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 text-sm">
-              <Filter className="w-4 h-4" />
+            <button 
+              onClick={handleExportReport}
+              className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 text-sm transition-colors duration-200"
+            >
+              <Download className="w-4 h-4" />
               Export Report
             </button>
           </div>

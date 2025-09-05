@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { BarChart3, PieChart, TrendingUp, Download, Calendar, Filter } from 'lucide-react';
+import { BarChart3, Download } from 'lucide-react';
 
 const Reports: React.FC = () => {
   const [reportType, setReportType] = useState('performance');
   const [dateRange, setDateRange] = useState('semester');
+  const [showExportForm, setShowExportForm] = useState(false);
+  const [exportFormat, setExportFormat] = useState('pdf');
 
   const performanceData = {
     labels: ['Computer Networks', 'Database Management', 'Operating Systems', 'Software Engineering', 'Web Technologies'],
@@ -16,13 +18,14 @@ const Reports: React.FC = () => {
     late: 5
   };
 
+  const handleExport = () => {
+    alert(`Exporting ${reportType} report for ${dateRange} in ${exportFormat.toUpperCase()} format`);
+    setShowExportForm(false);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">REPORTS & ANALYTICS</h1>
-          <p className="text-gray-600">Comprehensive examination insights and performance analytics</p>
-        </div>
         <div className="flex space-x-3">
           <select 
             value={reportType}
@@ -34,14 +37,90 @@ const Reports: React.FC = () => {
             <option value="grades">Grade Distribution</option>
             <option value="comparison">Comparative Analysis</option>
           </select>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors">
+
+          {/* Open Export Form */}
+          <button 
+            onClick={() => setShowExportForm(true)}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors"
+          >
             <Download className="h-4 w-4" />
-            <span>Export PDF</span>
+            <span>Export</span>
           </button>
         </div>
       </div>
 
+      {/* Export Form Modal */}
+      {showExportForm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-96">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Export Report</h3>
+
+            <div className="space-y-4">
+              {/* Report Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Report Type</label>
+                <select
+                  value={reportType}
+                  onChange={(e) => setReportType(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="performance">Performance Report</option>
+                  <option value="attendance">Attendance Report</option>
+                  <option value="grades">Grade Distribution</option>
+                  <option value="comparison">Comparative Analysis</option>
+                </select>
+              </div>
+
+              {/* Date Range */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                <select
+                  value={dateRange}
+                  onChange={(e) => setDateRange(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="semester">This Semester</option>
+                  <option value="year">This Year</option>
+                  <option value="custom">Custom Range</option>
+                </select>
+              </div>
+
+              {/* Export Format */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Export Format</label>
+                <select
+                  value={exportFormat}
+                  onChange={(e) => setExportFormat(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="pdf">PDF</option>
+                  <option value="excel">Excel</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={() => setShowExportForm(false)}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleExport}
+                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
+              >
+                Export
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Existing Dashboard Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Panel */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
@@ -66,9 +145,9 @@ const Reports: React.FC = () => {
             </div>
           </div>
 
+          {/* Subject-wise Performance */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-6">Subject-wise Performance</h3>
-            
             <div className="space-y-4">
               {performanceData.labels.map((subject, index) => (
                 <div key={subject} className="flex items-center justify-between">
@@ -90,7 +169,9 @@ const Reports: React.FC = () => {
           </div>
         </div>
 
+        {/* Right Panel */}
         <div className="space-y-6">
+          {/* Quick Stats */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
             <div className="space-y-4">
@@ -113,6 +194,7 @@ const Reports: React.FC = () => {
             </div>
           </div>
 
+          {/* Attendance Overview */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Attendance Overview</h3>
             <div className="space-y-3">
@@ -146,6 +228,7 @@ const Reports: React.FC = () => {
             </div>
           </div>
 
+          {/* Recent Activity */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
             <div className="space-y-3">

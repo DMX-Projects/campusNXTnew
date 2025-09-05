@@ -2,11 +2,11 @@
   "students": [
     {
       "id": "CS2023001",
-      "name": "Alex Wilson",
+      "name": "Arjun Kumar",
       "department": "Computer Science",
       "year": 3,
       "section": "A",
-      "email": "alex.wilson@college.edu",
+      "email": "arjun.kumar@college.edu",
       "phone": "+1234567890",
       "parentId": "parent_001",
       "hostelRoom": "H1-201",

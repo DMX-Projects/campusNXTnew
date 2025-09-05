@@ -527,13 +527,13 @@ const Projects: React.FC = () => {
               <p className="text-gray-600 mt-1">Monitor, manage, and track student projects across all departments</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button
+              {/*<button
                 onClick={() => setIsCreateModalOpen(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
               >
                 <PlusIcon size={20} />
                 Create Project
-              </button>
+              </button>*/}
               <button
                 onClick={exportProjects}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
@@ -813,12 +813,12 @@ const Projects: React.FC = () => {
                 >
                   View Details
                 </button>
-                <button
+                {/*<button
                   onClick={() => openProgressModal(project)}
                   className="flex-1 bg-green-100 hover:bg-green-200 text-green-700 py-2 px-3 rounded-lg transition-colors text-sm"
                 >
                   Update Progress
-                </button>
+                </button>*/}
               </div>
             </div>
           ))}

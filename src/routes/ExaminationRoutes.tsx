@@ -18,6 +18,20 @@ import ExamAttendanceManager from "../pages/examination/pages/ExamAttendance";
 import ResultAnalyticsDashboard from "../pages/examination/pages/ExamResults";
 import ExamInbox from "../pages/examination/pages/ExamInbox";
 import ExamEvaluation from "../pages/examination/pages/ExamEvaluation";
+import Dashboard from "../FacultyModules/Examination/Dashboard";
+import ExamTimetable from "../FacultyModules/Examination/ExamTimetablefaculty";
+import FacultyInvigilationDuties from "../FacultyModules/Examination/FacultyInvigilation";
+import ExamAttendanceSystem from "../FacultyModules/Examination/FacultyStudenceattendance";
+import FacultyExamEvaluation from "../FacultyModules/Examination/ExamEvalutionfaculty";
+import FacultyMarksList from "../FacultyModules/Examination/FacultyMarksList";
+import ExamResultsPage from "../FacultyModules/Examination/ExamResultsfaculty";
+import FacultyRaiseticket from "../FacultyModules/Examination/FacultyRaiseticket";
+import StudentDashboard from "../StudentModules/Examination/StudentDashboard";
+import StudentExamSchedule from "../StudentModules/Examination/StudentExamSchedule";
+import StudentHallticket from "../StudentModules/Examination/StudentHallticket";
+import StudentExamAttendance from "../StudentModules/Examination/StudentExamAttendance";
+import StudentExamResult from "../StudentModules/Examination/StudentExamResult";
+import StudentRaiseTicket from "../StudentModules/Examination/StudentRaiseTicket";
 const ExaminationRoutes: React.FC = () => {
   return (
     <Routes>
@@ -41,6 +55,20 @@ const ExaminationRoutes: React.FC = () => {
        <Route path="exam-results" element={<ResultAnalyticsDashboard/>}/>
        <Route path="inbox" element={<ExamInbox/>}/>
        <Route path="exam-evaluation" element={<ExamEvaluation/>}/>
+       <Route path="dashboard-faculty" element={<Dashboard/>}/>
+       <Route path="examtimetable-faculty" element={<ExamTimetable/>}/>
+       <Route path="invigilation-faculty" element={<FacultyInvigilationDuties/>}/>
+       <Route path="studentattendance-faculty" element={<ExamAttendanceSystem/>}/>
+       <Route path="examevalution-faculty" element={<FacultyExamEvaluation/>}/>
+       <Route path="marklist-faculty" element={<FacultyMarksList/>}/>
+       <Route path="examresults-faculty" element={<ExamResultsPage/>}/>
+       <Route path="faculty-raiseticket" element={<FacultyRaiseticket/>}/>
+       <Route path="student-dashboard" element={<StudentDashboard/>}/>
+       <Route path="student-examtimetable" element={<StudentExamSchedule/>}/>
+       <Route path="student-studenthallticket" element={<StudentHallticket/>}/>
+       <Route path="student-examattendance" element={<StudentExamAttendance/>}/>
+       <Route path="student-raiseticket" element={<StudentRaiseTicket/>}/>
+       <Route path="student-examresult" element={<StudentExamResult/>}/>
            {/* Catch all for invalid examination routes */}
       <Route path="*" element={<Navigate to="/examination" replace />} />
     </Routes>

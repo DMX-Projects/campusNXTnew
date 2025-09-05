@@ -18,7 +18,17 @@ import PlacementResults from '../pages/Placements/PlacementResults';
 import Reports from '../pages/Placements/Reports';
 import NotifyStu from '../pages/Placements/NotifyStu';
 import ScheduleTest from '../pages/Placements/ScheduleTest';
-
+{/* Student Placements Routes */}
+import StudentPlacementDashboard from '../StudentModules/Placements/StudentPlacementDashboard';
+import StudentPlacementInbox from '../StudentModules/Placements/StudentPlacementInbox';
+import StudentPlacementCalendar from '../StudentModules/Placements/StudentPlacementCalendar';
+import StudentCompanyDrives from '../StudentModules/Placements/StudentCompanyDrives';
+import PlacementPrepMaterials from '../StudentModules/Placements/PlacementPrepMaterials';
+import PlacementMockTests from '../StudentModules/Placements/PlacementMockTests';
+import StudentIntershipsOrOffers from '../StudentModules/Placements/StudentInternshipsOrOffers';
+import StudentPlacementRaiseTicket from '../StudentModules/Placements/StudentPlacementRaiseTicket';
+import StudentResumeManager from '../StudentModules/Placements/StudentResumeManager';
+import StudentPlacementResult from '../StudentModules/Placements/StudentPlacementResult';
 const PlacementsRoutes: React.FC = () => {
   return (
     <Routes>
@@ -42,7 +52,17 @@ const PlacementsRoutes: React.FC = () => {
       <Route path="placement-reports" element={<Reports />} />
       <Route path="notify-students" element={<NotifyStu />} />
       <Route path="schedule-test" element={<ScheduleTest />} />
-
+{/* Student Placements Routes */}
+      <Route path='student/dashboard' element={<StudentPlacementDashboard />} />
+      <Route path='student/inbox' element={<StudentPlacementInbox />} />
+      <Route path='student/placement-calendar' element={<StudentPlacementCalendar />} />
+      <Route path='student/companies' element={<StudentCompanyDrives />} />
+      <Route path='student/prep-materials' element={<PlacementPrepMaterials />} />
+      <Route path='student/mock-tests' element={<PlacementMockTests />} />
+      <Route path='student/internships-offers' element={<StudentIntershipsOrOffers />} />
+      <Route path='student/raise-ticket' element={<StudentPlacementRaiseTicket />} />
+      <Route path='student/resume-manager' element={<StudentResumeManager />} />
+      <Route path='student/placement-results' element={<StudentPlacementResult />} />
     </Routes>
   );
 };

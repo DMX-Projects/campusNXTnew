@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Tag, AlertCircle, Eye, Filter } from 'lucide-react';
+import { Calendar, Tag, AlertCircle, Eye, Filter, Download } from 'lucide-react';
 
 const noticeData = [
   {
@@ -8,7 +8,7 @@ const noticeData = [
     date: 'August 28, 2025',
     category: 'Academics',
     isUrgent: false,
-    content: 'The new academic calendar is now available. Please review all key dates, including holidays and examination periods.',
+    content: 'The new academic calendar is now available. Please review all key dates, including holidays and examination periods. The calendar includes term start and end dates, examination schedules, holidays, and important academic deadlines. All students are advised to mark these dates in their personal calendars to ensure they do not miss any important academic activities.',
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const noticeData = [
     date: 'August 25, 2025',
     category: 'Events',
     isUrgent: true,
-    content: 'This is an urgent reminder about the upcoming Parent-Teacher Association (PTA) meeting. Your attendance is mandatory.',
+    content: 'This is an urgent reminder about the upcoming Parent-Teacher Association (PTA) meeting. Your attendance is mandatory. The meeting will discuss student progress, upcoming events, fee structure changes, and other important academic matters. Please ensure your presence at the designated time and venue.',
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const noticeData = [
     date: 'August 20, 2025',
     category: 'Fees',
     isUrgent: false,
-    content: 'Please note the revised fee structure for the B.Tech program, effective from the next semester.',
+    content: 'Please note the revised fee structure for the B.Tech program, effective from the next semester. The changes include tuition fees, laboratory fees, library fees, and other miscellaneous charges. Detailed breakdown will be available at the accounts office.',
   },
   {
     id: 4,
@@ -32,7 +32,7 @@ const noticeData = [
     date: 'August 18, 2025',
     category: 'Events',
     isUrgent: false,
-    content: 'Registration for the annual college fest "Synergy 2025" is now open. Register now to participate in various cultural and technical events.',
+    content: 'Registration for the annual college fest "Synergy 2025" is now open. Register now to participate in various cultural and technical events. The fest will include dance competitions, music performances, technical exhibitions, and much more.',
   },
   {
     id: 5,
@@ -40,7 +40,7 @@ const noticeData = [
     date: 'August 15, 2025',
     category: 'Academics',
     isUrgent: false,
-    content: 'The library will now remain open until 10 PM on weekdays to facilitate better study environment for students.',
+    content: 'The library will now remain open until 10 PM on weekdays to facilitate better study environment for students. Weekend timings remain unchanged. Students are expected to maintain discipline and follow library rules.',
   },
   {
     id: 6,
@@ -48,7 +48,7 @@ const noticeData = [
     date: 'August 10, 2025',
     category: 'Fees',
     isUrgent: true,
-    content: 'Last date for hostel fee payment is September 5, 2025. Late payments will incur additional charges.',
+    content: 'Last date for hostel fee payment is September 5, 2025. Late payments will incur additional charges. Students are advised to clear their dues on time to avoid any inconvenience.',
   },
 ];
 
@@ -73,6 +73,66 @@ const Noticeboard = () => {
 
   const toggleNoticeExpansion = (noticeId) => {
     setExpandedNotice(expandedNotice === noticeId ? null : noticeId);
+  };
+
+  // Download function for notice content
+  const downloadNotice = (notice) => {
+    const content = `
+NOTICE: ${notice.title}
+Date: ${notice.date}
+Category: ${notice.category}
+${notice.isUrgent ? 'URGENT NOTICE' : ''}
+
+${notice.content}
+
+Additional Information:
+For more details regarding this notice, please contact the administration office during working hours (9 AM - 5 PM) or visit the student portal for complete documentation.
+
+Notice ID: ${notice.id}
+Category: ${notice.category}
+Generated on: ${new Date().toLocaleDateString()}
+    `.trim();
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Notice_${notice.id}_${notice.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Download as PDF (simulated - in real app you'd use a PDF library)
+  const downloadNoticePDF = (notice) => {
+    // For demonstration, we'll download as text with PDF extension
+    // In a real application, you would use libraries like jsPDF or react-pdf
+    const content = `
+NOTICE: ${notice.title}
+Date: ${notice.date}
+Category: ${notice.category}
+${notice.isUrgent ? 'URGENT NOTICE' : ''}
+
+${notice.content}
+
+Additional Information:
+For more details regarding this notice, please contact the administration office during working hours (9 AM - 5 PM) or visit the student portal for complete documentation.
+
+Notice ID: ${notice.id}
+Category: ${notice.category}
+Generated on: ${new Date().toLocaleDateString()}
+    `.trim();
+
+    const blob = new Blob([content], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Notice_${notice.id}_${notice.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -212,9 +272,23 @@ const Noticeboard = () => {
                       {expandedNotice === notice.id ? 'Show Less' : 'Read More'}
                     </button>
                     
-                    <button className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 text-sm sm:text-base">
-                      Download PDF
-                    </button>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => downloadNotice(notice)}
+                        className="flex-1 bg-green-500 hover:bg-green-600 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 text-sm sm:text-base flex items-center justify-center"
+                      >
+                        <Download className="w-4 h-4 mr-1" />
+                        TXT
+                      </button>
+                      
+                      <button 
+                        onClick={() => downloadNoticePDF(notice)}
+                        className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 text-sm sm:text-base flex items-center justify-center"
+                      >
+                        <Download className="w-4 h-4 mr-1" />
+                        PDF
+                      </button>
+                    </div>
                   </div>
                 </div>
 

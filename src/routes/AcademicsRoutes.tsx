@@ -1,14 +1,6 @@
-
-import Course from '../pages/Academics/Courses/CoursesPage';
-import FacultyLeaves from '../pages/Academics/Courses/FacultyLeaves';
 import Inbox from '../pages/Academics/Courses/inbox';
 import StudentAttendance from '../pages/Academics/Courses/Studentsattendence'
-import { UsersPage } from '../pages/Academics/Users/UsersPage';
-import { EditUserPage } from '../pages/Academics/Users/EditUserPage';
-import { AddUserPage } from '../pages/Academics/Users/AddUserPage';
-import { InstitutionsPage } from '../pages/Academics/Institutions/InstitutionsPage';
-import { ProgramsPage } from '../pages/Academics/Programs/ProgramsPage';
-import { RolesPage } from '../pages/Academics/Roles/RolesPage';
+import AttendanceManagement from '../components/Modules/AttendanceManagement'
 import Timetable from '../pages/Academics/timetable/TimeTable';
 import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
 import AcademicCalender from '../pages/Academics/AcademicCalender/AcademicCalender';
@@ -20,12 +12,40 @@ import StudentAppruval from '../pages/Academics/StudentAppruval/StudentAppruval'
 // import AcademicDashboard from '../pages/Academics/AcademicDashboar/AcademicDashboard';
 import AcademicFaculty from '../pages/Academics/AcademicFaculty/AcademicFaculty';
 import OnlineTest from '../pages/Academics/OnlineTest/OnlineTest';
-import CodingAssesment from '../pages/Academics/OnlineTest/codingAssesment';
+import CodingAssesment from '../pages/Academics/OnlineTest/codingAssesment'
 import FacultyFeedback from '../pages/Academics/FacultyFeedback/FacultyFeedback';
 import SyllabusTrackingDashboard from '../pages/Academics/SyllabusTracking/SyllabusTracking';
 import ScheduleOnlineClass from '../pages/Academics/Scheduleonlineclass/Scheduleonlineclass';
 import Reports from '../pages/Academics/Reports/Reports';
 import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
+
+import FacultyInbox from '../FacultyModules/FacultyAcademic/FacultyInbox';
+import Announcement from '../FacultyModules/FacultyAcademic/Announcement';
+import FacultyStudentAttendance from '../FacultyModules/FacultyAcademic/StudentAttendence';
+import TimeTableFaculty from '../FacultyModules/FacultyAcademic/TimeTableFaculty';
+import FacultyCalender from '../FacultyModules/FacultyAcademic/calenderFaculty';
+import FacultySubjectsSyllabus from '../FacultyModules/FacultyAcademic/FacultySubjectsSyllabus';
+import FacultyStudyMaterial from '../FacultyModules/FacultyAcademic/FacultyStudyMaterial';
+import FacultyStudentProject from '../FacultyModules/FacultyAcademic/StudentProject';
+import FacultyOnlineTest from '../FacultyModules/FacultyAcademic/FacultyOnlineTest';
+import ScheduleOnlinclass from '../FacultyModules/FacultyAcademic/ScheduleOnlinclass';
+import FacultyReports from '../FacultyModules/FacultyAcademic/FacultyReports';
+import FacultyRiseTicket  from '../FacultyModules/FacultyAcademic/FacultyRiseticket'
+// import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
+
+
+// student login 
+
+import AcademicstudentDashboard from '../FacultyModules/FacultyAcademic/StudentDashboard'
+import StudentfeeManagement from '../FacultyModules/FacultyAcademic/studentFeeManagement';
+import StudentRecordsResults from '../FacultyModules/FacultyAcademic/StudentRecords&Results';
+import StudentClassSchedule from '../FacultyModules/FacultyAcademic/StudentClassSchedule';
+import StudentCourseAcademic from '../FacultyModules/FacultyAcademic/StudentCourse';
+import StudentAssigment from '../FacultyModules/FacultyAcademic/StudentAssigment';
+import StudentExam from '../FacultyModules/FacultyAcademic/StudentExam';
+import StudentProfile from '../FacultyModules/FacultyAcademic/StudentProfile';
+import StudentStudyMaterial from '../FacultyModules/FacultyAcademic/StudentStudyMaterial';
+
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
 
@@ -33,16 +53,6 @@ const AcademicsRoutes: React.FC = () => {
   return (
     <Routes>
       {/* Default Home Route */}
-
-      <Route index element={<UsersPage />} />
-      <Route path = 'users' element = {<UsersPage />} />
-      <Route path = '/editUserPage' element = {<EditUserPage />} />
-      <Route path = '/addUserPage' element = {<AddUserPage />} />
-      <Route path = '/institutions' element = {<InstitutionsPage />} />
-      <Route path = '/programs' element = {<ProgramsPage />} />
-      <Route path = '/roles' element = {<RolesPage />} />
-      <Route path="/courses" element={<Course />} />
-      <Route path="/faculty-leaves" element={<FacultyLeaves />} />
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/student-attendance" element={<StudentAttendance />} />
       <Route path="/timetable" element={<Timetable />} />
@@ -62,6 +72,47 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="schedule-online-class" element={<ScheduleOnlineClass />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/raise-ticket" element={<RaiseTicket />} />
+
+
+      {/* Academic login Faculty Routes */}
+
+
+
+
+      <Route path="/faculty-inbox" element={<FacultyInbox />} />
+      <Route path="/announcement" element={<Announcement />} />
+      <Route path="/faculty-studentattendance" element={<FacultyStudentAttendance />} />
+      <Route path='/faculty-timetable' element ={<TimeTableFaculty />} />
+      <Route path='/faculty-calendar' element ={<FacultyCalender />} />
+      <Route path='/faculty-subjects-syllabus' element ={<FacultySubjectsSyllabus />} />
+      <Route path='/faculty-StudyMaterial' element ={<FacultyStudyMaterial/>}/>
+      <Route path='/faculty-studentprojects' element ={<FacultyStudentProject/>}/>
+      <Route path='/faculty-FacultyOnlineTest' element ={<FacultyOnlineTest/>}/>
+      <Route path='/faculty-schedule-onlineclass' element ={<ScheduleOnlinclass/>}/>
+      <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
+      <Route path='/faculty-raiseticket' element={<FacultyRiseTicket />} />
+
+
+
+
+
+
+
+    {/* //student login */}
+
+
+    <Route path="/student-dashboard" element={<AcademicstudentDashboard />} />
+    <Route path="/student-feemanagement" element={<StudentfeeManagement />} />
+    <Route path="/student-recordsresults" element={<StudentRecordsResults />} />
+    <Route path="/student-classschedule" element={<StudentClassSchedule />} />
+    <Route path="/student-courses" element={<StudentCourseAcademic />} />
+    <Route path="/student-assignments" element={<StudentAssigment />} />
+    <Route path="/student-exams" element={<StudentExam />} />
+    <Route path="/student-profile" element={<StudentProfile />} />
+    <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
+    <Route path="/my-attendance" element={<AttendanceManagement />} />
+
+      {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 
       {/* Users Routes
       <Route path="users" element={<Users />} />

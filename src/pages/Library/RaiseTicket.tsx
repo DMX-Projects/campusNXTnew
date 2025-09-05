@@ -77,7 +77,7 @@ export default function RaiseTicket() {
         <p className="text-gray-600">Report issues and track support requests</p>
       </div>
 
-      {/* Stats */}
+      Stats
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-center gap-2">
@@ -234,12 +234,7 @@ export default function RaiseTicket() {
             <button className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
               All ({tickets.length})
             </button>
-            <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200">
-              Open ({openTickets.length})
-            </button>
-            <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200">
-              Closed ({closedTickets.length})
-            </button>
+          
           </div>
 
           {/* Tickets List */}
@@ -311,35 +306,6 @@ export default function RaiseTicket() {
         </div>
       )}
 
-      {/* Common Issues */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Common Issues & Quick Solutions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="border border-gray-200 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 mb-2">Cannot access online catalog</h4>
-            <p className="text-sm text-gray-600 mb-3">Clear your browser cache and cookies, then try again.</p>
-            <button className="text-blue-600 text-sm hover:text-blue-800">View detailed solution →</button>
-          </div>
-          
-          <div className="border border-gray-200 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 mb-2">Forgot library card number</h4>
-            <p className="text-sm text-gray-600 mb-3">You can find your card number in previous email receipts or contact the front desk.</p>
-            <button className="text-blue-600 text-sm hover:text-blue-800">View detailed solution →</button>
-          </div>
-          
-          <div className="border border-gray-200 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 mb-2">Book renewal issues</h4>
-            <p className="text-sm text-gray-600 mb-3">Check if the book has pending reservations or if you've reached the renewal limit.</p>
-            <button className="text-blue-600 text-sm hover:text-blue-800">View detailed solution →</button>
-          </div>
-          
-          <div className="border border-gray-200 rounded-lg p-4">
-            <h4 className="font-medium text-gray-900 mb-2">Payment problems</h4>
-            <p className="text-sm text-gray-600 mb-3">Ensure your payment method is valid and you have sufficient funds.</p>
-            <button className="text-blue-600 text-sm hover:text-blue-800">View detailed solution →</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  </div>
+);
 }

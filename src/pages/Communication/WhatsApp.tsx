@@ -1,73 +1,91 @@
 import React, { useState } from "react";
-import { MessageCircle } from "lucide-react";
 
 const SendWhatsApp: React.FC = () => {
-  const [audience, setAudience] = useState("Custom Numbers");
+  const [audience, setAudience] = useState("custom");
   const [numbers, setNumbers] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSend = () => {
-    alert(`WhatsApp message sent to: ${numbers}\nMessage: ${message}`);
-    // Later we can integrate WhatsApp API here
+    if (message.trim() === "" || (audience === "custom" && numbers.trim() === "")) return;
+
+    setLoading(true);
+
+    setTimeout(() => {
+      alert(`✅ WhatsApp Message Sent!\n\nAudience: ${audience}\nNumbers: ${numbers || "N/A"}\nMessage: ${message}`);
+      setNumbers("");
+      setMessage("");
+      setAudience("custom");
+      setLoading(false);
+    }, 1500);
   };
 
   return (
-    <div className="flex justify-center items-center w-full p-6">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-2xl">
-        {/* Title */}
-        <div className="flex items-center justify-center space-x-2 mb-6">
-          <MessageCircle className="text-blue-500 w-6 h-6" />
-          <h2 className="text-xl font-bold text-blue-600">Send WhatsApp Message</h2>
-        </div>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Page Title */}
+        <h1 className="text-4xl font-bold text-gray-800 mb-10 text-center">
+          💬 Send WhatsApp Message
+        </h1>
 
-        {/* Audience */}
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Audience</label>
+        {/* Audience Selection */}
+        <div className="mb-6">
+          <label className="block text-lg font-semibold text-gray-700 mb-2">
+            Audience
+          </label>
           <select
             value={audience}
             onChange={(e) => setAudience(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+            className="w-full p-4 border-2 border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all bg-white"
           >
-            <option>Custom Numbers</option>
-            <option>All Students</option>
-            <option>All Parents</option>
-            <option>All HOD's</option>
-            <option>Non Teaching Staff</option>
-            <option>All Staff</option>
+            <option value="custom">Custom Numbers</option>
+            <option value="students">All Students</option>
+            <option value="parents">All Parents</option>
+            <option value="hods">All HOD's</option>
+            <option value="staff">All Staff</option>
+            <option value="non-teaching">Non Teaching Staff</option>
           </select>
         </div>
 
-        {/* Mobile Numbers */}
-        {audience === "Custom Numbers" && (
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Mobile Numbers</label>
+        {/* Mobile Numbers (only for custom) */}
+        {audience === "custom" && (
+          <div className="mb-6">
+            <label className="block text-lg font-semibold text-gray-700 mb-2">
+              Mobile Numbers
+            </label>
             <input
               type="text"
-              placeholder="9876543210, 9123456789"
               value={numbers}
               onChange={(e) => setNumbers(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              placeholder="9876543210, 9123456789"
+              className="w-full p-4 border-2 border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all bg-white"
             />
           </div>
         )}
 
-        {/* Message */}
-        <div className="mb-6">
-          <label className="block text-gray-700 mb-2">Message</label>
+        {/* WhatsApp Message */}
+        <div className="mb-8">
+          <label className="block text-lg font-semibold text-gray-700 mb-2">
+            Message
+          </label>
           <textarea
-            placeholder="Enter WhatsApp message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 h-28 focus:outline-none focus:ring focus:ring-blue-200"
+            placeholder="Enter WhatsApp message..."
+            rows={6}
+            className="w-full p-4 border-2 border-gray-300 rounded-xl text-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all bg-white"
           />
         </div>
 
         {/* Send Button */}
         <button
           onClick={handleSend}
-          className="w-full bg-blue-400 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition-colors"
+          disabled={(!message.trim() || (audience === "custom" && !numbers.trim())) || loading}
+          className={`w-full bg-blue-600 text-white py-4 px-8 rounded-xl text-xl font-semibold 
+            hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed 
+            transition-all duration-200 transform hover:scale-[1.01] active:scale-[0.98]`}
         >
-          Send WhatsApp Message
+          {loading ? "Sending..." : "Send WhatsApp Message"}
         </button>
       </div>
     </div>

@@ -1,375 +1,514 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, BookOpen, Plus, Edit, Trash2, Download, RefreshCw, Search, Filter, Save, X } from 'lucide-react';
 
+// Updated interfaces to match your DB structure
 interface TimeSlot {
   id: string;
+  subject: string;
+  class: string;
+  section: string;
+  facultyId: string;
+  facultyName?: string;
+  schedule: string;
+  room: string;
+  totalStudents: number;
   startTime: string;
   endTime: string;
-  subject: string;
-  faculty: string;
-  room: string;
-  type: 'lecture' | 'lab' | 'tutorial' | 'break';
-  department: string;
-  semester: number;
-  section: string;
+  days: string[];
 }
 
-interface TimetableEntry {
-  id: string;
-  day: string;
-  timeSlots: TimeSlot[];
-}
-
-interface Course {
+interface Student {
   id: string;
   name: string;
-  code: string;
-  department: string;
-  credits: number;
+  rollNumber: string;
+  class: string;
+  section: string;
+  email: string;
+  phone: string;
 }
 
 interface Faculty {
   id: string;
   name: string;
+  employeeId: string;
   department: string;
-  specialization: string;
+  designation: string;
+  email: string;
+  subjects: string[];
 }
 
-interface Room {
+interface AttendanceRecord {
   id: string;
-  name: string;
-  type: 'classroom' | 'lab' | 'auditorium';
-  capacity: number;
-  building: string;
+  studentId: string;
+  date: string;
+  subject: string;
+  class: string;
+  section: string;
+  status: 'Present' | 'Absent';
+  markedAt: string;
+  location: string;
 }
+
+// API endpoints
+const API_BASE_URL = 'http://localhost:3001';
+
+const apiService = {
+  // Timetable APIs
+  getTimetables: async (): Promise<TimeSlot[]> => {
+    const response = await fetch(`${API_BASE_URL}/timetables`);
+    return response.json();
+  },
+  
+  createTimetable: async (timetable: Omit<TimeSlot, 'id'>): Promise<TimeSlot> => {
+    const response = await fetch(`${API_BASE_URL}/timetables`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(timetable)
+    });
+    return response.json();
+  },
+  
+  updateTimetable: async (id: string, timetable: Partial<TimeSlot>): Promise<TimeSlot> => {
+    const response = await fetch(`${API_BASE_URL}/timetables/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(timetable)
+    });
+    return response.json();
+  },
+  
+  deleteTimetable: async (id: string): Promise<void> => {
+    await fetch(`${API_BASE_URL}/timetables/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  // Students API
+  getStudents: async (): Promise<Student[]> => {
+    const response = await fetch(`${API_BASE_URL}/students`);
+    return response.json();
+  },
+
+  // Faculty API  
+  getFaculty: async (): Promise<Faculty[]> => {
+    const response = await fetch(`${API_BASE_URL}/users`);
+    return response.json();
+  },
+
+  // Attendance API
+  getAttendance: async (): Promise<AttendanceRecord[]> => {
+    const response = await fetch(`${API_BASE_URL}/attendance`);
+    return response.json();
+  }
+};
 
 const CollegeTimetableSystem = () => {
-  // Dummy Data
-  const departments = ['Computer Science', 'Electronics', 'Mechanical', 'Civil', 'IT', 'MBA', 'BBA'];
+  // State management
+  const [timetables, setTimetables] = useState<TimeSlot[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [faculty, setFaculty] = useState<Faculty[]>([]);
+  const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+
+  // Filter states
+  const [selectedClass, setSelectedClass] = useState<string>('All');
+  const [selectedSection, setSelectedSection] = useState<string>('All');
+  const [selectedSubject, setSelectedSubject] = useState<string>('All');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'view' | 'create' | 'generate'>('view');
+  
+  // Modal states
+  const [editingSlot, setEditingSlot] = useState<TimeSlot | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  // Form state
+  const [newSlot, setNewSlot] = useState<Partial<TimeSlot>>({
+    subject: '',
+    class: 'BTech CSE',
+    section: 'A',
+    facultyId: '',
+    room: '',
+    totalStudents: 60,
+    startTime: '09:00',
+    endTime: '10:00',
+    days: ['Monday'],
+    schedule: ''
+  });
+
+  // Generate parameters
+  const [generateParams, setGenerateParams] = useState({
+    class: 'BTech CSE',
+    section: 'A',
+    workingDays: 5,
+    hoursPerDay: 6,
+    faculty: ''
+  });
+
+  // Extract unique values from data
+  const classes = [...new Set(timetables.map(t => t.class))].filter(Boolean);
+  const sections = [...new Set(timetables.map(t => t.section))].filter(Boolean);
+  const subjects = [...new Set(timetables.map(t => t.subject))].filter(Boolean);
+  const rooms = [...new Set(timetables.map(t => t.room))].filter(Boolean);
+  
   const timeSlots = [
-    '9:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:00',
+    '09:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-13:00',
     '13:00-14:00', '14:00-15:00', '15:00-16:00', '16:00-17:00'
   ];
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-  const dummyCourses: Course[] = [
-    { id: '1', name: 'Data Structures', code: 'CS301', department: 'Computer Science', credits: 4 },
-    { id: '2', name: 'Database Management', code: 'CS302', department: 'Computer Science', credits: 4 },
-    { id: '3', name: 'Computer Networks', code: 'CS303', department: 'Computer Science', credits: 3 },
-    { id: '4', name: 'Operating Systems', code: 'CS304', department: 'Computer Science', credits: 4 },
-    { id: '5', name: 'Software Engineering', code: 'CS305', department: 'Computer Science', credits: 3 },
-    { id: '6', name: 'Digital Electronics', code: 'EC201', department: 'Electronics', credits: 4 },
-    { id: '7', name: 'Microprocessors', code: 'EC202', department: 'Electronics', credits: 4 },
-    { id: '8', name: 'Signal Processing', code: 'EC203', department: 'Electronics', credits: 3 },
-    { id: '9', name: 'Thermodynamics', code: 'ME201', department: 'Mechanical', credits: 4 },
-    { id: '10', name: 'Fluid Mechanics', code: 'ME202', department: 'Mechanical', credits: 4 },
-    { id: '11', name: 'Machine Design', code: 'ME203', department: 'Mechanical', credits: 3 },
-    { id: '12', name: 'Structural Analysis', code: 'CE201', department: 'Civil', credits: 4 },
-    { id: '13', name: 'Concrete Technology', code: 'CE202', department: 'Civil', credits: 3 },
-    { id: '14', name: 'Web Development', code: 'IT301', department: 'IT', credits: 4 },
-    { id: '15', name: 'Mobile Computing', code: 'IT302', department: 'IT', credits: 3 },
-    { id: '16', name: 'Marketing Management', code: 'MBA401', department: 'MBA', credits: 3 },
-    { id: '17', name: 'Financial Accounting', code: 'BBA201', department: 'BBA', credits: 4 },
-    { id: '18', name: 'Machine Learning', code: 'CS401', department: 'Computer Science', credits: 4 },
-    { id: '19', name: 'Artificial Intelligence', code: 'CS402', department: 'Computer Science', credits: 3 },
-    { id: '20', name: 'Cyber Security', code: 'CS403', department: 'Computer Science', credits: 3 }
-  ];
+  // Available class options
+  const availableClasses = ['BTech CSE', 'BTech ECE', 'BTech ME', 'BTech CE', 'BTech IT', 'MBA', 'BBA'];
 
-  const dummyFaculty: Faculty[] = [
-    { id: '1', name: 'Dr. Rajesh Kumar', department: 'Computer Science', specialization: 'Data Structures' },
-    { id: '2', name: 'Prof. Anita Sharma', department: 'Computer Science', specialization: 'Database Systems' },
-    { id: '3', name: 'Dr. Vikram Singh', department: 'Computer Science', specialization: 'Networks' },
-    { id: '4', name: 'Prof. Meera Patel', department: 'Electronics', specialization: 'Digital Systems' },
-    { id: '5', name: 'Dr. Amit Gupta', department: 'Mechanical', specialization: 'Thermodynamics' },
-    { id: '6', name: 'Prof. Priya Jain', department: 'Civil', specialization: 'Structures' },
-    { id: '7', name: 'Dr. Suresh Reddy', department: 'Computer Science', specialization: 'Operating Systems' },
-    { id: '8', name: 'Prof. Kavita Nair', department: 'IT', specialization: 'Web Technologies' },
-    { id: '9', name: 'Dr. Ravi Krishnan', department: 'Electronics', specialization: 'Microprocessors' },
-    { id: '10', name: 'Prof. Sneha Agarwal', department: 'MBA', specialization: 'Marketing' },
-    { id: '11', name: 'Dr. Manoj Tiwari', department: 'Computer Science', specialization: 'AI/ML' },
-    { id: '12', name: 'Prof. Deepika Roy', department: 'BBA', specialization: 'Finance' },
-    { id: '13', name: 'Dr. Arun Kumar', department: 'Mechanical', specialization: 'Design' },
-    { id: '14', name: 'Prof. Sunita Das', department: 'Civil', specialization: 'Materials' },
-    { id: '15', name: 'Dr. Rahul Mishra', department: 'IT', specialization: 'Mobile Tech' }
-  ];
+  // Load data on component mount
+  useEffect(() => {
+    loadAllData();
+  }, []);
 
-  const dummyRooms: Room[] = [
-    { id: '1', name: 'CS-101', type: 'classroom', capacity: 60, building: 'Computer Science Block' },
-    { id: '2', name: 'CS-102', type: 'classroom', capacity: 60, building: 'Computer Science Block' },
-    { id: '3', name: 'CS-Lab1', type: 'lab', capacity: 30, building: 'Computer Science Block' },
-    { id: '4', name: 'CS-Lab2', type: 'lab', capacity: 30, building: 'Computer Science Block' },
-    { id: '5', name: 'EC-201', type: 'classroom', capacity: 50, building: 'Electronics Block' },
-    { id: '6', name: 'EC-Lab1', type: 'lab', capacity: 25, building: 'Electronics Block' },
-    { id: '7', name: 'ME-301', type: 'classroom', capacity: 55, building: 'Mechanical Block' },
-    { id: '8', name: 'ME-Workshop', type: 'lab', capacity: 20, building: 'Mechanical Block' },
-    { id: '9', name: 'Auditorium-1', type: 'auditorium', capacity: 200, building: 'Main Block' },
-    { id: '10', name: 'CE-401', type: 'classroom', capacity: 50, building: 'Civil Block' },
-    { id: '11', name: 'IT-501', type: 'classroom', capacity: 45, building: 'IT Block' },
-    { id: '12', name: 'MBA-601', type: 'classroom', capacity: 40, building: 'Management Block' },
-    { id: '13', name: 'Library-Hall', type: 'auditorium', capacity: 100, building: 'Library Block' },
-    { id: '14', name: 'CS-103', type: 'classroom', capacity: 65, building: 'Computer Science Block' },
-    { id: '15', name: 'EC-202', type: 'classroom', capacity: 55, building: 'Electronics Block' }
-  ];
-
-  // Generate comprehensive dummy timetable data
-  const generateDummyTimetable = (): TimetableEntry[] => {
-    const timetable: TimetableEntry[] = [];
-    
-    days.forEach(day => {
-      const daySchedule: TimeSlot[] = [];
+  const loadAllData = async () => {
+    try {
+      setLoading(true);
+      setError('');
       
-      timeSlots.forEach((time, index) => {
-        if (time === '13:00-14:00') {
-          // Lunch break
-          daySchedule.push({
-            id: `${day}-${index}`,
-            startTime: '13:00',
-            endTime: '14:00',
-            subject: 'Lunch Break',
-            faculty: '',
-            room: 'Cafeteria',
-            type: 'break',
-            department: '',
-            semester: 0,
-            section: ''
-          });
-        } else {
-          const course = dummyCourses[Math.floor(Math.random() * dummyCourses.length)];
-          const faculty = dummyFaculty.find(f => f.department === course.department) || dummyFaculty[0];
-          const room = dummyRooms[Math.floor(Math.random() * dummyRooms.length)];
-          const sections = ['A', 'B', 'C'];
-          const semesters = [1, 2, 3, 4, 5, 6, 7, 8];
-          
-          daySchedule.push({
-            id: `${day}-${index}`,
-            startTime: time.split('-')[0],
-            endTime: time.split('-')[1],
-            subject: course.name,
-            faculty: faculty.name,
-            room: room.name,
-            type: Math.random() > 0.8 ? 'lab' : 'lecture',
-            department: course.department,
-            semester: semesters[Math.floor(Math.random() * semesters.length)],
-            section: sections[Math.floor(Math.random() * sections.length)]
-          });
-        }
-      });
-      
-      timetable.push({
-        id: day,
-        day,
-        timeSlots: daySchedule
-      });
-    });
-    
-    return timetable;
+      const [timetableData, studentData, facultyData, attendanceData] = await Promise.all([
+        apiService.getTimetables(),
+        apiService.getStudents(),
+        apiService.getFaculty(),
+        apiService.getAttendance()
+      ]);
+
+      // Enrich timetable data with faculty names
+      const enrichedTimetables = timetableData.map(tt => ({
+        ...tt,
+        facultyName: facultyData.find(f => f.id === tt.facultyId)?.name || 'Unknown Faculty'
+      }));
+
+      setTimetables(enrichedTimetables);
+      setStudents(studentData);
+      setFaculty(facultyData);
+      setAttendance(attendanceData);
+    } catch (err) {
+      setError('Failed to load data. Please check if the server is running on http://localhost:3001');
+      console.error('API Error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const [timetable, setTimetable] = useState<TimetableEntry[]>(generateDummyTimetable());
-  const [selectedDepartment, setSelectedDepartment] = useState<string>('All');
-  const [selectedSemester, setSelectedSemester] = useState<number>(0);
-  const [selectedSection, setSelectedSection] = useState<string>('All');
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'view' | 'create' | 'generate'>('view');
-  const [editingSlot, setEditingSlot] = useState<TimeSlot | null>(null);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  // Create timetable grid structure
+  const createTimetableGrid = () => {
+    const grid: { [key: string]: { [key: string]: TimeSlot | null } } = {};
+    
+    days.forEach(day => {
+      grid[day] = {};
+      timeSlots.forEach(timeSlot => {
+        grid[day][timeSlot] = null;
+      });
+    });
 
-  // Form states
-  const [newSlot, setNewSlot] = useState<Partial<TimeSlot>>({
-    startTime: '9:00',
-    endTime: '10:00',
-    subject: '',
-    faculty: '',
-    room: '',
-    type: 'lecture',
-    department: 'Computer Science',
-    semester: 1,
-    section: 'A'
-  });
-
-  const [generateParams, setGenerateParams] = useState({
-    department: 'Computer Science',
-    semester: 1,
-    section: 'A',
-    workingDays: 6,
-    hoursPerDay: 6
-  });
-
-  // Filter timetable based on selected criteria
-  const filteredTimetable = timetable.map(day => ({
-    ...day,
-    timeSlots: day.timeSlots.filter(slot => {
-      const departmentMatch = selectedDepartment === 'All' || slot.department === selectedDepartment;
-      const semesterMatch = selectedSemester === 0 || slot.semester === selectedSemester;
-      const sectionMatch = selectedSection === 'All' || slot.section === selectedSection;
+    // Filter timetables based on current filters
+    const filteredTimetables = timetables.filter(tt => {
+      const classMatch = selectedClass === 'All' || tt.class === selectedClass;
+      const sectionMatch = selectedSection === 'All' || tt.section === selectedSection;
+      const subjectMatch = selectedSubject === 'All' || tt.subject === selectedSubject;
       const searchMatch = searchTerm === '' || 
-        slot.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        slot.faculty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        slot.room.toLowerCase().includes(searchTerm.toLowerCase());
+        tt.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tt.facultyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tt.room.toLowerCase().includes(searchTerm.toLowerCase());
       
-      return departmentMatch && semesterMatch && sectionMatch && searchMatch;
-    })
-  }));
+      return classMatch && sectionMatch && subjectMatch && searchMatch;
+    });
 
-  const handleSaveSlot = () => {
-    if (!newSlot.subject || !newSlot.faculty || !newSlot.room) {
+    // Place timetables in grid
+    filteredTimetables.forEach(tt => {
+      const timeSlotKey = `${tt.startTime}-${tt.endTime}`;
+      tt.days.forEach(day => {
+        if (grid[day] && grid[day][timeSlotKey] !== undefined) {
+          grid[day][timeSlotKey] = tt;
+        }
+      });
+    });
+
+    return grid;
+  };
+
+  // Handle form submission
+  const handleSaveSlot = async () => {
+    if (!newSlot.subject || !newSlot.facultyId || !newSlot.room || !newSlot.class) {
       alert('Please fill all required fields');
       return;
     }
 
-    const updatedTimetable = [...timetable];
-    const dayIndex = updatedTimetable.findIndex(d => d.day === 'Monday'); // Default to Monday for new slots
-    
-    if (editingSlot) {
-      // Update existing slot
-      const slotIndex = updatedTimetable[dayIndex].timeSlots.findIndex(s => s.id === editingSlot.id);
-      if (slotIndex !== -1) {
-        updatedTimetable[dayIndex].timeSlots[slotIndex] = {
-          ...editingSlot,
-          ...newSlot
-        } as TimeSlot;
+    try {
+      const scheduleStr = `${newSlot.days?.join(', ')} - ${newSlot.startTime}`;
+      const slotData = {
+        ...newSlot,
+        schedule: scheduleStr,
+        totalStudents: newSlot.totalStudents || 60
+      } as Omit<TimeSlot, 'id'>;
+
+      if (editingSlot) {
+        const updated = await apiService.updateTimetable(editingSlot.id, slotData);
+        setTimetables(prev => prev.map(t => t.id === editingSlot.id ? { ...updated, facultyName: faculty.find(f => f.id === updated.facultyId)?.name } : t));
+      } else {
+        const created = await apiService.createTimetable(slotData);
+        setTimetables(prev => [...prev, { ...created, facultyName: faculty.find(f => f.id === created.facultyId)?.name }]);
       }
-    } else {
-      // Add new slot
-      const newTimeSlot: TimeSlot = {
-        id: `new-${Date.now()}`,
-        startTime: newSlot.startTime || '9:00',
-        endTime: newSlot.endTime || '10:00',
-        subject: newSlot.subject || '',
-        faculty: newSlot.faculty || '',
-        room: newSlot.room || '',
-        type: newSlot.type || 'lecture',
-        department: newSlot.department || 'Computer Science',
-        semester: newSlot.semester || 1,
-        section: newSlot.section || 'A'
-      };
-      updatedTimetable[dayIndex].timeSlots.push(newTimeSlot);
+      
+      resetForm();
+      setShowModal(false);
+      alert(editingSlot ? 'Timetable updated successfully!' : 'Timetable created successfully!');
+    } catch (err) {
+      alert('Failed to save timetable. Please try again.');
+      console.error('Save Error:', err);
     }
-    
-    setTimetable(updatedTimetable);
-    setShowModal(false);
-    setEditingSlot(null);
-    setNewSlot({
-      startTime: '9:00',
-      endTime: '10:00',
-      subject: '',
-      faculty: '',
-      room: '',
-      type: 'lecture',
-      department: 'Computer Science',
-      semester: 1,
-      section: 'A'
-    });
   };
 
   const handleEditSlot = (slot: TimeSlot) => {
     setEditingSlot(slot);
-    setNewSlot(slot);
+    setNewSlot({
+      subject: slot.subject,
+      class: slot.class,
+      section: slot.section,
+      facultyId: slot.facultyId,
+      room: slot.room,
+      totalStudents: slot.totalStudents,
+      startTime: slot.startTime,
+      endTime: slot.endTime,
+      days: slot.days,
+      schedule: slot.schedule
+    });
     setShowModal(true);
   };
 
-  const handleDeleteSlot = (slotId: string) => {
-    if (confirm('Are you sure you want to delete this slot?')) {
-      const updatedTimetable = timetable.map(day => ({
-        ...day,
-        timeSlots: day.timeSlots.filter(slot => slot.id !== slotId)
-      }));
-      setTimetable(updatedTimetable);
+  const handleDeleteSlot = async (slotId: string) => {
+    if (!confirm('Are you sure you want to delete this timetable slot?')) return;
+    
+    try {
+      await apiService.deleteTimetable(slotId);
+      setTimetables(prev => prev.filter(t => t.id !== slotId));
+      alert('Timetable deleted successfully!');
+    } catch (err) {
+      alert('Failed to delete timetable. Please try again.');
+      console.error('Delete Error:', err);
     }
   };
 
-  const generateAutoTimetable = () => {
-    const newTimetable: TimetableEntry[] = [];
-    const { department, semester, section, workingDays, hoursPerDay } = generateParams;
-    
-    const relevantCourses = dummyCourses.filter(c => c.department === department);
-    const relevantFaculty = dummyFaculty.filter(f => f.department === department);
-    const availableRooms = [...dummyRooms];
-    
-    for (let dayIndex = 0; dayIndex < workingDays; dayIndex++) {
-      const day = days[dayIndex];
-      const daySchedule: TimeSlot[] = [];
-      
-      for (let hour = 0; hour < hoursPerDay; hour++) {
-        if (hour === 3) { // Lunch break at 4th hour
-          daySchedule.push({
-            id: `gen-${day}-${hour}`,
-            startTime: '13:00',
-            endTime: '14:00',
-            subject: 'Lunch Break',
-            faculty: '',
-            room: 'Cafeteria',
-            type: 'break',
-            department: '',
-            semester: 0,
-            section: ''
-          });
-        } else {
-          const course = relevantCourses[hour % relevantCourses.length];
-          const faculty = relevantFaculty[hour % relevantFaculty.length];
-          const room = availableRooms[hour % availableRooms.length];
-          const startHour = 9 + hour + (hour >= 3 ? 1 : 0); // Account for lunch break
-          
-          daySchedule.push({
-            id: `gen-${day}-${hour}`,
-            startTime: `${startHour}:00`,
-            endTime: `${startHour + 1}:00`,
-            subject: course.name,
-            faculty: faculty.name,
-            room: room.name,
-            type: hour % 4 === 3 ? 'lab' : 'lecture',
-            department,
-            semester,
-            section
-          });
-        }
-      }
-      
-      newTimetable.push({
-        id: day,
-        day,
-        timeSlots: daySchedule
-      });
-    }
-    
-    setTimetable(newTimetable);
-    setActiveTab('view');
-    alert('Timetable generated successfully!');
+  const resetForm = () => {
+    setNewSlot({
+      subject: '',
+      class: 'BTech CSE',
+      section: 'A',
+      facultyId: '',
+      room: '',
+      totalStudents: 60,
+      startTime: '09:00',
+      endTime: '10:00',
+      days: ['Monday'],
+      schedule: ''
+    });
+    setEditingSlot(null);
   };
 
   const exportTimetable = () => {
-    const data = JSON.stringify(filteredTimetable, null, 2);
+    const filteredData = timetables.filter(tt => {
+      const classMatch = selectedClass === 'All' || tt.class === selectedClass;
+      const sectionMatch = selectedSection === 'All' || tt.section === selectedSection;
+      const subjectMatch = selectedSubject === 'All' || tt.subject === selectedSubject;
+      return classMatch && sectionMatch && subjectMatch;
+    });
+    
+    const data = JSON.stringify(filteredData, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'timetable.json';
+    a.download = 'timetable-export.json';
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const getSlotColor = (type: string) => {
-    switch (type) {
-      case 'lecture': return 'bg-blue-100 border-blue-300';
-      case 'lab': return 'bg-green-100 border-green-300';
-      case 'tutorial': return 'bg-yellow-100 border-yellow-300';
-      case 'break': return 'bg-gray-100 border-gray-300';
-      default: return 'bg-blue-100 border-blue-300';
+  const getSlotColor = (subject: string) => {
+    const colors = [
+      'bg-blue-100 border-blue-300',
+      'bg-green-100 border-green-300',
+      'bg-yellow-100 border-yellow-300',
+      'bg-purple-100 border-purple-300',
+      'bg-red-100 border-red-300',
+      'bg-indigo-100 border-indigo-300'
+    ];
+    const hash = subject.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    return colors[Math.abs(hash) % colors.length];
+  };
+
+  // Auto-generate timetable function
+  const generateAutoTimetable = async () => {
+    if (!confirm('This will replace existing timetables for the selected class and section. Continue?')) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { class: selectedClass, section, workingDays, hoursPerDay } = generateParams;
+      
+      // Get relevant faculty for the selected class - Smart department matching
+const relevantFaculty = faculty.filter(f => {
+  const selectedDept = generateParams.class.toLowerCase();
+  const facultyDept = f.department.toLowerCase();
+  
+  // Define department mapping for better matching
+  const deptMappings = {
+    'btech cse': ['computer science', 'cse', 'cs'],
+    'btech ece': ['electronics', 'ece', 'electronic', 'communication'],
+    'btech me': ['mechanical', 'me', 'mech'],
+    'btech ce': ['civil', 'ce', 'construction'],
+    'btech it': ['information technology', 'it', 'computer'],
+    'mba': ['management', 'business', 'mba', 'administration'],
+    'bba': ['business', 'bba', 'administration', 'commerce']
+  };
+  
+  // Get matching keywords for selected class
+  const matchingKeywords = deptMappings[selectedDept] || [];
+  
+  // Check if faculty department contains any of the matching keywords
+  return matchingKeywords.some(keyword => facultyDept.includes(keyword));
+});
+
+      
+      if (relevantFaculty.length === 0) {
+        alert('No faculty found for the selected class. Please add faculty members first.');
+        setLoading(false);
+        return;
+      }
+
+      // Define available rooms (you can make this dynamic from your database)
+      const availableRooms = [
+        'Room CSE-204', 'Room CSE-205', 'Room CSE-206', 'Room CSE-207',
+        'Room ECE-301', 'Room ECE-302', 'Room ME-401', 'Room ME-402',
+        'Room CE-501', 'Room CE-502', 'Lab-101', 'Lab-102', 'Auditorium-1'
+      ];
+
+      // Sample subjects based on class
+      const subjectsByClass: { [key: string]: string[] } = {
+        'BTech CSE': ['Data Structures', 'Algorithms', 'Database Systems', 'Computer Networks', 'Operating Systems', 'Software Engineering'],
+        'BTech ECE': ['Digital Electronics', 'Signals & Systems', 'Communication Systems', 'Control Systems', 'Microprocessors', 'VLSI Design'],
+        'BTech ME': ['Thermodynamics', 'Fluid Mechanics', 'Machine Design', 'Heat Transfer', 'Manufacturing Technology', 'Automation'],
+        'BTech CE': ['Structural Analysis', 'Concrete Technology', 'Geotechnical Engineering', 'Transportation Engineering', 'Water Resources', 'Construction Management']
+      };
+
+      const availableSubjects = subjectsByClass[selectedClass] || ['General Subject 1', 'General Subject 2', 'General Subject 3'];
+
+      // Delete existing timetables for the selected class and section
+      const existingSlots = timetables.filter(tt => tt.class === selectedClass && tt.section === section);
+      for (const slot of existingSlots) {
+        await apiService.deleteTimetable(slot.id);
+      }
+
+      const generatedSlots: TimeSlot[] = [];
+
+      // Generate timetable for each day
+      for (let dayIndex = 0; dayIndex < Math.min(workingDays, days.length); dayIndex++) {
+        const day = days[dayIndex];
+        
+        for (let hour = 0; hour < hoursPerDay; hour++) {
+          // Skip lunch break (usually 12:00-13:00)
+          if (hour === 3) {
+            continue; // Skip lunch hour
+          }
+          
+          const actualHour = hour >= 3 ? hour + 1 : hour; // Adjust for lunch break
+          const startHour = 9 + actualHour;
+          const endHour = startHour + 1;
+          
+          // Skip if time goes beyond working hours
+          if (startHour >= 17) break;
+          
+          const subject = availableSubjects[hour % availableSubjects.length];
+          const facultyMember = relevantFaculty[hour % relevantFaculty.length];
+          const room = availableRooms[hour % availableRooms.length];
+          
+          const startTime = `${startHour.toString().padStart(2, '0')}:00`;
+          const endTime = `${endHour.toString().padStart(2, '0')}:00`;
+          const schedule = `${day} - ${startTime}`;
+          
+          const slotData: Omit<TimeSlot, 'id'> = {
+            subject,
+            class: selectedClass,
+            section,
+            facultyId: facultyMember.id,
+            room,
+            totalStudents: 60,
+            startTime,
+            endTime,
+            days: [day],
+            schedule
+          };
+
+          try {
+            const created = await apiService.createTimetable(slotData);
+            const enrichedSlot = {
+              ...created,
+              facultyName: facultyMember.name
+            };
+            generatedSlots.push(enrichedSlot);
+          } catch (error) {
+            console.error('Error creating timetable slot:', error);
+          }
+        }
+      }
+
+      // Update local state
+      setTimetables(prev => [
+        ...prev.filter(t => !(t.class === selectedClass && t.section === section)),
+        ...generatedSlots
+      ]);
+
+      setActiveTab('view');
+      alert(`Timetable generated successfully! Created ${generatedSlots.length} time slots for ${selectedClass} Section ${section}.`);
+      
+    } catch (err) {
+      alert('Failed to generate timetable. Please try again.');
+      console.error('Generation Error:', err);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <RefreshCw className="animate-spin text-blue-600" size={24} />
+          <span className="text-lg text-gray-600">Loading timetable data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-600 text-lg font-semibold mb-4">{error}</div>
+          <button
+            onClick={loadAllData}
+            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
+          >
+            Retry Loading
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const timetableGrid = createTimetableGrid();
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2 flex items-center gap-3">
-            <Calendar className="text-blue-600" />
-            College Timetable Management System
-          </h1>
-          <p className="text-gray-600">Manage and generate academic schedules for your institution</p>
-        </div> */}
-
         {/* Navigation Tabs */}
         <div className="bg-white rounded-lg shadow-md mb-6">
           <div className="flex border-b">
@@ -414,28 +553,15 @@ const CollegeTimetableSystem = () => {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
                   <select
-                    value={selectedDepartment}
-                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    value={selectedClass}
+                    onChange={(e) => setSelectedClass(e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="All">All Departments</option>
-                    {departments.map(dept => (
-                      <option key={dept} value={dept}>{dept}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Semester</label>
-                  <select
-                    value={selectedSemester}
-                    onChange={(e) => setSelectedSemester(Number(e.target.value))}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value={0}>All Semesters</option>
-                    {[1,2,3,4,5,6,7,8].map(sem => (
-                      <option key={sem} value={sem}>Semester {sem}</option>
+                    <option value="All">All Classes</option>
+                    {classes.map(cls => (
+                      <option key={cls} value={cls}>{cls}</option>
                     ))}
                   </select>
                 </div>
@@ -447,9 +573,22 @@ const CollegeTimetableSystem = () => {
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="All">All Sections</option>
-                    <option value="A">Section A</option>
-                    <option value="B">Section B</option>
-                    <option value="C">Section C</option>
+                    {sections.map(section => (
+                      <option key={section} value={section}>Section {section}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                  <select
+                    value={selectedSubject}
+                    onChange={(e) => setSelectedSubject(e.target.value)}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="All">All Subjects</option>
+                    {subjects.map(subject => (
+                      <option key={subject} value={subject}>{subject}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -498,24 +637,22 @@ const CollegeTimetableSystem = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {timeSlots.map(time => (
-                      <tr key={time} className="border-b hover:bg-gray-50">
+                    {timeSlots.map(timeSlot => (
+                      <tr key={timeSlot} className="border-b hover:bg-gray-50">
                         <td className="px-4 py-3 font-medium text-gray-700 border-r bg-gray-50">
-                          {time}
+                          {timeSlot}
                         </td>
-                        {filteredTimetable.map(day => {
-                          const slot = day.timeSlots.find(s => 
-                            `${s.startTime}-${s.endTime}` === time
-                          );
+                        {days.map(day => {
+                          const slot = timetableGrid[day][timeSlot];
                           return (
-                            <td key={`${day.day}-${time}`} className="px-2 py-1 border-r">
+                            <td key={`${day}-${timeSlot}`} className="px-2 py-1 border-r">
                               {slot ? (
-                                <div className={`p-3 rounded-lg border-2 ${getSlotColor(slot.type)} relative group`}>
+                                <div className={`p-3 rounded-lg border-2 ${getSlotColor(slot.subject)} relative group`}>
                                   <div className="font-semibold text-sm text-gray-800">{slot.subject}</div>
-                                  <div className="text-xs text-gray-600 mt-1">{slot.faculty}</div>
+                                  <div className="text-xs text-gray-600 mt-1">{slot.facultyName}</div>
                                   <div className="text-xs text-gray-500">{slot.room}</div>
                                   <div className="text-xs text-blue-600 mt-1">
-                                    {slot.department !== '' && `${slot.department} - Sem ${slot.semester}${slot.section}`}
+                                    {slot.class} - {slot.section} ({slot.totalStudents} students)
                                   </div>
                                   <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <button
@@ -554,53 +691,85 @@ const CollegeTimetableSystem = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
               <Plus className="text-blue-600" />
-              Create New Time Slot
+              Create New Timetable Slot
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
-                <select
-                  value={newSlot.subject}
+                <input
+                  type="text"
+                  value={newSlot.subject || ''}
                   onChange={(e) => setNewSlot({...newSlot, subject: e.target.value})}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter subject name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Class *</label>
+                <select
+                  value={newSlot.class || ''}
+                  onChange={(e) => setNewSlot({...newSlot, class: e.target.value})}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select Subject</option>
-                  {dummyCourses.map(course => (
-                    <option key={course.id} value={course.name}>{course.name} ({course.code})</option>
+                  <option value="">Select Class</option>
+                  {availableClasses.map(cls => (
+                    <option key={cls} value={cls}>{cls}</option>
                   ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Section *</label>
+                <select
+                  value={newSlot.section || ''}
+                  onChange={(e) => setNewSlot({...newSlot, section: e.target.value})}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select Section</option>
+                  <option value="A">Section A</option>
+                  <option value="B">Section B</option>
+                  <option value="C">Section C</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Faculty *</label>
                 <select
-                  value={newSlot.faculty}
-                  onChange={(e) => setNewSlot({...newSlot, faculty: e.target.value})}
+                  value={newSlot.facultyId || ''}
+                  onChange={(e) => setNewSlot({...newSlot, facultyId: e.target.value})}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Faculty</option>
-                  {dummyFaculty.map(faculty => (
-                    <option key={faculty.id} value={faculty.name}>{faculty.name}</option>
+                  {faculty.map(fac => (
+                    <option key={fac.id} value={fac.id}>
+                      {fac.name} - {fac.department}
+                    </option>
                   ))}
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Room *</label>
-                <select
-                  value={newSlot.room}
+                <input
+                  type="text"
+                  value={newSlot.room || ''}
                   onChange={(e) => setNewSlot({...newSlot, room: e.target.value})}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Room</option>
-                  {dummyRooms.map(room => (
-                    <option key={room.id} value={room.name}>{room.name} ({room.type})</option>
-                  ))}
-                </select>
+                  placeholder="e.g., Room CSE-204"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Total Students</label>
+                <input
+                  type="number"
+                  value={newSlot.totalStudents || 60}
+                  onChange={(e) => setNewSlot({...newSlot, totalStudents: parseInt(e.target.value)})}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  min="1"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
                 <input
                   type="time"
-                  value={newSlot.startTime}
+                  value={newSlot.startTime || '09:00'}
                   onChange={(e) => setNewSlot({...newSlot, startTime: e.target.value})}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -609,86 +778,48 @@ const CollegeTimetableSystem = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">End Time</label>
                 <input
                   type="time"
-                  value={newSlot.endTime}
+                  value={newSlot.endTime || '10:00'}
                   onChange={(e) => setNewSlot({...newSlot, endTime: e.target.value})}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                <select
-                  value={newSlot.type}
-                  onChange={(e) => setNewSlot({...newSlot, type: e.target.value as any})}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="lecture">Lecture</option>
-                  <option value="lab">Lab</option>
-                  <option value="tutorial">Tutorial</option>
-                  <option value="break">Break</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
-                <select
-                  value={newSlot.department}
-                  onChange={(e) => setNewSlot({...newSlot, department: e.target.value})}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {departments.map(dept => (
-                    <option key={dept} value={dept}>{dept}</option>
+              <div className="md:col-span-2 lg:col-span-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Days *</label>
+                <div className="flex flex-wrap gap-2">
+                  {days.map(day => (
+                    <label key={day} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={newSlot.days?.includes(day) || false}
+                        onChange={(e) => {
+                          const currentDays = newSlot.days || [];
+                          if (e.target.checked) {
+                            setNewSlot({...newSlot, days: [...currentDays, day]});
+                          } else {
+                            setNewSlot({...newSlot, days: currentDays.filter(d => d !== day)});
+                          }
+                        }}
+                        className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      />
+                      <span className="text-sm text-gray-700">{day}</span>
+                    </label>
                   ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Semester</label>
-                <select
-                  value={newSlot.semester}
-                  onChange={(e) => setNewSlot({...newSlot, semester: Number(e.target.value)})}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {[1,2,3,4,5,6,7,8].map(sem => (
-                    <option key={sem} value={sem}>Semester {sem}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Section</label>
-                <select
-                  value={newSlot.section}
-                  onChange={(e) => setNewSlot({...newSlot, section: e.target.value})}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="A">Section A</option>
-                  <option value="B">Section B</option>
-                  <option value="C">Section C</option>
-                </select>
+                </div>
               </div>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 mt-6">
               <button
                 onClick={handleSaveSlot}
                 className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
               >
                 <Save size={20} />
-                Save Slot
+                Save Timetable
               </button>
               <button
-                onClick={() => {
-                  setNewSlot({
-                    startTime: '9:00',
-                    endTime: '10:00',
-                    subject: '',
-                    faculty: '',
-                    room: '',
-                    type: 'lecture',
-                    department: 'Computer Science',
-                    semester: 1,
-                    section: 'A'
-                  });
-                }}
+                onClick={resetForm}
                 className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 transition-colors"
               >
-                Reset
+                Reset Form
               </button>
             </div>
           </div>
@@ -703,26 +834,14 @@ const CollegeTimetableSystem = () => {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
                 <select
-                  value={generateParams.department}
-                  onChange={(e) => setGenerateParams({...generateParams, department: e.target.value})}
+                  value={generateParams.class}
+                  onChange={(e) => setGenerateParams({...generateParams, class: e.target.value})}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {departments.map(dept => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Semester</label>
-                <select
-                  value={generateParams.semester}
-                  onChange={(e) => setGenerateParams({...generateParams, semester: Number(e.target.value)})}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {[1,2,3,4,5,6,7,8].map(sem => (
-                    <option key={sem} value={sem}>Semester {sem}</option>
+                  {availableClasses.map(cls => (
+                    <option key={cls} value={cls}>{cls}</option>
                   ))}
                 </select>
               </div>
@@ -761,24 +880,54 @@ const CollegeTimetableSystem = () => {
                   <option value={8}>8 Hours</option>
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Faculty & Subject</label>
+                <select
+                  value={generateParams.faculty}
+                  onChange={(e) => setGenerateParams({...generateParams, faculty: e.target.value})}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Random Facult & Subject</option>
+                  <option value="Dr. Rajesh Kumar - Data Structures">Dr. Rajesh Kumar - Data Structures</option>
+                  <option value="Dr. Priya Sharma - Algorithms">Dr. Priya Sharma - Algorithms</option>
+                  <option value="Dr. Amit Patel - Computer Networks">Dr. Amit Patel - Computer Networks</option>
+                  <option value="Dr. Amit Verma - Digital Electronics">Dr. Amit Verma - Digital Electronics</option>
+                  <option value="Dr. Amit Verma - Microprocessors">Dr. Amit Verma - Microprocessors</option>
+                  <option value="Dr. Priya Singh - Signals & Systems">Dr. Priya Singh - Signals & Systems</option>
+                  <option value="Dr. Amit Verma - Database Systems">Dr. Priya Singh - Control Systems</option>
+                </select>
+              </div>
             </div>
             
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
               <h3 className="font-medium text-blue-800 mb-2">Generation Settings Preview</h3>
               <div className="text-sm text-blue-700">
-                <p>Department: <span className="font-medium">{generateParams.department}</span></p>
-                <p>Semester: <span className="font-medium">{generateParams.semester}</span></p>
+                <p>Class: <span className="font-medium">{generateParams.class}</span></p>
                 <p>Section: <span className="font-medium">{generateParams.section}</span></p>
                 <p>Schedule: <span className="font-medium">{generateParams.workingDays} days × {generateParams.hoursPerDay} hours</span></p>
+                <p>Available Faculty: <span className="font-medium">
+                  {faculty.filter(f => f.department.toLowerCase().includes(generateParams.class.toLowerCase().split(' ')[1])).length} members
+                </span></p>
               </div>
+            </div>
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <h3 className="font-medium text-yellow-800 mb-2">⚠️ Important Notes</h3>
+              <ul className="text-sm text-yellow-700 list-disc list-inside space-y-1">
+                <li>This will replace all existing timetable entries for the selected class and section</li>
+                <li>Faculty assignments are made automatically based on department matching</li>
+                <li>Lunch break (12:00-13:00) is automatically excluded</li>
+                <li>Room assignments are distributed across available classrooms</li>
+              </ul>
             </div>
 
             <button
               onClick={generateAutoTimetable}
-              className="bg-green-600 text-white px-8 py-3 rounded-md hover:bg-green-700 transition-colors flex items-center gap-2 text-lg"
+              disabled={loading}
+              className="bg-green-600 text-white px-8 py-3 rounded-md hover:bg-green-700 disabled:bg-gray-400 transition-colors flex items-center gap-2 text-lg"
             >
-              <RefreshCw size={24} />
-              Generate Complete Timetable
+              <RefreshCw size={24} className={loading ? 'animate-spin' : ''} />
+              {loading ? 'Generating...' : 'Generate Complete Timetable'}
             </button>
           </div>
         )}
@@ -786,14 +935,15 @@ const CollegeTimetableSystem = () => {
         {/* Modal for editing */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-90vh overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-90vh overflow-y-auto">
               <div className="p-6 border-b">
                 <h3 className="text-lg font-semibold flex items-center justify-between">
-                  {editingSlot ? 'Edit Time Slot' : 'Create Time Slot'}
+                  {editingSlot ? 'Edit Timetable Slot' : 'Create Timetable Slot'}
                   <button
                     onClick={() => {
                       setShowModal(false);
                       setEditingSlot(null);
+                      resetForm();
                     }}
                     className="text-gray-400 hover:text-gray-600"
                   >
@@ -805,61 +955,80 @@ const CollegeTimetableSystem = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
-                    <select
-                      value={newSlot.subject}
+                    <input
+                      type="text"
+                      value={newSlot.subject || ''}
                       onChange={(e) => setNewSlot({...newSlot, subject: e.target.value})}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter subject name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Class *</label>
+                    <select
+                      value={newSlot.class || ''}
+                      onChange={(e) => setNewSlot({...newSlot, class: e.target.value})}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="">Select Subject</option>
-                      {dummyCourses.map(course => (
-                        <option key={course.id} value={course.name}>{course.name}</option>
+                      <option value="">Select Class</option>
+                      {availableClasses.map(cls => (
+                        <option key={cls} value={cls}>{cls}</option>
                       ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Section *</label>
+                    <select
+                      value={newSlot.section || ''}
+                      onChange={(e) => setNewSlot({...newSlot, section: e.target.value})}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select Section</option>
+                      <option value="A">Section A</option>
+                      <option value="B">Section B</option>
+                      <option value="C">Section C</option>
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Faculty *</label>
                     <select
-                      value={newSlot.faculty}
-                      onChange={(e) => setNewSlot({...newSlot, faculty: e.target.value})}
+                      value={newSlot.facultyId || ''}
+                      onChange={(e) => setNewSlot({...newSlot, facultyId: e.target.value})}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Select Faculty</option>
-                      {dummyFaculty.map(faculty => (
-                        <option key={faculty.id} value={faculty.name}>{faculty.name}</option>
+                      {faculty.map(fac => (
+                        <option key={fac.id} value={fac.id}>
+                          {fac.name} - {fac.department}
+                        </option>
                       ))}
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Room *</label>
-                    <select
-                      value={newSlot.room}
+                    <input
+                      type="text"
+                      value={newSlot.room || ''}
                       onChange={(e) => setNewSlot({...newSlot, room: e.target.value})}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="">Select Room</option>
-                      {dummyRooms.map(room => (
-                        <option key={room.id} value={room.name}>{room.name}</option>
-                      ))}
-                    </select>
+                      placeholder="e.g., Room CSE-204"
+                    />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                    <select
-                      value={newSlot.type}
-                      onChange={(e) => setNewSlot({...newSlot, type: e.target.value as any})}
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Total Students</label>
+                    <input
+                      type="number"
+                      value={newSlot.totalStudents || 60}
+                      onChange={(e) => setNewSlot({...newSlot, totalStudents: parseInt(e.target.value)})}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="lecture">Lecture</option>
-                      <option value="lab">Lab</option>
-                      <option value="tutorial">Tutorial</option>
-                      <option value="break">Break</option>
-                    </select>
+                      min="1"
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
                     <input
                       type="time"
-                      value={newSlot.startTime}
+                      value={newSlot.startTime || '09:00'}
                       onChange={(e) => setNewSlot({...newSlot, startTime: e.target.value})}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
@@ -868,46 +1037,33 @@ const CollegeTimetableSystem = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">End Time</label>
                     <input
                       type="time"
-                      value={newSlot.endTime}
+                      value={newSlot.endTime || '10:00'}
                       onChange={(e) => setNewSlot({...newSlot, endTime: e.target.value})}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
-                    <select
-                      value={newSlot.department}
-                      onChange={(e) => setNewSlot({...newSlot, department: e.target.value})}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      {departments.map(dept => (
-                        <option key={dept} value={dept}>{dept}</option>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Days *</label>
+                    <div className="flex flex-wrap gap-2">
+                      {days.map(day => (
+                        <label key={day} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            checked={newSlot.days?.includes(day) || false}
+                            onChange={(e) => {
+                              const currentDays = newSlot.days || [];
+                              if (e.target.checked) {
+                                setNewSlot({...newSlot, days: [...currentDays, day]});
+                              } else {
+                                setNewSlot({...newSlot, days: currentDays.filter(d => d !== day)});
+                              }
+                            }}
+                            className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                          />
+                          <span className="text-sm text-gray-700">{day}</span>
+                        </label>
                       ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Semester</label>
-                    <select
-                      value={newSlot.semester}
-                      onChange={(e) => setNewSlot({...newSlot, semester: Number(e.target.value)})}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      {[1,2,3,4,5,6,7,8].map(sem => (
-                        <option key={sem} value={sem}>Semester {sem}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Section</label>
-                    <select
-                      value={newSlot.section}
-                      onChange={(e) => setNewSlot({...newSlot, section: e.target.value})}
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="A">Section A</option>
-                      <option value="B">Section B</option>
-                      <option value="C">Section C</option>
-                    </select>
+                    </div>
                   </div>
                 </div>
                 <div className="flex justify-end gap-4 mt-6">
@@ -915,6 +1071,7 @@ const CollegeTimetableSystem = () => {
                     onClick={() => {
                       setShowModal(false);
                       setEditingSlot(null);
+                      resetForm();
                     }}
                     className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
                   >
@@ -925,7 +1082,7 @@ const CollegeTimetableSystem = () => {
                     className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
                   >
                     <Save size={20} />
-                    {editingSlot ? 'Update' : 'Create'} Slot
+                    {editingSlot ? 'Update' : 'Create'} Timetable
                   </button>
                 </div>
               </div>
@@ -941,8 +1098,8 @@ const CollegeTimetableSystem = () => {
                 <BookOpen className="text-blue-600" size={24} />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">Total Courses</h3>
-                <p className="text-2xl font-bold text-blue-600">{dummyCourses.length}</p>
+                <h3 className="text-lg font-semibold text-gray-800">Total Subjects</h3>
+                <p className="text-2xl font-bold text-blue-600">{subjects.length}</p>
               </div>
             </div>
           </div>
@@ -953,7 +1110,7 @@ const CollegeTimetableSystem = () => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-800">Faculty</h3>
-                <p className="text-2xl font-bold text-green-600">{dummyFaculty.length}</p>
+                <p className="text-2xl font-bold text-green-600">{faculty.length}</p>
               </div>
             </div>
           </div>
@@ -962,20 +1119,20 @@ const CollegeTimetableSystem = () => {
               <div className="p-3 bg-purple-100 rounded-lg">
                 <Calendar className="text-purple-600" size={24} />
               </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">Rooms</h3>
-                <p className="text-2xl font-bold text-purple-600">{dummyRooms.length}</p>
-              </div>
-            </div>
+              {/* <div>
+                <h3 className="text-lg font-semibold text-gray-800">Students</h3>
+                <p className="text-2xl font-bold text-purple-600">{students.length}</p>
+              </div> */}
+            {/* </div>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-orange-100 rounded-lg">
                 <Clock className="text-orange-600" size={24} />
-              </div>
+              </div> */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">Departments</h3>
-                <p className="text-2xl font-bold text-orange-600">{departments.length}</p>
+                <h3 className="text-lg font-semibold text-gray-800">Timetables</h3>
+                <p className="text-2xl font-bold text-orange-600">{timetables.length}</p>
               </div>
             </div>
           </div>
@@ -986,7 +1143,7 @@ const CollegeTimetableSystem = () => {
           <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
           <div className="flex flex-wrap gap-4">
             <button
-              onClick={() => setTimetable(generateDummyTimetable())}
+              onClick={loadAllData}
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
               <RefreshCw size={20} />
@@ -1000,77 +1157,30 @@ const CollegeTimetableSystem = () => {
               Add New Slot
             </button>
             <button
-              onClick={exportTimetable}
+              onClick={() => setActiveTab('generate')}
               className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors flex items-center gap-2"
+            >
+              <RefreshCw size={20} />
+              Generate Timetable
+            </button>
+            <button
+              onClick={exportTimetable}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-2"
             >
               <Download size={20} />
               Export Timetable
             </button>
             <button
               onClick={() => {
-                setSelectedDepartment('All');
-                setSelectedSemester(0);
+                setSelectedClass('All');
                 setSelectedSection('All');
+                setSelectedSubject('All');
                 setSearchTerm('');
               }}
               className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
             >
               Clear Filters
             </button>
-          </div>
-        </div>
-
-        {/* Resource Lists */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-          {/* Courses List */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <BookOpen className="text-blue-600" />
-              Available Courses
-            </h3>
-            <div className="max-h-64 overflow-y-auto space-y-2">
-              {dummyCourses.slice(0, 10).map(course => (
-                <div key={course.id} className="p-3 bg-gray-50 rounded-lg">
-                  <div className="font-medium text-gray-800">{course.name}</div>
-                  <div className="text-sm text-gray-600">{course.code} - {course.department}</div>
-                  <div className="text-xs text-blue-600">{course.credits} Credits</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Faculty List */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Users className="text-green-600" />
-              Faculty Members
-            </h3>
-            <div className="max-h-64 overflow-y-auto space-y-2">
-              {dummyFaculty.slice(0, 10).map(faculty => (
-                <div key={faculty.id} className="p-3 bg-gray-50 rounded-lg">
-                  <div className="font-medium text-gray-800">{faculty.name}</div>
-                  <div className="text-sm text-gray-600">{faculty.department}</div>
-                  <div className="text-xs text-green-600">{faculty.specialization}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Rooms List */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Calendar className="text-purple-600" />
-              Available Rooms
-            </h3>
-            <div className="max-h-64 overflow-y-auto space-y-2">
-              {dummyRooms.slice(0, 10).map(room => (
-                <div key={room.id} className="p-3 bg-gray-50 rounded-lg">
-                  <div className="font-medium text-gray-800">{room.name}</div>
-                  <div className="text-sm text-gray-600">{room.building}</div>
-                  <div className="text-xs text-purple-600 capitalize">{room.type} - {room.capacity} seats</div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>

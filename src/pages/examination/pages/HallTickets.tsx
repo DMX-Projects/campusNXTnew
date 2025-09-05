@@ -300,6 +300,200 @@ const Modal = ({ isOpen, onClose, title, children, size = 'max-w-2xl' }) => {
   );
 };
 
+// Email Modal Component
+const EmailModal = ({ isOpen, onClose, tickets }) => {
+  const [emailData, setEmailData] = useState({
+    recipients: 'students', // 'students' or 'custom'
+    customEmails: '',
+    subject: `Hall Ticket - ${tickets[0]?.examSessionId || 'Examination'}`,
+    message: `Dear Student,\n\nYour hall ticket for the upcoming examination is attached to this email.\n\nPlease download and print your hall ticket. Bring it along with a valid ID proof to the examination center.\n\nImportant Instructions:\n- Report to the examination center 30 minutes before the exam time\n- Mobile phones are strictly prohibited\n- Follow all examination rules\n\nBest regards,\nExamination Department`,
+    includeAttachment: true,
+    sendIndividually: true
+  });
+  
+  const [sending, setSending] = useState(false);
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+    setSending(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    setSending(false);
+    onClose();
+    
+    // Show success message
+    alert(`Emails sent successfully to ${tickets.length} recipients!`);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <Modal isOpen={true} onClose={onClose} title="Send Hall Tickets via Email" size="max-w-3xl">
+      <form onSubmit={handleSend}>
+        <div className="p-6 space-y-6">
+          {/* Email Recipients */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Email Recipients</h3>
+            <div className="space-y-3">
+              <label className="flex items-center space-x-3">
+                <input
+                  type="radio"
+                  name="recipients"
+                  value="students"
+                  checked={emailData.recipients === 'students'}
+                  onChange={(e) => setEmailData({...emailData, recipients: e.target.value})}
+                  className="h-4 w-4 text-blue-600"
+                />
+                <span className="text-sm text-gray-700">
+                  Send to student email addresses ({tickets.length} students)
+                </span>
+              </label>
+              
+              <label className="flex items-center space-x-3">
+                <input
+                  type="radio"
+                  name="recipients"
+                  value="custom"
+                  checked={emailData.recipients === 'custom'}
+                  onChange={(e) => setEmailData({...emailData, recipients: e.target.value})}
+                  className="h-4 w-4 text-blue-600"
+                />
+                <span className="text-sm text-gray-700">Send to custom email addresses</span>
+              </label>
+              
+              {emailData.recipients === 'custom' && (
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Addresses (comma separated)
+                  </label>
+                  <textarea
+                    value={emailData.customEmails}
+                    onChange={(e) => setEmailData({...emailData, customEmails: e.target.value})}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows={3}
+                    placeholder="email1@example.com, email2@example.com, ..."
+                    required={emailData.recipients === 'custom'}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Email Subject */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Email Subject *
+            </label>
+            <input
+              type="text"
+              value={emailData.subject}
+              onChange={(e) => setEmailData({...emailData, subject: e.target.value})}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Email Message */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Email Message *
+            </label>
+            <textarea
+              value={emailData.message}
+              onChange={(e) => setEmailData({...emailData, message: e.target.value})}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={8}
+              required
+            />
+          </div>
+
+          {/* Options */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Email Options</h3>
+            <div className="space-y-3">
+              <label className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  checked={emailData.includeAttachment}
+                  onChange={(e) => setEmailData({...emailData, includeAttachment: e.target.checked})}
+                  className="h-4 w-4 text-blue-600 rounded"
+                />
+                <span className="text-sm text-gray-700">Include hall ticket as PDF attachment</span>
+              </label>
+              
+              <label className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  checked={emailData.sendIndividually}
+                  onChange={(e) => setEmailData({...emailData, sendIndividually: e.target.checked})}
+                  className="h-4 w-4 text-blue-600 rounded"
+                />
+                <span className="text-sm text-gray-700">Send individual emails to each student</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Preview */}
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-medium text-gray-900 mb-2">Email Preview</h4>
+            <div className="text-sm space-y-2">
+              <div>
+                <span className="font-medium text-gray-600">To:</span> 
+                <span className="ml-2">
+                  {emailData.recipients === 'students' 
+                    ? `${tickets.length} student email addresses`
+                    : emailData.customEmails || 'Custom email addresses'
+                  }
+                </span>
+              </div>
+              <div>
+                <span className="font-medium text-gray-600">Subject:</span> 
+                <span className="ml-2">{emailData.subject}</span>
+              </div>
+              <div>
+                <span className="font-medium text-gray-600">Attachment:</span> 
+                <span className="ml-2">
+                  {emailData.includeAttachment ? 'Hall ticket PDF attached' : 'No attachment'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="p-6 border-t border-gray-200 flex justify-end space-x-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={sending}
+            className="px-6 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors flex items-center space-x-2 disabled:opacity-50"
+          >
+            {sending ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Sending...</span>
+              </>
+            ) : (
+              <>
+                <Mail className="h-4 w-4" />
+                <span>Send Emails</span>
+              </>
+            )}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  );
+};
+
 // Delete Confirmation Modal
 const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, ticket }) => {
   if (!isOpen) return null;
@@ -1348,6 +1542,7 @@ const HallTicketManagement = () => {
   const [deletingTicket, setDeletingTicket] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
 
   // Filter hall tickets based on search and filters
   useEffect(() => {
@@ -1545,8 +1740,6 @@ const HallTicketManagement = () => {
                   <Filter className="h-4 w-4" />
                   <span>Filters</span>
                 </button>
-                
-                
                 
                 <button
                   onClick={() => setShowGenerateForm(true)}
@@ -1772,7 +1965,7 @@ const HallTicketManagement = () => {
 
         {/* Bulk Actions */}
         {filteredTickets.length > 0 && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mt-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Bulk Actions</h3>
             <div className="flex flex-wrap gap-3">
               <button
@@ -1794,18 +1987,11 @@ const HallTicketManagement = () => {
               </button>
               
               <button
+                onClick={() => setShowEmailModal(true)}
                 className="px-4 py-2 bg-purple-600 text-white hover:bg-purple-700 rounded-lg transition-colors flex items-center space-x-2"
               >
                 <Mail className="h-4 w-4" />
                 <span>Send via Email</span>
-              </button>
-              
-              <button
-                
-                className="px-4 py-2 bg-orange-600 text-white hover:bg-orange-700 rounded-lg transition-colors flex items-center space-x-2"
-              >
-                <RefreshCw className="h-4 w-4" />
-                <span>Regenerate Selected</span>
               </button>
             </div>
           </div>
@@ -1841,6 +2027,14 @@ const HallTicketManagement = () => {
           onClose={() => setDeletingTicket(null)}
           onConfirm={confirmDelete}
           ticket={deletingTicket}
+        />
+      )}
+
+      {showEmailModal && (
+        <EmailModal
+          isOpen={true}
+          onClose={() => setShowEmailModal(false)}
+          tickets={filteredTickets}
         />
       )}
     </div>

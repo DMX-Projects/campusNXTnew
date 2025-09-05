@@ -127,8 +127,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
       <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 via-purple-500 to-green-500 rounded-md flex items-center justify-center">
-              <School className="w-3 h-3 text-white" />
+            <div className="w-6 h-6 flex items-center justify-center">
+              <img 
+                src="/2(B)Without_Text_Transparent.png" 
+                alt="AICAS Logo" 
+                className="w-6 h-6 object-contain"
+              />
             </div>
             <div>
               <span className="font-bold text-gray-900 dark:text-white text-xs">AICAS</span>

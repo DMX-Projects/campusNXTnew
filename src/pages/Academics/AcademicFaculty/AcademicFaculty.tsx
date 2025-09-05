@@ -635,14 +635,17 @@ const FacultyManagement = () => {
           <div className="flex items-center justify-between h-16">
             <h1 className="text-2xl font-bold text-gray-900">Faculty Management</h1>
             <div className="flex space-x-4">
-              <button className="flex items-center px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200">
+              {/* <button onClick={() => {}} className="flex items-center px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200">
                 <Upload className="w-4 h-4 mr-2" />
                 Import
               </button>
-              <button className="flex items-center px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200">
+              <button onClick={() => {}} className="flex items-center px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200">
                 <Download className="w-4 h-4 mr-2" />
                 Export
-              </button>
+              </button> */}
+
+              
+              
               <button 
                 onClick={() => openModal('add')}
                 className="flex items-center px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
@@ -736,3 +739,4 @@ const FacultyManagement = () => {
 };
 
 export default FacultyManagement;
+
