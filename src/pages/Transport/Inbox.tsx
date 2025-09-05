@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Clock, AlertCircle, CheckCircle, X, Send, Paperclip, Image, Trash2, Atom } from 'lucide-react';
 
 // Mock data with college and matter transportation themes
@@ -168,7 +168,7 @@ const sentMessages = [
   }
 ];
 
-function MessageDetail({ message, onClose }) {
+function MessageDetail({ message, onClose, onReply }) {
   const getFullContent = (msg) => {
     const contentMap = {
       1: `Dear Students,
@@ -363,7 +363,10 @@ Starfleet Academy Safety Division`
             >
               Close
             </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button 
+              onClick={() => onReply(message)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
               Reply
             </button>
           </div>
@@ -373,7 +376,7 @@ Starfleet Academy Safety Division`
   );
 }
 
-function ComposeMail({ isOpen, onClose, onSend }) {
+function ComposeMail({ isOpen, onClose, onSend, replyTo = null }) {
   const [formData, setFormData] = useState({
     to: '',
     subject: '',
@@ -382,6 +385,20 @@ function ComposeMail({ isOpen, onClose, onSend }) {
   });
 
   const [attachments, setAttachments] = useState([]);
+
+  // Pre-populate form when replying
+  useEffect(() => {
+    if (replyTo) {
+      setFormData({
+        to: replyTo.from || replyTo.to || '',
+        subject: replyTo.subject.startsWith('Re: ') ? replyTo.subject : `Re: ${replyTo.subject}`,
+        message: `\n\n--- Original Message ---\nFrom: ${replyTo.from || replyTo.to}\nDate: ${replyTo.date}\nSubject: ${replyTo.subject}\n\n${replyTo.preview}`,
+        priority: 'medium'
+      });
+    } else {
+      setFormData({ to: '', subject: '', message: '', priority: 'medium' });
+    }
+  }, [replyTo]);
 
   const handleSubmit = () => {
     if (!formData.to || !formData.subject || !formData.message) {
@@ -472,7 +489,9 @@ function ComposeMail({ isOpen, onClose, onSend }) {
     <div style={overlayStyle}>
       <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-4 max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">Compose Message</h2>
+          <h2 className="text-lg font-semibold text-gray-800">
+            {replyTo ? 'Reply to Message' : 'Compose Message'}
+          </h2>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -620,6 +639,7 @@ export default function Mailbox() {
   const [inboxMessageList, setInboxMessageList] = useState(inboxMessages);
   const [sentMessageList, setSentMessageList] = useState(sentMessages);
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const [replyToMessage, setReplyToMessage] = useState(null);
 
   const priorityColors = {
     high: 'text-red-600 bg-red-50',
@@ -649,6 +669,9 @@ export default function Mailbox() {
       ? ` with ${messageData.attachments.length} attachment(s)` 
       : '';
     alert(`Message sent to ${messageData.to} with subject: ${messageData.subject}${attachmentText}`);
+    
+    // Clear reply state
+    setReplyToMessage(null);
   };
 
   const handleMessageClick = (message) => {
@@ -662,6 +685,17 @@ export default function Mailbox() {
     setSelectedMessage(message);
   };
 
+  const handleReply = (message) => {
+    setReplyToMessage(message);
+    setSelectedMessage(null); // Close the message detail
+    setIsComposeOpen(true); // Open compose window
+  };
+
+  const handleComposeClick = () => {
+    setReplyToMessage(null); // Clear any reply state
+    setIsComposeOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen">
@@ -673,7 +707,7 @@ export default function Mailbox() {
             </div>
             
             <button 
-              onClick={() => setIsComposeOpen(true)}
+              onClick={handleComposeClick}
               className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors mb-6 flex items-center justify-center space-x-2"
             >
               <Send className="w-4 h-4" />
@@ -806,14 +840,19 @@ export default function Mailbox() {
 
       <ComposeMail 
         isOpen={isComposeOpen}
-        onClose={() => setIsComposeOpen(false)}
+        onClose={() => {
+          setIsComposeOpen(false);
+          setReplyToMessage(null);
+        }}
         onSend={handleSendMessage}
+        replyTo={replyToMessage}
       />
       
       {selectedMessage && (
         <MessageDetail
           message={selectedMessage}
           onClose={() => setSelectedMessage(null)}
+          onReply={handleReply}
         />
       )}
     </div>
