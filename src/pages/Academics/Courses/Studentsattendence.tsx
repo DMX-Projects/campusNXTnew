@@ -236,23 +236,9 @@ const StudentsAttendance: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <Users className="w-6 h-6 text-blue-600" />
-                Student Attendance Dashboard
-              </h1>
-              <p className="text-gray-600 mt-1">View and monitor student attendance records</p>
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-500">
-              <Calendar className="w-4 h-4" />
-              {new Date(filters.date).toLocaleDateString('en-IN')}
-            </div>
-          </div>
-        </div>
+        
 
         {/* Debug Info (remove in production) */}
         {/* <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">

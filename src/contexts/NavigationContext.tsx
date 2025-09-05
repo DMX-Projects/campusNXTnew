@@ -438,7 +438,7 @@ const SIDEBAR_ITEMS = {
     'Student': [
       { name: 'Mail', path: '/lms/student/mail', icon: 'Mail' },
       { name: 'Time Table', path: '/lms/student/time-table', icon: 'Calendar' },
-      { name: 'Attendance', path: '/lms/student/attendance', icon: 'CheckCircle' },
+      
       { name: 'Study Material', path: '/lms/student/study-material', icon: 'FolderOpen' },
       { name: 'Semester Prep', path: '/lms/student/semester-prep', icon: 'BookOpen' },
       { name: 'Projects', path: '/lms/student/projects', icon: 'Briefcase' },

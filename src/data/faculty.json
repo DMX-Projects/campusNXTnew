@@ -2,10 +2,10 @@
   "faculty": [
     {
       "id": "FAC001",
-      "name": "Prof. Emily Davis",
+      "name": "Prof. Rajesh Kumar",
       "department": "Computer Science",
       "designation": "Associate Professor",
-      "email": "emily.davis@college.edu",
+      "email": "rajesh.kumar@college.edu",
       "phone": "+1234567800",
       "subjects": ["Data Structures", "Algorithms", "Database Systems"],
       "experience": 8,
