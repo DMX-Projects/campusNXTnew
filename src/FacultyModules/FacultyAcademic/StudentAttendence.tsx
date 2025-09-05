@@ -82,62 +82,108 @@ const FacultyStudentAttendance: React.FC = () => {
   const currentDate = new Date().toISOString().split('T')[0];
   const currentTime = new Date().toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5);
   const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const getNextClassDate = (timetable: Timetable, currentDate: string): string | null => {
+  const today = new Date(currentDate);
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  
+  // Find the next occurrence of any scheduled day
+  for (let i = 1; i <= 7; i++) {
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + i);
+    const nextDayName = daysOfWeek[nextDate.getDay()];
+    
+    if (timetable.days.includes(nextDayName)) {
+      return nextDate.toISOString().split('T')[0];
+    }
+  }
+  
+  return null;
+};
 
   // Check if faculty can take attendance for the selected timetable and date
-  const canTakeAttendance = useMemo(() => {
-    if (!selectedTimetable) return { allowed: false, message: 'No timetable selected' };
+ const canTakeAttendance = useMemo(() => {
+  if (!selectedTimetable) return { allowed: false, message: 'No timetable selected' };
 
-    const selectedDateObj = new Date(selectedDate);
-    const currentDateObj = new Date(currentDate);
-    const selectedDay = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long' });
+  const selectedDateObj = new Date(selectedDate);
+  const currentDateObj = new Date(currentDate);
+  const selectedDay = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long' });
 
-    // Check if it's a past date
-    if (selectedDateObj < currentDateObj) {
-      return { 
-        allowed: false, 
-        message: 'You cannot take attendance for past lectures. Please select today\'s date.' 
-      };
-    }
+  // Check if it's a past date
+  if (selectedDateObj < currentDateObj) {
+    const nextClassDate = getNextClassDate(selectedTimetable, currentDate);
+    const nextClassFormatted = nextClassDate 
+      ? new Date(nextClassDate).toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })
+      : 'next scheduled day';
+    
+    return { 
+      allowed: false, 
+      message: `You cannot take attendance for past lectures. Your next class is on ${nextClassFormatted}.` 
+    };
+  }
 
-    // Check if it's a future date
-    if (selectedDateObj > currentDateObj) {
-      return { 
-        allowed: false, 
-        message: 'You cannot take attendance for future lectures. Attendance can only be marked for current lectures.' 
-      };
-    }
+  // Check if it's a future date
+  if (selectedDateObj > currentDateObj) {
+    return { 
+      allowed: false, 
+      message: 'You cannot take attendance for future lectures. Attendance can only be marked for current lectures.' 
+    };
+  }
 
-    // Check if today is a scheduled day for this subject
-    if (!selectedTimetable.days.includes(selectedDay)) {
-      return { 
-        allowed: false, 
-        message: `This subject is not scheduled for ${selectedDay}. Scheduled days: ${selectedTimetable.days.join(', ')}.` 
-      };
-    }
+  // Check if today is a scheduled day for this subject
+  if (!selectedTimetable.days.includes(selectedDay)) {
+    const nextClassDate = getNextClassDate(selectedTimetable, currentDate);
+    const nextClassFormatted = nextClassDate 
+      ? new Date(nextClassDate).toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })
+      : 'next scheduled day';
 
-    // Check if current time is within the lecture time window (with 15 minutes buffer)
-    const lectureStart = selectedTimetable.startTime;
-    const lectureEnd = selectedTimetable.endTime;
-    const bufferMinutes = 15;
+    return { 
+      allowed: false, 
+      message: `This subject is not scheduled for ${selectedDay}. Your next class is on ${nextClassFormatted}.` 
+    };
+  }
 
-    const startTime = new Date(`2000-01-01T${lectureStart}:00`);
-    const endTime = new Date(`2000-01-01T${lectureEnd}:00`);
-    const currentTimeObj = new Date(`2000-01-01T${currentTime}:00`);
+  // Check if current time is within the lecture time window (with 15 minutes buffer)
+  const lectureStart = selectedTimetable.startTime;
+  const lectureEnd = selectedTimetable.endTime;
+  const bufferMinutes = 15;
 
-    // Add buffer time
-    startTime.setMinutes(startTime.getMinutes() - bufferMinutes);
-    endTime.setMinutes(endTime.getMinutes() + bufferMinutes);
+  const startTime = new Date(`2000-01-01T${lectureStart}:00`);
+  const endTime = new Date(`2000-01-01T${lectureEnd}:00`);
+  const currentTimeObj = new Date(`2000-01-01T${currentTime}:00`);
 
-    if (currentTimeObj < startTime || currentTimeObj > endTime) {
-      return { 
-        allowed: false, 
-        message: `Attendance can only be taken during lecture time (${selectedTimetable.startTime} - ${selectedTimetable.endTime}) with a 15-minute buffer. Current time: ${currentTime}.` 
-      };
-    }
+  // Add buffer time
+  startTime.setMinutes(startTime.getMinutes() - bufferMinutes);
+  endTime.setMinutes(endTime.getMinutes() + bufferMinutes);
 
-    return { allowed: true, message: '' };
-  }, [selectedTimetable, selectedDate, currentDate, currentTime, currentDay]);
+  if (currentTimeObj < startTime || currentTimeObj > endTime) {
+    const nextClassDate = getNextClassDate(selectedTimetable, currentDate);
+    const nextClassFormatted = nextClassDate 
+      ? new Date(nextClassDate).toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })
+      : 'next scheduled day';
 
+    return { 
+      allowed: false, 
+      message: `Attendance can only be taken during lecture time (${selectedTimetable.startTime} - ${selectedTimetable.endTime}) with a 15-minute buffer. Current time: ${currentTime}. Your next class is on ${nextClassFormatted}.` 
+    };
+  }
+
+  return { allowed: true, message: '' };
+}, [selectedTimetable, selectedDate, currentDate, currentTime, currentDay]);
   // Show popup message
   const showMessage = (message: string, type: 'error' | 'success' | 'warning') => {
     setPopupMessage(message);
@@ -330,15 +376,29 @@ const FacultyStudentAttendance: React.FC = () => {
 
   // Bulk mark attendance
   const bulkMarkAttendance = async (status: 'Present' | 'Absent') => {
-    if (!canTakeAttendance.allowed) {
-      showMessage(canTakeAttendance.message, 'warning');
-      return;
-    }
+  if (!canTakeAttendance.allowed) {
+    showMessage(canTakeAttendance.message, 'warning');
+    return;
+  }
 
-    for (const student of filteredStudents) {
-      await markAttendance(student.id, status);
-    }
-  };
+  // Filter out students who are already on leave
+  const studentsToUpdate = filteredStudents.filter(student => {
+    const currentStatus = getAttendanceStatus(student.id);
+    return currentStatus !== 'Leave';
+  });
+
+  for (const student of studentsToUpdate) {
+    await markAttendance(student.id, status);
+  }
+
+  // Show message about preserved leave statuses if any
+  const leaveStudents = filteredStudents.filter(student => {
+    const currentStatus = getAttendanceStatus(student.id);
+    return currentStatus === 'Leave';
+  });
+
+  
+};
 
   // Get student attendance status
   const getAttendanceStatus = (studentId: string) => {
@@ -568,22 +628,26 @@ const FacultyStudentAttendance: React.FC = () => {
           </div>
 
           {viewMode === 'mark' && (
-            <div className="flex gap-2">
+           <div className="flex gap-2">
               <button
                 onClick={() => bulkMarkAttendance('Present')}
                 disabled={!canTakeAttendance.allowed}
                 className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Will not affect students already marked as Leave"
               >
                 <Check className="w-4 h-4" />
                 All Present
+                <span className="text-xs opacity-75">(excl. Leave)</span>
               </button>
               <button
                 onClick={() => bulkMarkAttendance('Absent')}
                 disabled={!canTakeAttendance.allowed}
                 className="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Will not affect students already marked as Leave"
               >
                 <X className="w-4 h-4" />
                 All Absent
+                <span className="text-xs opacity-75">(excl. Leave)</span>
               </button>
               <button
                 onClick={submitAttendance}

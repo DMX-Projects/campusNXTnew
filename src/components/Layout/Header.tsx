@@ -109,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
           {/* Right Section */}
           <div className="flex items-center space-x-2">
             {/* Theme Toggle */}
-            <button
+            {/* <button
               onClick={toggleTheme}
               className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
@@ -117,7 +117,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
                 <Sun className="w-4 h-4 text-yellow-500" /> : 
                 <Moon className="w-4 h-4 text-gray-600" />
               }
-            </button>
+            </button> */}
 
             {/* Notifications */}
             <button className="relative p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
