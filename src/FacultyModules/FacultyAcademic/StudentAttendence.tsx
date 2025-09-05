@@ -443,7 +443,7 @@ const FacultyStudentAttendance: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="mx-auto p-6 bg-gray-50 min-h-screen">
       {/* Popup Message */}
       {showPopup && (
         <div className="fixed top-4 right-4 z-50 max-w-md">

@@ -1,6 +1,5 @@
 {
   "timetables": [
-   
     {
       "id": "tt1",
       "subject": "Data Structures",
@@ -11,8 +10,12 @@
       "room": "Room CSE-204",
       "totalStudents": 60,
       "startTime": "10:00",
-      "endTime": "11:00",
-      "days": ["Monday", "Wednesday", "Friday"]
+      "endTime": "10:01",
+      "days": [
+        "Monday",
+        "Wednesday",
+        "Friday"
+      ]
     },
     {
       "id": "tt2",
@@ -23,9 +26,13 @@
       "schedule": "Tue, Thu - 11:00 AM",
       "room": "Room CSE-205",
       "totalStudents": 58,
-      "startTime": "11:00",
+      "startTime": "10:30",
       "endTime": "12:00",
-      "days": ["Tuesday", "Thursday"]
+      "days": [
+        "Tuesday",
+        "Thursday",
+        "Friday"
+      ]
     },
     {
       "id": "tt3",
@@ -38,7 +45,10 @@
       "totalStudents": 55,
       "startTime": "14:00",
       "endTime": "15:00",
-      "days": ["Monday", "Wednesday"]
+      "days": [
+        "Monday",
+        "Wednesday"
+      ]
     },
     {
       "id": "tt4",
@@ -51,10 +61,11 @@
       "totalStudents": 60,
       "startTime": "15:00",
       "endTime": "16:00",
-      "days": ["Tuesday", "Friday"]
+      "days": [
+        "Tuesday",
+        "Friday"
+      ]
     },
-
-   
     {
       "id": "tt5",
       "subject": "Digital Electronics",
@@ -66,7 +77,10 @@
       "totalStudents": 50,
       "startTime": "09:00",
       "endTime": "10:00",
-      "days": ["Monday", "Wednesday"]
+      "days": [
+        "Monday",
+        "Wednesday"
+      ]
     },
     {
       "id": "tt6",
@@ -79,10 +93,10 @@
       "totalStudents": 48,
       "startTime": "11:00",
       "endTime": "12:00",
-      "days": ["Thursday"]
+      "days": [
+        "Thursday"
+      ]
     },
-
-    
     {
       "id": "tt7",
       "subject": "Thermodynamics",
@@ -94,7 +108,10 @@
       "totalStudents": 52,
       "startTime": "10:00",
       "endTime": "11:00",
-      "days": ["Tuesday", "Thursday"]
+      "days": [
+        "Tuesday",
+        "Thursday"
+      ]
     },
     {
       "id": "tt8",
@@ -107,12 +124,12 @@
       "totalStudents": 46,
       "startTime": "14:00",
       "endTime": "15:00",
-      "days": ["Friday"]
+      "days": [
+        "Friday"
+      ]
     }
   ],
-
   "students": [
-   
     {
       "id": "1",
       "name": "Arjun Kumar",
@@ -140,8 +157,6 @@
       "email": "rahul@college.edu",
       "phone": "9876512345"
     },
-
-
     {
       "id": "11",
       "name": "Pooja Mehta",
@@ -160,8 +175,6 @@
       "email": "sandeep@college.edu",
       "phone": "9876612233"
     },
-
-   
     {
       "id": "21",
       "name": "Manoj Patil",
@@ -181,7 +194,7 @@
       "phone": "9876714455"
     }
   ],
-"users": [
+  "users": [
     {
       "id": "FAC001",
       "name": "Dr. Rajesh Kumar",
@@ -189,10 +202,14 @@
       "department": "Computer Science & Engineering",
       "designation": "Assistant Professor",
       "email": "rajesh.kumar@college.edu",
-      "subjects": ["Data Structures", "Algorithms", "Database Systems", "Computer Networks"]
+      "subjects": [
+        "Data Structures",
+        "Algorithms",
+        "Database Systems",
+        "Computer Networks"
+      ]
     }
-
-],
+  ],
   "attendance": [
     {
       "studentId": "1",
@@ -204,6 +221,17 @@
       "markedAt": "2025-09-04T12:27:26.682Z",
       "location": "Classroom",
       "id": "1455"
+    },
+    {
+      "id": "8779",
+      "studentId": "1",
+      "date": "2025-09-05",
+      "subject": "Data Structures",
+      "class": "BTech CSE",
+      "section": "A",
+      "status": "Absent",
+      "markedAt": "2025-09-05T04:29:46.182Z",
+      "location": "Classroom"
     }
   ]
 }

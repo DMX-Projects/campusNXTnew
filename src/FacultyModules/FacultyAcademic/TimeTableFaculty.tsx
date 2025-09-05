@@ -1,5 +1,5 @@
- // FacultyTimetable.tsx - Updated Version
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Calendar, 
   Clock, 
@@ -17,8 +17,23 @@ import {
   Eye,
   CheckCircle,
   AlertCircle,
-  Printer
+  Printer,
+  UserCheck
 } from 'lucide-react';
+
+interface TimetableEntry {
+  id: string;
+  subject: string;
+  class: string;
+  section: string;
+  facultyId: string;
+  schedule: string;
+  room: string;
+  totalStudents: number;
+  startTime: string;
+  endTime: string;
+  days: string[];
+}
 
 interface ClassSchedule {
   id: string;
@@ -45,7 +60,23 @@ interface TimePreference {
   avoidSlots: string[];
 }
 
+interface AttendanceRecord {
+  id?: string;
+  studentId: string;
+  date: string;
+  subject: string;
+  class: string;
+  section: string;
+  status: 'Present' | 'Absent' | 'Leave';
+  markedAt: string;
+  location?: string;
+}
+
+const API_BASE_URL = 'http://localhost:3001';
+
 const FacultyTimetable: React.FC = () => {
+  const navigate = useNavigate();
+  
   // Faculty Information
   const facultyInfo = {
     name: 'Dr. Rajesh Kumar',
@@ -60,108 +91,14 @@ const FacultyTimetable: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState('Monday');
   const [showPreferences, setShowPreferences] = useState(false);
   const [showChangeRequest, setShowChangeRequest] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Faculty's Personal Timetable (Read-Only)
-  const [timetable] = useState<ClassSchedule[]>([
-    {
-      id: '1',
-      subject: 'Data Structures and Algorithms',
-      subjectCode: 'CS301',
-      class: 'BTech CSE',
-      section: 'A',
-      day: 'Monday',
-      startTime: '09:00',
-      endTime: '10:00',
-      room: 'Room 204',
-      type: 'Lecture',
-      duration: 60,
-      studentsCount: 60,
-      semester: '3rd Semester',
-      status: 'scheduled'
-    },
-    {
-      id: '2',
-      subject: 'Data Structures and Algorithms',
-      subjectCode: 'CS301',
-      class: 'BTech CSE',
-      section: 'A',
-      day: 'Wednesday',
-      startTime: '09:00',
-      endTime: '10:00',
-      room: 'Room 204',
-      type: 'Lecture',
-      duration: 60,
-      studentsCount: 60,
-      semester: '3rd Semester',
-      status: 'scheduled'
-    },
-    {
-      id: '3',
-      subject: 'Algorithm Analysis',
-      subjectCode: 'CS302',
-      class: 'BTech CSE',
-      section: 'B',
-      day: 'Tuesday',
-      startTime: '10:30',
-      endTime: '11:30',
-      room: 'Room 205',
-      type: 'Lecture',
-      duration: 60,
-      studentsCount: 58,
-      semester: '3rd Semester',
-      status: 'scheduled'
-    },
-    {
-      id: '4',
-      subject: 'Database Systems Lab',
-      subjectCode: 'CS303L',
-      class: 'BTech CSE',
-      section: 'A',
-      day: 'Thursday',
-      startTime: '14:00',
-      endTime: '16:00',
-      room: 'Lab 301',
-      type: 'Lab',
-      duration: 120,
-      studentsCount: 30,
-      semester: '3rd Semester',
-      status: 'scheduled'
-    },
-    {
-      id: '5',
-      subject: 'Software Engineering Tutorial',
-      subjectCode: 'CS304T',
-      class: 'BTech CSE',
-      section: 'A',
-      day: 'Friday',
-      startTime: '11:00',
-      endTime: '12:00',
-      room: 'Room 206',
-      type: 'Tutorial',
-      duration: 60,
-      studentsCount: 60,
-      semester: '3rd Semester',
-      status: 'scheduled'
-    },
-    {
-      id: '6',
-      subject: 'Machine Learning Seminar',
-      subjectCode: 'CS401',
-      class: 'BTech CSE',
-      section: 'A',
-      day: 'Friday',
-      startTime: '15:00',
-      endTime: '16:00',
-      room: 'Virtual',
-      type: 'Seminar',
-      duration: 60,
-      studentsCount: 45,
-      semester: '4th Semester',
-      isOnline: true,
-      meetingLink: 'https://meet.google.com/abc-def-ghi',
-      status: 'scheduled'
-    }
-  ]);
+  // Dynamic State
+  const [timetable, setTimetable] = useState<ClassSchedule[]>([]);
+  const [rawTimetable, setRawTimetable] = useState<TimetableEntry[]>([]);
+  const [students, setStudents] = useState([]);
+  const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
 
   // Time Preferences State
   const [timePreferences, setTimePreferences] = useState<TimePreference[]>([
@@ -178,6 +115,105 @@ const FacultyTimetable: React.FC = () => {
     preferredTime: '',
     comments: ''
   });
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch timetables for current faculty
+        const timetableResponse = await fetch(`${API_BASE_URL}/timetables?facultyId=${facultyInfo.employeeId}`);
+        if (!timetableResponse.ok) throw new Error('Failed to fetch timetables');
+        const timetableData = await timetableResponse.json();
+        setRawTimetable(timetableData);
+
+        // Transform API data to match component structure
+        const transformedTimetable: ClassSchedule[] = [];
+        
+        timetableData.forEach((entry: TimetableEntry) => {
+          entry.days.forEach(day => {
+            transformedTimetable.push({
+              id: `${entry.id}-${day}`,
+              subject: entry.subject,
+              subjectCode: entry.id,
+              class: entry.class,
+              section: entry.section,
+              day: day as any,
+              startTime: entry.startTime,
+              endTime: entry.endTime,
+              room: entry.room,
+              type: 'Lecture', // Default type
+              duration: calculateDuration(entry.startTime, entry.endTime),
+              studentsCount: entry.totalStudents,
+              semester: '3rd Semester', // Default semester
+              status: 'scheduled'
+            });
+          });
+        });
+
+        setTimetable(transformedTimetable);
+
+        // Fetch students
+        const studentsResponse = await fetch(`${API_BASE_URL}/students`);
+        if (studentsResponse.ok) {
+          const studentsData = await studentsResponse.json();
+          setStudents(studentsData);
+        }
+
+        // Fetch today's attendance
+        const today = new Date().toISOString().split('T')[0];
+        const attendanceResponse = await fetch(`${API_BASE_URL}/attendance?date=${today}`);
+        if (attendanceResponse.ok) {
+          const attendanceData = await attendanceResponse.json();
+          setAttendance(attendanceData);
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Failed to load timetable data. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Helper function to calculate duration
+  const calculateDuration = (startTime: string, endTime: string): number => {
+    const start = new Date(`2000-01-01T${startTime}:00`);
+    const end = new Date(`2000-01-01T${endTime}:00`);
+    return (end.getTime() - start.getTime()) / (1000 * 60); // Duration in minutes
+  };
+
+  // Navigation function for attendance
+  const handleMarkAttendance = (classInfo: ClassSchedule) => {
+    // Find the original timetable entry
+    const originalEntry = rawTimetable.find(entry => 
+      entry.subject === classInfo.subject && 
+      entry.class === classInfo.class && 
+      entry.section === classInfo.section
+    );
+
+    navigate('/academics/faculty-studentattendance', { 
+      state: { 
+        timetableId: originalEntry?.id || classInfo.id,
+        classInfo: {
+          ...classInfo,
+          originalId: originalEntry?.id
+        },
+        facultyId: facultyInfo.employeeId,
+        facultyName: facultyInfo.name
+      } 
+    });
+  };
+
+  // Handle class row click
+  const handleClassClick = (classInfo: ClassSchedule) => {
+    handleMarkAttendance(classInfo);
+  };
 
   // Get week dates
   const getWeekDates = (date: Date) => {
@@ -237,7 +273,7 @@ const FacultyTimetable: React.FC = () => {
     const totalClasses = timetable.length;
     const totalHours = timetable.reduce((sum, cls) => sum + cls.duration / 60, 0);
     const uniqueSubjects = new Set(timetable.map(cls => cls.subject)).size;
-    const totalStudents = timetable.reduce((sum, cls) => sum + cls.studentsCount, 0);
+    const totalStudents = new Set(timetable.map(cls => `${cls.class}-${cls.section}`)).size;
 
     return { totalClasses, totalHours, uniqueSubjects, totalStudents };
   }, [timetable]);
@@ -278,12 +314,10 @@ const FacultyTimetable: React.FC = () => {
       a.click();
       URL.revokeObjectURL(url);
     }
-    // PDF export would be implemented similarly
   };
 
   // Submit change request
   const submitChangeRequest = () => {
-    // This would typically send to backend
     console.log('Change request submitted:', changeRequest);
     alert('Change request submitted successfully! You will be notified once reviewed.');
     setShowChangeRequest(false);
@@ -299,7 +333,6 @@ const FacultyTimetable: React.FC = () => {
 
   // Submit time preferences
   const submitTimePreferences = () => {
-    // This would typically send to backend
     console.log('Time preferences submitted:', timePreferences);
     alert('Time preferences saved successfully!');
     setShowPreferences(false);
@@ -316,8 +349,39 @@ const FacultyTimetable: React.FC = () => {
     }
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="mx-auto p-6 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-6"></div>
+          <p className="text-xl text-gray-600 font-medium">Loading your timetable...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="mx-auto p-6 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Timetable</h2>
+          <p className="text-red-600 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="mx-auto p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
         <div className="flex items-center justify-between">
@@ -364,7 +428,7 @@ const FacultyTimetable: React.FC = () => {
             <Users className="w-8 h-8 text-purple-600" />
             <div>
               <div className="text-2xl font-bold text-gray-900">{weeklyStats.totalStudents}</div>
-              <div className="text-sm text-gray-600">Total Students</div>
+              <div className="text-sm text-gray-600">Total Classes</div>
             </div>
           </div>
         </div>
@@ -478,13 +542,17 @@ const FacultyTimetable: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {(classesByDay[new Date().toLocaleDateString('en-US', { weekday: 'long' })] || []).slice(0, 3).map(cls => (
-                <div key={cls.id} className={`p-3 rounded-lg border ${
-                  isClassOngoing(cls) 
-                    ? 'bg-green-100 border-green-300' 
-                    : isClassUpcoming(cls)
-                    ? 'bg-yellow-100 border-yellow-300'
-                    : 'bg-white border-gray-200'
-                }`}>
+                <div 
+                  key={cls.id} 
+                  onClick={() => handleClassClick(cls)}
+                  className={`p-3 rounded-lg border cursor-pointer hover:shadow-md transition-shadow ${
+                    isClassOngoing(cls) 
+                      ? 'bg-green-100 border-green-300' 
+                      : isClassUpcoming(cls)
+                      ? 'bg-yellow-100 border-yellow-300'
+                      : 'bg-white border-gray-200'
+                  }`}
+                >
                   <div className="font-medium text-sm">
                     {cls.subject}
                     {isClassOngoing(cls) && <span className="ml-2 text-green-600">(Live)</span>}
@@ -535,6 +603,7 @@ const FacultyTimetable: React.FC = () => {
                           {dayClasses.map(cls => (
                             <div
                               key={cls.id}
+                              onClick={() => handleClassClick(cls)}
                               className={`p-3 rounded-lg border-l-4 mb-2 cursor-pointer hover:shadow-md transition-shadow ${getClassTypeColor(cls.type)} ${
                                 isClassOngoing(cls) ? 'ring-2 ring-green-400' : ''
                               }`}
@@ -557,6 +626,7 @@ const FacultyTimetable: React.FC = () => {
                                   target="_blank" 
                                   rel="noopener noreferrer"
                                   className="text-blue-600 hover:text-blue-800 text-xs mt-1 block"
+                                  onClick={(e) => e.stopPropagation()}
                                 >
                                   Join Meeting
                                 </a>
@@ -615,7 +685,8 @@ const FacultyTimetable: React.FC = () => {
                 {classesByDay[selectedDay].map(cls => (
                   <div
                     key={cls.id}
-                    className={`border rounded-lg p-6 hover:shadow-md transition-shadow ${
+                    onClick={() => handleClassClick(cls)}
+                    className={`border rounded-lg p-6 cursor-pointer hover:shadow-md transition-shadow ${
                       isClassOngoing(cls) 
                         ? 'border-green-400 bg-green-50' 
                         : isClassUpcoming(cls)
@@ -680,6 +751,7 @@ const FacultyTimetable: React.FC = () => {
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800 text-sm mt-1 block"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           Join Meeting: {cls.meetingLink}
                         </a>
@@ -687,10 +759,18 @@ const FacultyTimetable: React.FC = () => {
                     )}
 
                     <div className="mt-4 flex gap-3">
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkAttendance(cls);
+                        }}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2"
+                      >
+                        <UserCheck className="w-4 h-4" />
                         Mark Attendance
                       </button>
-                      <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition-colors">
+                      <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2">
+                        <Eye className="w-4 h-4" />
                         View Details
                       </button>
                     </div>

@@ -303,7 +303,7 @@ const FacultyDashboard: React.FC = () => {
 
   // Handle attendance navigation
   const handleMarkAttendance = (classInfo: TimetableEntry) => {
-    navigate('/attendance', { 
+    navigate('/academics/faculty-studentattendance', { 
       state: { 
         timetableId: classInfo.id,
         classInfo: classInfo,
@@ -435,7 +435,7 @@ const FacultyDashboard: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-4 lg:p-6 bg-gray-50 min-h-screen">
+    <div className=" mx-auto p-4 lg:p-6  min-h-screen">
       {/* Enhanced Header Section */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl shadow-lg p-6 mb-8 text-white">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between">
@@ -545,10 +545,7 @@ const FacultyDashboard: React.FC = () => {
                         <UserCheck className="w-5 h-5" />
                         Mark Attendance
                       </button>
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl">
-                        <Video className="w-5 h-5" />
-                        Start Online Class
-                      </button>
+                      
                     </div>
                   </div>
                 )}
@@ -873,53 +870,6 @@ const FacultyDashboard: React.FC = () => {
                 Manage All Subjects
                 <ChevronRight className="w-4 h-4" />
               </button>
-            </div>
-          </div>
-
-          {/* Enhanced Class Statistics Panel */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-violet-500 to-purple-500 p-6">
-              <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                <BarChart3 className="w-6 h-6" />
-                Statistics
-              </h2>
-            </div>
-
-            <div className="p-6">
-              <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-blue-600" />
-                    <span className="font-medium text-gray-700">Classes This Week</span>
-                  </div>
-                  <span className="font-bold text-xl text-blue-600">
-                    {timetable.reduce((total, t) => total + t.days.length, 0)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Users className="w-5 h-5 text-green-600" />
-                    <span className="font-medium text-gray-700">Avg Class Size</span>
-                  </div>
-                  <span className="font-bold text-xl text-green-600">
-                    {Math.round(timetable.reduce((sum, t) => sum + t.totalStudents, 0) / timetable.length) || 0}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Target className="w-5 h-5 text-purple-600" />
-                    <span className="font-medium text-gray-700">Total Students</span>
-                  </div>
-                  <span className="font-bold text-xl text-purple-600">{facultyStudents.length}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <BookOpen className="w-5 h-5 text-orange-600" />
-                    <span className="font-medium text-gray-700">Active Subjects</span>
-                  </div>
-                  <span className="font-bold text-xl text-orange-600">{timetable.length}</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>

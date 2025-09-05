@@ -260,7 +260,7 @@ const FacultyInbox: React.FC = () => {
   const unreadCount = messages.filter(msg => !msg.isRead && msg.recipient === facultyInfo.name).length;
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="mx-auto p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
         <div className="flex items-center justify-between">
