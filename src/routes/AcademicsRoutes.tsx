@@ -1,9 +1,6 @@
-
-import Course from '../pages/Academics/Courses/CoursesPage';
-import FacultyLeaves from '../pages/Academics/Courses/FacultyLeaves';
 import Inbox from '../pages/Academics/Courses/inbox';
 import StudentAttendance from '../pages/Academics/Courses/Studentsattendence'
- 
+import AttendanceManagement from '../components/Modules/AttendanceManagement'
 import Timetable from '../pages/Academics/timetable/TimeTable';
 import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
 import AcademicCalender from '../pages/Academics/AcademicCalender/AcademicCalender';
@@ -113,6 +110,7 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-exams" element={<StudentExam />} />
     <Route path="/student-profile" element={<StudentProfile />} />
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
+    <Route path="/my-attendance" element={<AttendanceManagement />} />
 
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 

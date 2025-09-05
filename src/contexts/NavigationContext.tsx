@@ -163,6 +163,7 @@ const SIDEBAR_ITEMS = {
     ],
     'Student': [
       { name: 'Dashboard', path: '/academics/student-dashboard', icon: 'BarChart3' },
+      { name: 'My Attendance', path: '/academics/my-attendance', icon: 'CheckCircle' },
       { name: 'Courses', path: '/academics/student-courses', icon: 'BookOpen' },
       { name: 'Assignments', path: '/academics/student-assignments', icon: 'FileText' },
       { name: 'Exams', path: '/academics/student-exams', icon: 'Monitor' },
@@ -427,7 +428,6 @@ const SIDEBAR_ITEMS = {
       { name: 'Placement Corner', path: '/lms/placement-corner', icon: 'Target' },
       { name: 'Online Test', path: '/lms/online-test', icon: 'Monitor' },
       { name: 'Time Table', path: '/lms/time-table', icon: 'Calendar' },
-      { name: 'Attendance', path: '/lms/attendance', icon: 'CheckCircle' },
       { name: 'Results', path: '/lms/results', icon: 'Award' },
       { name: 'Chat with Mentor', path: '/lms/chat-mentor', icon: 'MessageCircle' },
       { name: 'Approval', path: '/lms/approval', icon: 'CheckSquare' },
