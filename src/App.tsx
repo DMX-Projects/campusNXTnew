@@ -33,7 +33,10 @@ const AppRoutes: React.FC = () => {
       return '/home';
     }
     if (userRole === 'Student') {
-    return '/academics';
+    return '/academics/dashboard';
+  }
+  if (userRole === 'Faculty') {
+    return '/academics/dashboard';
   }
     return '/academics';
   };
