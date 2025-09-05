@@ -29,7 +29,7 @@ import {
   Zap,
   LayoutDashboard,
   PieChart,
-  Settings,
+  
   Filter,
   Download,
   RefreshCw,
@@ -420,62 +420,11 @@ export default function AcademicDashboard() {
 
             <div className="w-full md:w-auto flex flex-col items-start md:items-end">
               <div className="flex space-x-2 mb-4">
-                <button 
-                  onClick={handleRefresh}
-                  className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
-                  disabled={isRefreshing}
-                >
-                  <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
-                </button>
-                <div className="relative">
-                  <button 
-                    onClick={() => setShowNotifications(!showNotifications)}
-                    className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors relative"
-                  >
-                    <Bell className="h-5 w-5" />
-                    {notifications.filter(n => !n.read).length > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {notifications.filter(n => !n.read).length}
-                      </span>
-                    )}
-                  </button>
-                  {showNotifications && (
-                    <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
-                      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                        <h3 className="font-semibold text-gray-900 dark:text-gray-100">Notifications</h3>
-                      </div>
-                      <div className="max-h-60 overflow-y-auto">
-                        {notifications.map(notification => (
-                          <div key={notification.id} className={`p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 ${!notification.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}>
-                            <div className="flex items-start space-x-3">
-                              <div className={`w-2 h-2 rounded-full mt-2 ${
-                                notification.type === 'urgent' ? 'bg-red-500' :
-                                notification.type === 'success' ? 'bg-green-500' : 'bg-blue-500'
-                              }`}></div>
-                              <div className="flex-1">
-                                <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                  {notification.title}
-                                </h4>
-                                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                                  {notification.message}
-                                </p>
-                                <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                                  {notification.time}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <button className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
-                  <Settings className="h-5 w-5" />
-                </button>
-                <button className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors">
-                  <LayoutDashboard className="h-5 w-5" />
-                </button>
+               
+               
+                    
+               
+               
               </div>
               <div className="text-lg sm:text-xl md:text-2xl font-mono font-bold">
                 {currentTime.toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour12: true })}
@@ -520,16 +469,8 @@ export default function AcademicDashboard() {
                 <option value="EE">Electrical</option>
               </select>
             </div>
-            <div className="flex items-center space-x-2">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
-                <Download className="h-4 w-4" />
-                <span>Export Data</span>
-              </button>
-              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2">
-                <Plus className="h-4 w-4" />
-                <span>Quick Add</span>
-              </button>
-            </div>
+           
+          
           </div>
         </div>
 
@@ -1054,20 +995,8 @@ export default function AcademicDashboard() {
                 Last Updated: {currentTime.toLocaleTimeString()}
               </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors flex items-center space-x-2">
-                <Filter className="h-4 w-4" />
-                <span>Filter Data</span>
-              </button>
-              <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2">
-                <Download className="h-4 w-4" />
-                <span>Export Report</span>
-              </button>
-              <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center space-x-2">
-                <Plus className="h-4 w-4" />
-                <span>New Action</span>
-              </button>
-            </div>
+           
+            
           </div>
         </div>
       </div>

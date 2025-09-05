@@ -1,17 +1,13 @@
+
+
 import React, { useState, useMemo } from "react";
 import {
   Search,
-  Filter,
   Download,
-  Book,
   FileText,
   TrendingUp,
 } from "lucide-react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
@@ -20,6 +16,8 @@ import {
   PieChart,
   Pie,
   Cell,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 interface StudyMaterial {
@@ -30,9 +28,10 @@ interface StudyMaterial {
   uploadedBy: string;
   uploadedOn: string;
   downloads: number;
+  fileUrl: string; // 🔹 Added file URL
 }
 
-// Dummy data
+// Dummy data with file paths in public/files/
 const studyMaterials: StudyMaterial[] = [
   {
     id: 1,
@@ -42,6 +41,7 @@ const studyMaterials: StudyMaterial[] = [
     uploadedBy: "Prof. Sharma",
     uploadedOn: "2024-07-01",
     downloads: 120,
+    fileUrl: "/files/Linear_Algebra_Notes.pdf",
   },
   {
     id: 2,
@@ -51,6 +51,7 @@ const studyMaterials: StudyMaterial[] = [
     uploadedBy: "Prof. Singh",
     uploadedOn: "2024-07-05",
     downloads: 95,
+    fileUrl: "/files/Quantum_Mechanics_PPT.pdf",
   },
   {
     id: 3,
@@ -60,6 +61,7 @@ const studyMaterials: StudyMaterial[] = [
     uploadedBy: "Dr. Verma",
     uploadedOn: "2024-07-08",
     downloads: 75,
+    fileUrl: "/files/Data_Structures_Assignment.pdf",
   },
   {
     id: 4,
@@ -69,6 +71,7 @@ const studyMaterials: StudyMaterial[] = [
     uploadedBy: "Prof. Nair",
     uploadedOn: "2024-07-10",
     downloads: 60,
+    fileUrl: "/files/Poetry_Analysis_Book.pdf",
   },
   {
     id: 5,
@@ -78,6 +81,7 @@ const studyMaterials: StudyMaterial[] = [
     uploadedBy: "Prof. Khan",
     uploadedOn: "2024-07-12",
     downloads: 110,
+    fileUrl: "/files/Organic_Chemistry_Notes.pdf",
   },
 ];
 
@@ -110,12 +114,16 @@ export default function StudyMaterialPage() {
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
+  // Download handler
+  const handleDownload = (mat: StudyMaterial) => {
+    const link = document.createElement("a");
+    link.href = mat.fileUrl;
+    link.download = mat.title.replace(/\s+/g, "_"); // filename suggestion
+    link.click();
+  };
+
   return (
     <div className="p-6 space-y-6">
-      {/* <h1 className="text-2xl font-bold flex items-center gap-2">
-        <Book className="w-6 h-6" /> Study Materials
-      </h1> */}
-
       {/* Controls */}
       <div className="flex gap-4 items-center">
         <div className="flex items-center border rounded-lg px-3 py-2 shadow-sm w-1/3">
@@ -166,7 +174,10 @@ export default function StudyMaterialPage() {
                 <td className="border px-4 py-2">{mat.uploadedOn}</td>
                 <td className="border px-4 py-2">{mat.downloads}</td>
                 <td className="border px-4 py-2">
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded-lg flex items-center gap-2 hover:bg-blue-600">
+                  <button
+                    onClick={() => handleDownload(mat)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded-lg flex items-center gap-2 hover:bg-blue-600"
+                  >
                     <Download className="w-4 h-4" /> Download
                   </button>
                 </td>
