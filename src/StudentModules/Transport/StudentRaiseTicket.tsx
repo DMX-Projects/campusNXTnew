@@ -165,13 +165,8 @@ const StudentTicketSystem = () => {
               </span>
             </div>
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-              <button className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center">
-                <Edit className="w-4 h-4 mr-2" />
-                Update Ticket
-              </button>
-              <button className="w-full sm:w-auto px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg font-medium transition-colors">
-                Print
-              </button>
+              
+              
             </div>
           </div>
           
@@ -263,9 +258,7 @@ const StudentTicketSystem = () => {
             >
               Close
             </button>
-            <button className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-              Add Update
-            </button>
+            
           </div>
         </div>
       </div>
