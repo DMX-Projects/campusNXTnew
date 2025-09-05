@@ -1,12 +1,40 @@
+
+
+
 import React, { useState } from 'react';
-import { Plus, Eye, Calendar, Clock, AlertCircle, CheckCircle, XCircle, X, Menu, FileText, Edit, ArrowLeft } from 'lucide-react';
+import { Plus, Eye, Calendar, Clock, AlertCircle, CheckCircle, XCircle, X, Menu, FileText, Edit, ArrowLeft, Send } from 'lucide-react';
+
+interface Update {
+  date: string;
+  time: string;
+  user: string;
+  message: string;
+}
+
+interface Ticket {
+  id: string;
+  studentId: string;
+  name: string;
+  course: string;
+  category: string;
+  subCategory: string;
+  subject: string;
+  description: string;
+  priority: 'Low' | 'Medium' | 'High';
+  status: 'Open' | 'In Progress' | 'Resolved' | 'Closed';
+  createdAt: string;
+  lastUpdated: string;
+  updates: Update[];
+}
 
 const StudentTicketSystem = () => {
   const [activeTab, setActiveTab] = useState('raise');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [showDetailView, setShowDetailView] = useState(false);
-  const [tickets, setTickets] = useState([
+  const [showUpdateForm, setShowUpdateForm] = useState(false); // New state
+  const [updateMessage, setUpdateMessage] = useState(''); // New state
+  const [tickets, setTickets] = useState<Ticket[]>([
     {
       id: 'TKT001',
       studentId: '2025STU001',
@@ -39,10 +67,10 @@ const StudentTicketSystem = () => {
     subCategory: '',
     subject: '',
     description: '',
-    priority: ''
+    priority: '' as 'Low' | 'Medium' | 'High' | ''
   });
   
-  const categories = {
+  const categories: { [key: string]: string[] } = {
     'Academic': ['Assignment Issues', 'Exam Queries', 'Grade Disputes', 'Course Content'],
     'Transport': ['Bus Delay', 'Route Issues', 'Driver Complaints', 'Vehicle Condition'],
     'Hostel': ['Room Issues', 'Mess Complaints', 'Maintenance', 'Security'],
@@ -50,7 +78,7 @@ const StudentTicketSystem = () => {
     'Administrative': ['Fee Issues', 'Document Requests', 'Certificate Issues', 'Other']
   };
   
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value,
@@ -64,7 +92,7 @@ const StudentTicketSystem = () => {
       return;
     }
     
-    const newTicket = {
+    const newTicket: Ticket = {
       id: `TKT${String(tickets.length + 1).padStart(3, '0')}`,
       ...formData,
       status: 'Open',
@@ -93,18 +121,56 @@ const StudentTicketSystem = () => {
     });
     alert('Ticket raised successfully!');
   };
+
+  const handleUpdateSubmit = () => {
+    if (!updateMessage.trim()) {
+      alert('Please enter an update message.');
+      return;
+    }
   
-  const handleViewDetails = (ticket) => {
+    if (selectedTicket) {
+      const newUpdate: Update = {
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        user: 'Student',
+        message: updateMessage.trim(),
+      };
+  
+      const updatedTickets = tickets.map(ticket => 
+        ticket.id === selectedTicket.id 
+          ? {
+              ...ticket,
+              updates: [...ticket.updates, newUpdate],
+              lastUpdated: new Date().toISOString().split('T')[0]
+            }
+          : ticket
+      );
+  
+      setTickets(updatedTickets);
+      setSelectedTicket(prev => prev ? { ...prev, updates: [...prev.updates, newUpdate], lastUpdated: new Date().toISOString().split('T')[0] } : null);
+      setUpdateMessage('');
+      setShowUpdateForm(false);
+      alert('Ticket updated successfully!');
+    }
+  };
+  
+  const handleViewDetails = (ticket: Ticket) => {
     setSelectedTicket(ticket);
     setShowDetailView(true);
   };
   
   const handleCloseDetails = () => {
     setShowDetailView(false);
+    setShowUpdateForm(false);
     setSelectedTicket(null);
   };
   
-  const getStatusIcon = (status) => {
+  const handlePrintTicket = () => {
+    alert("Printing functionality is under development. Please use your browser's print option.");
+    window.print();
+  };
+  
+  const getStatusIcon = (status: Ticket['status']) => {
     switch (status) {
       case 'Open': return <AlertCircle className="w-4 h-4 text-orange-500" />;
       case 'In Progress': return <Clock className="w-4 h-4 text-blue-500" />;
@@ -114,7 +180,7 @@ const StudentTicketSystem = () => {
     }
   };
   
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (priority: Ticket['priority']) => {
     switch (priority) {
       case 'High': return 'bg-red-100 text-red-800 border-red-200';
       case 'Medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
@@ -124,7 +190,7 @@ const StudentTicketSystem = () => {
   };
   
   // Detail View Component
-  const TicketDetailView = ({ ticket }) => (
+  const TicketDetailView = ({ ticket }: { ticket: Ticket }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-lg w-full max-w-4xl mt-4 mb-4">
         {/* Header */}
@@ -165,15 +231,44 @@ const StudentTicketSystem = () => {
               </span>
             </div>
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-              <button className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center">
+              <button onClick={() => setShowUpdateForm(!showUpdateForm)} className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center">
                 <Edit className="w-4 h-4 mr-2" />
                 Update Ticket
               </button>
-              <button className="w-full sm:w-auto px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg font-medium transition-colors">
+              <button onClick={handlePrintTicket} className="w-full sm:w-auto px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg font-medium transition-colors">
                 Print
               </button>
             </div>
           </div>
+
+          {/* New Update Form */}
+          {showUpdateForm && (
+            <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+              <h3 className="font-semibold text-gray-900 mb-3">Add a New Update</h3>
+              <textarea
+                value={updateMessage}
+                onChange={(e) => setUpdateMessage(e.target.value)}
+                placeholder="Type your update here..."
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              />
+              <div className="flex justify-end mt-3 space-x-2">
+                <button
+                  onClick={() => setShowUpdateForm(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUpdateSubmit}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-all flex items-center"
+                >
+                  <Send className="w-4 h-4 mr-2" />
+                  Send Update
+                </button>
+              </div>
+            </div>
+          )}
           
           {/* Student Info */}
           <div className="bg-gray-50 rounded-lg p-4">
@@ -263,7 +358,10 @@ const StudentTicketSystem = () => {
             >
               Close
             </button>
-            <button className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+            <button 
+              onClick={() => setShowUpdateForm(true)}
+              className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+            >
               Add Update
             </button>
           </div>
@@ -274,7 +372,6 @@ const StudentTicketSystem = () => {
   
   // Dummy handler for Add Attachment button to prevent error
   const handleAddAttachment = () => {
-
     alert('Attachment feature is coming soon!');
   };
 
@@ -480,7 +577,7 @@ const StudentTicketSystem = () => {
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     placeholder="Detailed description of the issue..."
-                    rows="4"
+                    rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     required
                   />
@@ -497,7 +594,7 @@ const StudentTicketSystem = () => {
                   </label>
                   <select
                     value={formData.priority}
-                    onChange={(e) => handleInputChange('priority', e.target.value)}
+                    onChange={(e) => handleInputChange('priority', e.target.value as 'Low' | 'Medium' | 'High' | '')}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     required
                   >
@@ -628,7 +725,6 @@ const StudentTicketSystem = () => {
                             <span className="hidden xs:inline">View Details</span>
                             <span className="xs:hidden">Details</span>
                           </button>
-                         
                         </div>
                       </div>
                     </div>

@@ -201,6 +201,17 @@ const ChatWithMentorStu: React.FC = () => {
   const activeChat = chatRooms.find(chat => chat.id === activeChatId);
   const chatMessages = messages[activeChatId] || [];
 
+  // Moved downloadFile function here to be used when clicking on file downloads
+  const downloadFile = (url?: string, name?: string) => {
+    if (!url) return;
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = name || 'downloaded-file';
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [chatMessages]);
@@ -456,13 +467,15 @@ const ChatWithMentorStu: React.FC = () => {
                       }
                     </p>
                   )}
-                  <div className="flex items-center justify-between mt-1">
-                    <span className={`inline-block px-2 py-1 text-xs rounded-full ${
-                      chat.chatType === 'academic' ? 'bg-blue-100 text-blue-800' :
-                      chat.chatType === 'career' ? 'bg-green-100 text-green-800' :
-                      chat.chatType === 'project' ? 'bg-purple-100 text-purple-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                  <div className="flex items-center justify-between mt-1 text-xs rounded-full px-2 py-1 
+                    inline-block
+                    font-semibold
+                    {chat.chatType === 'academic' ? 'bg-blue-100 text-blue-800' :
+                    chat.chatType === 'career' ? 'bg-green-100 text-green-800' :
+                    chat.chatType === 'project' ? 'bg-purple-100 text-purple-800' :
+                    'bg-gray-100 text-gray-800'
+                    }">
+                    <span>
                       {chat.chatType}
                     </span>
                     <span className="text-xs text-gray-400">
@@ -568,7 +581,11 @@ const ChatWithMentorStu: React.FC = () => {
                               <p className="font-medium truncate">{message.fileName}</p>
                               <p className="text-xs opacity-75">{message.fileSize}</p>
                             </div>
-                            <button className="p-1 hover:bg-black hover:bg-opacity-10 rounded">
+                            <button
+                              onClick={() => downloadFile(message.fileUrl, message.fileName)}
+                              className="p-1 hover:bg-black hover:bg-opacity-10 rounded"
+                              title="Download File"
+                            >
                               <DownloadIcon size={16} />
                             </button>
                           </div>
@@ -623,6 +640,7 @@ const ChatWithMentorStu: React.FC = () => {
                   <button
                     onClick={() => setShowAttachmentMenu(!showAttachmentMenu)}
                     className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Attachments"
                   >
                     <PaperclipIcon size={20} />
                   </button>
@@ -682,6 +700,7 @@ const ChatWithMentorStu: React.FC = () => {
                   <button
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                     className="absolute right-2 top-2 p-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                    title="Emoji Picker"
                   >
                     <SmileIcon size={20} />
                   </button>
@@ -711,6 +730,7 @@ const ChatWithMentorStu: React.FC = () => {
                         ? 'bg-red-500 text-white' 
                         : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                     }`}
+                    title="Voice Recording"
                   >
                     <MicIcon size={20} />
                   </button>
@@ -719,6 +739,7 @@ const ChatWithMentorStu: React.FC = () => {
                     onClick={sendMessage}
                     disabled={!newMessage.trim()}
                     className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    title="Send Message"
                   >
                     <SendIcon size={20} />
                   </button>

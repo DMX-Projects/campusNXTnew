@@ -431,6 +431,19 @@ const StudentInternshipsOrOffers: React.FC = () => {
     applicationSource: 'online' as const,
     notes: ''
   });
+const handleDownload = (doc: Document) => {
+  const fileContent = `This is placeholder content for document: ${doc.name}`;
+  const blob = new Blob([fileContent], { type: 'text/plain' });
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = doc.fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+};
 
   // Filter and sort items
   useEffect(() => {
@@ -1557,9 +1570,18 @@ Status: ${item.status.replace('-', ' ').toUpperCase()}`;
                               }`}>
                                 {doc.status.toUpperCase()}
                               </span>
-                              <button className="p-1 text-gray-400 hover:text-blue-600">
+                              {/* <button className="p-1 text-gray-400 hover:text-blue-600">
                                 <DownloadIcon size={16} />
-                              </button>
+                              </button> */}
+
+
+                              <button
+  onClick={() => handleDownload(doc)}
+  className="p-1 text-gray-400 cursor-pointer hover:text-blue-600"
+  title="Download Document"
+>
+  <DownloadIcon size={16} />
+</button>
                             </div>
                           </div>
                         ))}

@@ -60,6 +60,10 @@ int main() {
       isUnsaved: false
     }
   ]);
+  const formatCode = () => {  alert('Format Code functionality to be implemented'); };
+  const checkSyntax = () => {  alert('Check Syntax functionality to be implemented'); };
+  const optimizeCode = () => {  alert('Optimize Code functionality to be implemented'); };
+  const debugCode = () => {  alert('Debug Code functionality to be implemented'); };
 
   const [activeFileId, setActiveFileId] = useState('1');
   const [isCompiling, setIsCompiling] = useState(false);
@@ -435,13 +439,13 @@ console.log("Hello, World!");`,
               </div>
               
               <div className="flex items-center gap-2">
-                <button
-                  onClick={downloadFile}
-                  className="text-gray-600 hover:text-blue-600 p-1"
-                  title="Download file"
-                >
-                  <DownloadIcon size={16} />
-                </button>
+               <button
+      onClick={downloadFile}
+      className="text-gray-600 hover:text-blue-600 p-1"
+      title="Download file"
+    >
+      <DownloadIcon size={16} />
+    </button>
               </div>
             </div>
             
@@ -548,7 +552,7 @@ console.log("Hello, World!");`,
               )}
               
               {!isCompiling && !compilationResult && (
-                <div className="text-center py-8 text-gray-500">
+                <div onClick={runCode} className="text-center py-8 text-gray-500">
                   <TerminalIcon className="mx-auto mb-2" size={32} />
                   <p>Click "Run Code" to see output here</p>
                 </div>
@@ -558,17 +562,17 @@ console.log("Hello, World!");`,
             {/* Quick Actions */}
             <div className="bg-white rounded-lg border border-gray-200 p-4">
               <h3 className="font-semibold text-gray-900 mb-3">Quick Actions</h3>
-              <div className="grid grid-cols-2 gap-2 text-sm">
+              <div onClick={formatCode} className="grid grid-cols-2 gap-2 text-sm">
                 <button className="p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
                   Format Code
                 </button>
-                <button className="p-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors">
+                <button onClick={checkSyntax} className="p-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors">
                   Check Syntax
                 </button>
-                <button className="p-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
+                <button onClick={optimizeCode} className="p-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
                   Optimize
                 </button>
-                <button className="p-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors">
+                <button onClick={debugCode} className="p-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors">
                   Debug
                 </button>
               </div>
