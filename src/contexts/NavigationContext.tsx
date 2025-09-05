@@ -161,6 +161,17 @@ const SIDEBAR_ITEMS = {
       { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
       { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
+    'Student': [
+      { name: 'Dashboard', path: '/academics/student-dashboard', icon: 'BarChart3' },
+      { name: 'Courses', path: '/academics/student-courses', icon: 'BookOpen' },
+      { name: 'Assignments', path: '/academics/student-assignments', icon: 'FileText' },
+      { name: 'Exams', path: '/academics/student-exams', icon: 'Monitor' },
+      { name: 'Results&Records', path: '/academics/student-recordsresults', icon: 'CheckCircle' },
+      { name: 'Profile', path: '/academics/student-profile', icon: 'User' },
+      { name: 'Fee Management', path: '/academics/student-feemanagement', icon: 'DollarSign' },
+      { name: 'Class Schedule', path: '/academics/student-classschedule', icon: 'Calendar' },
+      { name: 'Study Material', path: '/academics/student-studymaterial', icon: 'FolderOpen' }
+    ],
     'Principal': [
       { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
       { name: 'Faculty', path: '/academics/faculty', icon: 'GraduationCap' },
