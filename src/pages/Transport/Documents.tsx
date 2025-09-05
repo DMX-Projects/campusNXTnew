@@ -50,6 +50,8 @@ export default function Documents() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showRenewModal, setShowRenewModal] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [renewFile, setRenewFile] = useState(null);
   
   const [formData, setFormData] = useState({
     busNumber: '',
@@ -105,6 +107,30 @@ export default function Documents() {
     }));
   };
 
+  const handleFileSelect = (file, type) => {
+    if (type === 'add') {
+      setSelectedFile(file);
+    } else if (type === 'renew') {
+      setRenewFile(file);
+    }
+    console.log(`${type} file selected:`, file.name);
+  };
+
+  const handleDownload = (document) => {
+    try {
+      // Create a temporary link element and trigger download
+      const link = document.createElement('a');
+      link.href = document.fileUrl;
+      link.download = `${document.busNumber}-${document.documentType}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try again.');
+    }
+  };
+
   const handleSubmit = () => {
     // Validate form
     if (!formData.busNumber || !formData.issueDate || !formData.expiryDate) {
@@ -117,7 +143,7 @@ export default function Documents() {
       id: Date.now(), // Simple ID generation
       ...formData,
       status: calculateStatus(formData.expiryDate),
-      fileUrl: null // Would be set after file upload
+      fileUrl: selectedFile ? URL.createObjectURL(selectedFile) : null // Create object URL for preview
     };
 
     // Add to documents list
@@ -150,6 +176,12 @@ export default function Documents() {
   const handleRenew = () => {
     if (!selectedDocument) return;
 
+    // Validate required fields for renewal
+    if (!formData.issueDate || !formData.expiryDate) {
+      alert('Please fill in both issue date and expiry date');
+      return;
+    }
+
     // Create renewed document
     const renewedDocument = {
       ...selectedDocument,
@@ -157,7 +189,8 @@ export default function Documents() {
       expiryDate: formData.expiryDate,
       documentNumber: formData.documentNumber,
       issuedBy: formData.issuedBy,
-      status: calculateStatus(formData.expiryDate)
+      status: calculateStatus(formData.expiryDate),
+      fileUrl: renewFile ? URL.createObjectURL(renewFile) : selectedDocument.fileUrl
     };
 
     // Update the document
@@ -179,6 +212,8 @@ export default function Documents() {
       documentNumber: '',
       issuedBy: ''
     });
+    setSelectedFile(null);
+    setRenewFile(null);
   };
 
   const openViewModal = (document) => {
@@ -226,8 +261,8 @@ export default function Documents() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-gray-800">Vehicle Documents</h3>
-            <p className="text-sm text-gray-600">Manage bus registration, insurance, and compliance documents</p>
+            <h3 className="text-lg font-semibold text-gray-800"></h3>
+            <p className="text-sm text-gray-600"></p>
           </div>
           <button 
             onClick={() => setShowAddModal(true)}
@@ -458,14 +493,30 @@ export default function Documents() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Document File
                   </label>
-                  <div onClick={() => {
-                    const fileInput = document.querySelector('input[type=file]');
-                    if (fileInput) (fileInput as HTMLInputElement).click();
-                  }} className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+                  <div 
+                    onClick={() => {
+                      const fileInput = document.getElementById('add-file-input');
+                      if (fileInput) fileInput.click();
+                    }} 
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors cursor-pointer"
+                  >
                     <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500">Click to upload or drag and drop</p>
+                    <p className="text-sm text-gray-500">
+                      {selectedFile ? `Selected: ${selectedFile.name}` : 'Click to upload or drag and drop'}
+                    </p>
                     <p className="text-xs text-gray-400">PDF, JPG, PNG up to 10MB</p>
-                    <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" />
+                    <input 
+                      id="add-file-input"
+                      type="file" 
+                      className="hidden" 
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleFileSelect(file, 'add');
+                        }
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -558,7 +609,10 @@ export default function Documents() {
                 {selectedDocument.fileUrl && (
                   <div>
                     <label className="block text-sm font-medium text-gray-500 mb-2">Document File</label>
-                    <button className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm font-medium bg-blue-50 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors">
+                    <button 
+                      onClick={() => handleDownload(selectedDocument)}
+                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm font-medium bg-blue-50 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors"
+                    >
                       <Download className="w-4 h-4" />
                       <span>Download Document</span>
                     </button>
@@ -794,11 +848,30 @@ export default function Documents() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     New Document File
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+                  <div 
+                    onClick={() => {
+                      const fileInput = document.getElementById('renew-file-input');
+                      if (fileInput) fileInput.click();
+                    }}
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors cursor-pointer"
+                  >
                     <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500">Upload renewed document</p>
+                    <p className="text-sm text-gray-500">
+                      {renewFile ? `Selected: ${renewFile.name}` : 'Upload renewed document'}
+                    </p>
                     <p className="text-xs text-gray-400">PDF, JPG, PNG up to 10MB</p>
-                    <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" />
+                    <input 
+                      id="renew-file-input"
+                      type="file" 
+                      className="hidden" 
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          handleFileSelect(file, 'renew');
+                        }
+                      }}
+                    />
                   </div>
                 </div>
 

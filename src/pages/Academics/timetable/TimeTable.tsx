@@ -141,7 +141,8 @@ const CollegeTimetableSystem = () => {
     class: 'BTech CSE',
     section: 'A',
     workingDays: 5,
-    hoursPerDay: 6
+    hoursPerDay: 6,
+    faculty: ''
   });
 
   // Extract unique values from data
@@ -877,6 +878,23 @@ const relevantFaculty = faculty.filter(f => {
                   <option value={6}>6 Hours</option>
                   <option value={7}>7 Hours</option>
                   <option value={8}>8 Hours</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Faculty & Subject</label>
+                <select
+                  value={generateParams.faculty}
+                  onChange={(e) => setGenerateParams({...generateParams, faculty: e.target.value})}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Random Facult & Subject</option>
+                  <option value="Dr. Rajesh Kumar - Data Structures">Dr. Rajesh Kumar - Data Structures</option>
+                  <option value="Dr. Priya Sharma - Algorithms">Dr. Priya Sharma - Algorithms</option>
+                  <option value="Dr. Amit Patel - Computer Networks">Dr. Amit Patel - Computer Networks</option>
+                  <option value="Dr. Amit Verma - Digital Electronics">Dr. Amit Verma - Digital Electronics</option>
+                  <option value="Dr. Amit Verma - Microprocessors">Dr. Amit Verma - Microprocessors</option>
+                  <option value="Dr. Priya Singh - Signals & Systems">Dr. Priya Singh - Signals & Systems</option>
+                  <option value="Dr. Amit Verma - Database Systems">Dr. Priya Singh - Control Systems</option>
                 </select>
               </div>
             </div>

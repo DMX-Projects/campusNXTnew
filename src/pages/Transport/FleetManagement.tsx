@@ -138,19 +138,17 @@ const BusManagementSystem = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-semibold text-gray-900">Bus Details</h1>
-                <p className="text-sm text-gray-500">AI Powered Campus Automation System</p>
-              </div>
-            </div>
-            <button
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800"></h3>
+            <p className="text-sm text-gray-600"></p>
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900"></h1>
+            <p className="text-sm text-gray-500"></p>
+          </div>
+        </div>
+        <button
               onClick={() => openModal()}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
             >
@@ -159,9 +157,10 @@ const BusManagementSystem = () => {
             </button>
           </div>
         </div>
-      </div>
+  
 
       {/* Main Content */}
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {buses.map((bus) => (
@@ -404,7 +403,9 @@ const BusManagementSystem = () => {
             </div>
           </div>
         </div>
+        
       )}
+
     </div>
   );
 };

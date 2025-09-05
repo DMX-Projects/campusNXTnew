@@ -83,8 +83,12 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
             </button>
             
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 via-purple-500 to-green-500 rounded-lg flex items-center justify-center">
-                <School className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img 
+                  src="/2(B)Without_Text_Transparent.png" 
+                  alt="AICAS Logo" 
+                  className="w-8 h-8 object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-blue-600 dark:text-blue-400">AICAS</h1>
@@ -105,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
           {/* Right Section */}
           <div className="flex items-center space-x-2">
             {/* Theme Toggle */}
-            <button
+            {/* <button
               onClick={toggleTheme}
               className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
@@ -113,7 +117,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
                 <Sun className="w-4 h-4 text-yellow-500" /> : 
                 <Moon className="w-4 h-4 text-gray-600" />
               }
-            </button>
+            </button> */}
 
             {/* Notifications */}
             <button className="relative p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
