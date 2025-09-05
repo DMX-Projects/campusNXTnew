@@ -1,4 +1,4 @@
- // FacultyStudyMaterial.tsx - FIXED VERSION
+// FacultyStudyMaterial.tsx - FIXED VERSION WITH VIEW DETAILS MODAL
 import React, { useState, useMemo } from 'react';
 import { 
   Upload, 
@@ -22,7 +22,8 @@ import {
   AlertCircle,
   Clock,
   Folder,
-  Link
+  Link,
+  ExternalLink
 } from 'lucide-react';
 
 interface StudyMaterial {
@@ -73,7 +74,7 @@ const FacultyStudyMaterial: React.FC = () => {
     {
       id: '1',
       title: 'Introduction to Data Structures',
-      description: 'Comprehensive notes covering arrays, linked lists, and basic operations',
+      description: 'Comprehensive notes covering arrays, linked lists, and basic operations. This material includes detailed explanations, examples, and practice problems to help students understand fundamental data structure concepts.',
       fileName: 'data_structures_unit1.pdf',
       fileSize: '2.5 MB',
       fileType: 'pdf',
@@ -157,6 +158,8 @@ const FacultyStudyMaterial: React.FC = () => {
   const [filterType, setFilterType] = useState<'all' | string>('all');
   const [sortBy, setSortBy] = useState<'uploadDate' | 'title' | 'downloadCount'>('uploadDate');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedMaterial, setSelectedMaterial] = useState<StudyMaterial | null>(null);
   
   // Upload form state
   const [uploadForm, setUploadForm] = useState({
@@ -233,6 +236,16 @@ const FacultyStudyMaterial: React.FC = () => {
     }
   };
 
+  // Handle view material
+  const handleViewMaterial = (material: StudyMaterial) => {
+    setSelectedMaterial(material);
+    setIsViewModalOpen(true);
+    // Increment download count when viewing
+    setStudyMaterials(prev => prev.map(m => 
+      m.id === material.id ? { ...m, downloadCount: m.downloadCount + 1 } : m
+    ));
+  };
+
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -246,7 +259,7 @@ const FacultyStudyMaterial: React.FC = () => {
 
   // Handle file selection - FIXED
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;  // FIXED: Added [0] to access first file
+    const file = e.target.files?.[0] || null;
     setUploadForm(prev => ({ ...prev, file }));
   };
 
@@ -288,8 +301,8 @@ const FacultyStudyMaterial: React.FC = () => {
         subjectCode: uploadForm.subject,
         unit: uploadForm.unit,
         topic: uploadForm.topic,
-        uploadDate: new Date().toISOString().split('T')[0],  // FIXED: Added [0] to get date part
-        lastModified: new Date().toISOString().split('T')[0],  // FIXED: Added [0] to get date part
+        uploadDate: new Date().toISOString().split('T')[0],
+        lastModified: new Date().toISOString().split('T')[0],
         downloadCount: 0,
         isActive: true,
         tags: uploadForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
@@ -520,15 +533,13 @@ const FacultyStudyMaterial: React.FC = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-3">
-                  <a
-                    href={material.fileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => handleViewMaterial(material)}
                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium text-center transition-colors"
                   >
                     <Eye className="w-4 h-4 inline mr-1" />
-                    View
-                  </a>
+                    View Details
+                  </button>
                   <a
                     href={material.fileUrl}
                     download={material.fileName}
@@ -542,6 +553,163 @@ const FacultyStudyMaterial: React.FC = () => {
           ))
         )}
       </div>
+
+      {/* View Details Modal */}
+      {isViewModalOpen && selectedMaterial && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  {getFileTypeIcon(selectedMaterial.fileType)}
+                  <h2 className="text-2xl font-bold text-gray-900">{selectedMaterial.title}</h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setIsViewModalOpen(false);
+                    setSelectedMaterial(null);
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6 text-gray-500" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Basic Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Subject</label>
+                    <p className="text-gray-900 font-medium">{selectedMaterial.subject}</p>
+                    <p className="text-sm text-gray-600">({selectedMaterial.subjectCode})</p>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">File Name</label>
+                    <p className="text-gray-900">{selectedMaterial.fileName}</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">File Size</label>
+                    <p className="text-gray-900">{selectedMaterial.fileSize}</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">File Type</label>
+                    <div className="flex items-center gap-2">
+                      {getFileTypeIcon(selectedMaterial.fileType)}
+                      <span className="text-gray-900 capitalize">{selectedMaterial.fileType}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {selectedMaterial.unit && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Unit/Chapter</label>
+                      <p className="text-gray-900">{selectedMaterial.unit}</p>
+                    </div>
+                  )}
+
+                  {selectedMaterial.topic && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Topic</label>
+                      <p className="text-gray-900">{selectedMaterial.topic}</p>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Target Semester</label>
+                    <p className="text-gray-900">{selectedMaterial.targetSemester} Semester</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Section</label>
+                    <p className="text-gray-900">Section {selectedMaterial.section}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-500 mb-2">Description</label>
+                <p className="text-gray-900 leading-relaxed">{selectedMaterial.description}</p>
+              </div>
+
+              {/* Tags */}
+              {selectedMaterial.tags.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-2">Tags</label>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedMaterial.tags.map((tag, index) => (
+                      <span key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Statistics & Dates */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{selectedMaterial.downloadCount}</div>
+                  <div className="text-sm text-gray-600">Total Downloads</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-gray-900">
+                    {new Date(selectedMaterial.uploadDate).toLocaleDateString()}
+                  </div>
+                  <div className="text-sm text-gray-600">Upload Date</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-gray-900">
+                    {new Date(selectedMaterial.lastModified).toLocaleDateString()}
+                  </div>
+                  <div className="text-sm text-gray-600">Last Modified</div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-6 border-t border-gray-200">
+                {selectedMaterial.fileType === 'link' ? (
+                  <a
+                    href={selectedMaterial.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-center font-medium transition-colors flex items-center justify-center gap-2"
+                  >
+                    <ExternalLink className="w-5 h-5" />
+                    Open Link
+                  </a>
+                ) : (
+                  <>
+                    <a
+                      href={selectedMaterial.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-center font-medium transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Eye className="w-5 h-5" />
+                      Open File
+                    </a>
+                    <a
+                      href={selectedMaterial.fileUrl}
+                      download={selectedMaterial.fileName}
+                      className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+                    >
+                      <Download className="w-5 h-5" />
+                      Download
+                    </a>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Upload Modal */}
       {isUploadModalOpen && (
