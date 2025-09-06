@@ -56,32 +56,32 @@ const PostWall: React.FC = () => {
   const isOverLimit = characterCount > maxChars;
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
       {/* Page header */}
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Admin Wall</h1>
+      <h1 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Admin Wall</h1>
 
       {/* Post input card */}
-      <div className="bg-white rounded-xl shadow p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
         <div className="relative">
           <textarea
             value={postText}
             onChange={(e) => setPostText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Write an announcement... (Ctrl/Cmd + Enter to post)"
-            className={`w-full p-3 border rounded-lg resize-none focus:outline-none transition-all ${
+            className={`w-full p-3 border rounded-lg resize-none focus:outline-none transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
               isOverLimit
-                ? "border-red-300 focus:border-red-500 focus:ring-red-100"
-                : "border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                ? "border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-400 focus:ring-red-100 dark:focus:ring-red-900/20"
+                : "border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/20"
             }`}
             rows={3}
           />
           <div
             className={`absolute bottom-2 right-3 text-xs font-medium ${
               isOverLimit
-                ? "text-red-500"
+                ? "text-red-500 dark:text-red-400"
                 : characterCount > maxChars * 0.8
-                ? "text-yellow-500"
-                : "text-gray-400"
+                ? "text-yellow-500 dark:text-yellow-400"
+                : "text-gray-400 dark:text-gray-500"
             }`}
           >
             {characterCount}/{maxChars}
@@ -91,19 +91,19 @@ const PostWall: React.FC = () => {
         <button
           onClick={handlePost}
           disabled={postText.trim() === "" || isOverLimit}
-          className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+          className="mt-4 bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed"
         >
           {isOverLimit ? "Character limit exceeded" : "Post as Admin"}
         </button>
       </div>
 
       {/* Posts section */}
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200">
         {posts.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-3 bg-gray-100 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-3 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
               <svg
-                className="w-8 h-8 text-gray-400"
+                className="w-8 h-8 text-gray-400 dark:text-gray-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -116,36 +116,36 @@ const PostWall: React.FC = () => {
                 />
               </svg>
             </div>
-            <p className="text-gray-500">No posts yet. Create your first announcement!</p>
+            <p className="text-gray-500 dark:text-gray-400">No posts yet. Create your first announcement!</p>
           </div>
         ) : (
           <>
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">
               Announcements ({posts.length})
             </h2>
             <div className="space-y-4">
               {posts.map((post) => (
                 <div
                   key={post.id}
-                  className="group border border-gray-200 rounded-lg p-4 hover:shadow transition"
+                  className="group border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md dark:hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-200 bg-white dark:bg-gray-800"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-blue-600 dark:bg-blue-500 rounded-full flex items-center justify-center">
                         <span className="text-white font-semibold">
                           {post.author.charAt(0)}
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium text-gray-800 flex items-center space-x-2">
+                        <p className="font-medium text-gray-800 dark:text-white flex items-center space-x-2">
                           <span>{post.author}</span>
                           {post.role === "Admin" && (
-                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                            <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-0.5 rounded-full font-medium border border-blue-200 dark:border-blue-800">
                               Admin
                             </span>
                           )}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           {formatTimestamp(post.timestamp)}
                         </p>
                       </div>
@@ -153,7 +153,7 @@ const PostWall: React.FC = () => {
 
                     <button
                       onClick={() => deletePost(post.id)}
-                      className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition"
+                      className="opacity-0 group-hover:opacity-100 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-all duration-200 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
                       title="Delete post"
                     >
                       <svg
@@ -172,7 +172,7 @@ const PostWall: React.FC = () => {
                     </button>
                   </div>
 
-                  <p className="text-gray-700 whitespace-pre-wrap">{post.text}</p>
+                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">{post.text}</p>
                 </div>
               ))}
             </div>
