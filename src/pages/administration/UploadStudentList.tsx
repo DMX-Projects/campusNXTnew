@@ -627,13 +627,13 @@ const StudentManagementSystem: React.FC = () => {
   };
 
   const renderStudentList = (): JSX.Element => (
-    <div className="p-6">
+    <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Student Management</h2>
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Student Management</h2>
         <div className="flex space-x-3">
           <button 
             onClick={handleDownloadTemplate}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <Download className="w-5 h-5" />
             <span>Download Template</span>
@@ -641,14 +641,14 @@ const StudentManagementSystem: React.FC = () => {
           <button 
             onClick={handleUploadClick}
             disabled={isUploading}
-            className="bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 disabled:bg-green-300 dark:disabled:bg-green-400 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <Upload className="w-5 h-5" />
             <span>{isUploading ? 'Uploading...' : 'Upload Student List'}</span>
           </button>
           <button 
             onClick={handleExportStudents}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <Download className="w-5 h-5" />
             <span>Export Students</span>
@@ -660,7 +660,7 @@ const StudentManagementSystem: React.FC = () => {
               resetForm();
               setActiveTab('basic');
             }}
-            className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <Plus className="w-5 h-5" />
             <span>Add New Student</span>
@@ -677,28 +677,28 @@ const StudentManagementSystem: React.FC = () => {
         style={{ display: 'none' }}
       />
 
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors duration-200">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 dark:from-gray-700 to-white dark:to-gray-800">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                 <input
                   type="text"
                   placeholder="Search students by name, email, or roll number..."
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  className="pl-10 pr-4 py-3 w-80 border border-gray-300 rounded-lg   transition-all duration-200"
+                  className="pl-10 pr-4 py-3 w-80 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all duration-200"
                 />
               </div>
               <button 
                 onClick={() => setShowFilterModal(true)}
-                className="bg-gray-100 hover:bg-gray-200 px-4 py-3 rounded-lg flex items-center space-x-2 transition-colors"
+                className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-3 rounded-lg flex items-center space-x-2 transition-colors"
               >
                 <Filter className="w-4 h-4" />
                 <span>Filter</span>
                 {(filters.program || filters.gender || filters.status || filters.caste) && (
-                  <span className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  <span className="bg-blue-500 dark:bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                     {[filters.program, filters.gender, filters.status, filters.caste].filter(Boolean).length}
                   </span>
                 )}
@@ -706,13 +706,13 @@ const StudentManagementSystem: React.FC = () => {
               {(searchQuery || filters.program || filters.gender || filters.status || filters.caste) && (
                 <button
                   onClick={handleClearFilters}
-                  className="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm transition-colors"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 px-3 py-2 text-sm transition-colors"
                 >
                   Clear All
                 </button>
               )}
             </div>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500 dark:text-gray-400">
               Showing {filteredStudents.length} of {students.length} students
             </div>
           </div>
@@ -720,25 +720,23 @@ const StudentManagementSystem: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-               
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Details</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact Info</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Student Details</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contact Info</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Program</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {filteredStudents.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                     <div className="flex flex-col items-center">
                       <Users className="w-16 h-16 mb-4 opacity-30" />
-                      <p className="text-lg font-medium mb-2">No students found</p>
+                      <p className="text-lg font-medium mb-2 text-gray-900 dark:text-white">No students found</p>
                       <p className="text-sm">
                         {searchQuery || filters.program || filters.gender || filters.status || filters.caste
                           ? 'Try adjusting your search or filters'
@@ -750,32 +748,31 @@ const StudentManagementSystem: React.FC = () => {
                 </tr>
               ) : (
                 filteredStudents.map((student) => (
-                  <tr key={student.id} className="hover:bg-gray-50 transition-colors">
-                    
+                  <tr key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{student.name}</div>
-                        <div className="text-sm text-gray-500">Roll: {student.rollNumber}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{student.name}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">Roll: {student.rollNumber}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm text-gray-900">{student.mobile}</div>
-                        <div className="text-sm text-gray-500">{student.email}</div>
+                        <div className="text-sm text-gray-900 dark:text-white">{student.mobile}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{student.email}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{student.program}</div>
-                        <div className="text-sm text-gray-500">{student.gender}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{student.program}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{student.gender}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.caste}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{student.caste}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        student.status === 'CAP' ? 'bg-green-100 text-green-800' : 
-                        student.status === 'MANAGEMENT' ? 'bg-blue-100 text-blue-800' : 
-                        'bg-yellow-100 text-yellow-800'
+                        student.status === 'CAP' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 
+                        student.status === 'MANAGEMENT' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 
+                        'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
                       }`}>
                         {student.status}
                       </span>
@@ -783,7 +780,7 @@ const StudentManagementSystem: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex space-x-2">
                         <button 
-                          className="text-blue-600 hover:text-blue-800 p-1 rounded transition-colors"
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 p-1 rounded transition-colors"
                           onClick={() => editStudent(student)}
                           title="Edit Student"
                         >
@@ -791,7 +788,7 @@ const StudentManagementSystem: React.FC = () => {
                         </button>
                         
                         <button 
-                          className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
+                          className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 p-1 rounded transition-colors"
                           onClick={() => deleteStudent(student.id)}
                           title="Delete Student"
                         >
@@ -806,7 +803,7 @@ const StudentManagementSystem: React.FC = () => {
           </table>
         </div>
 
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center bg-gray-50">
+        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-700">
           
         </div>
       </div>
@@ -822,14 +819,14 @@ const StudentManagementSystem: React.FC = () => {
     placeholder: string = ''
   ): JSX.Element => (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        {label} {required && <span className="text-red-500 dark:text-red-400">*</span>}
       </label>
       {type === 'select' && options ? (
         <select
           value={formData[field] as string}
           onChange={(e: ChangeEvent<HTMLSelectElement>) => handleInputChange(field, e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
         >
           <option value="">Select {label}</option>
           {options.map(option => (
@@ -840,7 +837,7 @@ const StudentManagementSystem: React.FC = () => {
         <textarea
           value={formData[field] as string}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInputChange(field, e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200"
           rows={3}
           placeholder={placeholder}
         />
@@ -850,16 +847,16 @@ const StudentManagementSystem: React.FC = () => {
             type="checkbox"
             checked={formData[field] as boolean}
             onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(field, e.target.checked)}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+            className="w-4 h-4 text-blue-600 dark:text-blue-500 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-2"
           />
-          <label className="ml-2 text-sm text-gray-700">{placeholder}</label>
+          <label className="ml-2 text-sm text-gray-700 dark:text-gray-300">{placeholder}</label>
         </div>
       ) : (
         <input
           type={type}
           value={formData[field] as string}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(field, e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200"
           placeholder={placeholder}
         />
       )}
@@ -871,9 +868,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'basic':
         return (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <User className="w-5 h-5 mr-2 text-blue-600" />
+            <div className="bg-gradient-to-r from-blue-50 dark:from-blue-900/20 to-purple-50 dark:to-purple-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <User className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
                 Basic Student Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -885,25 +882,21 @@ const StudentManagementSystem: React.FC = () => {
                 {renderFormField('Academic Year', 'academicYear', 'text', null, true, 'e.g., 2023-24')}
               </div>
             </div>
-
-            
           </div>
         );
 
       case 'course':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <BookOpen className="w-5 h-5 mr-2 text-indigo-600" />
+            <div className="bg-gradient-to-r from-indigo-50 dark:from-indigo-900/20 to-purple-50 dark:to-purple-900/20 p-6 rounded-lg border border-indigo-200 dark:border-indigo-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400" />
                 Course Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {renderFormField('Course', 'course', 'text', null, true, 'Enter course name')}
-                 {renderFormField('Branch/stream', 'Branch', 'select', ['cse', 'eee', 'ece', 'civil', 'robotics', ], false)}
+                {renderFormField('Branch/stream', 'branch', 'select', ['cse', 'eee', 'ece', 'civil', 'robotics'], false)}
                 {renderFormField('Semester', 'semester', 'select', ['1', '2', '3', '4', '5', '6', '7', '8'], false)}
-               
-                
               </div>
             </div>
           </div>
@@ -912,9 +905,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'correspondence':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Mail className="w-5 h-5 mr-2 text-blue-600" />
+            <div className="bg-gradient-to-r from-blue-50 dark:from-blue-900/20 to-cyan-50 dark:to-cyan-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <Mail className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
                 Correspondence Address
               </h3>
               <div className="space-y-6">
@@ -936,9 +929,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'permanent':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-green-50 to-teal-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Home className="w-5 h-5 mr-2 text-green-600" />
+            <div className="bg-gradient-to-r from-green-50 dark:from-green-900/20 to-teal-50 dark:to-teal-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <Home className="w-5 h-5 mr-2 text-green-600 dark:text-green-400" />
                 Permanent Address
               </h3>
               
@@ -948,9 +941,9 @@ const StudentManagementSystem: React.FC = () => {
                     type="checkbox"
                     checked={formData.sameAsCorrespondence}
                     onChange={handleSameAsCorrespondence}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                    className="w-4 h-4 text-blue-600 dark:text-blue-500 bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-2"
                   />
-                  <label className="ml-2 text-sm text-gray-700">Same as correspondence address</label>
+                  <label className="ml-2 text-sm text-gray-700 dark:text-gray-300">Same as correspondence address</label>
                 </div>
               </div>
 
@@ -973,9 +966,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'personal':
         return (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <UserCheck className="w-5 h-5 mr-2 text-purple-600" />
+            <div className="bg-gradient-to-r from-purple-50 dark:from-purple-900/20 to-pink-50 dark:to-pink-900/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <UserCheck className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" />
                 Personal Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -990,9 +983,9 @@ const StudentManagementSystem: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-yellow-600" />
+            <div className="bg-gradient-to-r from-yellow-50 dark:from-yellow-900/20 to-orange-50 dark:to-orange-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <Phone className="w-5 h-5 mr-2 text-yellow-600 dark:text-yellow-400" />
                 Contact Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1003,9 +996,9 @@ const StudentManagementSystem: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <CreditCard className="w-5 h-5 mr-2 text-red-600" />
+            <div className="bg-gradient-to-r from-red-50 dark:from-red-900/20 to-pink-50 dark:to-pink-900/20 p-6 rounded-lg border border-red-200 dark:border-red-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <CreditCard className="w-5 h-5 mr-2 text-red-600 dark:text-red-400" />
                 Document Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1020,9 +1013,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'father':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <User className="w-5 h-5 mr-2 text-blue-600" />
+            <div className="bg-gradient-to-r from-blue-50 dark:from-blue-900/20 to-indigo-50 dark:to-indigo-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <User className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
                 Father's Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1041,9 +1034,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'mother':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <User className="w-5 h-5 mr-2 text-pink-600" />
+            <div className="bg-gradient-to-r from-pink-50 dark:from-pink-900/20 to-rose-50 dark:to-rose-900/20 p-6 rounded-lg border border-pink-200 dark:border-pink-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <User className="w-5 h-5 mr-2 text-pink-600 dark:text-pink-400" />
                 Mother's Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1062,9 +1055,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'guardian':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Users className="w-5 h-5 mr-2 text-teal-600" />
+            <div className="bg-gradient-to-r from-teal-50 dark:from-teal-900/20 to-cyan-50 dark:to-cyan-900/20 p-6 rounded-lg border border-teal-200 dark:border-teal-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <Users className="w-5 h-5 mr-2 text-teal-600 dark:text-teal-400" />
                 Guardian Details (if applicable)
               </h3>
               
@@ -1093,9 +1086,9 @@ const StudentManagementSystem: React.FC = () => {
       case 'previous':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-orange-50 to-yellow-50 p-6 rounded-lg border">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Calendar className="w-5 h-5 mr-2 text-orange-600" />
+            <div className="bg-gradient-to-r from-orange-50 dark:from-orange-900/20 to-yellow-50 dark:to-yellow-900/20 p-6 rounded-lg border border-orange-200 dark:border-orange-800">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+                <Calendar className="w-5 h-5 mr-2 text-orange-600 dark:text-orange-400" />
                 Previous Academic Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1115,15 +1108,15 @@ const StudentManagementSystem: React.FC = () => {
       case 'educational':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-lg border">
+            <div className="bg-gradient-to-r from-indigo-50 dark:from-indigo-900/20 to-blue-50 dark:to-blue-900/20 p-6 rounded-lg border border-indigo-200 dark:border-indigo-800">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-                  <GraduationCap className="w-5 h-5 mr-2 text-indigo-600" />
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center">
+                  <GraduationCap className="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400" />
                   Educational Information
                 </h3>
                 <button
                   onClick={addEducationRecord}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Record</span>
@@ -1131,110 +1124,110 @@ const StudentManagementSystem: React.FC = () => {
               </div>
 
               {formData.educationRecords.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                   <GraduationCap className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg font-medium mb-2">No Educational Records Added</p>
+                  <p className="text-lg font-medium mb-2 text-gray-900 dark:text-white">No Educational Records Added</p>
                   <p className="text-sm">Click "Add Record" to start adding educational information.</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full border border-gray-300 rounded-lg bg-white">
-                    <thead className="bg-gray-50">
+                  <table className="w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                    <thead className="bg-gray-50 dark:bg-gray-700">
                       <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">S.No</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Institute Name</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Board/Uni.</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Year</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Month</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Obtained</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Maximum</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Percentage</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Grade</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r">Attempt</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">S.No</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Institute Name</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Board/Uni.</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Year</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Month</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Obtained</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Maximum</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Percentage</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Grade</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase border-r dark:border-gray-600">Attempt</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                       {formData.educationRecords.map((record, index) => (
-                        <tr key={record.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 text-sm border-r">{index + 1}</td>
-                          <td className="px-4 py-3 border-r">
+                        <tr key={record.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="px-4 py-3 text-sm border-r dark:border-gray-600 text-gray-900 dark:text-white">{index + 1}</td>
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.instituteName}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'instituteName', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-32"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-32 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Institute name"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.boardUni}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'boardUni', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-28"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-28 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Board/University"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.year}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'year', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-20"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-20 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Year"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.month}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'month', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-20"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-20 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Month"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.obtained}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'obtained', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-20"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-20 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Obtained"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.maximum}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'maximum', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-20"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-20 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Maximum"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.percentage}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'percentage', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-20"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-20 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Percentage"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <input
                               type="text"
                               value={record.grade}
                               onChange={(e: ChangeEvent<HTMLInputElement>) => updateEducationRecord(record.id, 'grade', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 min-w-16"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 min-w-16 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                               placeholder="Grade"
                             />
                           </td>
-                          <td className="px-4 py-3 border-r">
+                          <td className="px-4 py-3 border-r dark:border-gray-600">
                             <select
                               value={record.attempt}
                               onChange={(e: ChangeEvent<HTMLSelectElement>) => updateEducationRecord(record.id, 'attempt', e.target.value)}
-                              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             >
                               <option value="1">1st</option>
                               <option value="2">2nd</option>
@@ -1244,7 +1237,7 @@ const StudentManagementSystem: React.FC = () => {
                           <td className="px-4 py-3">
                             <button
                               onClick={() => removeEducationRecord(record.id)}
-                              className="text-red-600 hover:text-red-800 p-1 rounded transition-colors"
+                              className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 p-1 rounded transition-colors"
                               title="Remove Record"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -1257,7 +1250,7 @@ const StudentManagementSystem: React.FC = () => {
                 </div>
               )}
               
-              <div className="mt-4 text-right text-sm text-gray-500">
+              <div className="mt-4 text-right text-sm text-gray-500 dark:text-gray-400">
                 Edited by: Admin
               </div>
             </div>
@@ -1265,42 +1258,42 @@ const StudentManagementSystem: React.FC = () => {
         );
 
       default:
-        return <div className="text-center py-8 text-gray-500">Content for {activeTab} tab</div>;
+        return <div className="text-center py-8 text-gray-500 dark:text-gray-400">Content for {activeTab} tab</div>;
     }
   };
 
   const renderEditForm = (): JSX.Element => (
-    <div className="p-6">
+    <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setCurrentView('list')}
-            className="text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
-          <h2 className="text-3xl font-bold text-gray-800">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
             {selectedStudent ? 'Edit Student Details' : 'Add New Student'}
           </h2>
         </div>
         <div className="flex space-x-3">
           <button 
             onClick={resetForm}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="bg-gray-500 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <X className="w-4 h-4" />
             <span>Reset</span>
           </button>
           <button 
             onClick={() => showNotification('info', 'PDF generation feature coming soon!')}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <FileText className="w-4 h-4" />
             <span>Generate PDF</span>
           </button>
           <button 
             onClick={saveStudent}
-            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <Save className="w-4 h-4" />
             <span>Save Student</span>
@@ -1309,8 +1302,8 @@ const StudentManagementSystem: React.FC = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-white rounded-xl shadow-lg mb-6 border border-gray-100">
-        <div className="border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-6 border border-gray-100 dark:border-gray-700">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -1320,8 +1313,8 @@ const StudentManagementSystem: React.FC = () => {
                   onClick={() => setActiveTab(tab.id as TabType)}
                   className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium border-b-2 transition-all duration-200 whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600 bg-blue-50'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-blue-500 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -1338,7 +1331,7 @@ const StudentManagementSystem: React.FC = () => {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-t border-gray-200 flex justify-between rounded-b-xl">
+        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 dark:from-gray-700 to-white dark:to-gray-800 border-t border-gray-200 dark:border-gray-700 flex justify-between rounded-b-xl">
           <button
             onClick={() => {
               const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
@@ -1347,13 +1340,13 @@ const StudentManagementSystem: React.FC = () => {
               }
             }}
             disabled={activeTab === tabs[0].id}
-            className="flex items-center space-x-2 px-6 py-3 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-200"
+            className="flex items-center space-x-2 px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Previous</span>
           </button>
           
-          <div className="text-sm text-gray-500 flex items-center">
+          <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
             Step {tabs.findIndex(tab => tab.id === activeTab) + 1} of {tabs.length}
           </div>
           
@@ -1365,7 +1358,7 @@ const StudentManagementSystem: React.FC = () => {
               }
             }}
             disabled={activeTab === tabs[tabs.length - 1].id}
-            className="flex items-center space-x-2 px-6 py-3 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-200"
+            className="flex items-center space-x-2 px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
           >
             <span>Next</span>
             <ArrowRight className="w-4 h-4" />
@@ -1379,16 +1372,16 @@ const StudentManagementSystem: React.FC = () => {
     if (!showProgramModal) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-xl p-6 w-96 shadow-2xl border border-gray-100">
+      <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-96 shadow-2xl border border-gray-100 dark:border-gray-700">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 flex items-center">
-              <BookOpen className="w-5 h-5 mr-2 text-blue-600" />
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center">
+              <BookOpen className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" />
               Select Program
             </h3>
             <button
               onClick={() => setShowProgramModal(false)}
-              className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors"
+              className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -1398,7 +1391,7 @@ const StudentManagementSystem: React.FC = () => {
             <select
               value={selectedProgram}
               onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedProgram(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
             >
               <option value="">Select a program</option>
               {programs.map(program => (
@@ -1409,7 +1402,7 @@ const StudentManagementSystem: React.FC = () => {
             <div className="flex justify-end space-x-3 mt-8">
               <button
                 onClick={() => setShowProgramModal(false)}
-                className="px-6 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-200"
+                className="px-6 py-3 text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
               >
                 Cancel
               </button>
@@ -1421,7 +1414,7 @@ const StudentManagementSystem: React.FC = () => {
                   setSelectedProgram('');
                 }}
                 disabled={!selectedProgram}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                className="px-6 py-3 bg-blue-500 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 Select Program
               </button>
@@ -1433,7 +1426,7 @@ const StudentManagementSystem: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 dark:from-gray-900 to-gray-100 dark:to-gray-800 transition-colors duration-200">
       <div className="w-full min-h-screen">
         {currentView === 'list' ? renderStudentList() : renderEditForm()}
       </div>
