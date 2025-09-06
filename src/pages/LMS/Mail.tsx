@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { X, Paperclip, Send, Mail, Edit3 } from 'lucide-react';
 
 interface Message {
   id: number;
   sender: string;
-  to?: string; 
+  to?: string;
   subject: string;
   date: string;
   body: string;
@@ -25,6 +26,7 @@ const Inbox: React.FC = () => {
   });
   const [errors, setErrors] = useState<{ to?: string; subject?: string; body?: string }>({});
   const [activeTab, setActiveTab] = useState<"inbox" | "sent">("inbox");
+
   const messageBody = `Dear Placement Team,
 
 We are excited to inform you about our upcoming placement drive and request your assistance in sharing this opportunity with your eligible students.
@@ -47,7 +49,6 @@ We look forward to welcoming your talented students to our drive. For any querie
 
 Best regards,
 Tech Innovators Pvt. Ltd. – HR Team`;
-
 
   useEffect(() => {
     setLoading(true);
@@ -109,7 +110,6 @@ Tech Innovators Pvt. Ltd. – HR Team`;
 
   const sendComposeMail = () => {
     if (!validateCompose()) return;
-
     const newMail: Message = {
       id: sentMessages.length + 1,
       sender: "You",
@@ -120,7 +120,6 @@ Tech Innovators Pvt. Ltd. – HR Team`;
       read: true,
       attachments: composeData.attachments,
     };
-
     setSentMessages([newMail, ...sentMessages]);
     setComposing(false);
     setComposeData({ to: "", subject: "", body: "", attachments: [] });
@@ -130,135 +129,215 @@ Tech Innovators Pvt. Ltd. – HR Team`;
   const displayedMessages = activeTab === "inbox" ? messages : sentMessages;
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Sidebar */}
-      <div className="w-80 border-r border-gray-200 flex flex-col bg-white shadow-md">
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-800">Mailbox</h2>
+      <div className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+        {/* Header */}
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-8 h-8 bg-blue-600 dark:bg-blue-500 rounded-lg flex items-center justify-center">
+              <Mail className="w-4 h-4 text-white" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Mailbox</h2>
+          </div>
           <button
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
             onClick={() => setComposing(true)}
+            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
           >
-            Compose
+            <Edit3 className="w-4 h-4" />
+            <span>Compose</span>
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200">
+        <div className="flex border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
           <button
-            className={`flex-1 py-2 ${activeTab === "inbox" ? "border-b-2 border-blue-500 font-bold" : ""}`}
             onClick={() => setActiveTab("inbox")}
+            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+              activeTab === "inbox"
+                ? "border-b-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+            }`}
           >
             Inbox
           </button>
           <button
-            className={`flex-1 py-2 ${activeTab === "sent" ? "border-b-2 border-blue-500 font-bold" : ""}`}
             onClick={() => setActiveTab("sent")}
+            className={`flex-1 py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+              activeTab === "sent"
+                ? "border-b-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-white dark:bg-gray-800"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
+            }`}
           >
             Sent
           </button>
         </div>
 
-        {loading ? (
-          <div className="p-4 space-y-2">
-            {[...Array(5)].map((_, idx) => (
-              <div key={idx} className="h-14 bg-gray-200 rounded animate-pulse"></div>
-            ))}
-          </div>
-        ) : (
-          <ul className="overflow-y-auto flex-1">
-            {displayedMessages.map((msg) => (
-              <li
-                key={msg.id}
-                className={`flex items-center p-3 border-b cursor-pointer hover:bg-blue-50 transition ${
-                  msg.read ? "" : "bg-blue-50 font-semibold"
-                }`}
-                onClick={() => {
-                  setSelectedMessage(msg);
-                  if (activeTab === "inbox") {
-                    setMessages((prev) =>
-                      prev.map((m) => (m.id === msg.id ? { ...m, read: true } : m))
-                    );
-                  }
-                }}
-              >
-                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-blue-200 text-white font-bold mr-3">
-                  {msg.sender
-                    .split(" ")
-                    .map((word) => word[0])
-                    .join("")
-                    .slice(0, 2)}
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">{activeTab === "inbox" ? msg.sender : msg.to}</span>
-                    <span className="text-gray-400 text-xs">{msg.date}</span>
+        {/* Messages List */}
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800/50">
+          {loading ? (
+            <div className="space-y-1 p-2">
+              {[...Array(5)].map((_, idx) => (
+                <div key={idx} className="p-4 border-b border-gray-200 dark:border-gray-700 animate-pulse bg-white dark:bg-gray-800 mx-2 mt-2 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
+                      <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+                    </div>
                   </div>
-                  <p className="text-gray-600 text-sm truncate">{msg.subject}</p>
                 </div>
-              </li>
-            ))}
-          </ul>
-        )}
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-1 p-2">
+              {displayedMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  onClick={() => {
+                    setSelectedMessage(msg);
+                    if (activeTab === "inbox") {
+                      setMessages((prev) =>
+                        prev.map((m) => (m.id === msg.id ? { ...m, read: true } : m))
+                      );
+                    }
+                  }}
+                  className={`p-4 rounded-lg cursor-pointer transition-colors duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 ${
+                    selectedMessage?.id === msg.id ? "ring-2 ring-blue-500 dark:ring-blue-400 bg-blue-50 dark:bg-blue-900/30" : ""
+                  } ${!msg.read && activeTab === "inbox" ? "shadow-sm" : ""}`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                      {msg.sender
+                        .split(" ")
+                        .map((word) => word[0])
+                        .join("")
+                        .slice(0, 2)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <p className={`text-sm font-medium truncate ${
+                          !msg.read && activeTab === "inbox" 
+                            ? "text-gray-900 dark:text-white font-semibold" 
+                            : "text-gray-700 dark:text-gray-300"
+                        }`}>
+                          {activeTab === "inbox" ? msg.sender : msg.to}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{msg.date}</p>
+                      </div>
+                      <p className={`text-sm truncate mt-1 ${
+                        !msg.read && activeTab === "inbox" 
+                          ? "text-gray-800 dark:text-gray-200 font-medium" 
+                          : "text-gray-600 dark:text-gray-400"
+                      }`}>
+                        {msg.subject}
+                      </p>
+                      {!msg.read && activeTab === "inbox" && (
+                        <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full mt-2"></div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Main Panel */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-white dark:bg-gray-800">
         {/* Compose Modal */}
         {composing && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
-            <div className="bg-white w-1/2 rounded shadow-lg p-6 space-y-4">
-              <h2 className="text-xl font-bold text-gray-800">Compose Mail</h2>
+          <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-hidden border border-gray-200 dark:border-gray-600">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Compose Mail</h3>
+                <button
+                  onClick={() => setComposing(false)}
+                  className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-4 overflow-y-auto max-h-[calc(90vh-140px)] bg-white dark:bg-gray-800">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">To</label>
+                  <input
+                    type="email"
+                    name="to"
+                    value={composeData.to}
+                    onChange={handleComposeChange}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                    placeholder="recipient@example.com"
+                  />
+                  {errors.to && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.to}</p>}
+                </div>
 
-              <div className="flex flex-col space-y-2">
-                <input
-                  type="text"
-                  name="to"
-                  placeholder="To"
-                  value={composeData.to}
-                  onChange={handleComposeChange}
-                  className="w-full border px-3 py-2 rounded"
-                />
-                {errors.to && <span className="text-red-500 text-sm">{errors.to}</span>}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={composeData.subject}
+                    onChange={handleComposeChange}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+                    placeholder="Email subject"
+                  />
+                  {errors.subject && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.subject}</p>}
+                </div>
 
-                <input
-                  type="text"
-                  name="subject"
-                  placeholder="Subject"
-                  value={composeData.subject}
-                  onChange={handleComposeChange}
-                  className="w-full border px-3 py-2 rounded"
-                />
-                {errors.subject && <span className="text-red-500 text-sm">{errors.subject}</span>}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                  <textarea
+                    name="body"
+                    value={composeData.body}
+                    onChange={handleComposeChange}
+                    rows={8}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors resize-none"
+                    placeholder="Type your message here..."
+                  />
+                  {errors.body && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors.body}</p>}
+                </div>
 
-                <textarea
-                  name="body"
-                  placeholder="Message"
-                  value={composeData.body}
-                  onChange={handleComposeChange}
-                  className="w-full border px-3 py-2 rounded h-64 resize-none"
-                />
-                {errors.body && <span className="text-red-500 text-sm">{errors.body}</span>}
-
-                <input
-                  type="file"
-                  multiple
-                  onChange={handleFileChange}
-                  className="border p-2 rounded"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Attachments</label>
+                  <div className="flex items-center space-x-3">
+                    <input
+                      type="file"
+                      multiple
+                      onChange={handleFileChange}
+                      className="hidden"
+                      id="file-upload"
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+                    >
+                      <Paperclip className="w-4 h-4 mr-2" />
+                      Choose Files
+                    </label>
+                    {composeData.attachments.length > 0 && (
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {composeData.attachments.length} file(s) selected
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              <div className="flex justify-end space-x-2">
+              <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
                 <button
-                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
                   onClick={() => setComposing(false)}
+                  className="px-6 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                   onClick={sendComposeMail}
+                  className="inline-flex items-center px-6 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-700 rounded-lg transition-colors"
                 >
+                  <Send className="w-4 h-4 mr-2" />
                   Send
                 </button>
               </div>
@@ -267,37 +346,61 @@ Tech Innovators Pvt. Ltd. – HR Team`;
         )}
 
         {/* Message Display */}
-        <div className="flex-1 p-6 overflow-y-auto">
-          {selectedMessage ? (
-            <div className="bg-white rounded shadow p-6 space-y-4">
-              <h2 className="text-2xl font-bold text-gray-800">{selectedMessage.subject}</h2>
-              <div className="flex justify-between text-gray-500 text-sm">
+        {selectedMessage ? (
+          <div className="flex-1 overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                {selectedMessage.subject}
+              </h1>
+              <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                 {activeTab === "inbox" ? (
-                  <span>From: {selectedMessage.sender}</span>
+                  <p><span className="font-medium text-gray-900 dark:text-gray-300">From:</span> {selectedMessage.sender}</p>
                 ) : (
-                  <span>To: {selectedMessage.to}</span>
+                  <p><span className="font-medium text-gray-900 dark:text-gray-300">To:</span> {selectedMessage.to}</p>
                 )}
-                <span>{selectedMessage.date}</span>
+                <p><span className="font-medium text-gray-900 dark:text-gray-300">Date:</span> {selectedMessage.date}</p>
               </div>
-              <hr />
-              <p className="text-gray-700 whitespace-pre-wrap">{selectedMessage.body}</p>
-              {selectedMessage.attachments && selectedMessage.attachments.length > 0 && (
-                <div>
-                  <h3 className="font-semibold mt-2">Attachments:</h3>
-                  <ul className="list-disc list-inside">
-                    {selectedMessage.attachments.map((file, idx) => (
-                      <li key={idx}>{file.name}</li>
-                    ))}
-                  </ul>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div className="prose prose-sm max-w-none dark:prose-invert">
+                  <div className="whitespace-pre-wrap text-gray-900 dark:text-gray-100 leading-relaxed">
+                    {selectedMessage.body}
+                  </div>
                 </div>
-              )}
+                
+                {selectedMessage.attachments && selectedMessage.attachments.length > 0 && (
+                  <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-4">Attachments:</h4>
+                    <div className="space-y-2">
+                      {selectedMessage.attachments.map((file, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                        >
+                          <Paperclip className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                          <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">{file.name}</span>
+                          <button className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 ml-auto">
+                            Download
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-          ) : (
-            <div className="text-gray-400 text-center mt-20 text-lg">
-              Select a message to read.
+          </div>
+        ) : (
+          <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <div className="text-center">
+              <Mail className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <p className="text-lg text-gray-600 dark:text-gray-400">Select a message to read.</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">Choose from your inbox or sent messages.</p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
