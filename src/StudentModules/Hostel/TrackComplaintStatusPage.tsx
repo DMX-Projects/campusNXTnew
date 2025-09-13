@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Eye, Clock, CheckCircle, AlertTriangle, User, 
   Calendar, MessageSquare, FileText, MapPin, Camera,
-  Star, ThumbsUp, ThumbsDown, RefreshCw, Filter, Search
+  Star, ThumbsUp, ThumbsDown, RefreshCw, Filter, Search, X
 } from 'lucide-react';
 
 interface ComplaintStatus {

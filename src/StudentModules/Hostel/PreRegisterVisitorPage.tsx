@@ -3,7 +3,7 @@ import {
   UserPlus, Calendar, Clock, MapPin, Phone, 
   User, FileText, Camera, QrCode, CheckCircle,
   AlertTriangle, Send, RefreshCw, Filter, Search,
-  CalendarDays, Users, Eye, Edit, Trash2
+  CalendarDays, Users, Eye, Edit, Trash2, X
 } from 'lucide-react';
 
 interface VisitorRegistration {

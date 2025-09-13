@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Download, FileText, Calendar, Clock, DollarSign, 
   Eye, Search, Filter, CheckCircle, AlertCircle,
-  Home, Building2, User, Phone, Mail, RefreshCw
+  Home, Building2, User, Phone, Mail, RefreshCw, X
 } from 'lucide-react';
 
 interface Receipt {
