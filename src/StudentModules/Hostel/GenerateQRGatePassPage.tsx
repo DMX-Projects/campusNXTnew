@@ -45,11 +45,11 @@ const GenerateQRGatePassPage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in',
+    email: 'arjun.kumar@college.edu.in',
     emergencyContact: '+91-9876543211'
   };
 
@@ -57,7 +57,7 @@ const GenerateQRGatePassPage: React.FC = () => {
     {
       id: 'GP001',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       leaveType: 'Home Leave',
       startDate: '2025-01-20',
@@ -83,7 +83,7 @@ const GenerateQRGatePassPage: React.FC = () => {
     {
       id: 'ML001',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       date: '2025-01-15',
       outTime: '18:30',
@@ -95,7 +95,7 @@ const GenerateQRGatePassPage: React.FC = () => {
     {
       id: 'ML002',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       date: '2025-01-16',
       outTime: '20:00',
@@ -106,7 +106,7 @@ const GenerateQRGatePassPage: React.FC = () => {
     {
       id: 'ML003',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       date: '2025-01-14',
       outTime: '19:00',
@@ -120,7 +120,7 @@ const GenerateQRGatePassPage: React.FC = () => {
     {
       id: 'GP002',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       leaveType: 'Medical Leave',
       startDate: '2025-01-10',

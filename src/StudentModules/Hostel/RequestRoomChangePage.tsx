@@ -46,8 +46,8 @@ const RequestRoomChangePage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     currentRoom: 'A-201',
     currentBlock: 'A Block',
     currentRoomType: 'Double AC',

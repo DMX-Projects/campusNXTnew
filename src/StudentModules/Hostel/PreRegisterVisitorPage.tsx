@@ -70,11 +70,11 @@ const PreRegisterVisitorPage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in',
+    email: 'arjun.kumar@college.edu.in',
     hostelId: 'H001',
     warden: 'Mr. Prakash Sharma'
   };
@@ -83,7 +83,7 @@ const PreRegisterVisitorPage: React.FC = () => {
     {
       id: 'VIS001',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Rajesh Kumar',
       visitorRelation: 'Father',
@@ -106,7 +106,7 @@ const PreRegisterVisitorPage: React.FC = () => {
     {
       id: 'VIS002',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Meera Patel',
       visitorRelation: 'Sister',
@@ -124,7 +124,7 @@ const PreRegisterVisitorPage: React.FC = () => {
     {
       id: 'VIS003',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Dr. Anil Kumar',
       visitorRelation: 'Doctor',

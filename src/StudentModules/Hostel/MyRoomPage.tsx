@@ -81,12 +81,12 @@ const MyRoomPage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent: Student = {
     id: 'STU001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     branch: 'Computer Science Engineering',
     semester: 4,
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in',
+    email: 'arjun.kumar@college.edu.in',
     emergencyContact: '+91-9876543211',
     bloodGroup: 'B+',
     hometown: 'Bangalore, Karnataka'
@@ -221,7 +221,7 @@ const MyRoomPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className=" mx-auto">
+      <div className="mx-auto">
        
 
 

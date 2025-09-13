@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   BarChart3, Home, Users, Calendar, Clock, 
   DollarSign, AlertTriangle, Bell, QrCode,
@@ -52,17 +53,18 @@ interface QuickAction {
 
 const HostelDashboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'activities' | 'notifications'>('overview');
+  const navigate = useNavigate();
 
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in',
+    email: 'arjun.kumar@college.edu.in',
     hostelId: 'H001',
-    warden: 'Mr. Prakash Sharma',
+    warden: 'Ms. Maria Garcia',
     hostelName: 'Boys Hostel A',
     block: 'A Block',
     floor: 2,
@@ -268,7 +270,7 @@ const HostelDashboardPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
@@ -337,6 +339,7 @@ const HostelDashboardPage: React.FC = () => {
                 <button
                   key={action.id}
                   className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left"
+                  onClick={() => navigate(action.path)}
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <div className={`p-2 rounded-lg ${getColorClasses(action.color)}`}>
@@ -354,7 +357,10 @@ const HostelDashboardPage: React.FC = () => {
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <button 
+            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left w-full"
+            onClick={() => navigate('/hostel/room/details')}
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <FileText className="w-5 h-5 text-blue-600" />
@@ -367,9 +373,12 @@ const HostelDashboardPage: React.FC = () => {
               <span className="text-sm text-gray-400">•</span>
               <span className="text-sm text-yellow-600">{dashboardStats.pendingApplications} pending</span>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <button 
+            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left w-full"
+            onClick={() => navigate('/hostel/leave/status')}
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="p-2 bg-yellow-100 rounded-lg">
                 <Calendar className="w-5 h-5 text-yellow-600" />
@@ -382,9 +391,12 @@ const HostelDashboardPage: React.FC = () => {
               <span className="text-sm text-gray-400">•</span>
               <span className="text-sm text-yellow-600">{dashboardStats.pendingLeaves} pending</span>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <button 
+            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left w-full"
+            onClick={() => navigate('/hostel/fees/details')}
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <DollarSign className="w-5 h-5 text-green-600" />
@@ -397,9 +409,12 @@ const HostelDashboardPage: React.FC = () => {
               <span className="text-sm text-gray-400">•</span>
               <span className="text-sm text-red-600">₹{dashboardStats.pendingFees.toLocaleString()} pending</span>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <button 
+            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left w-full"
+            onClick={() => navigate('/hostel/complaints/status')}
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="p-2 bg-red-100 rounded-lg">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
@@ -412,12 +427,15 @@ const HostelDashboardPage: React.FC = () => {
               <span className="text-sm text-gray-400">•</span>
               <span className="text-sm text-yellow-600">{dashboardStats.pendingComplaints} pending</span>
             </div>
-          </div>
+          </button>
         </div>
 
         {/* Additional Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <button 
+            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left w-full"
+            onClick={() => navigate('/hostel/visitors/logs')}
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <Users className="w-5 h-5 text-purple-600" />
@@ -430,9 +448,12 @@ const HostelDashboardPage: React.FC = () => {
               <span className="text-sm text-gray-400">•</span>
               <span className="text-sm text-yellow-600">{dashboardStats.pendingVisits} pending</span>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <button 
+            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left w-full"
+            onClick={() => navigate('/hostel/notifications')}
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="p-2 bg-indigo-100 rounded-lg">
                 <Bell className="w-5 h-5 text-indigo-600" />
@@ -445,9 +466,12 @@ const HostelDashboardPage: React.FC = () => {
               <span className="text-sm text-gray-400">•</span>
               <span className="text-sm text-green-600">{dashboardStats.notifications - dashboardStats.unreadNotifications} read</span>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <button 
+            className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow text-left w-full"
+            onClick={() => navigate('/hostel/student/my-room')}
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <Shield className="w-5 h-5 text-green-600" />
@@ -460,7 +484,7 @@ const HostelDashboardPage: React.FC = () => {
               <span className="text-sm text-gray-400">•</span>
               <span className="text-sm text-blue-600">Last updated: Now</span>
             </div>
-          </div>
+          </button>
         </div>
 
         {/* Tab Navigation */}

@@ -51,18 +51,18 @@ const GiveFeedbackPage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in'
+    email: 'arjun.kumar@college.edu.in'
   };
 
   const complaints: Complaint[] = [
     {
       id: 'COMP001',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       type: 'Maintenance',
       category: 'AC/Fan',
@@ -76,7 +76,7 @@ const GiveFeedbackPage: React.FC = () => {
     {
       id: 'COMP002',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       type: 'Mess',
       category: 'Food Quality',
@@ -95,7 +95,7 @@ const GiveFeedbackPage: React.FC = () => {
     {
       id: 'COMP003',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       type: 'Facilities',
       category: 'Wi-Fi',

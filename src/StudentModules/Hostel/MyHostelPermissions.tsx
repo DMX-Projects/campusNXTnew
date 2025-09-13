@@ -59,8 +59,8 @@ const MyPermissionsPage: React.FC = () => {
   // Current student info
   const currentStudent: Student = {
     id: 'STU001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     block: 'A Block',
     roomNumber: 'A-205',
     parentContact: '+91-9876543210',

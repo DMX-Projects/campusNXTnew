@@ -56,18 +56,18 @@ const TrackComplaintStatusPage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in'
+    email: 'arjun.kumar@college.edu.in'
   };
 
   const complaints: ComplaintStatus[] = [
     {
       id: 'COMP001',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       type: 'Maintenance',
       category: 'AC/Fan',
@@ -111,7 +111,7 @@ const TrackComplaintStatusPage: React.FC = () => {
     {
       id: 'COMP002',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       type: 'Mess',
       category: 'Food Quality',
@@ -224,7 +224,7 @@ const TrackComplaintStatusPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center gap-4">
