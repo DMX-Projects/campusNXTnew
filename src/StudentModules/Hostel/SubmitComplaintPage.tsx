@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   MessageSquare, AlertTriangle, Camera, FileText, 
   Clock, CheckCircle, User, Home, Building2, Phone, Mail,
-  Info, X, Upload, MapPin, Calendar, Star
+  Info, X, Upload, MapPin, Calendar, Star, ArrowLeft
 } from 'lucide-react';
 
 interface Complaint {
@@ -31,6 +32,7 @@ interface ComplaintCategory {
 }
 
 const SubmitComplaintPage: React.FC = () => {
+  const navigate = useNavigate();
   const [showComplaintForm, setShowComplaintForm] = useState(false);
   const [complaintForm, setComplaintForm] = useState({
     type: 'Maintenance' as Complaint['type'],
@@ -181,13 +183,22 @@ const SubmitComplaintPage: React.FC = () => {
                 <p className="text-gray-600">Report issues and submit complaints to hostel administration</p>
               </div>
             </div>
-            <button
-              onClick={() => setShowComplaintForm(true)}
-              className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"
-            >
-              <MessageSquare className="w-4 h-4" />
-              New Complaint
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate('/hostel/student-dashboard')}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Dashboard
+              </button>
+              <button
+                onClick={() => setShowComplaintForm(true)}
+                className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4" />
+                New Complaint
+              </button>
+            </div>
           </div>
         </div>
 

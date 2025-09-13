@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   CreditCard, DollarSign, CheckCircle, AlertCircle, 
   Calendar, Clock, FileText, Home, Building2, User,
-  Phone, Mail, Info, X, Eye, Lock, Shield
+  Phone, Mail, Info, X, Eye, Lock, Shield, ArrowLeft
 } from 'lucide-react';
 
 interface PaymentMethod {
@@ -27,6 +28,7 @@ interface PaymentDetails {
 }
 
 const PayOnlinePage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState<string>('');
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentStep, setPaymentStep] = useState<'method' | 'details' | 'confirmation'>('method');
@@ -160,14 +162,23 @@ const PayOnlinePage: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-100 rounded-xl">
-              <CreditCard className="w-8 h-8 text-green-600" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-green-100 rounded-xl">
+                <CreditCard className="w-8 h-8 text-green-600" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800">Online Payment</h1>
+                <p className="text-gray-600">Secure and convenient payment for your hostel fees</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">Online Payment</h1>
-              <p className="text-gray-600">Secure and convenient payment for your hostel fees</p>
-            </div>
+            <button
+              onClick={() => navigate('/hostel/student-dashboard')}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </button>
           </div>
         </div>
 

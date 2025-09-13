@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   CalendarCheck, Clock, MapPin, Phone, Mail, User, 
   FileText, CheckCircle, AlertCircle, Calendar, Home,
-  Building2, DollarSign, Info, X, Eye, Download
+  Building2, DollarSign, Info, X, Eye, Download, ArrowLeft
 } from 'lucide-react';
 
 interface LeaveRequest {
@@ -34,6 +35,7 @@ interface LeavePolicy {
 }
 
 const ApplyForLeavePage: React.FC = () => {
+  const navigate = useNavigate();
   const [showLeaveForm, setShowLeaveForm] = useState(false);
   const [showLeaveDetails, setShowLeaveDetails] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState<LeaveRequest | null>(null);
@@ -208,13 +210,22 @@ const ApplyForLeavePage: React.FC = () => {
                 <p className="text-gray-600">Apply for leave and track your leave requests</p>
               </div>
             </div>
-            <button
-              onClick={() => setShowLeaveForm(true)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-            >
-              <CalendarCheck className="w-4 h-4" />
-              Apply for Leave
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate('/hostel/student-dashboard')}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Dashboard
+              </button>
+              <button
+                onClick={() => setShowLeaveForm(true)}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              >
+                <CalendarCheck className="w-4 h-4" />
+                Apply for Leave
+              </button>
+            </div>
           </div>
         </div>
 

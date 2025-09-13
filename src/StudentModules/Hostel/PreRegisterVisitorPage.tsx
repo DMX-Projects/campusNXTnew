@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   UserPlus, Calendar, Clock, MapPin, Phone, 
   User, FileText, Camera, QrCode, CheckCircle,
   AlertTriangle, Send, RefreshCw, Filter, Search,
-  CalendarDays, Users, Eye, Edit, Trash2
+  CalendarDays, Users, Eye, Edit, Trash2, ArrowLeft
 } from 'lucide-react';
 
 interface VisitorRegistration {
@@ -47,6 +48,7 @@ interface VisitorForm {
 }
 
 const PreRegisterVisitorPage: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'register' | 'pending' | 'approved' | 'history'>('register');
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -248,14 +250,23 @@ const PreRegisterVisitorPage: React.FC = () => {
       <div className="  mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-purple-100 rounded-xl">
-              <UserPlus className="w-8 h-8 text-purple-600" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-purple-100 rounded-xl">
+                <UserPlus className="w-8 h-8 text-purple-600" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800">Pre-register Visitor</h1>
+                <p className="text-gray-600">Register visitors in advance for smooth entry process</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">Pre-register Visitor</h1>
-              <p className="text-gray-600">Register visitors in advance for smooth entry process</p>
-            </div>
+            <button
+              onClick={() => navigate('/hostel/student-dashboard')}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </button>
           </div>
         </div>
 
