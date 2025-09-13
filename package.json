@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"vite\"",
+    "dev": "concurrently \"npm run server\" \"npm run hostel-server\" \"vite\"",
     "server": "json-server --watch db.json --port 3001",
+    "hostel-server": "json-server --watch hostel.json --port 5000",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

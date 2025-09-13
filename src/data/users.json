@@ -14,7 +14,7 @@
     {"id": "PA001", "username": "parent", "password": "1234", "role": "Parent", "name": "Robert Wilson", "childId": "CS2023001", "childStudentId": "CS2023001"},
     {"id": "AO001", "username": "admin", "password": "1234", "role": "Administration Officer", "name": "Mr. David Lee", "campusId": "MAIN"},
     {"id": "TI001", "username": "transport", "password": "1234", "role": "Transportation Incharge", "name": "Mr. Carlos Rodriguez", "routeIds": ["R001", "R002"]},
-    {"id": "HI001", "username": "hostel", "password": "1234", "role": "Hostel Incharge", "name": "Ms. Maria Garcia", "hostelIds": ["H001", "H002"]},
+    {"id": "HI001", "username": "warden", "password": "1234", "role": "Hostel Incharge", "name": "Ms. Maria Garcia", "hostelIds": ["H001", "H002"]},
     {"id": "LI001", "username": "librarian", "password": "1234", "role": "Library Incharge", "name": "Ms. Jennifer Taylor", "libraryId": "LIB001"},
     {"id": "AC001", "username": "accounts", "password": "1234", "role": "Accounts Officer", "name": "Mr. Thomas Clark", "campusId": "MAIN"},
     {"id": "SC001", "username": "scholarship", "password": "1234", "role": "Scholarship Incharge", "name": "Ms. Nancy Lewis", "campusId": "MAIN"},
