@@ -42,20 +42,20 @@ const VisitorLogsPage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in',
+    email: 'arjun.kumar@college.edu.in',
     hostelId: 'H001',
-    warden: 'Mr. Prakash Sharma'
+    warden: 'Ms. Maria Garcia'
   };
 
   const visitorLogs: VisitorLog[] = [
     {
       id: 'VIS001',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Rajesh Kumar',
       visitorRelation: 'Father',
@@ -68,7 +68,7 @@ const VisitorLogsPage: React.FC = () => {
       purpose: 'Family visit',
       status: 'Completed',
       submittedDate: '2025-01-18',
-      approvedBy: 'Mr. Prakash Sharma',
+      approvedBy: 'Ms. Maria Garcia',
       approvedDate: '2025-01-19',
       qrCode: 'QR-VIS001-20250120',
       checkInTime: '14:05',
@@ -80,7 +80,7 @@ const VisitorLogsPage: React.FC = () => {
     {
       id: 'VIS002',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Meera Patel',
       visitorRelation: 'Sister',
@@ -93,7 +93,7 @@ const VisitorLogsPage: React.FC = () => {
       purpose: 'Personal visit',
       status: 'Approved',
       submittedDate: '2025-01-20',
-      approvedBy: 'Mr. Prakash Sharma',
+      approvedBy: 'Ms. Maria Garcia',
       approvedDate: '2025-01-21',
       qrCode: 'QR-VIS002-20250122',
       remarks: 'Ready for visit'
@@ -101,7 +101,7 @@ const VisitorLogsPage: React.FC = () => {
     {
       id: 'VIS003',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Dr. Anil Kumar',
       visitorRelation: 'Doctor',
@@ -114,7 +114,7 @@ const VisitorLogsPage: React.FC = () => {
       purpose: 'Medical consultation',
       status: 'Completed',
       submittedDate: '2025-01-14',
-      approvedBy: 'Mr. Prakash Sharma',
+      approvedBy: 'Ms. Maria Garcia',
       approvedDate: '2025-01-14',
       qrCode: 'QR-VIS003-20250115',
       checkInTime: '16:05',
@@ -126,7 +126,7 @@ const VisitorLogsPage: React.FC = () => {
     {
       id: 'VIS004',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Priya Sharma',
       visitorRelation: 'Friend',
@@ -139,7 +139,7 @@ const VisitorLogsPage: React.FC = () => {
       purpose: 'Study group meeting',
       status: 'Completed',
       submittedDate: '2025-01-08',
-      approvedBy: 'Mr. Prakash Sharma',
+      approvedBy: 'Ms. Maria Garcia',
       approvedDate: '2025-01-09',
       qrCode: 'QR-VIS004-20250110',
       checkInTime: '18:10',
@@ -151,7 +151,7 @@ const VisitorLogsPage: React.FC = () => {
     {
       id: 'VIS005',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       visitorName: 'Vikram Singh',
       visitorRelation: 'Cousin',
@@ -266,7 +266,7 @@ const VisitorLogsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center gap-4">

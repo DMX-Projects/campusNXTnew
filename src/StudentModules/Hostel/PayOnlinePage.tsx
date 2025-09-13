@@ -44,16 +44,16 @@ const PayOnlinePage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in'
+    email: 'arjun.kumar@college.edu.in'
   };
 
   const paymentDetails: PaymentDetails = {
     studentId: 'CS2023001',
-    studentName: 'Rahul Kumar',
+    studentName: 'Arjun Kumar',
     roomNumber: 'A-201',
     amount: 9200,
     description: 'February 2025 - Hostel Fee (Rent + Mess + Electricity)',

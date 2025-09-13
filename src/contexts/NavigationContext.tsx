@@ -659,7 +659,7 @@ const SIDEBAR_ITEMS = {
     { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
   ],
     'Student': [
-    { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
+    { name: 'Dashboard', path: '/hostel/student-dashboard', icon: 'BarChart3' },
     { 
       name: 'Room & Application', 
       path: '/hostel/room', 

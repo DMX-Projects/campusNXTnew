@@ -46,8 +46,8 @@ const RequestRoomChangePage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     currentRoom: 'A-201',
     currentBlock: 'A Block',
     currentRoomType: 'Double AC',
@@ -166,7 +166,7 @@ const RequestRoomChangePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="  mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">

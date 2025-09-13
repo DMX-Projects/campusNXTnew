@@ -46,13 +46,13 @@ const ApplyForHostelPage: React.FC = () => {
 
   // Sample data - would come from API in real application
   const currentStudent = {
-    id: 'CS2023004',
-    name: 'Vikram Singh',
-    rollNumber: '2023ME001',
-    branch: 'Mechanical Engineering',
-    semester: 2,
-    phoneNumber: '+91-9876543240',
-    email: 'vikram.singh@college.edu.in',
+    id: 'CS2023001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
+    branch: 'Computer Science',
+    semester: 3,
+    phoneNumber: '+91-9876543210',
+    email: 'arjun.kumar@college.edu.in',
     emergencyContact: '+91-9876543241',
     bloodGroup: 'AB+',
     hometown: 'Pune, Maharashtra'
@@ -154,7 +154,7 @@ const ApplyForHostelPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="  mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">

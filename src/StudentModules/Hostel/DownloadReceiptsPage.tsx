@@ -33,11 +33,11 @@ const DownloadReceiptsPage: React.FC = () => {
   // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     roomNumber: 'A-201',
     phoneNumber: '+91-9876543210',
-    email: 'rahul.kumar@college.edu.in'
+    email: 'arjun.kumar@college.edu.in'
   };
 
   const receipts: Receipt[] = [
@@ -45,7 +45,7 @@ const DownloadReceiptsPage: React.FC = () => {
       id: 'RCP001',
       receiptNumber: 'RCP-2025-001',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       paymentDate: '2025-01-01',
       amount: 9000,
@@ -63,7 +63,7 @@ const DownloadReceiptsPage: React.FC = () => {
       id: 'RCP002',
       receiptNumber: 'RCP-2023-002',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       paymentDate: '2023-07-15',
       amount: 10000,
@@ -81,7 +81,7 @@ const DownloadReceiptsPage: React.FC = () => {
       id: 'RCP003',
       receiptNumber: 'RCP-2024-003',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       paymentDate: '2024-12-01',
       amount: 8500,
@@ -99,7 +99,7 @@ const DownloadReceiptsPage: React.FC = () => {
       id: 'RCP004',
       receiptNumber: 'RCP-2024-004',
       studentId: 'CS2023001',
-      studentName: 'Rahul Kumar',
+      studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
       paymentDate: '2024-11-01',
       amount: 8000,
@@ -166,7 +166,7 @@ const DownloadReceiptsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="  mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">

@@ -56,8 +56,8 @@ import HostelDashboardPage from "../StudentModules/Hostel/HostelDashboardPage";
 const HostelRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Default → Redirect /hostel to /hostel/dashboard */}
-      <Route index element={<Navigate to="dashboard" replace />} />
+      {/* Default → Redirect /hostel to /hostel/student-dashboard for students */}
+      <Route index element={<Navigate to="student-dashboard" replace />} />
 
       {/* Admin/Warden Hostel pages */}
       <Route path="dashboard" element={<HostelDashboard />} />
@@ -112,8 +112,8 @@ const HostelRoutes: React.FC = () => {
       <Route path="student/attendance" element={<MyAttendancePage />} />
       <Route path="student/notices" element={<NoticesPage />} />
 
-      {/* Catch all → Redirect back to dashboard */}
-      <Route path="*" element={<Navigate to="/hostel/dashboard" replace />} />
+      {/* Catch all → Redirect back to student dashboard */}
+      <Route path="*" element={<Navigate to="/hostel/student-dashboard" replace />} />
     </Routes>
   );
 };
