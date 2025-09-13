@@ -35,6 +35,7 @@ import SemesterPrepStudent from '../StudentModules/LMS/SemesterPrepStudent';
 import StudyMaterialStudent from '../StudentModules/LMS/StudyMaterialStudent';
 import TimetableStudent from '../StudentModules/LMS/TimetableStudent';
 import MailLMSStudent from '../StudentModules/LMS/MailLMSStudent';
+
 {/* Faculty LMS Dashboard */}
 import FacultyMail from '../FacultyModules/LMS/Mail';
 import FacultySemesterprep from '../FacultyModules/LMS/Semesterprep';

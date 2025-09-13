@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Exam = {
   subject: string;
@@ -20,6 +21,8 @@ type Notification = {
 };
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  
   // Sample data
   const [nextExam, setNextExam] = useState<Exam>({
     subject: "Mathematics",
@@ -43,9 +46,12 @@ export default function Dashboard() {
     { id: 4, type: "announcement", message: "Physics exam postponed to next month", urgent: true },
   ]);
 
-  // Handler stubs for buttons (expand these with real navigation or logic)
-  const handleViewSchedule = () => alert("Navigate to Full Exam Schedule");
-  const handleCheckResults = () => alert("Navigate to Detailed Results");
+  // Navigation handlers
+  const handleViewSchedule = () => navigate('/examination/student-examtimetable');
+  const handleCheckResults = () => navigate('/examination/student-examresult');
+  const handleViewHallTicket = () => navigate('/examination/student-studenthallticket');
+  const handleViewAttendance = () => navigate('/examination/student-examattendance');
+  const handleRaiseTicket = () => navigate('/examination/student-raiseticket');
 
   // Color coding card background by status / percent urgency
   const getAttendanceColor = (percent: number) => {
@@ -125,6 +131,50 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Access Buttons */}
+        <section className="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <h2 className="text-lg font-semibold mb-4 text-gray-700">Quick Access</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <button
+              onClick={handleViewSchedule}
+              className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left bg-blue-50 hover:bg-blue-100"
+            >
+              <h3 className="font-medium text-gray-800 mb-1">View Exam Schedule</h3>
+              <p className="text-sm text-gray-600">Check upcoming exams and timings</p>
+            </button>
+            
+            <button
+              onClick={handleCheckResults}
+              className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left bg-green-50 hover:bg-green-100"
+            >
+              <h3 className="font-medium text-gray-800 mb-1">Check Results</h3>
+              <p className="text-sm text-gray-600">View your exam results and grades</p>
+            </button>
+            
+            <button
+              onClick={handleViewHallTicket}
+              className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left bg-purple-50 hover:bg-purple-100"
+            >
+              <h3 className="font-medium text-gray-800 mb-1">Download Hall Ticket</h3>
+              <p className="text-sm text-gray-600">Get your exam hall ticket</p>
+            </button>
+            
+            <button
+              onClick={handleViewAttendance}
+              className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left bg-yellow-50 hover:bg-yellow-100"
+            >
+              <h3 className="font-medium text-gray-800 mb-1">Exam Attendance</h3>
+              <p className="text-sm text-gray-600">View your exam attendance record</p>
+            </button>
+            
+            <button
+              onClick={handleRaiseTicket}
+              className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow text-left bg-red-50 hover:bg-red-100"
+            >
+              <h3 className="font-medium text-gray-800 mb-1">Raise Ticket</h3>
+              <p className="text-sm text-gray-600">Report issues or request help</p>
+            </button>
+          </div>
+        </section>
         
       </main>
 
