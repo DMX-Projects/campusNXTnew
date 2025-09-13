@@ -584,27 +584,136 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/hostel/raise-ticket', icon: 'AlertCircle' }
     ],
     'Hostel Incharge': [
-      { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
-      { name: 'Inbox', path: '/hostel/inbox', icon: 'Mail' },
-      { name: 'Hostel Student List', path: '/hostel/hostel-student-list', icon: 'Users' },
-      { name: 'Fee Details', path: '/hostel/fee-details', icon: 'DollarSign' },
-      { name: 'Out Time', path: '/hostel/out-time', icon: 'Clock' },
-      { name: 'Student Permissions', path: '/hostel/student-permissions', icon: 'UserCheck' },
-      { name: 'Geo Fencing', path: '/hostel/geo-fencing', icon: 'MapPin' },
-      { name: 'Inventory', path: '/hostel/inventory', icon: 'Package' },
-      { name: 'Reports', path: '/hostel/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/hostel/raise-ticket', icon: 'AlertCircle' }
-    ],
+    { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
+    { 
+      name: 'Hostel Setup', 
+      path: '/hostel/setup', 
+      icon: 'Settings',
+      children: [
+        { name: 'Buildings & Blocks', path: '/hostel/setup/buildings', icon: 'Building2' },
+        { name: 'Room Types & Amenities', path: '/hostel/setup/room-types', icon: 'BedDouble' },
+        { name: 'Rules & Policies', path: '/hostel/setup/rules', icon: 'FileText' }
+      ]
+    },
+    { 
+      name: 'Occupancy & Rooms', 
+      path: '/hostel/rooms', 
+      icon: 'Home',
+      children: [
+        { name: 'Occupancy Dashboard', path: '/hostel/rooms/occupancy', icon: 'LayoutDashboard' },
+        { name: 'Room Allotment', path: '/hostel/rooms/allotment', icon: 'UserPlus' },
+        { name: 'Room Change Requests', path: '/hostel/rooms/change-requests', icon: 'Repeat' }
+      ]
+    },
+    { 
+      name: 'Applications & Leave', 
+      path: '/hostel/applications', 
+      icon: 'FileCheck',
+      children: [
+        { name: 'Hostel Applications', path: '/hostel/applications/new', icon: 'ClipboardList' },
+        { name: 'Leave Requests', path: '/hostel/applications/leave', icon: 'CalendarCheck' },
+        { name: 'Entry/Exit Logs', path: '/hostel/applications/logs', icon: 'LogIn' }
+      ]
+    },
+    { 
+      name: 'Fee Management', 
+      path: '/hostel/fees', 
+      icon: 'Wallet',
+      children: [
+        { name: 'Fee Collection', path: '/hostel/fees/collection', icon: 'CreditCard' },
+        { name: 'Fee Reports', path: '/hostel/fees/reports', icon: 'FileSpreadsheet' }
+      ]
+    },
+    { 
+      name: 'Complaints & Discipline', 
+      path: '/hostel/complaints', 
+      icon: 'AlertTriangle',
+      children: [
+        { name: 'Complaints', path: '/hostel/complaints/list', icon: 'MessageSquare' },
+        { name: 'Discipline Cases', path: '/hostel/complaints/discipline', icon: 'Gavel' },
+        { name: 'Conduct Reports', path: '/hostel/complaints/reports', icon: 'Clipboard' }
+      ]
+    },
+    { 
+      name: 'Visitors', 
+      path: '/hostel/visitors', 
+      icon: 'Users',
+      children: [
+        { name: 'Visitor Approvals', path: '/hostel/visitors/approvals', icon: 'UserCheck' },
+        { name: 'Visitor Logs', path: '/hostel/visitors/logs', icon: 'ClipboardList' }
+      ]
+    },
+    { 
+      name: 'Reports & Analytics', 
+      path: '/hostel/reports', 
+      icon: 'BarChart2',
+      children: [
+        { name: 'Occupancy & Fees', path: '/hostel/reports/occupancy', icon: 'PieChart' },
+        { name: 'Complaints & Discipline', path: '/hostel/reports/complaints', icon: 'FileText' },
+        { name: 'Export', path: '/hostel/reports/export', icon: 'Download' }
+      ]
+    },
+    { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
+  ],
+  'default': [
+    { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
+  ],
     'Student': [
-        { name: 'Dashboard', path: '/hostel/student/dashboard', icon: 'BarChart' },  
-        { name: 'My Room', path: '/hostel/student/my-room', icon: 'Home' },          
-        { name: 'Permissions', path: '/hostel/student/student-permissions', icon: 'UserCheck' }, 
-        { name: 'Fees & Payments', path: '/hostel/student/fee-details', icon: 'DollarSign' },   
-        { name: 'Mess Services', path: '/hostel/student/mess-services', icon: 'Coffee' },         
-        { name: 'Attendance', path: '/hostel/student/attendance', icon: 'Clock' },                           
-        { name: 'Notices', path: '/hostel/student/notices', icon: 'Speaker' },                                 
-
-    ],
+    { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
+    { 
+      name: 'Room & Application', 
+      path: '/hostel/room', 
+      icon: 'Home',
+      children: [
+        { name: 'Apply for Hostel', path: '/hostel/room/apply', icon: 'ClipboardList' },
+        { name: 'Room Details & History', path: '/hostel/room/details', icon: 'FileText' },
+        { name: 'Request Room Change', path: '/hostel/room/change-request', icon: 'Repeat' }
+      ]
+    },
+    { 
+      name: 'Leave & Movement', 
+      path: '/hostel/leave', 
+      icon: 'CalendarCheck',
+      children: [
+        { name: 'Apply for Leave', path: '/hostel/leave/apply', icon: 'FileCheck' },
+        { name: 'Generate QR Gate Pass', path: '/hostel/leave/gate-pass', icon: 'QrCode' },
+        { name: 'Track Leave/Return', path: '/hostel/leave/status', icon: 'Clock' }
+      ]
+    },
+    { 
+      name: 'Fee Management', 
+      path: '/hostel/fees', 
+      icon: 'Wallet',
+      children: [
+        { name: 'View Fee Details', path: '/hostel/fees/details', icon: 'CreditCard' },
+        { name: 'Pay Online', path: '/hostel/fees/pay', icon: 'DollarSign' },
+        { name: 'Download Receipts', path: '/hostel/fees/receipts', icon: 'Download' }
+      ]
+    },
+    { 
+      name: 'Complaints & Feedback', 
+      path: '/hostel/complaints', 
+      icon: 'AlertTriangle',
+      children: [
+        { name: 'Submit Complaint', path: '/hostel/complaints/new', icon: 'MessageSquare' },
+        { name: 'Track Complaint Status', path: '/hostel/complaints/status', icon: 'Eye' },
+        { name: 'Give Feedback', path: '/hostel/complaints/feedback', icon: 'Star' }
+      ]
+    },
+    { 
+      name: 'Visitors', 
+      path: '/hostel/visitors', 
+      icon: 'Users',
+      children: [
+        { name: 'Pre-register Visitor', path: '/hostel/visitors/register', icon: 'UserPlus' },
+        { name: 'Visitor Logs', path: '/hostel/visitors/logs', icon: 'ClipboardList' }
+      ]
+    },
+    { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
+  ],
+  'default': [
+    { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
+  ],
     'default': [
       { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
       { name: 'Inbox', path: '/hostel/inbox', icon: 'Mail' },
