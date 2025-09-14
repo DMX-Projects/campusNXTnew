@@ -162,7 +162,7 @@ const HostelRoutes: React.FC = () => {
       <Route path="/complaints/discipline" element={<DisciplineCases />} />
       <Route path="complaints/reports" element={<ConductReport />} />
       <Route path="/visitors/approvals" element={<VisitorApproval />} />
-      <Route path="/visitors/logs" element={<VisitorLogs />} />
+      <Route path="/visitors/logs/warden" element={<VisitorLogs />} />
       <Route path="/reports/occupancy" element={<OccupencyAndFeesReport />} />
       <Route path="/reports/complaints" element={<ComplaintsAndDiscipline />} />
       <Route path="/notifications" element={<Notification />} />

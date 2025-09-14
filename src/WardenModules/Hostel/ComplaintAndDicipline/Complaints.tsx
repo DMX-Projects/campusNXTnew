@@ -57,7 +57,7 @@ const seedComplaints: Complaint[] = [
     id: 'CMP-1001',
     createdAt: new Date(Date.now() - 36e5 * 30).toISOString(),
     updatedAt: new Date(Date.now() - 36e5 * 10).toISOString(),
-    student: students,
+    student: students[0],
     title: 'Water leakage in bathroom',
     description: 'Persistent leakage near the shower causing slippery floor.',
     category: 'Maintenance',
@@ -75,7 +75,7 @@ const seedComplaints: Complaint[] = [
     id: 'CMP-1002',
     createdAt: new Date(Date.now() - 36e5 * 60).toISOString(),
     updatedAt: new Date(Date.now() - 36e5 * 5).toISOString(),
-    student: students[20], // FIX: valid index, not students[18]
+    student: students[2], // FIX: valid index, not students[18]
     title: 'Loud noise after midnight',
     description: 'Frequent disturbance from adjacent room post 12 AM.',
     category: 'Noise',
@@ -283,7 +283,7 @@ const Complaints: React.FC = () => {
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900">
       <div className="mb-4">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Hostel Complaints </h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Student Tickets </h1>
         <p className="text-gray-600 dark:text-gray-400">Track, assign, and resolve student complaints with SLA and detailed timeline.</p>
       </div>
 
