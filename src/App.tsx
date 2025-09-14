@@ -52,15 +52,19 @@ const getRedirectPath = (userRole: string) => {
   return (
     <Routes>
       <Route 
-        path="/" 
-        element={
-          isAuthenticated && user ? (
-            <Navigate to={getRedirectPath(user.role)} replace />
-          ) : (
-            <Login />
-          )
-        } 
-      />
+  path="/" 
+  element={
+    isAuthenticated && user ? (
+      (() => {
+        const redirectPath = getRedirectPath(user.role);
+        console.log("Redirecting to:", redirectPath);
+        return <Navigate to={redirectPath} replace />;
+      })()
+    ) : (
+      <Login />
+    )
+  } 
+/>
       <Route 
         element={
           <ProtectedRoute>
