@@ -28,24 +28,26 @@ const AppRoutes: React.FC = () => {
   const { isAuthenticated, user,loading  } = useAuth();
   if (loading) return <div>Loading...</div>; 
 
-  const getRedirectPath = (userRole: string) => {
-    console.log(userRole)
-    if (userRole === 'Chairperson' || userRole === 'College Secretary') {
-      return '/home';
-    }
-    if (userRole === 'Student') {
-      console.log('Student detected');
-    return '/hostel/student-dashboard';
+const getRedirectPath = (userRole: string) => {
+  const role = userRole?.trim().toLowerCase();
+  console.log("Normalized role:", role);
+
+  if (role === "chairperson" || role === "college secretary") {
+    return "/home";
   }
-  if (userRole === 'Faculty') {
-    return '/academics/dashboard';
+  if (role === "student") {
+    console.log("Student detected");
+    return "/hostel/student-dashboard";
   }
-  if (userRole === 'Hostel Incharge' || userRole === 'Warden ') {
-    console.log('Hostel Incharge or Warden detected');
-    return '/hostel/dashboard';
+  if (role === "faculty") {
+    return "/academics/dashboard";
   }
-    return '/academics';
-  };
+  if (role === "hostel incharge" || role === "warden") {
+    console.log("Hostel Incharge or Warden detected");
+    return "/hostel/dashboard";
+  }
+  return "/academics";
+};
 
   return (
     <Routes>
