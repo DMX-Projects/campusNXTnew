@@ -40,6 +40,7 @@ const AppRoutes: React.FC = () => {
     return '/academics/dashboard';
   }
   if (userRole === 'Hostel Incharge' || userRole === 'Warden ') {
+    console.log('Hostel Incharge or Warden detected');
     return '/hostel/dashboard';
   }
     return '/academics';
