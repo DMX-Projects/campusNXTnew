@@ -590,8 +590,7 @@ const SIDEBAR_ITEMS = {
       path: '/hostel/setup', 
       icon: 'Settings',
       children: [
-        { name: 'Buildings & Blocks', path: '/hostel/setup/buildings', icon: 'Building2' },
-        { name: 'Room Types & Amenities', path: '/hostel/setup/room-types', icon: 'BedDouble' },
+        { name: 'Buildings & Blocks', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
         { name: 'Rules & Policies', path: '/hostel/setup/rules', icon: 'FileText' }
       ]
     },
@@ -600,7 +599,6 @@ const SIDEBAR_ITEMS = {
       path: '/hostel/rooms', 
       icon: 'Home',
       children: [
-        { name: 'Occupancy Dashboard', path: '/hostel/rooms/occupancy', icon: 'LayoutDashboard' },
         { name: 'Room Allotment', path: '/hostel/rooms/allotment', icon: 'UserPlus' },
         { name: 'Room Change Requests', path: '/hostel/rooms/change-requests', icon: 'Repeat' }
       ]
@@ -650,7 +648,6 @@ const SIDEBAR_ITEMS = {
       children: [
         { name: 'Occupancy & Fees', path: '/hostel/reports/occupancy', icon: 'PieChart' },
         { name: 'Complaints & Discipline', path: '/hostel/reports/complaints', icon: 'FileText' },
-        { name: 'Export', path: '/hostel/reports/export', icon: 'Download' }
       ]
     },
     { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
