@@ -34,6 +34,7 @@ const AppRoutes: React.FC = () => {
       return '/home';
     }
     if (userRole === 'Student') {
+      console.log('Student detected');
     return '/hostel/student-dashboard';
   }
   if (userRole === 'Faculty') {
