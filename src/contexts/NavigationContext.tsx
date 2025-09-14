@@ -600,6 +600,7 @@ const SIDEBAR_ITEMS = {
       icon: 'Home',
       children: [
         { name: 'Room Allotment', path: '/hostel/rooms/allotment', icon: 'UserPlus' },
+        { name: 'Hostel Applications', path: '/hostel/applications/new', icon: 'ClipboardList' },
         { name: 'Room Change Requests', path: '/hostel/rooms/change-requests', icon: 'Repeat' }
       ]
     },
@@ -608,7 +609,7 @@ const SIDEBAR_ITEMS = {
       path: '/hostel/applications', 
       icon: 'FileCheck',
       children: [
-        { name: 'Hostel Applications', path: '/hostel/applications/new', icon: 'ClipboardList' },
+        
         { name: 'Leave Requests', path: '/hostel/applications/leave', icon: 'CalendarCheck' },
         { name: 'Entry/Exit Logs', path: '/hostel/applications/logs', icon: 'LogIn' }
       ]
@@ -623,13 +624,12 @@ const SIDEBAR_ITEMS = {
       ]
     },
     { 
-      name: 'Complaints & Discipline', 
+      name: 'Tickets', 
       path: '/hostel/complaints', 
       icon: 'AlertTriangle',
       children: [
-        { name: 'Complaints', path: '/hostel/complaints/list', icon: 'MessageSquare' },
+        { name: 'Student Tickets', path: '/hostel/complaints/list', icon: 'MessageSquare' },
         { name: 'Discipline Cases', path: '/hostel/complaints/discipline', icon: 'Gavel' },
-        { name: 'Conduct Reports', path: '/hostel/complaints/reports', icon: 'Clipboard' }
       ]
     },
     { 
@@ -638,18 +638,11 @@ const SIDEBAR_ITEMS = {
       icon: 'Users',
       children: [
         { name: 'Visitor Approvals', path: '/hostel/visitors/approvals', icon: 'UserCheck' },
-        { name: 'Visitor Logs', path: '/hostel/visitors/logs', icon: 'ClipboardList' }
+        { name: 'Visitor Logs', path: '/hostel/visitors/logs/warden', icon: 'ClipboardList' }
       ]
     },
-    { 
-      name: 'Reports & Analytics', 
-      path: '/hostel/reports', 
-      icon: 'BarChart2',
-      children: [
-        { name: 'Occupancy & Fees', path: '/hostel/reports/occupancy', icon: 'PieChart' },
-        { name: 'Complaints & Discipline', path: '/hostel/reports/complaints', icon: 'FileText' },
-      ]
-    },
+        { name: 'Occupancy & Fees Reports', path: '/hostel/reports/occupancy', icon: 'PieChart' },
+     
     { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
   ],
   'default': [

@@ -63,7 +63,7 @@ const seedCases: DisciplineCase[] = [
     id: 'DC-2001',
     createdAt: new Date(Date.now() - 36e5 * 70).toISOString(),
     updatedAt: new Date(Date.now() - 36e5 * 6).toISOString(),
-    student: students[21], // FIX: valid index
+    student: students[0], // FIX: valid index
     category: 'Curfew Breach',
     severity: 'Moderate',
     title: 'Exceeding curfew time repeatedly',
@@ -81,7 +81,7 @@ const seedCases: DisciplineCase[] = [
     id: 'DC-2002',
     createdAt: new Date(Date.now() - 36e5 * 120).toISOString(),
     updatedAt: new Date(Date.now() - 36e5 * 3).toISOString(),
-    student: students as StudentRef, // FIX: not the array
+    student: students [1],
     category: 'Vandalism',
     severity: 'High',
     title: 'Damage to common area furniture',
