@@ -3,7 +3,7 @@ import {
   UserPlus, Calendar, Clock, MapPin, Phone, 
   User, FileText, Camera, QrCode, CheckCircle,
   AlertTriangle, Send, RefreshCw, Filter, Search,
-  CalendarDays, Users, Eye, Edit, Trash2,X
+  CalendarDays, Users, Eye, Edit, Trash2, X
 } from 'lucide-react';
 
 interface VisitorRegistration {
@@ -11,15 +11,19 @@ interface VisitorRegistration {
   studentId: string;
   studentName: string;
   roomNumber: string;
-  visitorName: string;
-  visitorRelation: string;
+  primaryVisitorName: string;
+  relationToStudent: string;
   visitorPhone: string;
-  visitorIdProof: string;
-  visitorIdNumber: string;
-  visitDate: string;
-  visitTime: string;
-  expectedDuration: string;
-  purpose: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  estimatedDuration: string;
+  visitPurpose: string;
+  emergencyContact: string;
+  vehicleNumber?: string;
+  itemsCarrying: string;
+  specialInstructions?: string;
+  totalVisitors: number;
+  companionDetails?: string;
   status: 'Pending' | 'Approved' | 'Rejected' | 'Completed';
   submittedDate: string;
   approvedBy?: string;
@@ -31,19 +35,19 @@ interface VisitorRegistration {
 }
 
 interface VisitorForm {
-  visitorName: string;
-  visitorRelation: string;
+  primaryVisitorName: string;
+  relationToStudent: string;
   visitorPhone: string;
-  visitorIdProof: string;
-  visitorIdNumber: string;
-  visitDate: string;
-  visitTime: string;
-  expectedDuration: string;
-  purpose: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  estimatedDuration: string;
+  visitPurpose: string;
   emergencyContact: string;
   vehicleNumber?: string;
   itemsCarrying: string;
   specialInstructions?: string;
+  totalVisitors: number;
+  companionDetails?: string;
 }
 
 const PreRegisterVisitorPage: React.FC = () => {
@@ -52,19 +56,19 @@ const PreRegisterVisitorPage: React.FC = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedVisitor, setSelectedVisitor] = useState<VisitorRegistration | null>(null);
   const [visitorForm, setVisitorForm] = useState<VisitorForm>({
-    visitorName: '',
-    visitorRelation: '',
+    primaryVisitorName: '',
+    relationToStudent: '',
     visitorPhone: '',
-    visitorIdProof: 'Aadhar Card',
-    visitorIdNumber: '',
-    visitDate: '',
-    visitTime: '',
-    expectedDuration: '2 hours',
-    purpose: '',
+    scheduledDate: '',
+    scheduledTime: '',
+    estimatedDuration: '2 hours',
+    visitPurpose: '',
     emergencyContact: '',
     vehicleNumber: '',
     itemsCarrying: '',
-    specialInstructions: ''
+    specialInstructions: '',
+    totalVisitors: 1,
+    companionDetails: ''
   });
 
   // Sample data - would come from API in real application
@@ -85,65 +89,109 @@ const PreRegisterVisitorPage: React.FC = () => {
       studentId: 'CS2023001',
       studentName: 'Arjun Kumar',
       roomNumber: 'A-201',
-      visitorName: 'Rajesh Kumar',
-      visitorRelation: 'Father',
+      primaryVisitorName: 'Rajesh Kumar',
+      relationToStudent: 'Father',
       visitorPhone: '+91-9876543211',
-      visitorIdProof: 'Aadhar Card',
-      visitorIdNumber: '1234-5678-9012',
-      visitDate: '2025-01-20',
-      visitTime: '14:00',
-      expectedDuration: '2 hours',
-      purpose: 'Family visit',
+      scheduledDate: '2025-01-20',
+      scheduledTime: '14:00',
+      estimatedDuration: '2 hours',
+      visitPurpose: 'Family visit',
+      emergencyContact: '+91-9876543220',
+      vehicleNumber: 'DL01AB1234',
+      itemsCarrying: 'Bag, Fruits',
+      specialInstructions: '',
+      totalVisitors: 2,
+      companionDetails: 'Sunita Kumar (Mother)',
       status: 'Approved',
       submittedDate: '2025-01-18',
       approvedBy: 'Mr. Prakash Sharma',
-      approvedDate: '2025-01-19',
+      approvedDate: '2025-09-19',
       qrCode: 'QR-VIS001-20250120',
       checkInTime: null,
       checkOutTime: null,
       remarks: 'Approved for family visit'
-    },
-    {
-      id: 'VIS002',
-      studentId: 'CS2023001',
-      studentName: 'Arjun Kumar',
-      roomNumber: 'A-201',
-      visitorName: 'Meera Patel',
-      visitorRelation: 'Sister',
-      visitorPhone: '+91-9876543222',
-      visitorIdProof: 'Driving License',
-      visitorIdNumber: 'DL-123456789',
-      visitDate: '2025-01-22',
-      visitTime: '10:00',
-      expectedDuration: '4 hours',
-      purpose: 'Personal visit',
-      status: 'Pending',
-      submittedDate: '2025-01-20',
-      remarks: 'Under review'
-    },
-    {
-      id: 'VIS003',
-      studentId: 'CS2023001',
-      studentName: 'Arjun Kumar',
-      roomNumber: 'A-201',
-      visitorName: 'Dr. Anil Kumar',
-      visitorRelation: 'Doctor',
-      visitorPhone: '+91-9876543233',
-      visitorIdProof: 'Medical License',
-      visitorIdNumber: 'MED-123456',
-      visitDate: '2025-01-15',
-      visitTime: '16:00',
-      expectedDuration: '1 hour',
-      purpose: 'Medical consultation',
-      status: 'Completed',
-      submittedDate: '2025-01-14',
-      approvedBy: 'Mr. Prakash Sharma',
-      approvedDate: '2025-01-14',
-      qrCode: 'QR-VIS003-20250115',
-      checkInTime: '16:05',
-      checkOutTime: '17:10',
-      remarks: 'Medical consultation completed'
-    }
+    },  {
+    id: "VIS002",
+      studentId: "CS2023002",
+      studentName: "Priya Singh",
+      roomNumber: "B-105",
+      primaryVisitorName: "Anil Singh",
+      relationToStudent : "Brother",
+      visitorPhone: "+91-9876500011",
+      scheduledDate: "2025-09-22",
+      scheduledTime: "16:30",
+      estimatedDuration: "1 hour",
+      visitPurpose: "Deliver documents",
+      emergencyContact: "+91-9876500022",
+      vehicleNumber: "UP16CD4321",
+      itemsCarrying: "Folder, Books",
+      specialInstructions: "Documents to be signed by warden",
+      totalVisitors: 1,
+      companionDetails: "",
+      status: "Pending",
+      submittedDate: "2025-01-20",
+      approvedBy: null,
+      approvedDate: null,
+      qrCode: "QR-VIS002-20250122",
+      checkInTime: null,
+      checkOutTime: null,
+      remarks: "Awaiting approval"
+  },
+  {
+    id: "VIS003",
+    studentId: "CS2023003",
+    studentName: "Rohan Verma",
+    roomNumber: "C-309",
+    primaryVisitorName: "Suresh Verma",
+    relationToStudent: "Uncle",
+    visitorPhone: "+91-9876512345",
+    scheduledDate: "2025-09-19",
+    scheduledTime: "11:00",
+    estimatedDuration: "3 hours",
+    visitPurpose: "Casual visit",
+    emergencyContact: "+91-9876512367",
+    vehicleNumber: "BR06XY9988",
+    itemsCarrying: "Gift Box",
+    specialInstructions: "",
+    totalVisitors: 2,
+    companionDetails: "Meena Verma (Aunt)",
+    status: "Rejected",
+    submittedDate: "2025-01-17",
+    approvedBy: "Mr. Prakash Sharma",
+    approvedDate: "2025-01-18",
+    qrCode: null,
+    checkInTime: null,
+    checkOutTime: null,
+    remarks: "Rejected due to non-family relation"
+  },
+  {
+    id: "VIS004",
+    studentId: "CS2023004",
+    studentName: "Neha Gupta",
+    roomNumber: "D-112",
+    primaryVisitorName: "Alok Gupta",
+    relationToStudent: "Father",
+    visitorPhone: "+91-9876523456",
+    scheduledDate: "2025-09-10",
+    scheduledTime: "15:00",
+    estimatedDuration: "2 hours",
+    visitPurpose: "Family meeting",
+    emergencyContact: "+91-9876523477",
+    vehicleNumber: "DL05GH5678",
+    itemsCarrying: "Bag",
+    specialInstructions: "",
+    totalVisitors: 3,
+    companionDetails: "Anita Gupta (Mother), Riya Gupta (Sister)",
+    status: "Completed",
+    submittedDate: "2025-01-13",
+    approvedBy: "Mr. Prakash Sharma",
+    approvedDate: "2025-01-14",
+    qrCode: "QR-VIS004-20250115",
+    checkInTime: "2025-01-15T15:05:00",
+    checkOutTime: "2025-01-15T17:10:00",
+    remarks: "Visit completed successfully"
+  },
+
   ];
 
   const getStatusColor = (status: string) => {
@@ -176,19 +224,19 @@ const PreRegisterVisitorPage: React.FC = () => {
 
   const openRegistrationModal = () => {
     setVisitorForm({
-      visitorName: '',
-      visitorRelation: '',
+      primaryVisitorName: '',
+      relationToStudent: '',
       visitorPhone: '',
-      visitorIdProof: 'Aadhar Card',
-      visitorIdNumber: '',
-      visitDate: '',
-      visitTime: '',
-      expectedDuration: '2 hours',
-      purpose: '',
+      scheduledDate: '',
+      scheduledTime: '',
+      estimatedDuration: '2 hours',
+      visitPurpose: '',
       emergencyContact: '',
       vehicleNumber: '',
       itemsCarrying: '',
-      specialInstructions: ''
+      specialInstructions: '',
+      totalVisitors: 1,
+      companionDetails: ''
     });
     setShowRegistrationModal(true);
   };
@@ -200,23 +248,22 @@ const PreRegisterVisitorPage: React.FC = () => {
 
   const handleRegistrationSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Visitor registration submitted:', visitorForm);
     alert('Visitor registration submitted successfully! You will receive a confirmation once approved.');
     setShowRegistrationModal(false);
     setVisitorForm({
-      visitorName: '',
-      visitorRelation: '',
+      primaryVisitorName: '',
+      relationToStudent: '',
       visitorPhone: '',
-      visitorIdProof: 'Aadhar Card',
-      visitorIdNumber: '',
-      visitDate: '',
-      visitTime: '',
-      expectedDuration: '2 hours',
-      purpose: '',
+      scheduledDate: '',
+      scheduledTime: '',
+      estimatedDuration: '2 hours',
+      visitPurpose: '',
       emergencyContact: '',
       vehicleNumber: '',
       itemsCarrying: '',
-      specialInstructions: ''
+      specialInstructions: '',
+      totalVisitors: 1,
+      companionDetails: ''
     });
   };
 
@@ -227,25 +274,20 @@ const PreRegisterVisitorPage: React.FC = () => {
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
   };
 
-  const getCurrentDate = () => {
-    const now = new Date();
-    return now.toISOString().split('T')[0];
-  };
-
   const getMinDate = () => {
     const now = new Date();
-    return now.toISOString().split('T')[0];
+    return now.toISOString().split('T');
   };
 
   const getMaxDate = () => {
     const now = new Date();
     const maxDate = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 days from now
-    return maxDate.toISOString().split('T')[0];
+    return maxDate.toISOString().split('T');
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="  mx-auto">
+      <div className="mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center gap-4">
@@ -253,7 +295,7 @@ const PreRegisterVisitorPage: React.FC = () => {
               <UserPlus className="w-8 h-8 text-purple-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">Pre-register Visitor</h1>
+              <h1 className="text-2xl font-bold text-gray-800">Register Visitor</h1>
               <p className="text-gray-600">Register visitors in advance for smooth entry process</p>
             </div>
           </div>
@@ -294,54 +336,7 @@ const PreRegisterVisitorPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Users className="w-5 h-5 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-gray-800">Total Visitors</h3>
-            </div>
-            <p className="text-2xl font-bold text-blue-600">{visitorRegistrations.length}</p>
-            <p className="text-sm text-gray-600">All time</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="w-5 h-5 text-yellow-600" />
-              </div>
-              <h3 className="font-semibold text-gray-800">Pending</h3>
-            </div>
-            <p className="text-2xl font-bold text-yellow-600">{visitorRegistrations.filter(v => v.status === 'Pending').length}</p>
-            <p className="text-sm text-gray-600">Awaiting approval</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-gray-800">Approved</h3>
-            </div>
-            <p className="text-2xl font-bold text-green-600">{visitorRegistrations.filter(v => v.status === 'Approved').length}</p>
-            <p className="text-sm text-gray-600">Ready to visit</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <CalendarDays className="w-5 h-5 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-gray-800">Completed</h3>
-            </div>
-            <p className="text-2xl font-bold text-purple-600">{visitorRegistrations.filter(v => v.status === 'Completed').length}</p>
-            <p className="text-sm text-gray-600">Visits completed</p>
-          </div>
-        </div>
-
-        {/* Tab Navigation */}
+        {/* Tabs */}
         <div className="bg-white rounded-lg shadow-sm p-1 mb-6">
           <nav className="-mb-px flex gap-1">
             {[
@@ -375,7 +370,7 @@ const PreRegisterVisitorPage: React.FC = () => {
             <div className="text-center py-8">
               <UserPlus className="w-16 h-16 text-purple-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Register a New Visitor</h3>
-              <p className="text-gray-600 mb-6">Pre-register your visitors for smooth entry process</p>
+              <p className="text-gray-600 mb-6">Register your visitors for smooth entry process</p>
               <button
                 onClick={openRegistrationModal}
                 className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 font-medium flex items-center gap-2 mx-auto"
@@ -403,7 +398,7 @@ const PreRegisterVisitorPage: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <h3 className="text-lg font-semibold text-gray-800">
-                          {visitor.visitorName}
+                          {visitor.primaryVisitorName}
                         </h3>
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(visitor.status)}`}>
                           {visitor.status}
@@ -433,16 +428,22 @@ const PreRegisterVisitorPage: React.FC = () => {
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
                             <User className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-600">{visitor.visitorRelation}</span>
+                            <span className="text-sm text-gray-600">{visitor.relationToStudent}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Phone className="w-4 h-4 text-gray-500" />
                             <span className="text-sm text-gray-600">{visitor.visitorPhone}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-600">{visitor.visitorIdProof}</span>
+                            <Users className="w-4 h-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">{visitor.totalVisitors} visitor(s)</span>
                           </div>
+                          {!!visitor.companionDetails && (
+                            <div className="flex items-center gap-2">
+                              <FileText className="w-4 h-4 text-gray-500" />
+                              <span className="text-sm text-gray-600">{visitor.companionDetails}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div>
@@ -451,16 +452,16 @@ const PreRegisterVisitorPage: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-500" />
                             <span className="text-sm text-gray-600">
-                              {new Date(visitor.visitDate).toLocaleDateString('en-IN')}
+                              {new Date(visitor.scheduledDate).toLocaleDateString('en-IN')}
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-600">{visitor.visitTime}</span>
+                            <span className="text-sm text-gray-600">{visitor.scheduledTime}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-600">{visitor.expectedDuration}</span>
+                            <span className="text-sm text-gray-600">{visitor.estimatedDuration}</span>
                           </div>
                         </div>
                       </div>
@@ -485,19 +486,17 @@ const PreRegisterVisitorPage: React.FC = () => {
                             <div className="flex items-center gap-2">
                               <Clock className="w-4 h-4 text-blue-500" />
                               <span className="text-sm text-gray-600">
-                                {getDaysUntilVisit(visitor.visitDate)} days until visit
+                                {getDaysUntilVisit(visitor.scheduledDate)} days until visit
                               </span>
                             </div>
                           )}
                         </div>
                       </div>
                     </div>
-
                     <div className="mb-4">
                       <h4 className="font-medium text-gray-700 mb-2">Purpose</h4>
-                      <p className="text-sm text-gray-600">{visitor.purpose}</p>
+                      <p className="text-sm text-gray-600">{visitor.visitPurpose}</p>
                     </div>
-
                     {visitor.remarks && (
                       <div className="p-3 bg-gray-50 rounded-lg">
                         <p className="text-sm text-gray-700">
@@ -540,21 +539,20 @@ const PreRegisterVisitorPage: React.FC = () => {
                     </label>
                     <input
                       type="text"
-                      value={visitorForm.visitorName}
-                      onChange={(e) => setVisitorForm({...visitorForm, visitorName: e.target.value})}
+                      value={visitorForm.primaryVisitorName}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, primaryVisitorName: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                       placeholder="Enter visitor's full name"
                       required
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Relation <span className="text-red-500">*</span>
                     </label>
                     <select
-                      value={visitorForm.visitorRelation}
-                      onChange={(e) => setVisitorForm({...visitorForm, visitorRelation: e.target.value})}
+                      value={visitorForm.relationToStudent}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, relationToStudent: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                       required
                     >
@@ -569,7 +567,6 @@ const PreRegisterVisitorPage: React.FC = () => {
                       <option value="Other">Other</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Phone Number <span className="text-red-500">*</span>
@@ -577,81 +574,123 @@ const PreRegisterVisitorPage: React.FC = () => {
                     <input
                       type="tel"
                       value={visitorForm.visitorPhone}
-                      onChange={(e) => setVisitorForm({...visitorForm, visitorPhone: e.target.value})}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, visitorPhone: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                       placeholder="+91-9876543210"
                       required
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ID Proof Type <span className="text-red-500">*</span>
+                      Emergency Contact
                     </label>
-                    <select
-                      value={visitorForm.visitorIdProof}
-                      onChange={(e) => setVisitorForm({...visitorForm, visitorIdProof: e.target.value})}
+                    <input
+                      type="tel"
+                      value={visitorForm.emergencyContact}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, emergencyContact: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                      required
-                    >
-                      <option value="Aadhar Card">Aadhar Card</option>
-                      <option value="Driving License">Driving License</option>
-                      <option value="Passport">Passport</option>
-                      <option value="Voter ID">Voter ID</option>
-                      <option value="PAN Card">PAN Card</option>
-                      <option value="Other">Other</option>
-                    </select>
+                      placeholder="Emergency contact number"
+                    />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ID Number <span className="text-red-500">*</span>
+                      Vehicle Number
                     </label>
                     <input
                       type="text"
-                      value={visitorForm.visitorIdNumber}
-                      onChange={(e) => setVisitorForm({...visitorForm, visitorIdNumber: e.target.value})}
+                      value={visitorForm.vehicleNumber}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, vehicleNumber: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                      placeholder="Enter ID number"
-                      required
+                      placeholder="Vehicle registration number"
                     />
                   </div>
-
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Items Carrying
+                    </label>
+                    <input
+                      type="text"
+                      value={visitorForm.itemsCarrying}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, itemsCarrying: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      placeholder="List items being carried (if any)"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Special Instructions
+                    </label>
+                    <textarea
+                      value={visitorForm.specialInstructions}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, specialInstructions: e.target.value })}
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      placeholder="Any special instructions or requirements..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Number of Visitors <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={visitorForm.totalVisitors}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, totalVisitors: Number(e.target.value) })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                      required
+                    >
+                      {[...Array(6)].map((_, i) => (
+                        <option key={i+1} value={i+1}>{i+1}</option>
+                      ))}
+                    </select>
+                  </div>
+                  {visitorForm.totalVisitors > 1 && (
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Companion Details
+                      </label>
+                      <textarea
+                        value={visitorForm.companionDetails}
+                        onChange={(e) => setVisitorForm({ ...visitorForm, companionDetails: e.target.value })}
+                        rows={2}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                        placeholder="Names and relations of accompanying visitors"
+                        required={visitorForm.totalVisitors > 1}
+                      />
+                    </div>
+                  )}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Visit Date <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="date"
-                      value={visitorForm.visitDate}
-                      onChange={(e) => setVisitorForm({...visitorForm, visitDate: e.target.value})}
+                      value={visitorForm.scheduledDate}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, scheduledDate: e.target.value })}
                       min={getMinDate()}
                       max={getMaxDate()}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                       required
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Visit Time <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="time"
-                      value={visitorForm.visitTime}
-                      onChange={(e) => setVisitorForm({...visitorForm, visitTime: e.target.value})}
+                      value={visitorForm.scheduledTime}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, scheduledTime: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                       required
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Expected Duration <span className="text-red-500">*</span>
                     </label>
                     <select
-                      value={visitorForm.expectedDuration}
-                      onChange={(e) => setVisitorForm({...visitorForm, expectedDuration: e.target.value})}
+                      value={visitorForm.estimatedDuration}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, estimatedDuration: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                       required
                     >
@@ -663,74 +702,20 @@ const PreRegisterVisitorPage: React.FC = () => {
                       <option value="Full day">Full day</option>
                     </select>
                   </div>
-
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Purpose of Visit <span className="text-red-500">*</span>
                     </label>
                     <textarea
-                      value={visitorForm.purpose}
-                      onChange={(e) => setVisitorForm({...visitorForm, purpose: e.target.value})}
+                      value={visitorForm.visitPurpose}
+                      onChange={(e) => setVisitorForm({ ...visitorForm, visitPurpose: e.target.value })}
                       rows={3}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                       placeholder="Describe the purpose of the visit..."
                       required
                     />
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Emergency Contact
-                    </label>
-                    <input
-                      type="tel"
-                      value={visitorForm.emergencyContact}
-                      onChange={(e) => setVisitorForm({...visitorForm, emergencyContact: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                      placeholder="Emergency contact number"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Vehicle Number
-                    </label>
-                    <input
-                      type="text"
-                      value={visitorForm.vehicleNumber}
-                      onChange={(e) => setVisitorForm({...visitorForm, vehicleNumber: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                      placeholder="Vehicle registration number"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Items Carrying
-                    </label>
-                    <input
-                      type="text"
-                      value={visitorForm.itemsCarrying}
-                      onChange={(e) => setVisitorForm({...visitorForm, itemsCarrying: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                      placeholder="List items being carried (if any)"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Special Instructions
-                    </label>
-                    <textarea
-                      value={visitorForm.specialInstructions}
-                      onChange={(e) => setVisitorForm({...visitorForm, specialInstructions: e.target.value})}
-                      rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                      placeholder="Any special instructions or requirements..."
-                    />
-                  </div>
                 </div>
-
                 <div className="flex gap-3">
                   <button
                     type="button"
@@ -757,7 +742,7 @@ const PreRegisterVisitorPage: React.FC = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-800">Visitor Details - {selectedVisitor.visitorName}</h3>
+                <h3 className="text-xl font-bold text-gray-800">Visitor Details - {selectedVisitor.primaryVisitorName}</h3>
                 <button
                   onClick={() => setShowDetailsModal(false)}
                   className="p-2 hover:bg-gray-100 rounded-full"
@@ -765,7 +750,6 @@ const PreRegisterVisitorPage: React.FC = () => {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-
               <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedVisitor.status)}`}>
@@ -773,7 +757,6 @@ const PreRegisterVisitorPage: React.FC = () => {
                   </span>
                   {getStatusIcon(selectedVisitor.status)}
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-800">Visitor Information</h4>
@@ -782,14 +765,14 @@ const PreRegisterVisitorPage: React.FC = () => {
                         <User className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="text-sm text-gray-600">Name</p>
-                          <p className="font-medium">{selectedVisitor.visitorName}</p>
+                          <p className="font-medium">{selectedVisitor.primaryVisitorName}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Users className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="text-sm text-gray-600">Relation</p>
-                          <p className="font-medium">{selectedVisitor.visitorRelation}</p>
+                          <p className="font-medium">{selectedVisitor.relationToStudent}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -800,15 +783,23 @@ const PreRegisterVisitorPage: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <FileText className="w-4 h-4 text-gray-500" />
+                        <Users className="w-4 h-4 text-gray-500" />
                         <div>
-                          <p className="text-sm text-gray-600">ID Proof</p>
-                          <p className="font-medium">{selectedVisitor.visitorIdProof}</p>
+                          <p className="text-sm text-gray-600">Visitors</p>
+                          <p className="font-medium">{selectedVisitor.totalVisitors}</p>
                         </div>
                       </div>
+                      {selectedVisitor.companionDetails && (
+                        <div className="flex items-center gap-3">
+                          <FileText className="w-4 h-4 text-gray-500" />
+                          <div>
+                            <p className="text-sm text-gray-600">Companions</p>
+                            <p className="font-medium">{selectedVisitor.companionDetails}</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-800">Visit Details</h4>
                     <div className="space-y-3">
@@ -816,21 +807,21 @@ const PreRegisterVisitorPage: React.FC = () => {
                         <Calendar className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="text-sm text-gray-600">Visit Date</p>
-                          <p className="font-medium">{new Date(selectedVisitor.visitDate).toLocaleDateString('en-IN')}</p>
+                          <p className="font-medium">{new Date(selectedVisitor.scheduledDate).toLocaleDateString('en-IN')}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Clock className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="text-sm text-gray-600">Visit Time</p>
-                          <p className="font-medium">{selectedVisitor.visitTime}</p>
+                          <p className="font-medium">{selectedVisitor.scheduledTime}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Clock className="w-4 h-4 text-gray-500" />
                         <div>
                           <p className="text-sm text-gray-600">Duration</p>
-                          <p className="font-medium">{selectedVisitor.expectedDuration}</p>
+                          <p className="font-medium">{selectedVisitor.estimatedDuration}</p>
                         </div>
                       </div>
                       {selectedVisitor.checkInTime && (
@@ -854,12 +845,10 @@ const PreRegisterVisitorPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 <div>
                   <h4 className="font-semibold text-gray-800 mb-2">Purpose</h4>
-                  <p className="text-gray-700">{selectedVisitor.purpose}</p>
+                  <p className="text-gray-700">{selectedVisitor.visitPurpose}</p>
                 </div>
-
                 {selectedVisitor.remarks && (
                   <div className="p-3 bg-gray-50 rounded-lg">
                     <p className="text-sm text-gray-700">
@@ -867,7 +856,6 @@ const PreRegisterVisitorPage: React.FC = () => {
                     </p>
                   </div>
                 )}
-
                 {selectedVisitor.qrCode && (
                   <div className="text-center p-4 bg-gray-50 rounded-lg">
                     <h4 className="font-semibold text-gray-800 mb-2">QR Code</h4>
@@ -877,7 +865,6 @@ const PreRegisterVisitorPage: React.FC = () => {
                     <p className="text-sm text-gray-600 mt-2">{selectedVisitor.qrCode}</p>
                   </div>
                 )}
-
                 <div className="flex gap-3">
                   {selectedVisitor.status === 'Approved' && selectedVisitor.qrCode && (
                     <button className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 font-medium flex items-center justify-center gap-2">
@@ -900,5 +887,4 @@ const PreRegisterVisitorPage: React.FC = () => {
     </div>
   );
 };
-
 export default PreRegisterVisitorPage;

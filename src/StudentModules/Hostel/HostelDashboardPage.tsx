@@ -64,7 +64,7 @@ const HostelDashboardPage: React.FC = () => {
     phoneNumber: '+91-9876543210',
     email: 'arjun.kumar@college.edu.in',
     hostelId: 'H001',
-    warden: 'Ms. Maria Garcia',
+    warden: 'Mr Moazzam Parewez',
     hostelName: 'Boys Hostel A',
     block: 'A Block',
     floor: 2,
@@ -182,7 +182,7 @@ const HostelDashboardPage: React.FC = () => {
     },
     {
       id: 'QA003',
-      title: 'Submit Complaint',
+      title: 'Tickets',
       description: 'Report an issue',
       icon: 'AlertTriangle',
       color: 'red',
@@ -191,15 +191,15 @@ const HostelDashboardPage: React.FC = () => {
     {
       id: 'QA004',
       title: 'Register Visitor',
-      description: 'Pre-register visitor',
+      description: 'Register visitor',
       icon: 'Users',
       color: 'purple',
       path: '/hostel/visitors/register'
     },
     {
       id: 'QA005',
-      title: 'Generate QR Pass',
-      description: 'Create gate pass',
+      title: 'Entry/Exit Gate Pass',
+      description: 'Get Pass',
       icon: 'QrCode',
       color: 'indigo',
       path: '/hostel/leave/gate-pass'
@@ -283,14 +283,7 @@ const HostelDashboardPage: React.FC = () => {
                 <p className="text-gray-600">Welcome back, {currentStudent.name}!</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                <RefreshCw className="w-5 h-5" />
-              </button>
-              <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                <Filter className="w-5 h-5" />
-              </button>
-            </div>
+            
           </div>
         </div>
 

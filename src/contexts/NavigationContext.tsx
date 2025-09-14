@@ -673,8 +673,8 @@ const SIDEBAR_ITEMS = {
       icon: 'CalendarCheck',
       children: [
         { name: 'Apply for Leave', path: '/hostel/leave/apply', icon: 'FileCheck' },
-        { name: 'Generate QR Gate Pass', path: '/hostel/leave/gate-pass', icon: 'QrCode' },
-        { name: 'Track Leave/Return', path: '/hostel/leave/status', icon: 'Clock' }
+        { name: ' Entry/Exit Gate Pass', path: '/hostel/leave/gate-pass', icon: 'QrCode' },
+        // { name: 'Track Leave/Return', path: '/hostel/leave/status', icon: 'Clock' }
       ]
     },
     { 
@@ -702,7 +702,7 @@ const SIDEBAR_ITEMS = {
       path: '/hostel/visitors', 
       icon: 'Users',
       children: [
-        { name: 'Pre-register Visitor', path: '/hostel/visitors/register', icon: 'UserPlus' },
+        { name: 'Register Visitor', path: '/hostel/visitors/register', icon: 'UserPlus' },
         { name: 'Visitor Logs', path: '/hostel/visitors/logs', icon: 'ClipboardList' }
       ]
     },

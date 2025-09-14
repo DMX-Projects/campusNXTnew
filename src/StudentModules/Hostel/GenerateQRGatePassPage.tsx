@@ -4,7 +4,7 @@ import {
   Calendar, CheckCircle, AlertCircle, FileText, Home,
   Building2, Mail, RefreshCw, X, Info, Camera
 } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 interface GatePass {
   id: string;
   studentId: string;
@@ -41,6 +41,7 @@ const GenerateQRGatePassPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'gatepass' | 'movement' | 'history'>('gatepass');
   const [showQRModal, setShowQRModal] = useState(false);
   const [selectedGatePass, setSelectedGatePass] = useState<GatePass | null>(null);
+  const navigate = useNavigate();
 
   // Sample data - would come from API in real application
   const currentStudent = {
@@ -162,10 +163,10 @@ const GenerateQRGatePassPage: React.FC = () => {
   const downloadQRCode = () => {
     // In a real application, this would generate and download the QR code
     alert('QR Code downloaded successfully!');
-  };
+  };  
 
   const generateNewGatePass = () => {
-    alert('Redirecting to leave application form...');
+    navigate('hostel/leave/apply');
   };
 
   return (
@@ -179,17 +180,11 @@ const GenerateQRGatePassPage: React.FC = () => {
                 <QrCode className="w-8 h-8 text-purple-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">QR Gate Pass</h1>
+                <h1 className="text-2xl font-bold text-gray-800">Entry/Exit Gate Pass</h1>
                 <p className="text-gray-600">Generate and manage your QR gate passes for hostel entry/exit</p>
               </div>
             </div>
-            <button
-              onClick={generateNewGatePass}
-              className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center gap-2"
-            >
-              <QrCode className="w-4 h-4" />
-              Generate New Pass
-            </button>
+           
           </div>
         </div>
 

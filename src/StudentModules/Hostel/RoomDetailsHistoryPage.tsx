@@ -189,7 +189,7 @@ const RoomDetailsHistoryPage: React.FC = () => {
               { key: 'current', label: 'Current Room', icon: Home },
               { key: 'history', label: 'Room History', icon: History },
               { key: 'roommates', label: 'Roommates', icon: Users },
-              { key: 'maintenance', label: 'Maintenance', icon: Wrench }
+              // { key: 'maintenance', label: 'Maintenance', icon: Wrench }
             ].map((tab) => {
               const Icon = tab.icon;
               return (
