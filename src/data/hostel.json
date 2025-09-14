@@ -7,7 +7,11 @@
       "occupied": 145,
       "warden": "Mr. Prakash Sharma",
       "floors": 4,
-      "roomsPerFloor": 40
+      "roomsPerFloor": 40,
+      "block": "A Block",
+      "gender": "Male",
+      "amenities": ["Wi-Fi", "AC", "Laundry", "Gym", "Common Room"],
+      "rules": ["No smoking", "Curfew 10 PM", "Visitor registration required"]
     },
     {
       "id": "H002",
@@ -16,28 +20,405 @@
       "occupied": 98,
       "warden": "Ms. Priya Gupta",
       "floors": 3,
-      "roomsPerFloor": 40
+      "roomsPerFloor": 40,
+      "block": "B Block",
+      "gender": "Female",
+      "amenities": ["Wi-Fi", "AC", "Laundry", "Study Room", "Common Room"],
+      "rules": ["No smoking", "Curfew 9 PM", "Visitor registration required"]
+    },
+    {
+      "id": "H003",
+      "name": "Boys Hostel B",
+      "capacity": 200,
+      "occupied": 180,
+      "warden": "Mr. Rajesh Kumar",
+      "floors": 5,
+      "roomsPerFloor": 40,
+      "block": "C Block",
+      "gender": "Male",
+      "amenities": ["Wi-Fi", "Non-AC", "Laundry", "Gym", "Common Room"],
+      "rules": ["No smoking", "Curfew 10 PM", "Visitor registration required"]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "A-201",
+      "block": "A Block",
+      "floor": 2,
+      "roomType": "Double AC",
+      "capacity": 2,
+      "currentOccupants": 2,
+      "monthlyRent": 5500,
+      "amenities": ["AC", "Wi-Fi", "Study Table", "Wardrobe", "Attached Bathroom"],
+      "facilities": ["24/7 Security", "Laundry Service", "Common Room", "Gym Access"],
+      "maintenanceStatus": "Good",
+      "lastCleaned": "2025-01-15",
+      "wifiPassword": "HostelA201@2025",
+      "electricityMeter": "EM-A201-001",
+      "allocatedDate": "2023-07-15"
+    },
+    {
+      "id": "A-202",
+      "block": "A Block",
+      "floor": 2,
+      "roomType": "Double AC",
+      "capacity": 2,
+      "currentOccupants": 1,
+      "monthlyRent": 5500,
+      "amenities": ["AC", "Wi-Fi", "Study Table", "Wardrobe", "Attached Bathroom"],
+      "facilities": ["24/7 Security", "Laundry Service", "Common Room", "Gym Access"],
+      "maintenanceStatus": "Good",
+      "lastCleaned": "2025-01-10",
+      "wifiPassword": "HostelA202@2025",
+      "electricityMeter": "EM-A202-001",
+      "allocatedDate": "2023-07-15"
+    },
+    {
+      "id": "B-301",
+      "block": "B Block",
+      "floor": 3,
+      "roomType": "Single AC",
+      "capacity": 1,
+      "currentOccupants": 1,
+      "monthlyRent": 7500,
+      "amenities": ["AC", "Wi-Fi", "Study Table", "Wardrobe", "Attached Bathroom"],
+      "facilities": ["24/7 Security", "Laundry Service", "Study Room", "Common Room"],
+      "maintenanceStatus": "Good",
+      "lastCleaned": "2025-01-12",
+      "wifiPassword": "HostelB301@2025",
+      "electricityMeter": "EM-B301-001",
+      "allocatedDate": "2023-07-20"
     }
   ],
   "students": [
     {
       "id": "CS2023001",
-      "name": "Alex Wilson",
+      "name": "Rahul Kumar",
+      "rollNumber": "2023CSE001",
+      "branch": "Computer Science Engineering",
+      "semester": 4,
+      "phoneNumber": "+91-9876543210",
+      "email": "rahul.kumar@college.edu.in",
       "hostelId": "H001",
-      "roomNumber": "H1-201",
+      "roomNumber": "A-201",
       "feeStatus": "Paid",
-      "monthlyFee": 8000,
+      "monthlyFee": 5500,
       "checkInTime": "22:30",
-      "checkOutTime": "06:30"
+      "checkOutTime": "06:30",
+      "emergencyContact": "+91-9876543211",
+      "bloodGroup": "B+",
+      "hometown": "Bangalore, Karnataka",
+      "allocatedDate": "2023-07-15",
+      "status": "Active"
+    },
+    {
+      "id": "CS2023002",
+      "name": "Arjun Patel",
+      "rollNumber": "2023CSE002",
+      "branch": "Computer Science Engineering",
+      "semester": 4,
+      "phoneNumber": "+91-9876543220",
+      "email": "arjun.patel@college.edu.in",
+      "hostelId": "H001",
+      "roomNumber": "A-201",
+      "feeStatus": "Paid",
+      "monthlyFee": 5500,
+      "checkInTime": "23:00",
+      "checkOutTime": "07:00",
+      "emergencyContact": "+91-9876543221",
+      "bloodGroup": "O+",
+      "hometown": "Ahmedabad, Gujarat",
+      "allocatedDate": "2023-07-15",
+      "status": "Active"
+    },
+    {
+      "id": "CS2023003",
+      "name": "Priya Sharma",
+      "rollNumber": "2023ECE001",
+      "branch": "Electronics & Communication Engineering",
+      "semester": 3,
+      "phoneNumber": "+91-9876543230",
+      "email": "priya.sharma@college.edu.in",
+      "hostelId": "H002",
+      "roomNumber": "B-301",
+      "feeStatus": "Pending",
+      "monthlyFee": 7500,
+      "checkInTime": "21:30",
+      "checkOutTime": "06:00",
+      "emergencyContact": "+91-9876543231",
+      "bloodGroup": "A+",
+      "hometown": "Delhi, NCR",
+      "allocatedDate": "2023-07-20",
+      "status": "Active"
+    }
+  ],
+  "applications": [
+    {
+      "id": "APP001",
+      "studentId": "CS2023004",
+      "studentName": "Vikram Singh",
+      "rollNumber": "2023ME001",
+      "branch": "Mechanical Engineering",
+      "semester": 2,
+      "preferredBlock": "A Block",
+      "preferredRoomType": "Double AC",
+      "reason": "Need accommodation for academic year 2024-25",
+      "submittedDate": "2025-01-10",
+      "status": "Pending",
+      "priority": "High",
+      "remarks": "Under review by hostel administration"
+    },
+    {
+      "id": "APP002",
+      "studentId": "CS2023005",
+      "studentName": "Sneha Reddy",
+      "rollNumber": "2023CSE003",
+      "branch": "Computer Science Engineering",
+      "semester": 3,
+      "preferredBlock": "B Block",
+      "preferredRoomType": "Single AC",
+      "reason": "Transfer from other college, need hostel accommodation",
+      "submittedDate": "2025-01-08",
+      "status": "Approved",
+      "priority": "Medium",
+      "remarks": "Room B-302 allocated"
+    }
+  ],
+  "leaveRequests": [
+    {
+      "id": "LR001",
+      "studentId": "CS2023001",
+      "studentName": "Rahul Kumar",
+      "roomNumber": "A-201",
+      "leaveType": "Home Leave",
+      "startDate": "2025-01-20",
+      "endDate": "2025-01-25",
+      "reason": "Family function",
+      "destination": "Bangalore, Karnataka",
+      "emergencyContact": "+91-9876543211",
+      "submittedDate": "2025-01-15",
+      "status": "Approved",
+      "approvedBy": "Mr. Prakash Sharma",
+      "approvedDate": "2025-01-16",
+      "qrCode": "QR-LR001-20250120",
+      "remarks": "Approved for 5 days"
+    },
+    {
+      "id": "LR002",
+      "studentId": "CS2023002",
+      "studentName": "Arjun Patel",
+      "roomNumber": "A-201",
+      "leaveType": "Medical Leave",
+      "startDate": "2025-01-18",
+      "endDate": "2025-01-20",
+      "reason": "Medical checkup",
+      "destination": "Ahmedabad, Gujarat",
+      "emergencyContact": "+91-9876543221",
+      "submittedDate": "2025-01-17",
+      "status": "Pending",
+      "approvedBy": null,
+      "approvedDate": null,
+      "qrCode": null,
+      "remarks": "Under review"
+    }
+  ],
+  "feeDetails": [
+    {
+      "id": "FEE001",
+      "studentId": "CS2023001",
+      "studentName": "Rahul Kumar",
+      "roomNumber": "A-201",
+      "monthlyRent": 5500,
+      "messFee": 3000,
+      "securityDeposit": 10000,
+      "electricityCharges": 500,
+      "totalAmount": 19000,
+      "paidAmount": 19000,
+      "pendingAmount": 0,
+      "lastPaymentDate": "2025-01-01",
+      "nextDueDate": "2025-02-01",
+      "status": "Paid",
+      "paymentHistory": [
+        {
+          "date": "2025-01-01",
+          "amount": 9000,
+          "type": "Monthly Rent + Mess Fee",
+          "method": "Online Payment"
+        },
+        {
+          "date": "2023-07-15",
+          "amount": 10000,
+          "type": "Security Deposit",
+          "method": "Bank Transfer"
+        }
+      ]
+    },
+    {
+      "id": "FEE002",
+      "studentId": "CS2023003",
+      "studentName": "Priya Sharma",
+      "roomNumber": "B-301",
+      "monthlyRent": 7500,
+      "messFee": 3000,
+      "securityDeposit": 10000,
+      "electricityCharges": 600,
+      "totalAmount": 21100,
+      "paidAmount": 10000,
+      "pendingAmount": 11100,
+      "lastPaymentDate": "2023-07-20",
+      "nextDueDate": "2025-01-20",
+      "status": "Pending",
+      "paymentHistory": [
+        {
+          "date": "2023-07-20",
+          "amount": 10000,
+          "type": "Security Deposit",
+          "method": "Bank Transfer"
+        }
+      ]
+    }
+  ],
+  "complaints": [
+    {
+      "id": "COMP001",
+      "studentId": "CS2023001",
+      "studentName": "Rahul Kumar",
+      "roomNumber": "A-201",
+      "type": "Maintenance",
+      "category": "AC/Fan",
+      "description": "AC not cooling properly, making unusual noise",
+      "priority": "High",
+      "status": "In Progress",
+      "submittedDate": "2025-01-10",
+      "assignedTo": "Maintenance Team - Ravi Kumar",
+      "resolvedDate": null,
+      "remarks": "Technician will visit on Jan 15th",
+      "feedback": null
+    },
+    {
+      "id": "COMP002",
+      "studentId": "CS2023002",
+      "studentName": "Arjun Patel",
+      "roomNumber": "A-201",
+      "type": "Mess",
+      "category": "Food Quality",
+      "description": "Food quality has deteriorated in the last week",
+      "priority": "Medium",
+      "status": "Resolved",
+      "submittedDate": "2025-01-05",
+      "assignedTo": "Mess Committee",
+      "resolvedDate": "2025-01-08",
+      "remarks": "New cook appointed, quality improved",
+      "feedback": "Good response, food quality improved"
+    }
+  ],
+  "visitors": [
+    {
+      "id": "VIS001",
+      "studentId": "CS2023001",
+      "studentName": "Rahul Kumar",
+      "visitorName": "Rajesh Kumar",
+      "visitorRelation": "Father",
+      "visitorPhone": "+91-9876543211",
+      "visitorIdProof": "Aadhar Card",
+      "visitDate": "2025-01-12",
+      "visitTime": "14:00",
+      "expectedDuration": "2 hours",
+      "purpose": "Family visit",
+      "status": "Approved",
+      "approvedBy": "Mr. Prakash Sharma",
+      "approvedDate": "2025-01-11",
+      "qrCode": "QR-VIS001-20250112",
+      "checkInTime": "14:05",
+      "checkOutTime": "16:30",
+      "remarks": "Visit completed successfully"
+    },
+    {
+      "id": "VIS002",
+      "studentId": "CS2023002",
+      "studentName": "Arjun Patel",
+      "visitorName": "Meera Patel",
+      "visitorRelation": "Sister",
+      "visitorPhone": "+91-9876543222",
+      "visitorIdProof": "Driving License",
+      "visitDate": "2025-01-15",
+      "visitTime": "10:00",
+      "expectedDuration": "4 hours",
+      "purpose": "Personal visit",
+      "status": "Pending",
+      "approvedBy": null,
+      "approvedDate": null,
+      "qrCode": null,
+      "checkInTime": null,
+      "checkOutTime": null,
+      "remarks": "Under review"
     }
   ],
   "inOutRegister": [
     {
       "studentId": "CS2023001",
+      "studentName": "Rahul Kumar",
+      "roomNumber": "A-201",
       "date": "2025-01-15",
       "outTime": "18:30",
       "inTime": "21:45",
-      "purpose": "Library Study"
+      "purpose": "Library Study",
+      "status": "Completed"
+    },
+    {
+      "studentId": "CS2023002",
+      "studentName": "Arjun Patel",
+      "roomNumber": "A-201",
+      "date": "2025-01-15",
+      "outTime": "19:00",
+      "inTime": "22:30",
+      "purpose": "Shopping",
+      "status": "Completed"
+    },
+    {
+      "studentId": "CS2023001",
+      "studentName": "Rahul Kumar",
+      "roomNumber": "A-201",
+      "date": "2025-01-16",
+      "outTime": "20:00",
+      "inTime": null,
+      "purpose": "Movie",
+      "status": "Out"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "NOT001",
+      "title": "Room Allocation Confirmation",
+      "message": "Your room A-201 has been successfully allocated. Please collect keys from reception.",
+      "type": "Administrative",
+      "priority": "High",
+      "date": "2025-01-15",
+      "time": "09:30",
+      "isRead": false,
+      "studentId": "CS2023001"
+    },
+    {
+      "id": "NOT002",
+      "title": "Mess Menu Update",
+      "message": "Weekly mess menu updated with special regional dishes. Check notice board for details.",
+      "type": "Mess",
+      "priority": "Medium",
+      "date": "2025-01-14",
+      "time": "08:15",
+      "isRead": true,
+      "studentId": "CS2023001"
+    },
+    {
+      "id": "NOT003",
+      "title": "Maintenance Notice",
+      "message": "Water supply maintenance scheduled for Block A on Jan 17th, 6 AM - 8 AM.",
+      "type": "Maintenance",
+      "priority": "High",
+      "date": "2025-01-13",
+      "time": "16:45",
+      "isRead": false,
+      "studentId": "CS2023001"
     }
   ]
 }

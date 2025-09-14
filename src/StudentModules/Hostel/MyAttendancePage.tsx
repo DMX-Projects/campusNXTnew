@@ -56,8 +56,8 @@ const MyAttendancePage: React.FC = () => {
 
   // Current student info
   const currentStudent = {
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     block: 'A Block',
     roomNumber: 'A-205',
     currentStatus: 'Present',

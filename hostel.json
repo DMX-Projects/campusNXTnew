@@ -1,0 +1,222 @@
+{
+    "students": [
+    {
+      "id": 1,
+      "name": "Ravi Kumar",
+      "email": "ravi@student.com",
+      "phone": "9876543210",
+      "gender": "male",
+      "applicationId": 1,
+      "roomId": 101
+    },
+    {
+      "id": 2,
+      "name": "Ananya Singh",
+      "email": "ananya@student.com",
+      "phone": "9123456780",
+      "gender": "female",
+      "applicationId": 2,
+      "roomId": null
+    }
+  ],
+  "wardens": [
+    {
+      "id": 1,
+      "name": "Anil Sharma",
+      "email": "warden@hostel.com",
+      "phone": "9876501234",
+      "assignedHostelId": 1
+    }
+  ],
+  "hostels": [
+    {
+      "id": 1,
+      "name": "Vivekananda Bhawan",
+      "type": "Boys",
+      "blocks": ["Block A", "Block B"],
+      "floors": 4,
+      "rules": "1. No entry after 10:00 PM without prior permission.\n2. Guests are only allowed in common areas.\n3. Maintain silence during study hours (8 PM - 11 PM)."
+    }
+  ],
+  "rooms": [
+    {
+      "id": 101,
+      "hostelId": 1,
+      "block": "Block A",
+      "floor": 1,
+      "roomNumber": "101",
+      "roomType": "Double Seater",
+      "capacity": 2,
+      "amenities": ["Fan", "Table", "Chair", "Cupboard"],
+      "gender": "male",
+      "occupied": true,
+      "studentIds": [1]
+    },
+    {
+      "id": 102,
+      "hostelId": 1,
+      "block": "Block A",
+      "floor": 1,
+      "roomNumber": "102",
+      "roomType": "Single Seater",
+      "capacity": 1,
+      "amenities": ["Fan", "Table", "Chair", "Cupboard", "AC"],
+      "gender": "male",
+      "occupied": false,
+      "studentIds": []
+    }
+  ],
+  
+    "applications": [
+      {
+        "id": 1,
+        "studentId": 1,
+        "preferences": ["Block 1", "double"],
+        "status": "approved",
+        "allottedRoomId": 101,
+        "submittedAt": "2025-09-10"
+      },
+      {
+        "id": 2,
+        "studentId": 2,
+        "preferences": ["Block 2", "single"],
+        "status": "pending",
+        "allottedRoomId": null,
+        "submittedAt": "2025-09-11"
+      }
+    ],
+  
+    "feeStructures": [
+      {
+        "id": 1,
+        "hostelId": 1,
+        "roomType": "single",
+        "hostelFee": 8000,
+        "messFee": 3000,
+        "deposit": 2000,
+        "fineRules": "Late payment fine ₹100/day"
+      },
+      {
+        "id": 2,
+        "hostelId": 1,
+        "roomType": "double",
+        "hostelFee": 5000,
+        "messFee": 2500,
+        "deposit": 2000,
+        "fineRules": "Late payment fine ₹100/day"
+      }
+    ],
+  
+    "fees": [
+      {
+        "id": 1,
+        "studentId": 1,
+        "feeStructureId": 2,
+        "amountDue": 9500,
+        "amountPaid": 5000,
+        "status": "partial",
+        "dueDate": "2025-10-01",
+        "transactions": [
+          {
+            "txnId": "TXN1001",
+            "amount": 5000,
+            "date": "2025-09-12",
+            "mode": "online"
+          }
+        ]
+      }
+    ],
+  
+    "leaves": [
+      {
+        "id": 1,
+        "studentId": 1,
+        "type": "home leave",
+        "fromDate": "2025-09-20",
+        "toDate": "2025-09-25",
+        "status": "approved",
+        "qrPass": "/passes/leave1.png"
+      }
+    ],
+  
+    "complaints": [
+      {
+        "id": 1,
+        "studentId": 1,
+        "category": "mess",
+        "description": "Food quality issue",
+        "status": "resolved",
+        "assignedTo": "Mess Supervisor",
+        "feedback": "Issue fixed"
+      },
+      {
+        "id": 2,
+        "studentId": 2,
+        "category": "room",
+        "description": "Fan not working",
+        "status": "pending",
+        "assignedTo": "Electrician",
+        "feedback": null
+      }
+    ],
+  
+    "discipline": [
+      {
+        "id": 1,
+        "studentId": 1,
+        "violation": "Late entry after curfew",
+        "penalty": "Warning Letter",
+        "date": "2025-09-12"
+      }
+    ],
+  
+    "visitors": [
+      {
+        "id": 1,
+        "studentId": 1,
+        "name": "Rajesh Kumar",
+        "relation": "Father",
+        "checkIn": "2025-09-11T10:00:00",
+        "checkOut": "2025-09-11T18:00:00",
+        "status": "approved"
+      }
+    ],
+  
+    "notices": [
+      {
+        "id": 1,
+        "title": "Fee Due Reminder",
+        "content": "All students must clear hostel fees by 1st Oct.",
+        "date": "2025-09-13",
+        "audience": "all"
+      },
+      {
+        "id": 2,
+        "title": "Maintenance Alert",
+        "content": "Water supply will be off in Block 1 from 2-4 PM tomorrow.",
+        "date": "2025-09-14",
+        "audience": "block1"
+      }
+    ],
+  
+    "reports": [
+      {
+        "id": 1,
+        "type": "occupancy",
+        "data": {
+          "totalRooms": 100,
+          "occupiedRooms": 85,
+          "vacantRooms": 15
+        }
+      },
+      {
+        "id": 2,
+        "type": "complaints",
+        "data": {
+          "totalComplaints": 25,
+          "resolved": 18,
+          "pending": 7
+        }
+      }
+    ]
+  }

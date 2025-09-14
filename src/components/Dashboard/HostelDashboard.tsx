@@ -1,19 +1,26 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-         PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { useNavigate } from 'react-router-dom';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, LineChart, Line
+} from 'recharts';
 import DashboardCard from './DashboardCard';
-import { Hotel, Users, DollarSign, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Hotel, Users, Boxes, BedDouble, CheckCircle, Hash } from 'lucide-react';
 
 const HostelDashboard: React.FC = () => {
+  const navigate = useNavigate();
+
+  // Summary metrics
   const cardData = [
     { title: 'Total Occupancy', value: '85%', change: '+3.2%', trend: 'up' as const, icon: Hotel, color: 'bg-blue-500' },
     { title: 'Hostel Students', value: '1,456', change: '+28', trend: 'up' as const, icon: Users, color: 'bg-green-500' },
-    { title: 'Monthly Revenue', value: '₹9.2L', change: '+5.8%', trend: 'up' as const, icon: DollarSign, color: 'bg-purple-500' },
-    { title: 'Late Returns', value: '12', change: '-3', trend: 'down' as const, icon: Clock, color: 'bg-orange-500' },
-    { title: 'Pending Dues', value: '₹1.2L', change: '-15%', trend: 'down' as const, icon: AlertTriangle, color: 'bg-red-500' },
-    { title: 'Room Transfers', value: '8', change: '+2', trend: 'up' as const, icon: CheckCircle, color: 'bg-teal-500' }
+    { title: 'Total Blocks', value: '6', change: '+1', trend: 'up' as const, icon: Boxes, color: 'bg-indigo-500' },
+    { title: 'Total Rooms', value: '610', change: '+12', trend: 'up' as const, icon: BedDouble, color: 'bg-purple-500' },
+    { title: 'Available Rooms', value: '92', change: '+7', trend: 'up' as const, icon: CheckCircle, color: 'bg-teal-500' },
+    { title: 'Hostels', value: '4', change: '—', trend: 'up' as const, icon: Hash, color: 'bg-amber-500' }
   ];
 
+  // Charts data
   const occupancyData = [
     { hostel: 'Boys Hostel A', occupied: 145, capacity: 160, percentage: 90.6 },
     { hostel: 'Boys Hostel B', occupied: 132, capacity: 150, percentage: 88.0 },
@@ -39,10 +46,65 @@ const HostelDashboard: React.FC = () => {
     { time: '22:00', in: 89, out: 3 }
   ];
 
+  // CSV helpers
+  const toCSV = (rows: Record<string, any>[]) => {
+    if (!rows.length) return '';
+    const headers = Object.keys(rows);
+    const cell = (v: any) => {
+      const s = v == null ? '' : String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    return [headers.join(','), ...rows.map(r => headers.map(h => cell(r[h])).join(','))].join('\n');
+  };
+
+  const download = (filename: string, data: string, mime = 'text/csv;charset=utf-8;') => {
+    const blob = new Blob([data], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+  };
+
+  const downloadReport = () => {
+    // Build a simple multi-section CSV
+    const summaryRows = [
+      { metric: 'Total Occupancy', value: '85%' },
+      { metric: 'Hostel Students', value: '1456' },
+      { metric: 'Total Blocks', value: '6' },
+      { metric: 'Total Rooms', value: '610' },
+      { metric: 'Available Rooms', value: '92' },
+      { metric: 'Hostels', value: '4' },
+    ];
+    const occupancyRows = occupancyData.map(d => ({
+      hostel: d.hostel,
+      occupied: d.occupied,
+      capacity: d.capacity,
+      percentage: d.percentage
+    }));
+    const feeRows = feeStatusData.map(d => ({ status: d.status, count: d.count }));
+    const ioRows = inOutData.map(d => ({ time: d.time, in: d.in, out: d.out }));
+
+    const parts = [
+      'Summary',
+      toCSV(summaryRows),
+      '',
+      'Occupancy',
+      toCSV(occupancyRows),
+      '',
+      'Fee Status',
+      toCSV(feeRows),
+      '',
+      'Daily In/Out',
+      toCSV(ioRows),
+    ];
+    const csv = parts.join('\n');
+    download(`hostel_report_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`, csv);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Hostel Management Dashboard
@@ -51,18 +113,20 @@ const HostelDashboard: React.FC = () => {
             Monitor hostel operations and student accommodation
           </p>
         </div>
-        <div className="flex items-center space-x-3">
-          <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate('/hostel/rooms/allotment')}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+            aria-label="Go to room allocation"
+          >
             Room Allocation
           </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-            Generate Report
-          </button>
+          
         </div>
       </div>
 
       {/* Key Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
         {cardData.map((card, index) => (
           <DashboardCard key={index} data={card} />
         ))}
@@ -80,16 +144,17 @@ const HostelDashboard: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis dataKey="hostel" stroke="#6B7280" />
               <YAxis stroke="#6B7280" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#1F2937', 
-                  border: 'none', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#111827',
+                  border: 'none',
                   borderRadius: '8px',
                   color: '#F9FAFB'
-                }} 
+                }}
+                labelStyle={{ color: '#E5E7EB' }}
               />
-              <Bar dataKey="occupied" fill="#3B82F6" radius={[2, 2, 0, 0]} />
-              <Bar dataKey="capacity" fill="#E5E7EB" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="occupied" name="Occupied" fill="#3B82F6" radius={[2, 2, 0, 0]} />
+              <Bar dataKey="capacity" name="Capacity" fill="#9CA3AF" radius={[2, 2, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -113,7 +178,15 @@ const HostelDashboard: React.FC = () => {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#111827',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#F9FAFB'
+                }}
+                labelStyle={{ color: '#E5E7EB' }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -128,16 +201,17 @@ const HostelDashboard: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis dataKey="time" stroke="#6B7280" />
               <YAxis stroke="#6B7280" />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: '#1F2937', 
-                  border: 'none', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#111827',
+                  border: 'none',
                   borderRadius: '8px',
                   color: '#F9FAFB'
-                }} 
+                }}
+                labelStyle={{ color: '#E5E7EB' }}
               />
-              <Line type="monotone" dataKey="in" stroke="#10B981" strokeWidth={3} dot={{ fill: '#10B981', r: 4 }} />
-              <Line type="monotone" dataKey="out" stroke="#EF4444" strokeWidth={3} dot={{ fill: '#EF4444', r: 4 }} />
+              <Line type="monotone" name="In" dataKey="in" stroke="#10B981" strokeWidth={3} dot={{ fill: '#10B981', r: 4 }} />
+              <Line type="monotone" name="Out" dataKey="out" stroke="#EF4444" strokeWidth={3} dot={{ fill: '#EF4444', r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>

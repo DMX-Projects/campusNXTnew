@@ -51,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
     navigate('/');
   };
 
-  const truncateText = (text: string, maxLength: number = 15) => {
+  const truncateText = (text: string, maxLength: number = 25) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
@@ -109,14 +109,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         
         {/* Render children with proper scrolling */}
         {hasChildren && !isCollapsed && isExpanded && (
-          <div className="mt-1 pl-2">
-            <div className="max-h-80 overflow-y-auto overflow-x-hidden space-y-1 border-l border-gray-200 dark:border-gray-600 ml-3">
-              <div className="pl-2 space-y-1">
-                {item.children.map((child: any) => renderMenuItem(child, level + 1))}
-              </div>
-            </div>
-          </div>
-        )}
+  <div className="mt-1">
+    <div className="max-h-80 overflow-y-auto overflow-x-hidden space-y-1 border-l border-gray-200 dark:border-gray-600">
+      <div className="space-y-1">
+        {item.children.map((child: any) => renderMenuItem(child, level + 1))}
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     );
   };

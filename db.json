@@ -499,7 +499,19 @@
   "startTime": "14:00",
   "endTime": "15:00",
   "days": ["Saturday"]
-},
+  },{
+    "id": "sat0",
+    "subject": "C programming",
+    "class": "BTech CSE",
+    "section": "A",
+    "facultyId": "FAC001",
+    "schedule": "Saturday - 13:00",
+    "room": "Room CSE-204",
+    "totalStudents": 62,
+    "startTime": "13:00",
+    "endTime": "14:00",
+    "days": ["Saturday"]
+  },
 {
   "id": "sat2",
   "subject": "Algorithm Design & Analysis",
