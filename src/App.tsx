@@ -38,6 +38,9 @@ const AppRoutes: React.FC = () => {
   if (userRole === 'Faculty') {
     return '/academics/dashboard';
   }
+  if (userRole === 'warden') {
+    return '/hostel/dashboard';
+  }
     return '/academics';
   };
 
