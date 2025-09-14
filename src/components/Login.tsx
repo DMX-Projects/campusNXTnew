@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff, School, Lock, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getRedirectPath } from './ProtectedRoute';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -26,7 +27,10 @@ const Login: React.FC = () => {
       if (rememberMe) {
         localStorage.setItem('rememberUser', username);
       }
-      navigate('/dashboard');
+      // Get the user from auth context to determine redirect path
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      const redirectPath = getRedirectPath(currentUser.role);
+      navigate(redirectPath);
     } else {
       setError('Invalid username or password');
     }

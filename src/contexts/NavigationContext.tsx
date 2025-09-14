@@ -763,6 +763,10 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       let initialModule = 'Academics'; // default
       if (user.role === 'Chairperson' || user.role === 'College Secretary') {
         initialModule = 'Home';
+      } else if (user.role === 'Student') {
+        initialModule = 'Hostel';
+      } else if (user.role === 'Hostel Incharge') {
+        initialModule = 'Hostel';
       }
       
       // Check if current path matches any module
