@@ -3,7 +3,7 @@ import {
   ClipboardList, Calendar, Clock, MapPin, Phone, 
   User, FileText, QrCode, CheckCircle, AlertTriangle,
   Eye, Filter, Search, Download, RefreshCw, CalendarDays,
-  Users, TrendingUp, BarChart3, Clock3, CheckSquare
+  Users, TrendingUp, BarChart3, Clock3, CheckSquare,X
 } from 'lucide-react';
 
 interface VisitorLog {

@@ -3,7 +3,7 @@ import {
   Star, MessageSquare, ThumbsUp, ThumbsDown, 
   Clock, CheckCircle, AlertTriangle, User, 
   Calendar, FileText, RefreshCw, Filter, Search,
-  Send, Heart, Smile, Frown, Meh
+  Send, Heart, Smile, Frown, Meh,Phone, MapPin, X
 } from 'lucide-react';
 
 interface FeedbackForm {
