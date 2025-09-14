@@ -177,8 +177,8 @@ const SubmitComplaintPage: React.FC = () => {
                 <MessageSquare className="w-8 h-8 text-red-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">Submit Complaint</h1>
-                <p className="text-gray-600">Report issues and submit complaints to hostel administration</p>
+                <h1 className="text-2xl font-bold text-gray-800">Tickets</h1>
+                <p className="text-gray-600">Report issues and submit tickets to hostel administration</p>
               </div>
             </div>
             <button
@@ -186,7 +186,7 @@ const SubmitComplaintPage: React.FC = () => {
               className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"
             >
               <MessageSquare className="w-4 h-4" />
-              New Complaint
+              New Ticket
             </button>
           </div>
         </div>
@@ -228,7 +228,7 @@ const SubmitComplaintPage: React.FC = () => {
 
         {/* Complaint Categories */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Complaint Categories</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Ticket Categories</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {complaintCategories.map((category, index) => (
               <div key={index} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
@@ -262,7 +262,7 @@ const SubmitComplaintPage: React.FC = () => {
 
         {/* Existing Complaints */}
         <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Your Complaints</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Your Tickets</h2>
           
           {existingComplaints.length > 0 ? (
             <div className="space-y-4">
@@ -271,7 +271,7 @@ const SubmitComplaintPage: React.FC = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <h3 className="text-lg font-semibold text-gray-800">
-                        Complaint #{complaint.id}
+                        Ticket #{complaint.id}
                       </h3>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(complaint.status)}`}>
                         {complaint.status}
@@ -288,7 +288,7 @@ const SubmitComplaintPage: React.FC = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
                     <div>
-                      <h4 className="font-medium text-gray-700 mb-2">Complaint Details</h4>
+                      <h4 className="font-medium text-gray-700 mb-2">Ticket Details</h4>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <AlertTriangle className="w-4 h-4 text-gray-500" />
@@ -360,8 +360,8 @@ const SubmitComplaintPage: React.FC = () => {
           ) : (
             <div className="text-center py-8">
               <MessageSquare className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-600 mb-2">No Complaints Submitted</h3>
-              <p className="text-gray-500">You haven't submitted any complaints yet</p>
+              <h3 className="text-lg font-medium text-gray-600 mb-2">No Ticket Submitted</h3>
+              <p className="text-gray-500">You haven't submitted any tickets yet</p>
             </div>
           )}
         </div>
@@ -371,7 +371,7 @@ const SubmitComplaintPage: React.FC = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-800">Submit New Complaint</h3>
+                <h3 className="text-xl font-bold text-gray-800">Submit New Ticket</h3>
                 <button
                   onClick={() => setShowComplaintForm(false)}
                   className="p-2 hover:bg-gray-100 rounded-full"
@@ -384,7 +384,7 @@ const SubmitComplaintPage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Complaint Type <span className="text-red-500">*</span>
+                      Ticket Type <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={complaintForm.type}
@@ -495,8 +495,8 @@ const SubmitComplaintPage: React.FC = () => {
                       <ul className="text-sm text-red-800 space-y-1">
                         <li>• Provide accurate and detailed information</li>
                         <li>• Attach photos if applicable for better understanding</li>
-                        <li>• You will be notified about the complaint status</li>
-                        <li>• False complaints may result in disciplinary action</li>
+                        <li>• You will be notified about the Ticket status</li>
+                        <li>• False tickets may result in disciplinary action</li>
                       </ul>
                     </div>
                   </div>
@@ -507,7 +507,7 @@ const SubmitComplaintPage: React.FC = () => {
                     type="submit"
                     className="flex-1 bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700 font-medium"
                   >
-                    Submit Complaint
+                    Submit Ticket
                   </button>
                   <button
                     type="button"

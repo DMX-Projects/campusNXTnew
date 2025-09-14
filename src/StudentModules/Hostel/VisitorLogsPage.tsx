@@ -444,7 +444,7 @@ const VisitorLogsPage: React.FC = () => {
                     <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
                     <th className="text-left py-3 px-4 font-medium text-gray-700">Purpose</th>
                     <th className="text-left py-3 px-4 font-medium text-gray-700">Check-in/out</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-700">View pass</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -497,14 +497,7 @@ const VisitorLogsPage: React.FC = () => {
                           >
                             <Eye className="w-4 h-4" />
                           </button>
-                          {log.qrCode && (
-                            <button
-                              className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
-                              title="QR Code"
-                            >
-                              <QrCode className="w-4 h-4" />
-                            </button>
-                          )}
+                          
                         </div>
                       </td>
                     </tr>
@@ -668,7 +661,7 @@ const VisitorLogsPage: React.FC = () => {
                   {selectedVisitor.qrCode && (
                     <button className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 font-medium flex items-center justify-center gap-2">
                       <QrCode className="w-4 h-4" />
-                      Download QR Code
+                      Share QR Code
                     </button>
                   )}
                   <button

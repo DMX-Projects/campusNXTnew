@@ -29,6 +29,7 @@ const AppRoutes: React.FC = () => {
   if (loading) return <div>Loading...</div>; 
 
   const getRedirectPath = (userRole: string) => {
+    console.log(userRole)
     if (userRole === 'Chairperson' || userRole === 'College Secretary') {
       return '/home';
     }
@@ -38,7 +39,7 @@ const AppRoutes: React.FC = () => {
   if (userRole === 'Faculty') {
     return '/academics/dashboard';
   }
-  if (userRole === 'warden') {
+  if (userRole === 'Hostel Incharge' || userRole === 'Warden ') {
     return '/hostel/dashboard';
   }
     return '/academics';

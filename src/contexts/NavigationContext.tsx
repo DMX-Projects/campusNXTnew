@@ -687,16 +687,17 @@ const SIDEBAR_ITEMS = {
         { name: 'Download Receipts', path: '/hostel/fees/receipts', icon: 'Download' }
       ]
     },
-    { 
-      name: 'Complaints & Feedback', 
-      path: '/hostel/complaints', 
-      icon: 'AlertTriangle',
-      children: [
-        { name: 'Submit Complaint', path: '/hostel/complaints/new', icon: 'MessageSquare' },
-        { name: 'Track Complaint Status', path: '/hostel/complaints/status', icon: 'Eye' },
-        { name: 'Give Feedback', path: '/hostel/complaints/feedback', icon: 'Star' }
-      ]
-    },
+    // { 
+    //   name: 'Complaints & Feedback', 
+    //   path: '/hostel/complaints', 
+    //   icon: 'AlertTriangle',
+    //   children: [
+    //     { name: 'Submit Complaint', path: '/hostel/complaints/new', icon: 'MessageSquare' },
+    //     { name: 'Track Complaint Status', path: '/hostel/complaints/status', icon: 'Eye' },
+    //     { name: 'Give Feedback', path: '/hostel/complaints/feedback', icon: 'Star' }
+    //   ]
+    // },
+    
     { 
       name: 'Visitors', 
       path: '/hostel/visitors', 
@@ -706,6 +707,7 @@ const SIDEBAR_ITEMS = {
         { name: 'Visitor Logs', path: '/hostel/visitors/logs', icon: 'ClipboardList' }
       ]
     },
+    { name: 'Ticket', path: 'hostel/complaints/new', icon: 'ClipboardList' },
     { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
   ],
 
