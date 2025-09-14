@@ -60,8 +60,8 @@ const FeePaymentsPage: React.FC = () => {
 
   // Current student and fee info
   const currentStudent = {
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     block: 'A Block',
     roomNumber: 'A-205',
     roomType: 'Double AC',

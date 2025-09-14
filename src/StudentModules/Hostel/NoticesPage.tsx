@@ -142,7 +142,7 @@ const NoticesPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Mobile-first responsive padding */}
       <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-        <div className=" mx-auto">
+        <div className="mx-auto">
         
           {/* Search and Filters - Enhanced mobile layout */}
           <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">

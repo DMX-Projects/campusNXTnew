@@ -656,7 +656,7 @@ const SIDEBAR_ITEMS = {
     { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
   ],
     'Student': [
-    { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
+    { name: 'Dashboard', path: '/hostel/student-dashboard', icon: 'BarChart3' },
     { 
       name: 'Room & Application', 
       path: '/hostel/room', 
@@ -708,18 +708,7 @@ const SIDEBAR_ITEMS = {
     },
     { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
   ],
-  'default': [
-    { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
-  ],
-    'default': [
-      { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
-      { name: 'Inbox', path: '/hostel/inbox', icon: 'Mail' },
-      { name: 'Hostel Student List', path: '/hostel/hostel-student-list', icon: 'Users' },
-      { name: 'Fee Details', path: '/hostel/fee-details', icon: 'DollarSign' },
-      { name: 'Out Time', path: '/hostel/out-time', icon: 'Clock' },
-      { name: 'Reports', path: '/hostel/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/hostel/raise-ticket', icon: 'AlertCircle' }
-    ]
+
   },
   Parent: {
     'Chairperson': [

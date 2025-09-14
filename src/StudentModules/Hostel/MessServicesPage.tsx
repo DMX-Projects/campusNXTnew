@@ -960,8 +960,8 @@ export const MessServicesPage: React.FC = () => {
 
   // Current student info
   const currentStudent = {
-    name: 'Rahul Kumar',
-    rollNumber: '2023CSE001',
+    name: 'Arjun Kumar',
+    rollNumber: 'CS2023001',
     messCardNumber: 'MC2023001',
     messType: 'Full Mess',
     dietaryPreference: 'Vegetarian'

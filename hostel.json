@@ -1,69 +1,71 @@
 {
     "students": [
-      {
-        "id": 1,
-        "name": "Ravi Kumar",
-        "email": "ravi@student.com",
-        "phone": "9876543210",
-        "gender": "male",
-        "applicationId": 1,
-        "roomId": 101
-      },
-      {
-        "id": 2,
-        "name": "Ananya Singh",
-        "email": "ananya@student.com",
-        "phone": "9123456780",
-        "gender": "female",
-        "applicationId": 2,
-        "roomId": null
-      }
-    ],
-  
-    "wardens": [
-      {
-        "id": 1,
-        "name": "Anil Sharma",
-        "email": "warden@hostel.com",
-        "phone": "9876501234",
-        "assignedHostelId": 1
-      }
-    ],
-  
-    "hostels": [
-      {
-        "id": 1,
-        "name": "Hostel A",
-        "blocks": ["Block 1", "Block 2"],
-        "floors": 3,
-        "rules": "No late entry after 10 PM"
-      }
-    ],
-  
-    "rooms": [
-      {
-        "id": 101,
-        "hostelId": 1,
-        "block": "Block 1",
-        "floor": 1,
-        "roomType": "double",
-        "amenities": ["fan", "table", "chair"],
-        "gender": "male",
-        "occupied": true,
-        "studentIds": [1]
-      },
-      {
-        "id": 102,
-        "hostelId": 1,
-        "block": "Block 1",
-        "floor": 1,
-        "roomType": "single",
-        "amenities": ["fan", "table", "chair", "cupboard"],
-        "gender": "male",
-        "occupied": false,
-        "studentIds": []
-      }
-    ],
+    {
+      "id": 1,
+      "name": "Ravi Kumar",
+      "email": "ravi@student.com",
+      "phone": "9876543210",
+      "gender": "male",
+      "applicationId": 1,
+      "roomId": 101
+    },
+    {
+      "id": 2,
+      "name": "Ananya Singh",
+      "email": "ananya@student.com",
+      "phone": "9123456780",
+      "gender": "female",
+      "applicationId": 2,
+      "roomId": null
+    }
+  ],
+  "wardens": [
+    {
+      "id": 1,
+      "name": "Anil Sharma",
+      "email": "warden@hostel.com",
+      "phone": "9876501234",
+      "assignedHostelId": 1
+    }
+  ],
+  "hostels": [
+    {
+      "id": 1,
+      "name": "Vivekananda Bhawan",
+      "type": "Boys",
+      "blocks": ["Block A", "Block B"],
+      "floors": 4,
+      "rules": "1. No entry after 10:00 PM without prior permission.\n2. Guests are only allowed in common areas.\n3. Maintain silence during study hours (8 PM - 11 PM)."
+    }
+  ],
+  "rooms": [
+    {
+      "id": 101,
+      "hostelId": 1,
+      "block": "Block A",
+      "floor": 1,
+      "roomNumber": "101",
+      "roomType": "Double Seater",
+      "capacity": 2,
+      "amenities": ["Fan", "Table", "Chair", "Cupboard"],
+      "gender": "male",
+      "occupied": true,
+      "studentIds": [1]
+    },
+    {
+      "id": 102,
+      "hostelId": 1,
+      "block": "Block A",
+      "floor": 1,
+      "roomNumber": "102",
+      "roomType": "Single Seater",
+      "capacity": 1,
+      "amenities": ["Fan", "Table", "Chair", "Cupboard", "AC"],
+      "gender": "male",
+      "occupied": false,
+      "studentIds": []
+    }
+  ],
   
     "applications": [
       {
@@ -218,4 +220,3 @@
       }
     ]
   }
-  
