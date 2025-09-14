@@ -2,8 +2,12 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
+// Centralized role → path mapping
 const getRedirectPath = (role: string): string => {
-  switch (role?.toLowerCase()) {
+  const normalizedRole = role?.trim().toLowerCase();
+  console.log("role in getRedirectPath:", normalizedRole);
+
+  switch (normalizedRole) {
     case "student":
       return "/academics/student-dashboard";
     case "faculty":
@@ -11,9 +15,14 @@ const getRedirectPath = (role: string): string => {
     case "admin":
       return "/administration/admin-dashboard";
     case "hostel":
-      return "/hostel/student-dashboard";
+    case "hostel incharge":
+    case "warden":
+      return "/hostel/dashboard";
+    case "chairperson":
+    case "college secretary":
+      return "/home";
     default:
-      return "/"; 
+      return "/dashboard";
   }
 };
 
@@ -22,10 +31,7 @@ interface ProtectedRouteProps {
   allowedRoles?: string[];
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children,
-  allowedRoles,
-}) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
@@ -33,13 +39,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   const userRole = user?.role || "";
+  const normalized = userRole.trim().toLowerCase();
 
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
+  // If roles are restricted and user not allowed → send to their dashboard
+  if (allowedRoles && !allowedRoles.map(r => r.toLowerCase()).includes(normalized)) {
     return <Navigate to={getRedirectPath(userRole)} replace />;
   }
 
-  // ✅ User is allowed → render the page
   return <>{children}</>;
 };
 
+export { getRedirectPath };
 export default ProtectedRoute;
