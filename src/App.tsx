@@ -40,7 +40,6 @@ const AppRoutes: React.FC = () => {
         }
       />
 
-      {/* All other routes wrapped in ProtectedRoute + Layout */}
       <Route
         element={
           <ProtectedRoute>

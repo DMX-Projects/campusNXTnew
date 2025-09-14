@@ -9,7 +9,7 @@ const getRedirectPath = (role: string): string => {
 
   switch (normalizedRole) {
     case "student":
-      return "/academics/student-dashboard";
+      return "/hostel/student-dashboard";
     case "faculty":
       return "/academics/faculty-dashboard";
     case "admin":
@@ -41,7 +41,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
   const userRole = user?.role || "";
   const normalized = userRole.trim().toLowerCase();
 
-  // If roles are restricted and user not allowed → send to their dashboard
   if (allowedRoles && !allowedRoles.map(r => r.toLowerCase()).includes(normalized)) {
     return <Navigate to={getRedirectPath(userRole)} replace />;
   }
