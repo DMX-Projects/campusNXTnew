@@ -46,7 +46,7 @@ const seed: VisitLog[] = [
     id: 'VR-5002',
     createdAt: new Date(Date.now() - 72 * 36e5).toISOString(),
     updatedAt: new Date(Date.now() - 60 * 36e5).toISOString(),
-    student: students,
+    student: students[0],
     visitor: { id: 'V101', name: 'Priya Singh', relation: 'Relative', idType: 'Aadhaar', idNumber: 'XXXX-5678' },
     purpose: 'Dropping documents',
     visitDate: new Date(Date.now() - 24 * 36e5).toISOString().slice(0, 10),
