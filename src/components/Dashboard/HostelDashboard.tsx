@@ -121,12 +121,7 @@ const HostelDashboard: React.FC = () => {
           >
             Room Allocation
           </button>
-          <button
-            onClick={downloadReport}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-          >
-            Generate Report
-          </button>
+          
         </div>
       </div>
 
