@@ -599,8 +599,8 @@ const SIDEBAR_ITEMS = {
       path: '/hostel/rooms', 
       icon: 'Home',
       children: [
-        { name: 'Room Allotment', path: '/hostel/rooms/allotment', icon: 'UserPlus' },
         { name: 'Hostel Applications', path: '/hostel/applications/new', icon: 'ClipboardList' },
+        { name: 'Room Allotment', path: '/hostel/rooms/allotment', icon: 'UserPlus' },  
         { name: 'Room Change Requests', path: '/hostel/rooms/change-requests', icon: 'Repeat' }
       ]
     },

@@ -328,81 +328,134 @@ const ChangeRoomRequests: React.FC = () => {
       </div>
 
       {/* Detail Modal */}
-      {detailItem && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setDetailItem(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-2xl max-h-full overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Request {detailItem.id}</h3>
-                <button onClick={() => setDetailItem(null)} className="p-2 rounded-full text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+{detailItem && (
+  <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setDetailItem(null)}>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-2xl max-h-full overflow-y-auto" onClick={e => e.stopPropagation()}>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white">Request {detailItem.id}</h3>
+          <button onClick={() => setDetailItem(null)} className="p-2 rounded-full text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-              <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className={`px-2 py-0.5 text-xs rounded-full ${badgeByStatus[detailItem.status]}`}>{detailItem.status}</span>
-                <span className={`px-2 py-0.5 text-xs rounded-full ${urgencyChip[detailItem.urgency]}`}>{detailItem.urgency}</span>
-                <span className="px-2 py-0.5 text-xs rounded-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100">{detailItem.changeType}</span>
-              </div>
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <span className={`px-2 py-0.5 text-xs rounded-full ${badgeByStatus[detailItem.status]}`}>{detailItem.status}</span>
+          <span className={`px-2 py-0.5 text-xs rounded-full ${urgencyChip[detailItem.urgency]}`}>{detailItem.urgency}</span>
+          <span className="px-2 py-0.5 text-xs rounded-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100">{detailItem.changeType}</span>
+        </div>
 
+        {/* Helpers to format hostel info from your RoomRef */}
+        {/*
+          You may replace these maps with actual data from backend later.
+        */}
+        {(() => {
+          const getHostelName = (b: RoomRef['building']) => {
+            const map: Record<RoomRef['building'], string> = { A: 'Hostel A', B: 'Hostel B', C: 'Hostel C', D: 'Hostel D' };
+            return map[b] || `Hostel ${b}`;
+          };
+          const getHostelBlock = (b: RoomRef['building']) => `${b}-Block`;
+          const getRoomNo = (room: RoomRef) => room.roomNumber;
+          const getRoomType = (room: RoomRef) => {
+            // Example heuristic; swap with real field when available
+            return room.floor >= 3 ? 'Single' : 'Double';
+          };
+          const getPrevAllotDate = (_: RoomRef) => {
+            // Placeholder: derive from student allocation history when integrated
+            return '—';
+          };
+
+          const current = detailItem.currentRoom;
+          const desired = detailItem.desiredRoom;
+          const swap = detailItem.swapWith?.room;
+
+          return (
+            <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                {/* Student Details */}
                 <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">Requester</p>
-                  <p className="text-gray-700 dark:text-gray-300">{detailItem.requester.name} ({detailItem.requester.id})</p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-200">Student Details</p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {detailItem.requester.name} ({detailItem.requester.id})
+                  </p>
                   <p className="text-gray-600 dark:text-gray-400">{detailItem.requester.yearDept}</p>
                 </div>
 
+                {/* Current Room with enriched fields */}
                 <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
                   <p className="font-semibold text-gray-800 dark:text-gray-200">Current Room</p>
-                  <p className="text-gray-700 dark:text-gray-300">{detailItem.currentRoom.building}-{detailItem.currentRoom.roomNumber}</p>
-                  <p className="text-gray-600 dark:text-gray-400">Floor {detailItem.currentRoom.floor}</p>
+                  <div className="text-gray-700 dark:text-gray-300">
+                    <p>Hostel Name: {getHostelName(current.building)}</p>
+                    <p>Hostel Block: {getHostelBlock(current.building)}</p>
+                    <p>Room No: {getRoomNo(current)}</p>
+                    <p>Room Type: {getRoomType(current)}</p>
+                    <p>Previous Date of Allotment: {getPrevAllotDate(current)}</p>
+                  </div>
                 </div>
 
-                {detailItem.changeType === 'Transfer' && detailItem.desiredRoom && (
+                {/* Requested Change for Transfer */}
+                {detailItem.changeType === 'Transfer' && desired && (
                   <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <p className="font-semibold text-gray-800 dark:text-gray-200">Desired Room</p>
-                    <p className="text-gray-700 dark:text-gray-300">{detailItem.desiredRoom.building}-{detailItem.desiredRoom.roomNumber}</p>
-                    <p className="text-gray-600 dark:text-gray-400">Floor {detailItem.desiredRoom.floor}</p>
+                    <p className="font-semibold text-gray-800 dark:text-gray-200">Requested Change</p>
+                    <div className="text-gray-700 dark:text-gray-300">
+                      <p>Preferred Hostel: {getHostelName(desired.building)}</p>
+                      <p>Preferred Block: {getHostelBlock(desired.building)}</p>
+                      <p>Preferred Room Type: {getRoomType(desired)}</p>
+                    </div>
+                    <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                      Target: {desired.building}-{desired.roomNumber} (Floor {desired.floor})
+                    </p>
                   </div>
                 )}
 
-                {detailItem.changeType === 'Swap' && detailItem.swapWith && (
+                {/* Requested Change for Swap (renamed and includes preferences) */}
+                {detailItem.changeType === 'Swap' && swap && (
                   <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <p className="font-semibold text-gray-800 dark:text-gray-200">Swap With</p>
-                    <p className="text-gray-700 dark:text-gray-300">{detailItem.swapWith.name} ({detailItem.swapWith.id})</p>
-                    <p className="text-gray-600 dark:text-gray-400">{detailItem.swapWith.yearDept}</p>
-                    <p className="text-gray-600 dark:text-gray-400">Room: {detailItem.swapWith.room.building}-{detailItem.swapWith.room.roomNumber} (Floor {detailItem.swapWith.room.floor})</p>
+                    <p className="font-semibold text-gray-800 dark:text-gray-200">Requested Change</p>
+                    <div className="text-gray-700 dark:text-gray-300">
+                      <p>Preferred Hostel: {getHostelName(swap.building)}</p>
+                      <p>Preferred Block: {getHostelBlock(swap.building)}</p>
+                      <p>Preferred Room Type: {getRoomType(swap)}</p>
+                    </div>
+                    <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                      <p>Swap Candidate: {detailItem.swapWith?.name} ({detailItem.swapWith?.id}) • {detailItem.swapWith?.yearDept}</p>
+                      <p>Candidate Room: {swap.building}-{swap.roomNumber} (Floor {swap.floor})</p>
+                    </div>
                   </div>
                 )}
               </div>
+            </>
+          );
+        })()}
 
-              <div className="mt-4">
-                <p className="font-semibold text-gray-800 dark:text-gray-200">Reason</p>
-                <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{detailItem.reason}</p>
-              </div>
+        <div className="mt-4">
+          <p className="font-semibold text-gray-800 dark:text-gray-200">Reason</p>
+          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{detailItem.reason}</p>
+        </div>
 
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">Timestamps</p>
-                  <p className="text-gray-700 dark:text-gray-300">Requested: {new Date(detailItem.requestedAt).toLocaleString()}</p>
-                  {detailItem.decidedAt && <p className="text-gray-700 dark:text-gray-300">Decided: {new Date(detailItem.decidedAt).toLocaleString()}</p>}
-                </div>
-                <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">Admin Note</p>
-                  <p className="text-gray-700 dark:text-gray-300">{detailItem.adminNote || '—'}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center gap-2">
-                <button onClick={() => setDetailItem(null)} className="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600">Close</button>
-                {detailItem.status === 'Pending' && (
-                  <button onClick={() => { setActionItem(detailItem); setAdminNote(''); }} className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Take Action</button>
-                )}
-              </div>
-            </div>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Timestamps</p>
+            <p className="text-gray-700 dark:text-gray-300">Requested: {new Date(detailItem.requestedAt).toLocaleString()}</p>
+            {detailItem.decidedAt && <p className="text-gray-700 dark:text-gray-300">Decided: {new Date(detailItem.decidedAt).toLocaleString()}</p>}
+          </div>
+          <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Wardens Remarks</p>
+            <p className="text-gray-700 dark:text-gray-300">{detailItem.adminNote || 'Not specified'}</p>
           </div>
         </div>
-      )}
+
+        <div className="mt-6 flex items-center gap-2">
+          <button onClick={() => setDetailItem(null)} className="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600">Close</button>
+          {detailItem.status === 'Pending' && (
+            <button onClick={() => { setActionItem(detailItem); setAdminNote(''); }} className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Take Action</button>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Action Modal */}
       {actionItem && (
@@ -415,7 +468,7 @@ const ChangeRoomRequests: React.FC = () => {
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Admin Note</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Wardens Remarks</label>
                 <textarea
                   value={adminNote}
                   onChange={e => setAdminNote(e.target.value)}

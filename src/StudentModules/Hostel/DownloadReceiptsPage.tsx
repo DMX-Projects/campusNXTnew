@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { 
   Download, FileText, Calendar, Clock, DollarSign, 
-  Eye, Search, Filter, CheckCircle, AlertCircle,
-  Home, Building2, User, Phone, Mail, RefreshCw
+  Eye, Search, Filter, CheckCircle,
+  Home, Building2, User, Phone, X, Mail, RefreshCw
 } from 'lucide-react';
 
 interface Receipt {
@@ -30,7 +30,6 @@ const DownloadReceiptsPage: React.FC = () => {
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [selectedReceipt, setSelectedReceipt] = useState<Receipt | null>(null);
 
-  // Sample data - would come from API in real application
   const currentStudent = {
     id: 'CS2023001',
     name: 'Arjun Kumar',
@@ -115,6 +114,69 @@ const DownloadReceiptsPage: React.FC = () => {
     }
   ];
 
+  // helper: Blob download via temporary anchor
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }; // Standard CSV download pattern using Blob + anchor. [2][11]
+
+  // escape CSV cell values (wrap in quotes and escape inner quotes)
+  const csvCell = (v: unknown) => {
+    const s = String(v ?? '');
+    const needsQuote = /[",\n\r]/.test(s);
+    const escaped = s.replace(/"/g, '""');
+    return needsQuote ? `"${escaped}"` : escaped;
+  }; // Minimal CSV escaping for safe Excel opening. [2]
+
+  // build a single-receipt CSV (header + single row)
+  const buildReceiptCSV = (r: Receipt) => {
+    const header = [
+      'ReceiptNumber','StudentId','StudentName','Room',
+      'AcademicYear','Semester','Amount','PaymentType',
+      'PaymentMethod','TransactionId','PaymentDate','Status','Description'
+    ];
+    const row = [
+      r.receiptNumber, r.studentId, r.studentName, r.roomNumber,
+      r.academicYear, r.semester, r.amount,
+      r.paymentType, r.paymentMethod, r.transactionId,
+      new Date(r.paymentDate).toLocaleDateString('en-IN'),
+      r.status, r.description
+    ];
+    return [header.map(csvCell).join(','), row.map(csvCell).join(',')].join('\r\n');
+  }; // Creates simple CSV content with key fields. [2]
+
+  // single receipt dummy "Excel" as CSV with .xlsx extension
+  const downloadReceipt = (receipt: Receipt) => {
+    const csv = buildReceiptCSV(receipt);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    downloadBlob(blob, `${receipt.receiptNumber}.xlsx`);
+  }; // Downloads CSV with .xlsx name; Excel opens it seamlessly. [2]
+
+  // combined dummy "Excel" for all receipts
+  const downloadAllReceipts = () => {
+    const header = [
+      'ReceiptNumber','StudentId','StudentName','Room',
+      'AcademicYear','Semester','Amount','PaymentType',
+      'PaymentMethod','TransactionId','PaymentDate','Status','Description'
+    ];
+    const rows = receipts.map(r => [
+      r.receiptNumber, r.studentId, r.studentName, r.roomNumber,
+      r.academicYear, r.semester, r.amount,
+      r.paymentType, r.paymentMethod, r.transactionId,
+      new Date(r.paymentDate).toLocaleDateString('en-IN'),
+      r.status, r.description
+    ]);
+    const csv = [header.map(csvCell).join(','), ...rows.map(r => r.map(csvCell).join(','))].join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    downloadBlob(blob, `receipts_${currentStudent.id}.xlsx`);
+  }; // Combines all receipts into one CSV file and downloads it. [2]
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Success': return 'bg-green-100 text-green-800';
@@ -135,9 +197,10 @@ const DownloadReceiptsPage: React.FC = () => {
   };
 
   const filteredReceipts = receipts.filter(receipt => {
-    const matchesSearch = receipt.receiptNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         receipt.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         receipt.paymentType.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      receipt.receiptNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      receipt.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      receipt.paymentType.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === 'All' || receipt.paymentType === filterType;
     return matchesSearch && matchesFilter;
   });
@@ -147,26 +210,12 @@ const DownloadReceiptsPage: React.FC = () => {
     setShowReceiptModal(true);
   };
 
-  const downloadReceipt = (receipt: Receipt) => {
-    // In a real application, this would trigger the actual download
-    alert(`Downloading receipt: ${receipt.receiptNumber}`);
-  };
-
-  const downloadAllReceipts = () => {
-    alert('Downloading all receipts as ZIP file...');
-  };
-
-  const getTotalAmount = () => {
-    return receipts.reduce((total, receipt) => total + receipt.amount, 0);
-  };
-
-  const getPaymentMethods = () => {
-    return [...new Set(receipts.map(receipt => receipt.paymentMethod))];
-  };
+  const getTotalAmount = () => receipts.reduce((total, r) => total + r.amount, 0);
+  const getPaymentMethods = () => [...new Set(receipts.map(r => r.paymentMethod))];
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="  mx-auto">
+      <div className="mx-auto">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
