@@ -416,9 +416,9 @@ Take Action
                 </div>
               </div>
 
-              {/* Admin note */}
+              {/* Wardens Remarks */}
               <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Admin Note</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Wardens Remarks</label>
                 <textarea value={adminNote} onChange={e => setAdminNote(e.target.value)} rows={3} placeholder="Add note for allocation/waitlist/rejection..." className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text:white dark:border-gray-600" />
               </div>
 

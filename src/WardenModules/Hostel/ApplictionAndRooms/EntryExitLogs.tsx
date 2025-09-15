@@ -1,6 +1,6 @@
 // src/components/hostel/EntryExitLogs.tsx
 import React, { useMemo, useEffect, useState } from 'react';
-import { Search, Filter, QrCode, LogIn, LogOut, User2, Clock3, CalendarDays, ChevronLeft, ChevronRight, BellRing, AlertTriangle } from 'lucide-react';
+import { Search, Filter, QrCode, LogIn, LogOut, User2, Clock3, CalendarDays, ChevronLeft, ChevronRight, BellRing, AlertTriangle, Phone, Mail, MessageSquare } from 'lucide-react';
 
 type Direction = 'Entry' | 'Exit';
 type Via = 'GatePass' | 'VisitorPass' | 'StaffID';
@@ -8,18 +8,25 @@ type Status = 'On-campus' | 'Off-campus' | 'Returned';
 
 interface StudentRef { id: string; name: string; yearDept: string; }
 
+type ContactInfo = { name?: string; relation?: string; phone?: string };
+
 interface LogRecord {
   id: string;
   student: StudentRef;
   direction: Direction;
   via: Via;
-  refId?: string;              // gate pass ID
-  time: string;                // ISO exact timestamp
-  date: string;                // YYYY-MM-DD
+  refId?: string;               // gate pass ID
+  time: string;                 // ISO exact timestamp
+  date: string;                 // YYYY-MM-DD
   guardName: string;
   notes?: string;
   status: Status;
-  expectedReturnAt?: string;   // for Exit via GatePass
+  expectedReturnAt?: string;    // for Exit via GatePass
+
+  // New optional fields for notification workflow
+  studentPhone?: string;
+  parentGuardian?: ContactInfo;
+  emergencyContact?: ContactInfo;
 }
 
 interface AlertRecord {
@@ -40,10 +47,64 @@ const statusBadge: Record<Status, string> = {
 };
 
 const initialLogs: LogRecord[] = [
-  { id: 'LOG-7001', student: { id: 'ST2099', name: 'Neha Gupta', yearDept: '1st Year - CSE' }, direction: 'Exit', via: 'GatePass', refId: 'GP-99021', time: new Date(Date.now() - 1000*60*60*4).toISOString(), date: new Date().toISOString().slice(0,10), guardName: 'R. Singh', notes: 'Family function', status: 'Off-campus', expectedReturnAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
-  { id: 'LOG-7002', student: { id: 'ST1501', name: 'Kiran Joshi', yearDept: '3rd Year - CSE' }, direction: 'Entry', via: 'GatePass', refId: 'GP-99021', time: new Date(Date.now() - 1000*60*60*1).toISOString(), date: new Date().toISOString().slice(0,10), guardName: 'R. Singh', status: 'Returned' },
-  { id: 'LOG-7003', student: { id: 'ST1201', name: 'Zoya Khan', yearDept: '1st Year - CE' }, direction: 'Exit', via: 'GatePass', refId: 'GP-99022', time: new Date(Date.now() - 1000*60*60*5).toISOString(), date: new Date().toISOString().slice(0,10), guardName: 'M. Khan', notes: 'Fieldwork', status: 'Off-campus', expectedReturnAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
-  { id: 'LOG-7004', student: { id: 'ST1130', name: 'Mohan Das', yearDept: '2nd Year - IT' }, direction: 'Entry', via: 'GatePass', refId: 'GP-98001', time: new Date(Date.now() - 1000*60*30).toISOString(), date: new Date().toISOString().slice(0,10), guardName: 'A. Verma', status: 'Returned' },
+  {
+    id: 'LOG-7001',
+    student: { id: 'ST2099', name: 'Neha Gupta', yearDept: '1st Year - CSE' },
+    direction: 'Exit',
+    via: 'GatePass',
+    refId: 'GP-99021',
+    time: new Date(Date.now() - 1000*60*60*4).toISOString(),
+    date: new Date().toISOString().slice(0,10),
+    guardName: 'R. Singh',
+    notes: 'Family function',
+    status: 'Off-campus',
+    expectedReturnAt: new Date(Date.now() - 1000*60*60*2).toISOString(),
+    studentPhone: '+91-90000-11111',
+    parentGuardian: { name: 'Mr. Gupta', relation: 'Father', phone: '+91-90000-22222' },
+    emergencyContact: { name: 'Amit Gupta', relation: 'Uncle', phone: '+91-90000-33333' },
+  },
+  {
+    id: 'LOG-7002',
+    student: { id: 'ST1501', name: 'Kiran Joshi', yearDept: '3rd Year - CSE' },
+    direction: 'Entry',
+    via: 'GatePass',
+    refId: 'GP-99021',
+    time: new Date(Date.now() - 1000*60*60*1).toISOString(),
+    date: new Date().toISOString().slice(0,10),
+    guardName: 'R. Singh',
+    status: 'Returned',
+    studentPhone: '+91-90000-44444',
+    parentGuardian: { name: 'Mrs. Joshi', relation: 'Mother', phone: '+91-90000-55555' },
+  },
+  {
+    id: 'LOG-7003',
+    student: { id: 'ST1201', name: 'Zoya Khan', yearDept: '1st Year - CE' },
+    direction: 'Exit',
+    via: 'GatePass',
+    refId: 'GP-99022',
+    time: new Date(Date.now() - 1000*60*60*5).toISOString(),
+    date: new Date().toISOString().slice(0,10),
+    guardName: 'M. Khan',
+    notes: 'Fieldwork',
+    status: 'Off-campus',
+    expectedReturnAt: new Date(Date.now() - 1000*60*60*2).toISOString(),
+    studentPhone: '+91-90000-66666',
+    parentGuardian: { name: 'Mr. Khan', relation: 'Father', phone: '+91-90000-77777' },
+    emergencyContact: { name: 'Rehan Khan', relation: 'Brother', phone: '+91-90000-88888' },
+  },
+  {
+    id: 'LOG-7004',
+    student: { id: 'ST1130', name: 'Mohan Das', yearDept: '2nd Year - IT' },
+    direction: 'Entry',
+    via: 'GatePass',
+    refId: 'GP-98001',
+    time: new Date(Date.now() - 1000*60*30).toISOString(),
+    date: new Date().toISOString().slice(0,10),
+    guardName: 'A. Verma',
+    status: 'Returned',
+    studentPhone: '+91-90000-99999',
+    parentGuardian: { name: 'Mrs. Das', relation: 'Mother', phone: '+91-90000-12345' },
+  },
 ];
 
 const EntryExitLogs: React.FC = () => {
@@ -65,6 +126,23 @@ const EntryExitLogs: React.FC = () => {
 
   // Alerts
   const [alerts, setAlerts] = useState<AlertRecord[]>([]);
+
+  // Notify modal state
+  const [notifyItem, setNotifyItem] = useState<LogRecord | null>(null);
+  const [notifyMsg, setNotifyMsg] = useState('');
+
+  // Helpers
+  const isLate = (log: LogRecord) => {
+    if (log.direction !== 'Exit' || !log.expectedReturnAt) return false;
+    const now = Date.now();
+    const due = new Date(log.expectedReturnAt).getTime();
+    return now > due && log.status === 'Off-campus';
+  };
+
+  const defaultNotifyMsg = (log: LogRecord) => {
+    const due = log.expectedReturnAt ? new Date(log.expectedReturnAt).toLocaleString() : 'the due time';
+    return `Dear Parent/Guardian, this is to inform you that ${log.student.name} (ID: ${log.student.id}) has not returned by ${due}. Kindly be informed. - Warden`;
+  };
 
   // Overstay detector
   useEffect(() => {
@@ -95,7 +173,7 @@ const EntryExitLogs: React.FC = () => {
       }
     });
     if (newAlerts.length) setAlerts(prev => [...newAlerts, ...prev]);
-  }, [logs]);
+  }, [logs]); // triggers when logs change [4][14]
 
   // Resolve alert if a matching Entry appears after expectedReturnAt
   useEffect(() => {
@@ -107,7 +185,7 @@ const EntryExitLogs: React.FC = () => {
       return returned ? { ...a, resolved: true } : a;
     });
     setAlerts(updated);
-  }, [logs]);
+  }, [logs, alerts.length]); // keep synced with logs [4][14]
 
   // Filters pipeline
   const filtered = useMemo(() => {
@@ -129,7 +207,7 @@ const EntryExitLogs: React.FC = () => {
         ? new Date(b.time).getTime() - new Date(a.time).getTime()
         : new Date(a.time).getTime() - new Date(b.time).getTime()
       );
-  }, [logs, tab, via, dateFrom, dateTo, search, sortBy]);
+  }, [logs, tab, via, dateFrom, dateTo, search, sortBy]); // stable filtering [20][12]
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -145,14 +223,14 @@ const EntryExitLogs: React.FC = () => {
     const off = all.filter(l => l.status === 'Off-campus').length;
     const ret = all.filter(l => l.status === 'Returned').length;
     return { total: all.length, on, off, ret };
-  }, [logs]);
+  }, [logs]); // snapshot of campus status [5]
 
   return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <div className="mb-4">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Student Entry & Exit</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">Entry and Exit tabs with date filters and automated overstay alerts for gate-pass return times.</p>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">Entry and Exit tabs with date filters, late-return highlighting, and parent/guardian notifications.</p>
       </div>
 
       {/* Top Stats + Alerts */}
@@ -234,11 +312,31 @@ const EntryExitLogs: React.FC = () => {
                   {item.refId && <span className="inline-flex items-center gap-1"><QrCode className="w-4 h-4" /> GP: {item.refId}</span>}
                   <span className="inline-flex items-center gap-1"><Clock3 className="w-4 h-4" /> {new Date(item.time).toLocaleTimeString()}</span>
                   <span className="inline-flex items-center gap-1"><CalendarDays className="w-4 h-4" /> {item.date}</span>
-                  {item.expectedReturnAt && tab==='Exit' && (
-                    <span className="inline-flex items-center gap-1"><AlertTriangle className="w-4 h-4 text-amber-500" /> Return by: {new Date(item.expectedReturnAt).toLocaleTimeString()}</span>
+                  {item.expectedReturnAt && item.direction === 'Exit' && (
+                    <span className="inline-flex items-center gap-1">
+                      <AlertTriangle className={`w-4 h-4 ${isLate(item) ? 'text-red-600' : 'text-amber-500'}`} />
+                      Return by: {new Date(item.expectedReturnAt).toLocaleTimeString()}
+                    </span>
                   )}
                 </div>
                 {item.notes && <p className="mt-1 text-sm text-gray-700 dark:text-gray-300 line-clamp-1">{item.notes}</p>}
+
+                {/* Notify button */}
+                {item.direction === 'Exit' && (
+                  <div className="mt-2">
+                    <button
+                      onClick={() => { setNotifyItem(item); setNotifyMsg(defaultNotifyMsg(item)); }}
+                      className={`px-3 py-1.5 rounded-md text-sm inline-flex items-center gap-1 ${
+                        isLate(item)
+                          ? 'bg-red-600 text-white hover:bg-red-700'
+                          : 'bg-amber-500 text-white hover:bg-amber-600'
+                      }`}
+                      title="Notify Parent/Guardian"
+                    >
+                      <MessageSquare className="w-4 h-4" /> Notify Parent/Guardian
+                    </button>
+                  </div>
+                )}
               </div>
             </li>
           ))}
@@ -264,6 +362,76 @@ const EntryExitLogs: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Notify Modal */}
+      {notifyItem && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setNotifyItem(null)}>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-lg" onClick={e => e.stopPropagation()}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Notify Parent/Guardian</h3>
+                <button onClick={() => setNotifyItem(null)} className="px-2 py-1 rounded text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700">Close</button>
+              </div>
+
+              <div className="mb-3 text-sm text-gray-700 dark:text-gray-300">
+                <p className="font-medium">Student</p>
+                <p>{notifyItem.student.name} ({notifyItem.student.id}) • {notifyItem.student.yearDept}</p>
+                {notifyItem.expectedReturnAt && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Expected return: {new Date(notifyItem.expectedReturnAt).toLocaleString()}</p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 text-sm">
+                <div className="p-3 rounded border border-gray-200 dark:border-gray-700">
+                  <p className="font-semibold text-gray-800 dark:text-gray-200">Phone Numbers</p>
+                  <p className="text-gray-700 dark:text-gray-300">Student: {notifyItem.studentPhone || '—'}</p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Parent/Guardian: {notifyItem.parentGuardian?.name ? `${notifyItem.parentGuardian.name} (${notifyItem.parentGuardian.relation || '—'})` : '—'}
+                    {notifyItem.parentGuardian?.phone ? ` • ${notifyItem.parentGuardian.phone}` : ''}
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    Emergency: {notifyItem.emergencyContact?.name ? `${notifyItem.emergencyContact.name} (${notifyItem.emergencyContact.relation || '—'})` : '—'}
+                    {notifyItem.emergencyContact?.phone ? ` • ${notifyItem.emergencyContact.phone}` : ''}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded border border-gray-200 dark:border-gray-700">
+                  <p className="font-semibold text-gray-800 dark:text-gray-200">Message</p>
+                  <textarea
+                    value={notifyMsg}
+                    onChange={e => setNotifyMsg(e.target.value)}
+                    rows={4}
+                    className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                    placeholder="Type message to send..."
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4 flex items-center justify-end gap-2">
+                <button onClick={() => setNotifyItem(null)} className="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600">Close</button>
+                {/* Replace with backend integrations and audit logging */}
+                <button onClick={() => { /* TODO: integrate SMS */ alert('SMS sent (demo)'); }} className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 inline-flex items-center gap-1">
+                  <MessageSquare className="w-4 h-4" /> Send SMS
+                </button>
+                <button onClick={() => { /* TODO: integrate Email */ alert('Email sent (demo)'); }} className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 inline-flex items-center gap-1">
+                  <Mail className="w-4 h-4" /> Send Email
+                </button>
+                <a
+                  href={notifyItem.parentGuardian?.phone ? `tel:${notifyItem.parentGuardian.phone}` : '#'}
+                  className={`px-4 py-2 rounded-md inline-flex items-center gap-1 ${notifyItem.parentGuardian?.phone ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+                  onClick={e => { if (!notifyItem.parentGuardian?.phone) e.preventDefault(); }}
+                >
+                  <Phone className="w-4 h-4" /> Call Parent
+                </a>
+              </div>
+
+              <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                Ensure notifications comply with institute privacy and guardian consent policies. [Refer institute handbook/guidelines offline]
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

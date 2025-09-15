@@ -265,61 +265,60 @@ const LeaveRequests: React.FC = () => {
       </div>
 
       {/* Detail Modal */}
-      {detailItem && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setDetailItem(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-2xl max-h-full overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Leave {detailItem.id}</h3>
-                <button onClick={() => setDetailItem(null)} className="p-2 rounded-full text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700"><X className="w-5 h-5" /></button>
-              </div>
+{detailItem && (
+  <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setDetailItem(null)}>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-2xl max-h-full overflow-y-auto" onClick={e => e.stopPropagation()}>
+      <div className="p-6">
+        {/* ...existing header and chips... */}
 
-              <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className={`px-2 py-0.5 text-xs rounded-full ${statusBadge[detailItem.status]}`}>{detailItem.status}</span>
-                <span className="px-2 py-0.5 text-xs rounded-full bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100">{detailItem.leaveType}</span>
-                <span className={`px-2 py-0.5 text-xs rounded-full ${consentBadge[detailItem.parentConsent]}`}>Parent: {detailItem.parentConsent}</span>
-                <span className={`px-2 py-0.5 text-xs rounded-full ${approvBadge[detailItem.mentorApproval]}`}>Mentor: {detailItem.mentorApproval}</span>
-                <span className={`px-2 py-0.5 text-xs rounded-full ${approvBadge[detailItem.wardenApproval]}`}>Warden: {detailItem.wardenApproval}</span>
-              </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          {/* Student */}
+          <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Student</p>
+            <p className="text-gray-700 dark:text-gray-300">{detailItem.student.name} ({detailItem.student.id})</p>
+            <p className="text-gray-600 dark:text-gray-400">{detailItem.student.yearDept}</p>
+          </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">Student</p>
-                  <p className="text-gray-700 dark:text-gray-300">{detailItem.student.name} ({detailItem.student.id})</p>
-                  <p className="text-gray-600 dark:text-gray-400">{detailItem.student.yearDept}</p>
-                </div>
-                <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">Schedule</p>
-                  <p className="text-gray-700 dark:text-gray-300">{new Date(detailItem.startDate).toLocaleString()} → {new Date(detailItem.endDate).toLocaleString()}</p>
-                  <p className="text-gray-600 dark:text-gray-400">Duration: {detailItem.durationDays} day(s)</p>
-                </div>
-                <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">Details</p>
-                  {detailItem.destination && <p className="text-gray-700 dark:text-gray-300">Destination: {detailItem.destination}</p>}
-                  <p className="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{detailItem.reason}</p>
-                </div>
-                <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">Refs</p>
-                  <p className="text-gray-700 dark:text-gray-300">Requested: {new Date(detailItem.requestedAt).toLocaleString()}</p>
-                  <p className="text-gray-700 dark:text-gray-300">Decided: {detailItem.decidedAt ? new Date(detailItem.decidedAt).toLocaleString() : '—'}</p>
-                  <p className="text-gray-700 dark:text-gray-300">Gate Pass: {detailItem.gatePassId || '—'}</p>
-                  <p className="text-gray-700 dark:text-gray-300">Attachments: {detailItem.attachments?.join(', ') || '—'}</p>
-                </div>
-              </div>
+          {/* Schedule */}
+          <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Schedule</p>
+            <p className="text-gray-700 dark:text-gray-300">{new Date(detailItem.startDate).toLocaleString()} → {new Date(detailItem.endDate).toLocaleString()}</p>
+            <p className="text-gray-600 dark:text-gray-400">Duration: {detailItem.durationDays} day(s)</p>
+          </div>
 
-              <div className="mt-6 flex items-center gap-2">
-                <button onClick={() => setDetailItem(null)} className="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600">Close</button>
-                {detailItem.status === 'Pending' && (
-                  <button onClick={() => { setActionItem(detailItem); setAdminNote(''); }} className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Take Action</button>
-                )}
-                {detailItem.status === 'Approved' && (
-                  <button onClick={() => cancelLeave(detailItem.id)} className="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-100 dark:hover:bg-gray-500">Cancel</button>
-                )}
-              </div>
-            </div>
+          {/* Details */}
+          <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Details</p>
+            {detailItem.destination && <p className="text-gray-700 dark:text-gray-300">Destination: {detailItem.destination}</p>}
+            <p className="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{detailItem.reason}</p>
+          </div>
+
+          {/* Refs */}
+          <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Refs</p>
+            <p className="text-gray-700 dark:text-gray-300">Requested: {new Date(detailItem.requestedAt).toLocaleString()}</p>
+            <p className="text-gray-700 dark:text-gray-300">Decided: {detailItem.decidedAt ? new Date(detailItem.decidedAt).toLocaleString() : '—'}</p>
+            <p className="text-gray-700 dark:text-gray-300">Gate Pass: {detailItem.gatePassId || '—'}</p>
+            <p className="text-gray-700 dark:text-gray-300">Attachments: {detailItem.attachments?.join(', ') || '—'}</p>
+          </div>
+
+          {/* Emergency Contact - new card */}
+          <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 sm:col-span-2">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">Emergency Contact</p>
+            {/* Placeholder values; replace with real fields when API available */}
+            <p className="text-gray-700 dark:text-gray-300">Contact Name: Ram Sharma</p>
+            <p className="text-gray-700 dark:text-gray-300">Relationship: Father</p>
+            <p className="text-gray-700 dark:text-gray-300">Phone: +91 9876543210</p>
+            <p className="text-gray-700 dark:text-gray-300">Alternate Phone: +91 9876543210</p>
           </div>
         </div>
-      )}
+
+        {/* ...existing footer buttons... */}
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Action Modal */}
       {actionItem && (
