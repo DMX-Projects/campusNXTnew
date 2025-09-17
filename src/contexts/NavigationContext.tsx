@@ -174,64 +174,179 @@ const SIDEBAR_ITEMS = {
       { name: 'Study Material', path: '/academics/student-studymaterial', icon: 'FolderOpen' }
     ],
     'Principal': [
-      { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
-      { name: 'Faculty', path: '/academics/faculty', icon: 'GraduationCap' },
-      { name: 'Inbox', path: '/academics/inbox', icon: 'Mail' },
+  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+
+  {
+    name: 'Students',
+    path: '/academics/principal-students',
+    icon: 'Users',
+    children: [
       { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
-      { name: 'Timetable', path: '/academics/timetable', icon: 'Calendar' },
       { name: 'Student Leaves', path: '/academics/student-leaves', icon: 'UserMinus' },
       { name: 'Student Approval', path: '/academics/student-approval', icon: 'UserCheck' },
+      { name: 'Student Projects', path: '/academics/student-projects', icon: 'Briefcase' },
+    ]
+  },
+
+  {
+    name: 'Academics',
+    path: '/academics/principal-academics',
+    icon: 'BookOpen',
+    children: [
+      { name: 'Timetable', path: '/academics/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
       { name: 'Subjects & Syllabus', path: '/academics/subjects-syllabus', icon: 'BookOpen' },
-      { name: 'Student Exam Preparation', path: '/academics/exam-preparation', icon: 'FileText' },
+      { name: 'Syllabus Tracking', path: '/academics/syllabus-tracking', icon: 'Target' },
       { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
-      { name: 'Student Projects', path: '/academics/student-projects', icon: 'Briefcase' },
+    ]
+  },
+
+  {
+    name: 'Assessments',
+    path: '/academics/principal-assessments',
+    icon: 'FileText',
+    children: [
+      { name: 'Student Exam Preparation', path: '/academics/exam-preparation', icon: 'FileText' },
       { name: 'Online Tests', path: '/academics/online-tests', icon: 'Monitor' },
       { name: 'Coding Assessment', path: '/academics/coding-assessment', icon: 'Code' },
+    ]
+  },
+
+  {
+    name: 'Faculty',
+    path: '/academics/principal-faculty',
+    icon: 'GraduationCap',
+    children: [
       { name: 'Faculty Feedback', path: '/academics/faculty-feedback', icon: 'MessageSquare' },
-      { name: 'Syllabus Tracking', path: '/academics/syllabus-tracking', icon: 'Target' },
+    ]
+  },
+
+  {
+    name: 'Resources',
+    path: '/academics/principal-resources',
+    icon: 'FolderOpen',
+    children: [
       { name: 'Schedule Online Class', path: '/academics/schedule-online-class', icon: 'Video' },
-      { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
-    ],
+    ]
+  },
+
+  { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
+  { name: 'Inbox', path: '/academics/inbox', icon: 'Mail' },
+  { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
+],
     'HoD': [
-      { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
-      { name: 'Faculty', path: '/academics/faculty', icon: 'GraduationCap' },
-      { name: 'Inbox', path: '/academics/inbox', icon: 'Mail' },
+  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+
+  { 
+    name: 'Students', 
+    path: '/academics/students', 
+    icon: 'Users',
+    children: [
       { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
-      { name: 'Timetable', path: '/academics/timetable', icon: 'Calendar' },
       { name: 'Student Leaves', path: '/academics/student-leaves', icon: 'UserMinus' },
       { name: 'Student Approval', path: '/academics/student-approval', icon: 'UserCheck' },
+      { name: 'Student Projects', path: '/academics/student-projects', icon: 'Briefcase' },
+    ]
+  },
+
+  { 
+    name: 'Academics', 
+    path: '/academics/setup', 
+    icon: 'BookOpen',
+    children: [
+      { name: 'Timetable', path: '/academics/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
       { name: 'Subjects & Syllabus', path: '/academics/subjects-syllabus', icon: 'BookOpen' },
+      { name: 'Syllabus Tracking', path: '/academics/syllabus-tracking', icon: 'Target' },
+    ]
+  },
+
+  { 
+    name: 'Assessments', 
+    path: '/academics/assessments', 
+    icon: 'FileText',
+    children: [
       { name: 'Student Exam Preparation', path: '/academics/exam-preparation', icon: 'FileText' },
-      { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
-      { name: 'Student Projects', path: '/academics/student-projects', icon: 'Briefcase' },
       { name: 'Online Tests', path: '/academics/online-tests', icon: 'Monitor' },
       { name: 'Coding Assessment', path: '/academics/coding-assessment', icon: 'Code' },
-      { name: 'Faculty Feedback', path: '/academics/faculty-feedback', icon: 'MessageSquare' },
-      { name: 'Syllabus Tracking', path: '/academics/syllabus-tracking', icon: 'Target' },
+    ]
+  },
+
+  { 
+    name: 'Resources', 
+    path: '/academics/resources', 
+    icon: 'FolderOpen',
+    children: [
+      { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
       { name: 'Schedule Online Class', path: '/academics/schedule-online-class', icon: 'Video' },
-      { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
-    ],
+    ]
+  },
+
+  { 
+    name: 'Faculty', 
+    path: '/academics/faculty', 
+    icon: 'GraduationCap',
+    children: [
+      { name: 'Faculty', path: '/academics/faculty', icon: 'GraduationCap' },
+      { name: 'Faculty Feedback', path: '/academics/faculty-feedback', icon: 'MessageSquare' },
+    ]
+  },
+
+  { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
+  { name: 'Inbox', path: '/academics/inbox', icon: 'Mail' },
+  { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
+],
+
     'Faculty': [
-      { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
-      { name: 'Inbox', path: '/academics/faculty-inbox', icon: 'Mail' },
+  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+
+  { 
+    name: 'Students', 
+    path: '/academics/faculty-students', 
+    icon: 'Users',
+    children: [
       { name: 'Student Attendance', path: '/academics/faculty-studentattendance', icon: 'CheckCircle' },
+      { name: 'Student Projects', path: '/academics/faculty-studentprojects', icon: 'Briefcase' },
+    ]
+  },
+
+  { 
+    name: 'Academics', 
+    path: '/academics/faculty-academics', 
+    icon: 'BookOpen',
+    children: [
       { name: 'Timetable', path: '/academics/faculty-timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/academics/faculty-calendar', icon: 'Calendar' },
       { name: 'Subjects & Syllabus', path: '/academics/faculty-subjects-syllabus', icon: 'BookOpen' },
       { name: 'Study Material', path: '/academics/faculty-StudyMaterial', icon: 'FolderOpen' },
-      { name: 'Student Projects', path: '/academics/faculty-studentprojects', icon: 'Briefcase' },
+    ]
+  },
+
+  { 
+    name: 'Assessments', 
+    path: '/academics/faculty-assessments', 
+    icon: 'FileText',
+    children: [
       { name: 'Online Tests', path: '/academics/faculty-FacultyOnlineTest', icon: 'Monitor' },
-      // { name: 'Coding Assessment', path: '/academics/coding-assessment', icon: 'Code' },
-      // { name: 'Syllabus Tracking', path: '/academics/syllabus-tracking', icon: 'Target' },
+      // If you later enable coding or syllabus tracking for faculty, add here
+    ]
+  },
+
+  { 
+    name: 'Resources', 
+    path: '/academics/faculty-resources', 
+    icon: 'FolderOpen',
+    children: [
       { name: 'Schedule Online Class', path: '/academics/faculty-schedule-onlineclass', icon: 'Video' },
-      { name: 'Reports', path: '/academics/faculty-reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/academics/faculty-raiseticket', icon: 'AlertCircle' },
-      { name: 'Announcement', path: '/academics/announcement', icon: 'Megaphone' }
-    ],
+    ]
+  },
+
+  { name: 'Reports', path: '/academics/faculty-reports', icon: 'FileText' },
+  { name: 'Inbox', path: '/academics/faculty-inbox', icon: 'Mail' },
+  { name: 'Announcement', path: '/academics/announcement', icon: 'Megaphone' },
+  { name: 'Raise Ticket', path: '/academics/faculty-raiseticket', icon: 'AlertCircle' }
+],
+
     'default': [
       { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
       { name: 'Faculty', path: '/academics/faculty', icon: 'GraduationCap' },
