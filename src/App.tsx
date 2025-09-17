@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Layout from "./components/Layout/Layout";
-import Login from "./components/Login";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import { useAuth } from "./features/auth/hooks/useAuth";
+import { useAppDispatch } from "./store/hooks";
+import { loadUserFromStorage } from "./store/slices/authSlice";
+import Layout from "./layouts/Layout";
+import Login from "./features/auth/Login";
 import Dashboard from "./components/Dashboard";
-import ProtectedRoute, { getRedirectPath } from "./components/ProtectedRoute";
-import ModuleDashboard from "./components/ModuleDashboard";
-import { NavigationProvider } from "./contexts/NavigationContext";
+import ProtectedRoute from "./features/auth/ProtectedRoute";
+import { getRedirectPath } from "./utils/auth";
 
 // Import all module routes
 import HomeRoutes from "./routes/HomeRoutes";
@@ -22,24 +24,38 @@ import AdministrationRoutes from "./routes/AdministrationRoutes";
 import ExaminationRoutes from "./routes/ExaminationRoutes";
 import ParentRoutes from "./routes/ParentRoutes";
 
+const AppInitializer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    // Load user from localStorage on app start
+    dispatch(loadUserFromStorage());
+  }, [dispatch]);
+
+  return <>{children}</>;
+};
+
 const AppRoutes: React.FC = () => {
-  const { isAuthenticated, user, loading } = useAuth();
-  if (loading) return <div>Loading...</div>;
+  const { isAuthenticated, user } = useAuth();
 
   return (
     <Routes>
-      {/* Root path: redirect if logged in */}
+      {/* Public routes */}
+      <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" replace />} />
+      
+      {/* Root path redirect */}
       <Route
         path="/"
         element={
           isAuthenticated && user ? (
             <Navigate to={getRedirectPath(user.role)} replace />
           ) : (
-            <Login />
+            <Navigate to="/login" replace />
           )
         }
       />
 
+      {/* Protected routes */}
       <Route
         element={
           <ProtectedRoute>
@@ -80,17 +96,15 @@ const AppRoutes: React.FC = () => {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <NavigationProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-              <AppRoutes />
-            </div>
-          </NavigationProvider>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+    <Provider store={store}>
+      <Router>
+        <AppInitializer>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+            <AppRoutes />
+          </div>
+        </AppInitializer>
+      </Router>
+    </Provider>
   );
 }
 

@@ -1,13 +1,9 @@
-export interface User {
-  username: string;
-  password: string;
-  role: string;
-  name: string;
-  department?: string;
-  studentId?: string;
-  childId?: string;
-}
+// Re-export all types from subdirectories
+export * from './models';
+export * from './api';
+export * from './forms';
 
+// Legacy interface for backward compatibility
 export interface AuthContextType {
   user: User | null;
   login: (username: string, password: string) => boolean;
@@ -15,76 +11,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
 }
 
-export interface Student {
-  id: string;
-  name: string;
-  department: string;
-  year: number;
-  section: string;
-  email: string;
-  phone: string;
-  parentId?: string;
-  hostelRoom?: string;
-  feeStatus: 'Paid' | 'Pending' | 'Overdue';
-  cgpa: number;
-  attendancePercentage: number;
-}
-
-export interface Faculty {
-  id: string;
-  name: string;
-  department: string;
-  designation: string;
-  email: string;
-  phone: string;
-  subjects: string[];
-  experience: number;
-  attendancePercentage: number;
-}
-
-export interface AttendanceRecord {
-  studentId: string;
-  date: string;
-  status: 'Present' | 'Absent' | 'Late';
-  subject: string;
-  facultyId: string;
-}
-
-export interface ExamResult {
-  studentId: string;
-  subject: string;
-  marks: number;
-  maxMarks: number;
-  grade: string;
-  semester: number;
-  examType: 'Mid-Sem' | 'End-Sem' | 'Internal';
-}
-
-export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  isbn: string;
-  category: string;
-  availableCopies: number;
-  totalCopies: number;
-  issuedTo?: string[];
-}
-
-export interface Placement {
-  id: string;
-  companyName: string;
-  position: string;
-  package: number;
-  studentsSelected: string[];
-  driveDate: string;
-  eligibilityCriteria: {
-    minCGPA: number;
-    departments: string[];
-    year: number;
-  };
-}
-
+// UI specific types
 export interface DashboardCardData {
   title: string;
   value: string | number;
@@ -93,3 +20,6 @@ export interface DashboardCardData {
   icon: any;
   color: string;
 }
+
+// Re-import User type for AuthContextType
+import { User } from './models';
