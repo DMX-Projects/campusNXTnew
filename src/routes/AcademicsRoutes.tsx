@@ -70,6 +70,10 @@ import HodPersonalTimetable from '../pages/HODModules/Timetable/ViewTimetable';
 import HodDashboard from '../pages/HODModules/HodDashboard.';
 
 
+import Subject from '../pages/FacultyModules/Academic/Subject';
+import SyllabusUpdates from '../pages/FacultyModules/Academic/SyllabusUpdates';
+import LeaveRequest from '../pages/FacultyModules/Academic/LeaveRequest';
+import ReportsFaculty from '../pages/FacultyModules/Academic/Reports';
 
 
 
@@ -198,6 +202,13 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="student-attendance" element={<HODStudentAttendance  />} />
 
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
+
+            {/* //  ACADEMIC FACULTY LESSON PLAN AND SYLLABUS UPDATES */}
+      <Route path="/faculty-lessonplan" element={<Subject />} />
+      <Route path="/faculty-syllabus-update" element={<SyllabusUpdates />} />
+      <Route path="faculty-leave-request" element={<LeaveRequest />} />
+      <Route path="faculty-reports" element={<ReportsFaculty />} />
+
 
       {/* Users Routes
       <Route path="users" element={<Users />} />
