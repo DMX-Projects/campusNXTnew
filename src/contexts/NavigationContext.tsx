@@ -202,8 +202,13 @@ const SIDEBAR_ITEMS = {
   { name: 'Raise Tickets', path: '/academics/raise-ticket', icon: 'AlertCircle' }
 ],
     'HoD': [
-  { name: 'Dashboard', path: '/academics/hod-dashboard', icon: 'BarChart3' },
-  { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
+
+  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+
+  { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
+
+ 
+
   { 
     name: 'Faculty', 
     path: '/academics', 
@@ -216,12 +221,14 @@ const SIDEBAR_ITEMS = {
   },
   { 
     name: 'Students', 
-    path: '/academics/students', 
+    path: '/academics', 
     icon: 'Users',
     children: [
-      { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
-      { name: 'Student Leaves', path: '/academics/student-leaves', icon: 'UserMinus' },
-      { name: 'Student Projects', path: '/academics/student-projects', icon: 'Briefcase' },
+
+      { name: 'Student Attendance', path: '/academics/hod/student-attendance', icon: 'CheckCircle' },
+      { name: 'Student Leaves', path: '/academics/hod/student-leaves', icon: 'UserMinus' },
+      { name: 'Student Projects', path: '/academics/hod/student-projects', icon: 'Briefcase' },
+
     ]
   },
   { 
@@ -229,11 +236,11 @@ const SIDEBAR_ITEMS = {
     path: '/academics', 
     icon: 'BookOpen',
     children: [
-      { name: 'Create Timetable', path: '/academics/hod/timetable', icon: 'Calendar' },
+
+     { name: 'Create Timetable', path: '/academics/hod/timetable', icon: 'Calendar' },
       { name: 'View Timetable', path: '/academics/hod/view-timetable', icon: 'Calendar' },
     ]
-
-     },
+  },
   { 
     name: 'Courses', 
     path: '/academics/courses',
@@ -251,6 +258,13 @@ const SIDEBAR_ITEMS = {
 
   { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
+  { name: 'CAT', path: '/academics/hod/cat', icon: 'Code' },
+
+  { name: 'Leave Requests', path: '/academics/hod/leave-requests', icon: 'FileText' },
+
+  { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
+  { name: 'Raise Ticket', path: '/academics/hod/raise-ticket', icon: 'AlertCircle' }
+
 ],
 
     'Faculty': [

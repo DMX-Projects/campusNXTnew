@@ -79,6 +79,21 @@ import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyA
 import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
 import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
 
+
+
+
+
+//HOD Login Routes
+import FacultyDetails from '../pages/HODModules/Faculties/FacultyDetails'
+import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyAttendanceAndFeedback';
+import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
+import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
+import HODStudentLeaveDetails from '../pages/HODModules/Students/HODStudentLeaveDetails';
+import HODStudentProjects from '../pages/HODModules/Students/HODStudentProjects';
+import HODReports from '../pages/HODModules/HODReports';
+import HODCatPage from '../pages/HODModules/HODCatPage';
+
+
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
 
@@ -159,6 +174,7 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-profile" element={<StudentProfile />} />
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
     <Route path="/my-attendance" element={<AttendanceManagement />} />
+
     <Route path="/student-timetable" element={<TimeTable />} />
     <Route path="/attendance" element={<StudentAttendence />} />
     <Route path="/student-results" element={<Results />} />
@@ -168,11 +184,19 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/cat" element={<CAT />} />
 
 
+
     //Hod Route paths
     <Route path="/faculty/faculty-details" element={<FacultyDetails  />} />
     <Route path="/faculty/faculty-attendance" element={<FacultyAttendanceAndFeedback  />} />
     <Route path="/faculty/faculty-leave-requests" element={<FacultyLeaves  />} />
+    <Route path="/hod/student-attendance" element={<HODStudentAttendance  />} />
+    <Route path="/hod/student-leaves" element={<HODStudentLeaveDetails  />} />
+    <Route path="/hod/student-projects" element={<HODStudentProjects />} />
+    <Route path="/hod/reports" element={<HODReports  />} />
+    <Route path="/hod/cat" element={<HODCatPage  />} />
+
     <Route path="student-attendance" element={<HODStudentAttendance  />} />
+
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 
       {/* Users Routes
