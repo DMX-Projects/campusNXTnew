@@ -162,14 +162,14 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
-  { name: 'Dashboard', path: '/academics/student-dashboard', icon: 'BarChart3' },
+  { name: 'Dashboard', path: '/academics/studentdashboard', icon: 'BarChart3' },
   { name: 'Academic Calender', path: '/academics/student-academiccalender', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
-  { name: 'My Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
+  { name: 'My Attendance', path: '/academics/attendance', icon: 'CheckCircle' },
   { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
-  { name: 'My Projects', path: '/academics/student-projects', icon: 'FolderOpen' },
-  { name: 'CAT', path: '/academics/student-cat', icon: 'BookOpen' },
-  { name: 'Leave Request', path: '/academics/student-leaverequest', icon: 'Send' },
+  { name: 'My Projects', path: '/academics/student-myprojects', icon: 'FolderOpen' },
+  { name: 'CAT', path: '/academics/cat', icon: 'BookOpen' },
+  { name: 'Leave Request', path: '/academics/leaveRequest', icon: 'Send' },
   { name: 'Raise Tickets', path: '/academics/student-raisetickets', icon: 'MessageSquare' }
 ],
     'Principal': [

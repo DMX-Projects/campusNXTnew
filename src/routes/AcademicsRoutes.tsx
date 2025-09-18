@@ -45,6 +45,15 @@ import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/Stude
 import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
 import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
 import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
+import TimeTable from '../pages/StudentModules/Academics/TimeTable';
+import StudentAttendence from '../pages/StudentModules/Academics/StudentAttendence';
+import Results from '../pages/StudentModules/Academics/Results';
+import LeaveRequest from '../pages/StudentModules/Academics/LeaveRequest';
+import Dashboard from '../pages/StudentModules/Academics/Dashboard';
+import MyProjects from '../pages/StudentModules/Academics/MyProjects';
+import CAT from '../pages/StudentModules/Academics/CAT';
+
+
 
 
 
@@ -117,6 +126,13 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-profile" element={<StudentProfile />} />
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
     <Route path="/my-attendance" element={<AttendanceManagement />} />
+    <Route path="/student-timetable" element={<TimeTable />} />
+    <Route path="/attendance" element={<StudentAttendence />} />
+    <Route path="/student-results" element={<Results />} />
+    <Route path="/leaveRequest" element={<LeaveRequest />} />
+    <Route path="/studentdashboard" element={<Dashboard />} />
+    <Route path="/student-myprojects" element={<MyProjects />} />
+    <Route path="/cat" element={<CAT />} />
 
 
     //Hod Routes 
