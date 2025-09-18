@@ -1,5 +1,10 @@
 import Inbox from '../pages/ChairpersonModule/Academics/Courses/inbox';
-import StudentAttendance from '../pages/ChairpersonModule/Academics/Courses/Studentsattendence'
+// import StudentAttendance from '../pages/ChairpersonModule/Academics/Courses/Studentsattendence'
+import StudentAttendance from '../pages/PrincipalModules/Academics/Students/StudentAttendance';
+import FacultyAttendance from '../pages/PrincipalModules/Academics/Faculty/FacultyAttendance';
+import FacultyDetail from '../pages/PrincipalModules/Academics/Faculty/FacultyDetail';
+import LeaveRequests from '../pages/PrincipalModules/Academics/Faculty/LeaveRequests';
+import RaiseTicket from '../pages/PrincipalModules/Academics/RaiseTicket';
 import AttendanceManagement from '../components/Modules/AttendanceManagement'
 import Timetable from '../pages/ChairpersonModule/Academics/timetable/TimeTable';
 // import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
@@ -77,6 +82,10 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="online-tests" element={<OnlineTest />} />
       <Route path="coding-assessment" element={<CodingAssesment />} />
       <Route path="faculty-feedback" element={<FacultyFeedback />} />
+      <Route path="faculty-attendance" element={<FacultyAttendance />} />
+      <Route path="faculty-details" element={<FacultyDetail />} />
+      <Route path="leave-requests" element={<LeaveRequests />} />
+      <Route path="raise-ticket" element={<RaiseTicket />} />
       <Route path="syllabus-tracking" element={<SyllabusTrackingDashboard />} />
       <Route path="schedule-online-class" element={<ScheduleOnlineClass />} />
       <Route path="/reports" element={<Reports />} />
