@@ -83,6 +83,10 @@ import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyA
 import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
 import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
 
+import TimeTable from '../pages/principalModules/TimeTable';
+import PrincipalInbox from '../pages/principalModules/inbox';
+import ReportsPrincipal from '../pages/principalModules/Reports';
+
 
 
 
@@ -96,6 +100,7 @@ import HODStudentLeaveDetails from '../pages/HODModules/Students/HODStudentLeave
 import HODStudentProjects from '../pages/HODModules/Students/HODStudentProjects';
 import HODReports from '../pages/HODModules/HODReports';
 import HODCatPage from '../pages/HODModules/HODCatPage';
+
 
 
 import React from 'react';
@@ -227,6 +232,13 @@ const AcademicsRoutes: React.FC = () => {
       
       {/* Catch all for invalid home routes */}
        {/* <Route path="*" element={<Navigate to="/home" replace />} />  */}
+
+
+
+       <Route path='/principal-timetable' element={<TimeTable/>}/>
+         <Route path='/principal-Inbox' element={<PrincipalInbox/>}/>
+        <Route path='/principal-reports' element={<ReportsPrincipal/>}/>
+      
     </Routes>
   );
 };

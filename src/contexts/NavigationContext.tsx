@@ -196,10 +196,12 @@ const SIDEBAR_ITEMS = {
     ]
   },
 
+
   { name: 'Time Table', path: '/academics/principal-timetable', icon: 'Clock' },
   { name: 'Reports', path: '/academics/principal-reports', icon: 'FileText' },
   { name: 'Inbox', path: '/academics/principal-inbox', icon: 'Mail' },
   { name: 'Raise Tickets', path: '/academics/raise-ticket', icon: 'AlertCircle' }
+
 ],
     'HoD': [
 
