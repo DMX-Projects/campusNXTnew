@@ -31,6 +31,7 @@ import FacultyOnlineTest from '../pages/FacultyModules/FacultyAcademic/FacultyOn
 import ScheduleOnlinclass from '../pages/FacultyModules/FacultyAcademic/ScheduleOnlinclass';
 import FacultyReports from '../pages/FacultyModules/FacultyAcademic/FacultyReports';
 import FacultyRiseTicket  from '../pages/FacultyModules/FacultyAcademic/FacultyRiseticket'
+import CATManagementInterface from '../pages/FacultyModules/FacultyAcademic/CATManagementInterface';
 // import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
 
 
@@ -57,6 +58,7 @@ import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttenda
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
+
 
 const AcademicsRoutes: React.FC = () => {
   return (
@@ -89,13 +91,15 @@ const AcademicsRoutes: React.FC = () => {
 
 
       <Route path="/faculty-inbox" element={<FacultyInbox />} />
+      <Route path="/faculty/student-cat" element={<CATManagementInterface />} />
+      
       <Route path="/announcement" element={<Announcement />} />
-      <Route path="/faculty-studentattendance" element={<FacultyStudentAttendance />} />
+      <Route path="/faculty-student-attendance" element={<FacultyStudentAttendance />} />
       <Route path='/faculty-timetable' element ={<TimeTableFaculty />} />
       <Route path='/faculty-calendar' element ={<FacultyCalender />} />
       <Route path='/faculty-subjects-syllabus' element ={<FacultySubjectsSyllabus />} />
       <Route path='/faculty-StudyMaterial' element ={<FacultyStudyMaterial/>}/>
-      <Route path='/faculty-studentprojects' element ={<FacultyStudentProject/>}/>
+      <Route path='/faculty-student-projects' element ={<FacultyStudentProject/>}/>
       <Route path='/faculty-FacultyOnlineTest' element ={<FacultyOnlineTest/>}/>
       <Route path='/faculty-schedule-onlineclass' element ={<ScheduleOnlinclass/>}/>
       <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
