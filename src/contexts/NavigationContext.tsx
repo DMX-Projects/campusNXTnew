@@ -196,10 +196,10 @@ const SIDEBAR_ITEMS = {
     ]
   },
 
-  { name: 'Time Table', path: '/academics/principal-timetable', icon: 'Clock' },
-  { name: 'Reports', path: '/academics/principal-reports', icon: 'FileText' },
-  { name: 'Inbox', path: '/academics/principal-inbox', icon: 'Mail' },
-  { name: 'Raise Tickets', path: '/academics/principal-raisetickets', icon: 'AlertCircle' }
+  { name: 'Time Table', path: '/academics/principal-TimeTable', icon: 'Clock' },
+  { name: 'Reports', path: '/academics/principal-Reports', icon: 'FileText' },
+  { name: 'Inbox', path: '/academics/principal-Inbox', icon: 'Mail' },
+  { name: 'Raise Tickets', path: '/academics/principal-RaiseTickets', icon: 'AlertCircle' }
 ],
     'HoD': [
   { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
