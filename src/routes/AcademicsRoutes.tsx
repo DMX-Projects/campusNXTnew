@@ -41,7 +41,7 @@ import StudentfeeManagement from '../pages/FacultyModules/FacultyAcademic/studen
 import StudentRecordsResults from '../pages/FacultyModules/FacultyAcademic/StudentRecords&Results';
 import StudentClassSchedule from '../pages/FacultyModules/FacultyAcademic/StudentClassSchedule';
 import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/StudentCourse';
-import StudentAssigment from '../pages/FacultyModules/FacultyAcademic/StudentAssigment';
+// import StudentAssigment from '../pages/FacultyModules/FacultyAcademic/StudentAssigment';
 import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
 import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
 import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
@@ -106,7 +106,7 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-recordsresults" element={<StudentRecordsResults />} />
     <Route path="/student-classschedule" element={<StudentClassSchedule />} />
     <Route path="/student-courses" element={<StudentCourseAcademic />} />
-    <Route path="/student-assignments" element={<StudentAssigment />} />
+    {/* <Route path="/student-assignments" element={<StudentAssigment />} /> */}
     <Route path="/student-exams" element={<StudentExam />} />
     <Route path="/student-profile" element={<StudentProfile />} />
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
