@@ -46,6 +46,22 @@ import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
 import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
 import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
 
+<<<<<<< Updated upstream
+=======
+
+
+
+//HOD Login Routes
+import FacultyDetails from '../pages/HODModules/Faculties/FacultyDetails'
+import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyAttendanceAndFeedback';
+import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
+import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
+import HODStudentLeaveDetails from '../pages/HODModules/Students/HODStudentLeaveDetails';
+import HODStudentProjects from '../pages/HODModules/Students/HODStudentProjects';
+import HODReports from '../pages/HODModules/HODReports';
+import HODCatPage from '../pages/HODModules/HODCatPage';
+
+>>>>>>> Stashed changes
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
 
@@ -112,6 +128,19 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
     <Route path="/my-attendance" element={<AttendanceManagement />} />
 
+<<<<<<< Updated upstream
+=======
+
+    //Hod Route paths
+    <Route path="/faculty/faculty-details" element={<FacultyDetails  />} />
+    <Route path="/faculty/faculty-attendance" element={<FacultyAttendanceAndFeedback  />} />
+    <Route path="/faculty/faculty-leave-requests" element={<FacultyLeaves  />} />
+    <Route path="/hod/student-attendance" element={<HODStudentAttendance  />} />
+    <Route path="/hod/student-leaves" element={<HODStudentLeaveDetails  />} />
+    <Route path="/hod/student-projects" element={<HODStudentProjects />} />
+    <Route path="/hod/reports" element={<HODReports  />} />
+    <Route path="/hod/cat" element={<HODCatPage  />} />
+>>>>>>> Stashed changes
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 
       {/* Users Routes

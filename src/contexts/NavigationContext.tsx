@@ -236,16 +236,36 @@ const SIDEBAR_ITEMS = {
 ],
     'HoD': [
   { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+<<<<<<< Updated upstream
 
+=======
+  { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
+  { 
+    name: 'Faculty', 
+    path: '/academics', 
+    icon: 'GraduationCap',
+    children: [
+      { name: 'Faculty Details', path: '/academics/faculty/faculty-details', icon: 'GraduationCap' },
+      { name: 'Faculty Attendance', path: '/academics/faculty/faculty-attendance', icon: 'MessageSquare' },
+      { name: 'Faculty Leave Requests', path: '/academics/faculty/faculty-leave-requests', icon: 'MessageSquare' },
+    ]
+  },
+>>>>>>> Stashed changes
   { 
     name: 'Students', 
-    path: '/academics/students', 
+    path: '/academics', 
     icon: 'Users',
     children: [
+<<<<<<< Updated upstream
       { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
       { name: 'Student Leaves', path: '/academics/student-leaves', icon: 'UserMinus' },
       { name: 'Student Approval', path: '/academics/student-approval', icon: 'UserCheck' },
       { name: 'Student Projects', path: '/academics/student-projects', icon: 'Briefcase' },
+=======
+      { name: 'Student Attendance', path: '/academics/hod/student-attendance', icon: 'CheckCircle' },
+      { name: 'Student Leaves', path: '/academics/hod/student-leaves', icon: 'UserMinus' },
+      { name: 'Student Projects', path: '/academics/hod/student-projects', icon: 'Briefcase' },
+>>>>>>> Stashed changes
     ]
   },
 
@@ -260,6 +280,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Syllabus Tracking', path: '/academics/syllabus-tracking', icon: 'Target' },
     ]
   },
+<<<<<<< Updated upstream
 
   { 
     name: 'Assessments', 
@@ -295,6 +316,14 @@ const SIDEBAR_ITEMS = {
   { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
   { name: 'Inbox', path: '/academics/inbox', icon: 'Mail' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
+=======
+  { name: 'CAT', path: '/academics/hod/cat', icon: 'Code' },
+
+  { name: 'Leave Requests', path: '/academics/hod/leave-requests', icon: 'FileText' },
+
+  { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
+  { name: 'Raise Ticket', path: '/academics/hod/raise-ticket', icon: 'AlertCircle' }
+>>>>>>> Stashed changes
 ],
 
     'Faculty': [
