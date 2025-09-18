@@ -46,6 +46,12 @@ import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
 import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
 import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
 
+
+
+
+//HOD Login Routes
+import FacultyDetails from '../pages/HODModules/Faculties/FacultyDetails'
+
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
 
@@ -111,6 +117,9 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-profile" element={<StudentProfile />} />
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
     <Route path="/my-attendance" element={<AttendanceManagement />} />
+
+
+    //Hod Routes 
 
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 

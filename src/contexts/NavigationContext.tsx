@@ -162,17 +162,16 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
-      { name: 'Dashboard', path: '/academics/student-dashboard', icon: 'BarChart3' },
-      { name: 'My Attendance', path: '/academics/my-attendance', icon: 'CheckCircle' },
-      { name: 'Courses', path: '/academics/student-courses', icon: 'BookOpen' },
-      { name: 'Assignments', path: '/academics/student-assignments', icon: 'FileText' },
-      { name: 'Exams', path: '/academics/student-exams', icon: 'Monitor' },
-      { name: 'Results&Records', path: '/academics/student-recordsresults', icon: 'CheckCircle' },
-      { name: 'Profile', path: '/academics/student-profile', icon: 'User' },
-      { name: 'Fee Management', path: '/academics/student-feemanagement', icon: 'DollarSign' },
-      { name: 'Class Schedule', path: '/academics/student-classschedule', icon: 'Calendar' },
-      { name: 'Study Material', path: '/academics/student-studymaterial', icon: 'FolderOpen' }
-    ],
+  { name: 'Dashboard', path: '/academics/student-dashboard', icon: 'BarChart3' },
+  { name: 'Academic Calender', path: '/academics/student-academiccalender', icon: 'Calendar' },
+  { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
+  { name: 'My Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
+  { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
+  { name: 'My Projects', path: '/academics/student-projects', icon: 'FolderOpen' },
+  { name: 'CAT', path: '/academics/student-cat', icon: 'BookOpen' },
+  { name: 'Leave Request', path: '/academics/student-leaverequest', icon: 'Send' },
+  { name: 'Raise Tickets', path: '/academics/student-raisetickets', icon: 'MessageSquare' }
+],
     'Principal': [
   { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
 
