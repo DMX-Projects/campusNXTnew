@@ -202,7 +202,7 @@ const SIDEBAR_ITEMS = {
   { name: 'Raise Tickets', path: '/academics/principal-raisetickets', icon: 'AlertCircle' }
 ],
     'HoD': [
-  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+  { name: 'Dashboard', path: '/academics/hod-dashboard', icon: 'BarChart3' },
   { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
   { 
     name: 'Faculty', 
@@ -226,11 +226,11 @@ const SIDEBAR_ITEMS = {
   },
   { 
     name: 'Time Table', 
-    path: '/academics/time-table', 
+    path: '/academics', 
     icon: 'BookOpen',
     children: [
-      { name: 'Create Timetable', path: '/academics/timetable', icon: 'Calendar' },
-      { name: 'View Timetable', path: '/academics/view-timetable', icon: 'Calendar' },
+      { name: 'Create Timetable', path: '/academics/hod/timetable', icon: 'Calendar' },
+      { name: 'View Timetable', path: '/academics/hod/view-timetable', icon: 'Calendar' },
     ]
 
      },
@@ -240,14 +240,14 @@ const SIDEBAR_ITEMS = {
     icon: 'BookOpen',
     children: [
       { name: 'Course Faculties', path: '/academics/course-faculties', icon: 'BookOpen' },
-      { name: 'Syllabus', path: '/academics/syllabus', icon: 'Target' },
-      { name: 'Track Syllabus', path: '/academics/syllabus-tracking', icon: 'Target' },
+      { name: 'Lesson Plan', path: '/academics/lesson-plan', icon: 'Target' },
+      { name: 'Track Syllabus', path: '/academics/syllabus-track', icon: 'Target' },
       { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
     ]
   },
   { name: 'CAT', path: '/academics/cat', icon: 'Code' },
 
-  { name: 'Leave Requests', path: '/academics/leave-requests', icon: 'FileText' },
+  { name: 'Leave Requests', path: '/academics/leave-request', icon: 'FileText' },
 
   { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }

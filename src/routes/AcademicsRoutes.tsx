@@ -47,6 +47,15 @@ import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
 import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
 import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
 
+import CourseFaculties from '../pages/HODModules/Courses/CourseFaculties';
+import SyllabusLessonPlan from '../pages/HODModules/Courses/LessonPlan';
+import SyllabusTracking from '../pages/HODModules/Courses/SyllabusTracker';
+import HODLeaveRequest from '../pages/HODModules/LeaveRequest';
+import DepartmentTimetable from '../pages/HODModules/Timetable/CreateTimetable';
+import HodPersonalTimetable from '../pages/HODModules/Timetable/ViewTimetable';
+import HodDashboard from '../pages/HODModules/HodDashboard.';
+
+
 
 
 
@@ -83,6 +92,20 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="schedule-online-class" element={<ScheduleOnlineClass />} />
       <Route path="/reports" element={<Reports />} />
       {/* <Route path="/raise-ticket" element={<RaiseTicket />} /> */}
+      {/* Academic login Hod Routes */}
+       <Route path="course-faculties" element={<CourseFaculties />} />
+       <Route path="lesson-plan" element={<SyllabusLessonPlan />} />
+      <Route path="syllabus-track" element={<SyllabusTracking />} />
+       <Route path="leave-request" element={<HODLeaveRequest />} />
+       <Route path="/hod/timetable" element={<DepartmentTimetable />} />
+      <Route path="/hod/view-timetable" element={< HodPersonalTimetable/>} />
+      <Route path="hod-dashboard" element={< HodDashboard/>} />
+      
+      
+
+
+
+
 
 
       {/* Academic login Faculty Routes */}
