@@ -162,89 +162,56 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
-      { name: 'Dashboard', path: '/academics/student-dashboard', icon: 'BarChart3' },
-      { name: 'My Attendance', path: '/academics/my-attendance', icon: 'CheckCircle' },
-      { name: 'Courses', path: '/academics/student-courses', icon: 'BookOpen' },
-      { name: 'Assignments', path: '/academics/student-assignments', icon: 'FileText' },
-      { name: 'Exams', path: '/academics/student-exams', icon: 'Monitor' },
-      { name: 'Results&Records', path: '/academics/student-recordsresults', icon: 'CheckCircle' },
-      { name: 'Profile', path: '/academics/student-profile', icon: 'User' },
-      { name: 'Fee Management', path: '/academics/student-feemanagement', icon: 'DollarSign' },
-      { name: 'Class Schedule', path: '/academics/student-classschedule', icon: 'Calendar' },
-      { name: 'Study Material', path: '/academics/student-studymaterial', icon: 'FolderOpen' }
-    ],
+  { name: 'Dashboard', path: '/academics/student-dashboard', icon: 'BarChart3' },
+  { name: 'Academic Calender', path: '/academics/student-academiccalender', icon: 'Calendar' },
+  { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
+  { name: 'My Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
+  { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
+  { name: 'My Projects', path: '/academics/student-projects', icon: 'FolderOpen' },
+  { name: 'CAT', path: '/academics/student-cat', icon: 'BookOpen' },
+  { name: 'Leave Request', path: '/academics/student-leaverequest', icon: 'Send' },
+  { name: 'Raise Tickets', path: '/academics/student-raisetickets', icon: 'MessageSquare' }
+],
     'Principal': [
-  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
-
-  {
-    name: 'Students',
-    path: '/academics/principal-students',
-    icon: 'Users',
-    children: [
-      { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
-      { name: 'Student Leaves', path: '/academics/student-leaves', icon: 'UserMinus' },
-      { name: 'Student Approval', path: '/academics/student-approval', icon: 'UserCheck' },
-      { name: 'Student Projects', path: '/academics/student-projects', icon: 'Briefcase' },
-    ]
-  },
-
-  {
-    name: 'Academics',
-    path: '/academics/principal-academics',
-    icon: 'BookOpen',
-    children: [
-      { name: 'Timetable', path: '/academics/timetable', icon: 'Calendar' },
-      { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
-      { name: 'Subjects & Syllabus', path: '/academics/subjects-syllabus', icon: 'BookOpen' },
-      { name: 'Syllabus Tracking', path: '/academics/syllabus-tracking', icon: 'Target' },
-      { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
-    ]
-  },
-
-  {
-    name: 'Assessments',
-    path: '/academics/principal-assessments',
-    icon: 'FileText',
-    children: [
-      { name: 'Student Exam Preparation', path: '/academics/exam-preparation', icon: 'FileText' },
-      { name: 'Online Tests', path: '/academics/online-tests', icon: 'Monitor' },
-      { name: 'Coding Assessment', path: '/academics/coding-assessment', icon: 'Code' },
-    ]
-  },
+  { name: 'Dashboard', path: '/academics/principal-dashboard', icon: 'BarChart3' },
+  { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
 
   {
     name: 'Faculty',
     path: '/academics/principal-faculty',
     icon: 'GraduationCap',
     children: [
-      { name: 'Faculty Feedback', path: '/academics/faculty-feedback', icon: 'MessageSquare' },
+      { name: 'Faculty Details', path: '/academics/faculty-details', icon: 'Users' },
+      { name: 'Faculty Attendance', path: '/academics/faculty-attendance', icon: 'CheckCircle' },
+      { name: 'Leave Requests', path: '/academics/faculty-leave-requests', icon: 'UserMinus' },
     ]
   },
 
   {
-    name: 'Resources',
-    path: '/academics/principal-resources',
-    icon: 'FolderOpen',
+    name: 'Student',
+    path: '/academics/principal-students',
+    icon: 'User',
     children: [
-      { name: 'Schedule Online Class', path: '/academics/schedule-online-class', icon: 'Video' },
+      { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'ClipboardList' }
     ]
   },
 
-  { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
-  { name: 'Inbox', path: '/academics/inbox', icon: 'Mail' },
-  { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
+  { name: 'Time Table', path: '/academics/principal-timetable', icon: 'Clock' },
+  { name: 'Reports', path: '/academics/principal-reports', icon: 'FileText' },
+  { name: 'Inbox', path: '/academics/principal-inbox', icon: 'Mail' },
+  { name: 'Raise Tickets', path: '/academics/principal-raisetickets', icon: 'AlertCircle' }
 ],
     'HoD': [
   { name: 'Dashboard', path: '/academics/hod-dashboard', icon: 'BarChart3' },
   { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
   { 
     name: 'Faculty', 
-    path: '/academics/faculty', 
+    path: '/academics', 
     icon: 'GraduationCap',
     children: [
-      { name: 'Faculty Details', path: '/academics/faculty', icon: 'GraduationCap' },
-      { name: 'Faculty Attendance', path: '/academics/faculty-attendance', icon: 'MessageSquare' },
-      { name: 'Faculty Leave Requests', path: '/academics/faculty-leave-requests', icon: 'MessageSquare' },
+      { name: 'Faculty Details', path: '/academics/faculty/faculty-details', icon: 'GraduationCap' },
+      { name: 'Faculty Attendance', path: '/academics/faculty/faculty-attendance', icon: 'MessageSquare' },
+      { name: 'Faculty Leave Requests', path: '/academics/faculty/faculty-leave-requests', icon: 'MessageSquare' },
     ]
   },
   { 
@@ -287,52 +254,32 @@ const SIDEBAR_ITEMS = {
 ],
 
     'Faculty': [
-  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
-
-  { 
-    name: 'Students', 
-    path: '/academics/faculty-students', 
+  { name: 'Dashboard', path: '/academics/faculty-dashboard', icon: 'BarChart3' },
+  { name: 'Academic Calendar', path: '/academics/faculty-calendar', icon: 'Calendar' },
+  { name: 'Time Table', path: '/academics/faculty-timetable', icon: 'Clock' },
+  {
+    name: 'Students',
+    path: '/academics',
     icon: 'Users',
     children: [
-      { name: 'Student Attendance', path: '/academics/faculty-studentattendance', icon: 'CheckCircle' },
-      { name: 'Student Projects', path: '/academics/faculty-studentprojects', icon: 'Briefcase' },
+      { name: 'Attendance', path: '/academics/faculty-student-attendance', icon: 'CheckCircle' },
+      { name: 'Student Projects', path: '/academics/faculty-student-projects', icon: 'Briefcase' }
     ]
   },
 
-  { 
-    name: 'Academics', 
-    path: '/academics/faculty-academics', 
+  {
+    name: 'Subjects',
+    path: '/academics/faculty-subjects',
     icon: 'BookOpen',
     children: [
-      { name: 'Timetable', path: '/academics/faculty-timetable', icon: 'Calendar' },
-      { name: 'Academic Calendar', path: '/academics/faculty-calendar', icon: 'Calendar' },
-      { name: 'Subjects & Syllabus', path: '/academics/faculty-subjects-syllabus', icon: 'BookOpen' },
-      { name: 'Study Material', path: '/academics/faculty-StudyMaterial', icon: 'FolderOpen' },
+      { name: 'Lesson Plan', path: '/academics/faculty-lessonplan', icon: 'ClipboardList' },
+      { name: 'Syllabus Update', path: '/academics/faculty-syllabus-update', icon: 'Edit3' }
     ]
   },
 
-  { 
-    name: 'Assessments', 
-    path: '/academics/faculty-assessments', 
-    icon: 'FileText',
-    children: [
-      { name: 'Online Tests', path: '/academics/faculty-FacultyOnlineTest', icon: 'Monitor' },
-      // If you later enable coding or syllabus tracking for faculty, add here
-    ]
-  },
-
-  { 
-    name: 'Resources', 
-    path: '/academics/faculty-resources', 
-    icon: 'FolderOpen',
-    children: [
-      { name: 'Schedule Online Class', path: '/academics/faculty-schedule-onlineclass', icon: 'Video' },
-    ]
-  },
-
-  { name: 'Reports', path: '/academics/faculty-reports', icon: 'FileText' },
-  { name: 'Inbox', path: '/academics/faculty-inbox', icon: 'Mail' },
-  { name: 'Announcement', path: '/academics/announcement', icon: 'Megaphone' },
+  { name: 'CAT', path: '/academics/faculty/student-cat', icon: 'FileText' },
+  { name: 'Leave Request', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
+  { name: 'Reports', path: '/academics/faculty-reports', icon: 'BarChart' },
   { name: 'Raise Ticket', path: '/academics/faculty-raiseticket', icon: 'AlertCircle' }
 ],
 

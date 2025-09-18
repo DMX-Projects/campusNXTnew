@@ -31,6 +31,7 @@ import FacultyOnlineTest from '../pages/FacultyModules/FacultyAcademic/FacultyOn
 import ScheduleOnlinclass from '../pages/FacultyModules/FacultyAcademic/ScheduleOnlinclass';
 import FacultyReports from '../pages/FacultyModules/FacultyAcademic/FacultyReports';
 import FacultyRiseTicket  from '../pages/FacultyModules/FacultyAcademic/FacultyRiseticket'
+import CATManagementInterface from '../pages/FacultyModules/FacultyAcademic/CATManagementInterface';
 // import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
 
 
@@ -45,6 +46,7 @@ import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/Stude
 import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
 import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
 import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
+
 import CourseFaculties from '../pages/HODModules/Courses/CourseFaculties';
 import SyllabusLessonPlan from '../pages/HODModules/Courses/LessonPlan';
 import SyllabusTracking from '../pages/HODModules/Courses/SyllabusTracker';
@@ -52,8 +54,20 @@ import HODLeaveRequest from '../pages/HODModules/LeaveRequest';
 import DepartmentTimetable from '../pages/HODModules/Timetable/CreateTimetable';
 import HodPersonalTimetable from '../pages/HODModules/Timetable/ViewTimetable';
 import HodDashboard from '../pages/HODModules/HodDashboard.';
+
+
+
+
+
+//HOD Login Routes
+import FacultyDetails from '../pages/HODModules/Faculties/FacultyDetails'
+import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyAttendanceAndFeedback';
+import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
+import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
+
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
+
 
 const AcademicsRoutes: React.FC = () => {
   return (
@@ -100,23 +114,19 @@ const AcademicsRoutes: React.FC = () => {
 
 
       <Route path="/faculty-inbox" element={<FacultyInbox />} />
+      <Route path="/faculty/student-cat" element={<CATManagementInterface />} />
+      
       <Route path="/announcement" element={<Announcement />} />
-      <Route path="/faculty-studentattendance" element={<FacultyStudentAttendance />} />
+      <Route path="/faculty-student-attendance" element={<FacultyStudentAttendance />} />
       <Route path='/faculty-timetable' element ={<TimeTableFaculty />} />
       <Route path='/faculty-calendar' element ={<FacultyCalender />} />
       <Route path='/faculty-subjects-syllabus' element ={<FacultySubjectsSyllabus />} />
       <Route path='/faculty-StudyMaterial' element ={<FacultyStudyMaterial/>}/>
-      <Route path='/faculty-studentprojects' element ={<FacultyStudentProject/>}/>
+      <Route path='/faculty-student-projects' element ={<FacultyStudentProject/>}/>
       <Route path='/faculty-FacultyOnlineTest' element ={<FacultyOnlineTest/>}/>
       <Route path='/faculty-schedule-onlineclass' element ={<ScheduleOnlinclass/>}/>
       <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
       <Route path='/faculty-raiseticket' element={<FacultyRiseTicket />} />
-
-
-
-
-
-
 
     {/* //student login */}
 
@@ -132,6 +142,12 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
     <Route path="/my-attendance" element={<AttendanceManagement />} />
 
+
+    //Hod Route paths
+    <Route path="/faculty/faculty-details" element={<FacultyDetails  />} />
+    <Route path="/faculty/faculty-attendance" element={<FacultyAttendanceAndFeedback  />} />
+    <Route path="/faculty/faculty-leave-requests" element={<FacultyLeaves  />} />
+    <Route path="student-attendance" element={<HODStudentAttendance  />} />
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 
       {/* Users Routes
