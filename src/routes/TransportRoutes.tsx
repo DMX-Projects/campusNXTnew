@@ -2,29 +2,29 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // Import your transport components
-import Dashboard from "../pages/Transport/Dashboard";
-import FleetManagement from "../pages/Transport/FleetManagement";
-import RouteManagement from "../pages/Transport/RouteManagement";
-import StudentTransport from "../pages/Transport/StudentTransport"; 
-import DriverManagement from "../pages/Transport/DriverManagement";
-import DriverDetails from "../pages/Transport/DriverDetails";
-import Documents from "../pages/Transport/Documents";
-import Expenses from "../pages/Transport/Expenses";
-import FeeDetails from "../pages/Transport/FeeDetails";
-import LiveLocation from "../pages/Transport/LiveLocation";
-import Reports from "../pages/Transport/Reports";
-import StaffList from "../pages/Transport/StaffList";
-import StudentsList from "../pages/Transport/StudentsList";
-import Tickets from "../pages/Transport/Tickets";
-import AddFaculty from "../pages/Transport/Components/addfaculty";
-import Inbox from "../pages/Transport/Inbox";
-import AddStudent from "../pages/Transport/Components/addstudent";
-import EditStudent from "../pages/Transport/Components/editstudent";
-import ViewDetailsStudent from "../pages/Transport/Components/viewdetailsstudent";
-import BusDetail from "../StudentModules/Transport/Stubusdetail";
-import StudentFeeDetail from "../StudentModules/Transport/StudentFeeDetail";
-import BusLiveLocation from "../StudentModules/Transport/BusLiveLocation";
-import StudentRaiseTicket from "../StudentModules/Transport/StudentRaiseTicket";
+import Dashboard from "../pages/ChairpersonModule/Transport/Dashboard";
+import FleetManagement from "../pages/ChairpersonModule/Transport/FleetManagement";
+import RouteManagement from "../pages/ChairpersonModule/Transport/RouteManagement";
+import StudentTransport from "../pages/ChairpersonModule/Transport/StudentTransport"; 
+import DriverManagement from "../pages/ChairpersonModule/Transport/DriverManagement";
+import DriverDetails from "../pages/ChairpersonModule/Transport/DriverDetails";
+import Documents from "../pages/ChairpersonModule/Transport/Documents";
+import Expenses from "../pages/ChairpersonModule/Transport/Expenses";
+import FeeDetails from "../pages/ChairpersonModule/Transport/FeeDetails";
+import LiveLocation from "../pages/ChairpersonModule/Transport/LiveLocation";
+import Reports from "../pages/ChairpersonModule/Transport/Reports";
+import StaffList from "../pages/ChairpersonModule/Transport/StaffList";
+import StudentsList from "../pages/ChairpersonModule/Transport/StudentsList";
+import Tickets from "../pages/ChairpersonModule/Transport/Tickets";
+import AddFaculty from "../pages/ChairpersonModule/Transport/Components/addfaculty";
+import Inbox from "../pages/ChairpersonModule/Transport/Inbox";
+import AddStudent from "../pages/ChairpersonModule/Transport/Components/addstudent";
+import EditStudent from "../pages/ChairpersonModule/Transport/Components/editstudent";
+import ViewDetailsStudent from "../pages/ChairpersonModule/Transport/Components/viewdetailsstudent";
+// import BusDetail from "../StudentModules/Transport/Stubusdetail";
+import StudentFeeDetail from "../pages/StudentModules/Transport/StudentFeeDetail";
+import BusLiveLocation from "../pages/StudentModules/Transport/BusLiveLocation";
+import StudentRaiseTicket from "../pages/StudentModules/Transport/StudentRaiseTicket";
 
 const TransportRoutes: React.FC = () => {
   return (
@@ -49,7 +49,7 @@ const TransportRoutes: React.FC = () => {
       <Route path="add-student" element={<AddStudent />} />
       <Route path="edit-student/:id" element={<EditStudent />} />
       <Route path="view-student/:id" element={<ViewDetailsStudent />} />
-      <Route path="StuTransport/bus-details" element={<BusDetail />} />
+      {/* <Route path="StuTransport/bus-details" element={<BusDetail />} /> */}
       <Route path="StuTransport/fee-details" element={<StudentFeeDetail />} />
       <Route path="StuTransport/live-location" element={<BusLiveLocation />} />
       <Route path="StuTransport/tickets" element={<StudentRaiseTicket />} />

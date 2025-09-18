@@ -12,7 +12,7 @@ import AdministrationDashboard from './AdministrationDashboard';
 import TransportDashboard from './TransportDashboard';
 import HostelDashboard from './HostelDashboard';
 import LibraryDashboard from './LibraryDashboard';
-import CollegeSecretaryDashboard from '../../pages/Academics/AcademicDashboar/CollegeSecretaryDashboard';
+import CollegeSecretaryDashboard from '../../pages/ChairpersonModule/Academics/AcademicDashboar/CollegeSecretaryDashboard';
 import DeanDashboard from './DeanDashboard';
 import HoDDashboard from './HoDDashboard';
 import LabAssistantDashboard from './LabAssistantDashboard';

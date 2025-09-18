@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import DashboardCard from './DashboardCard';
 import { Users, TrendingUp, Calendar, Award, Target, Building, CheckCircle } from 'lucide-react';
 import * as XLSX from "xlsx";  // npm install xlsx
-import DriveScheduleModal from "../../pages/Placements/components/DriveScheduleModal";
+import DriveScheduleModal from "../../pages/ChairpersonModule/Placements/components/DriveScheduleModal";
 const TPODashboard: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
   const cardData = [

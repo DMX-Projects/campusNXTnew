@@ -6,7 +6,7 @@ import Layout from "./components/Layout/Layout";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import ProtectedRoute, { getRedirectPath } from "./components/ProtectedRoute";
-import ModuleDashboard from "./components/ModuleDashboard";
+// import ModuleDashboard from "./components/ModuleDashboard";
 import { NavigationProvider } from "./contexts/NavigationContext";
 
 // Import all module routes

@@ -1,50 +1,50 @@
-import Inbox from '../pages/Academics/Courses/inbox';
-import StudentAttendance from '../pages/Academics/Courses/Studentsattendence'
+import Inbox from '../pages/ChairpersonModule/Academics/Courses/inbox';
+import StudentAttendance from '../pages/ChairpersonModule/Academics/Courses/Studentsattendence'
 import AttendanceManagement from '../components/Modules/AttendanceManagement'
-import Timetable from '../pages/Academics/timetable/TimeTable';
-import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
-import AcademicCalender from '../pages/Academics/AcademicCalender/AcademicCalender';
-import SubjectsAndSyllabus from '../pages/Academics/SubjectandSyllabus/SubjectSyllabus';
-import StudentExamprepation from '../pages/Academics/StudentExamprepration/StudentExamprep';
-import StudyMaterialPage from '../pages/Academics/StudyMaterial/StudyMaterial';
-import StudentProject from '../pages/Academics/StudentProject/StudentProject';
-import StudentAppruval from '../pages/Academics/StudentAppruval/StudentAppruval';
+import Timetable from '../pages/ChairpersonModule/Academics/timetable/TimeTable';
+// import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
+import AcademicCalender from '../pages/ChairpersonModule/Academics/AcademicCalender/AcademicCalender';
+// import SubjectsAndSyllabus from '../pages/Academics/SubjectandSyllabus/SubjectSyllabus';
+import StudentExamprepation from '../pages/ChairpersonModule/Academics/StudentExamprepration/StudentExamprep';
+import StudyMaterialPage from '../pages/ChairpersonModule/Academics/StudyMaterial/StudyMaterial';
+import StudentProject from '../pages/ChairpersonModule/Academics/StudentProject/StudentProject';
+import StudentAppruval from '../pages/ChairpersonModule/Academics/StudentAppruval/StudentAppruval';
 // import AcademicDashboard from '../pages/Academics/AcademicDashboar/AcademicDashboard';
-import AcademicFaculty from '../pages/Academics/AcademicFaculty/AcademicFaculty';
-import OnlineTest from '../pages/Academics/OnlineTest/OnlineTest';
-import CodingAssesment from '../pages/Academics/OnlineTest/codingAssesment'
-import FacultyFeedback from '../pages/Academics/FacultyFeedback/FacultyFeedback';
-import SyllabusTrackingDashboard from '../pages/Academics/SyllabusTracking/SyllabusTracking';
-import ScheduleOnlineClass from '../pages/Academics/Scheduleonlineclass/Scheduleonlineclass';
-import Reports from '../pages/Academics/Reports/Reports';
-import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
+import AcademicFaculty from '../pages/ChairpersonModule/Academics/AcademicFaculty/AcademicFaculty';
+import OnlineTest from '../pages/ChairpersonModule/Academics/OnlineTest/OnlineTest';
+import CodingAssesment from '../pages/ChairpersonModule/Academics/OnlineTest/codingAssesment'
+import FacultyFeedback from '../pages/ChairpersonModule/Academics/FacultyFeedback/FacultyFeedback';
+import SyllabusTrackingDashboard from '../pages/ChairpersonModule/Academics/SyllabusTracking/SyllabusTracking';
+import ScheduleOnlineClass from '../pages/ChairpersonModule/Academics/Scheduleonlineclass/Scheduleonlineclass';
+import Reports from '../pages/ChairpersonModule/Academics/Reports/Reports';
+// import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
 
-import FacultyInbox from '../FacultyModules/FacultyAcademic/FacultyInbox';
-import Announcement from '../FacultyModules/FacultyAcademic/Announcement';
-import FacultyStudentAttendance from '../FacultyModules/FacultyAcademic/StudentAttendence';
-import TimeTableFaculty from '../FacultyModules/FacultyAcademic/TimeTableFaculty';
-import FacultyCalender from '../FacultyModules/FacultyAcademic/calenderFaculty';
-import FacultySubjectsSyllabus from '../FacultyModules/FacultyAcademic/FacultySubjectsSyllabus';
-import FacultyStudyMaterial from '../FacultyModules/FacultyAcademic/FacultyStudyMaterial';
-import FacultyStudentProject from '../FacultyModules/FacultyAcademic/StudentProject';
-import FacultyOnlineTest from '../FacultyModules/FacultyAcademic/FacultyOnlineTest';
-import ScheduleOnlinclass from '../FacultyModules/FacultyAcademic/ScheduleOnlinclass';
-import FacultyReports from '../FacultyModules/FacultyAcademic/FacultyReports';
-import FacultyRiseTicket  from '../FacultyModules/FacultyAcademic/FacultyRiseticket'
+import FacultyInbox from '../pages/FacultyModules/FacultyAcademic/FacultyInbox';
+import Announcement from '../pages/FacultyModules/FacultyAcademic/Announcement';
+import FacultyStudentAttendance from '../pages/FacultyModules/FacultyAcademic/StudentAttendence';
+import TimeTableFaculty from '../pages/FacultyModules/FacultyAcademic/TimeTableFaculty';
+import FacultyCalender from '../pages/FacultyModules/FacultyAcademic/calenderFaculty';
+import FacultySubjectsSyllabus from '../pages/FacultyModules/FacultyAcademic/FacultySubjectsSyllabus';
+import FacultyStudyMaterial from '../pages/FacultyModules/FacultyAcademic/FacultyStudyMaterial';
+import FacultyStudentProject from '../pages/FacultyModules/FacultyAcademic/StudentProject';
+import FacultyOnlineTest from '../pages/FacultyModules/FacultyAcademic/FacultyOnlineTest';
+import ScheduleOnlinclass from '../pages/FacultyModules/FacultyAcademic/ScheduleOnlinclass';
+import FacultyReports from '../pages/FacultyModules/FacultyAcademic/FacultyReports';
+import FacultyRiseTicket  from '../pages/FacultyModules/FacultyAcademic/FacultyRiseticket'
 // import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
 
 
 // student login 
 
-import AcademicstudentDashboard from '../FacultyModules/FacultyAcademic/StudentDashboard'
-import StudentfeeManagement from '../FacultyModules/FacultyAcademic/studentFeeManagement';
-import StudentRecordsResults from '../FacultyModules/FacultyAcademic/StudentRecords&Results';
-import StudentClassSchedule from '../FacultyModules/FacultyAcademic/StudentClassSchedule';
-import StudentCourseAcademic from '../FacultyModules/FacultyAcademic/StudentCourse';
-import StudentAssigment from '../FacultyModules/FacultyAcademic/StudentAssigment';
-import StudentExam from '../FacultyModules/FacultyAcademic/StudentExam';
-import StudentProfile from '../FacultyModules/FacultyAcademic/StudentProfile';
-import StudentStudyMaterial from '../FacultyModules/FacultyAcademic/StudentStudyMaterial';
+import AcademicstudentDashboard from '../pages/FacultyModules/FacultyAcademic/StudentDashboard'
+import StudentfeeManagement from '../pages/FacultyModules/FacultyAcademic/studentFeeManagement';
+import StudentRecordsResults from '../pages/FacultyModules/FacultyAcademic/StudentRecords&Results';
+import StudentClassSchedule from '../pages/FacultyModules/FacultyAcademic/StudentClassSchedule';
+import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/StudentCourse';
+import StudentAssigment from '../pages/FacultyModules/FacultyAcademic/StudentAssigment';
+import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
+import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
+import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
@@ -56,9 +56,9 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/student-attendance" element={<StudentAttendance />} />
       <Route path="/timetable" element={<Timetable />} />
-      <Route path="student-leaves" element={<StudentLeave />} />
+      {/* <Route path="student-leaves" element={<StudentLeave />} /> */}
       <Route path="academic-calendar" element={<AcademicCalender />} />
-      <Route path="subjects-syllabus" element={<SubjectsAndSyllabus />} />
+      {/* <Route path="subjects-syllabus" element={<SubjectsAndSyllabus />} /> */}
       <Route path="exam-preparation" element={<StudentExamprepation />} />
       <Route path="study-material" element={<StudyMaterialPage />} />
       <Route path="student-projects" element={<StudentProject />} />
@@ -71,7 +71,7 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="syllabus-tracking" element={<SyllabusTrackingDashboard />} />
       <Route path="schedule-online-class" element={<ScheduleOnlineClass />} />
       <Route path="/reports" element={<Reports />} />
-      <Route path="/raise-ticket" element={<RaiseTicket />} />
+      {/* <Route path="/raise-ticket" element={<RaiseTicket />} /> */}
 
 
       {/* Academic login Faculty Routes */}

@@ -4,28 +4,28 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 // Import your administration components
 
-import LibrarySearch from "../pages/Library/Librarysearch";
-import Categories from "../pages/Library/Categories";
-import OverDues from "../pages/Library/OverDues";
-import Alerts from "../pages/Library/Alerts";
-import BookIssueReturn from "../pages/Library/BookIssueReturn";
-import BookList from "../pages/Library/BookList";
-import Dashboard from "../pages/Library/Dashboard";
-import LateFee from "../pages/Library/LateFee";
-import RaiseTicket from "../pages/Library/RaiseTicket"; 
-import Inbox from "../pages/Library/Inbox";
-import  Reports from "../pages/Library/Reports";
-import BookReservation from "../pages/Library/BookReservation";
+import LibrarySearch from "../pages/ChairpersonModule/Library/Librarysearch";
+import Categories from "../pages/ChairpersonModule/Library/Categories";
+import OverDues from "../pages/ChairpersonModule/Library/OverDues";
+import Alerts from "../pages/ChairpersonModule/Library/Alerts";
+import BookIssueReturn from "../pages/ChairpersonModule/Library/BookIssueReturn";
+import BookList from "../pages/ChairpersonModule/Library/BookList";
+import Dashboard from "../pages/ChairpersonModule/Library/Dashboard";
+import LateFee from "../pages/ChairpersonModule/Library/LateFee";
+import RaiseTicket from "../pages/ChairpersonModule/Library/RaiseTicket"; 
+import Inbox from "../pages/ChairpersonModule/Library/Inbox";
+import  Reports from "../pages/ChairpersonModule/Library/Reports";
+import BookReservation from "../pages/ChairpersonModule/Library/BookReservation";
 
-import SearchBook from "../StudentModules/Library/Faculty/SearchBook";
+import SearchBook from "../pages/StudentModules/Library/Faculty/SearchBook";
 // import RequestBookIssue from "../StudentModules/Library/Faculty/RequestBookIssue";
-import OverdueBooks from "../StudentModules/Library/Faculty/OverDueBooks";
-import BookReservationStatus from "../StudentModules/Library/Faculty/BookReservationStatus";
-import FacultyDashboard from "../StudentModules/Library/Faculty/FacultyDashboard";
-import MyIssuedBooks from "../StudentModules/Library/Faculty/MyIssueBooks";
-import RenewalRequests from "../StudentModules/Library/Faculty/RenewalRequests";
-import MyBorrowedBooks from "../StudentModules/Library/Faculty/MyBorrowedBooks";
-import RequestBookIssue from "../StudentModules/Library/Faculty/RequestBookIssue";
+import OverdueBooks from "../pages/StudentModules/Library/Faculty/OverDueBooks";
+import BookReservationStatus from "../pages/StudentModules/Library/Faculty/BookReservationStatus";
+import FacultyDashboard from "../pages/StudentModules/Library/Faculty/FacultyDashboard";
+import MyIssuedBooks from "../pages/StudentModules/Library/Faculty/MyIssueBooks";
+import RenewalRequests from "../pages/StudentModules/Library/Faculty/RenewalRequests";
+import MyBorrowedBooks from "../pages/StudentModules/Library/Faculty/MyBorrowedBooks";
+import RequestBookIssue from "../pages/StudentModules/Library/Faculty/RequestBookIssue";
 
 
 

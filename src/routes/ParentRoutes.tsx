@@ -2,18 +2,18 @@ import React from "react";
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 // import ParentDashboard from "../components/Dashboard/ParentDashboard";
-import Inbox from "../pages/parent/Inbox";
- import Noticeboard from "../pages/parent/Noticeboard";
+import Inbox from "../pages/ChairpersonModule/parent/Inbox";
+ import Noticeboard from "../pages/ChairpersonModule/parent/Noticeboard";
 
-import YourChildClassroom from "../pages/parent/Yourchildclassroom";
- import YourchildResults from "../pages/parent/Yourchildresults";
- import YourChildHostelAttendance from "../pages/parent/Yourchildhostelattendence";
-import Feedetails from "../pages/parent/Feedetails";
- import TalkToMentor from "../pages/parent/Talktomentor";
- import Ticketraised from "../pages/chairpersonparent/Ticketraised";
-import Parentdirectory from "../FacultyModules/Parentdirectory";
-import Parentnotifications from "../FacultyModules/Parentnotificatins";
-import Parentmessages from "../FacultyModules/Parentmessages";
+import YourChildClassroom from "../pages/ChairpersonModule/parent/Yourchildclassroom";
+ import YourchildResults from "../pages/ChairpersonModule/parent/Yourchildresults";
+ import YourChildHostelAttendance from "../pages/ChairpersonModule/parent/Yourchildhostelattendence";
+import Feedetails from "../pages/ChairpersonModule/parent/Feedetails";
+ import TalkToMentor from "../pages/ChairpersonModule/parent/Talktomentor";
+ import Ticketraised from "../pages/ChairpersonModule/chairpersonparent/Ticketraised";
+import Parentdirectory from "../pages/FacultyModules/Parentdirectory";
+import Parentnotifications from "../pages/FacultyModules/Parentnotificatins";
+import Parentmessages from "../pages/FacultyModules/Parentmessages";
 const ParentRoutes: React.FC = () => {
     return (
         <Routes>

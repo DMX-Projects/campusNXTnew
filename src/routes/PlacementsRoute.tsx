@@ -2,33 +2,33 @@ import React from 'react';
 import { Routes, Route,  } from 'react-router-dom';
 
 // Import placement components
-import Companies from '../pages/Placements/Placement_Companies/Companies';
-import Inbox from '../pages/Placements/Inbox';
-import Calendar from '../pages/Placements/Calender';
-import Placementhistory from '../pages/Placements/PlacementHistory';
-import EligibleStudentList from '../pages/Placements/Placement_Companies/EligibleStudentList';
-import AssesmentTest from '../pages/Placements/AssesmentTest';
-import Internships from '../pages/Placements/Internships';
-import PlacedStuDetails from '../pages/Placements/PlacedStuDetails';
-import PlacementCourses from '../pages/Placements/PlacementCourses';
-import RaiseTicket from '../pages/Placements/RaiseTicket';
-import ResumeManagement from '../pages/Placements/ResumeManagement';
-import DriverRegistration from '../pages/Placements/Placement_Companies/DriverRegistration';
-import PlacementResults from '../pages/Placements/PlacementResults';
-import Reports from '../pages/Placements/Reports';
-import NotifyStu from '../pages/Placements/NotifyStu';
-import ScheduleTest from '../pages/Placements/ScheduleTest';
+import Companies from '../pages/ChairpersonModule/Placements/Placement_Companies/Companies';
+import Inbox from '../pages/ChairpersonModule/Placements/Inbox';
+import Calendar from '../pages/ChairpersonModule/Placements/Calender';
+import Placementhistory from '../pages/ChairpersonModule/Placements/PlacementHistory';
+import EligibleStudentList from '../pages/ChairpersonModule/Placements/Placement_Companies/EligibleStudentList';
+import AssesmentTest from '../pages/ChairpersonModule/Placements/AssesmentTest';
+import Internships from '../pages/ChairpersonModule/Placements/Internships';
+import PlacedStuDetails from '../pages/ChairpersonModule/Placements/PlacedStuDetails';
+import PlacementCourses from '../pages/ChairpersonModule/Placements/PlacementCourses';
+import RaiseTicket from '../pages/ChairpersonModule/Placements/RaiseTicket';
+import ResumeManagement from '../pages/ChairpersonModule/Placements/ResumeManagement';
+import DriverRegistration from '../pages/ChairpersonModule/Placements/Placement_Companies/DriverRegistration';
+import PlacementResults from '../pages/ChairpersonModule/Placements/PlacementResults';
+import Reports from '../pages/ChairpersonModule/Placements/Reports';
+import NotifyStu from '../pages/ChairpersonModule/Placements/NotifyStu';
+import ScheduleTest from '../pages/ChairpersonModule/Placements/ScheduleTest';
 {/* Student Placements Routes */}
-import StudentPlacementDashboard from '../StudentModules/Placements/StudentPlacementDashboard';
-import StudentPlacementInbox from '../StudentModules/Placements/StudentPlacementInbox';
-import StudentPlacementCalendar from '../StudentModules/Placements/StudentPlacementCalendar';
-import StudentCompanyDrives from '../StudentModules/Placements/StudentCompanyDrives';
-import PlacementPrepMaterials from '../StudentModules/Placements/PlacementPrepMaterials';
-import PlacementMockTests from '../StudentModules/Placements/PlacementMockTests';
-import StudentIntershipsOrOffers from '../StudentModules/Placements/StudentInternshipsOrOffers';
-import StudentPlacementRaiseTicket from '../StudentModules/Placements/StudentPlacementRaiseTicket';
-import StudentResumeManager from '../StudentModules/Placements/StudentResumeManager';
-import StudentPlacementResult from '../StudentModules/Placements/StudentPlacementResult';
+import StudentPlacementDashboard from '../pages/StudentModules/Placements/StudentPlacementDashboard';
+import StudentPlacementInbox from '../pages/StudentModules/Placements/StudentPlacementInbox';
+import StudentPlacementCalendar from '../pages/StudentModules/Placements/StudentPlacementCalendar';
+import StudentCompanyDrives from '../pages/StudentModules/Placements/StudentCompanyDrives';
+import PlacementPrepMaterials from '../pages/StudentModules/Placements/PlacementPrepMaterials';
+import PlacementMockTests from '../pages/StudentModules/Placements/PlacementMockTests';
+import StudentIntershipsOrOffers from '../pages/StudentModules/Placements/StudentInternshipsOrOffers';
+import StudentPlacementRaiseTicket from '../pages/StudentModules/Placements/StudentPlacementRaiseTicket';
+import StudentResumeManager from '../pages/StudentModules/Placements/StudentResumeManager';
+import StudentPlacementResult from '../pages/StudentModules/Placements/StudentPlacementResult';
 const PlacementsRoutes: React.FC = () => {
   return (
     <Routes>

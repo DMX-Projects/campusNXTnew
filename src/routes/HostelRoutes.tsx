@@ -2,80 +2,80 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // Hostel pages/components
-import HostelDashboard from "../pages/Hostel/HostelDashboard";
-import HostelInbox from "../pages/Hostel/HostelInbox";
-import HostelDetails from "../pages/Hostel/HostelDetails";
-import HostelStudentsList from "../pages/Hostel/HostelStudentsList";
-import HostelFacultyList from "../pages/Hostel/HostelFacultyList";
-import HostelFeeDues from "../pages/Hostel/HostelFee_Dues";
-import HostelInOut from "../pages/Hostel/HostelInOut";
-import HostelPermissions from "../pages/Hostel/Hostel_Permissions";
-import HostelInventory from "../pages/Hostel/HostelInventory";
-import GeofencingManagement from "../pages/Hostel/GeofencingManagement";
+import HostelDashboard from "../pages/ChairpersonModule/Hostel/HostelDashboard";
+import HostelInbox from "../pages/ChairpersonModule/Hostel/HostelInbox";
+import HostelDetails from "../pages/ChairpersonModule/Hostel/HostelDetails";
+import HostelStudentsList from "../pages/ChairpersonModule/Hostel/HostelStudentsList";
+import HostelFacultyList from "../pages/ChairpersonModule/Hostel/HostelFacultyList";
+import HostelFeeDues from "../pages/ChairpersonModule/Hostel/HostelFee_Dues";
+import HostelInOut from "../pages/ChairpersonModule/Hostel/HostelInOut";
+import HostelPermissions from "../pages/ChairpersonModule/Hostel/Hostel_Permissions";
+import HostelInventory from "../pages/ChairpersonModule/Hostel/HostelInventory";
+import GeofencingManagement from "../pages/ChairpersonModule/Hostel/GeofencingManagement";
 // import HostelGeoFencing from "../pages/Hostel/HostelGeoFencing";
-import HostelReports from "../pages/Hostel/HostelReports";
-import HostelTickets from "../pages/Hostel/HostelTickets";
+import HostelReports from "../pages/ChairpersonModule/Hostel/HostelReports";
+import HostelTickets from "../pages/ChairpersonModule/Hostel/HostelTickets";
 // import HostelTickets from "../pages/Hostel/HostelTickets";
 // import HostelTransfer from "../pages/Hostel/HostelTransfer";
 
 // Existing Student Modules
-import StudentHostelInbox from "../StudentModules/Hostel/HostelInbox"
-import MyRoomPage from "../StudentModules/Hostel/MyRoomPage";
-import MyHostelPermissions from "../StudentModules/Hostel/MyHostelPermissions";
-import FeePaymentsPage from "../StudentModules/Hostel/FeePaymentPage";
-import MessServicesPage from "../StudentModules/Hostel/MessServicesPage";
-import MyAttendancePage from "../StudentModules/Hostel/MyAttendancePage";
-import NoticesPage from "../StudentModules/Hostel/NoticesPage";
+import StudentHostelInbox from "../pages/StudentModules/Hostel/HostelInbox"
+import MyRoomPage from "../pages/StudentModules/Hostel/MyRoomPage";
+import MyHostelPermissions from "../pages/StudentModules/Hostel/MyHostelPermissions";
+import FeePaymentsPage from "../pages/StudentModules/Hostel/FeePaymentPage";
+import MessServicesPage from "../pages/StudentModules/Hostel/MessServicesPage";
+import MyAttendancePage from "../pages/StudentModules/Hostel/MyAttendancePage";
+import NoticesPage from "../pages/StudentModules/Hostel/NoticesPage";
 
 
 // New Student Modules - Room & Application
-import ApplyForHostelPage from "../StudentModules/Hostel/ApplyForHostelPage";
-import RoomDetailsHistoryPage from "../StudentModules/Hostel/RoomDetailsHistoryPage";
-import RequestRoomChangePage from "../StudentModules/Hostel/RequestRoomChangePage";
+import ApplyForHostelPage from "../pages/StudentModules/Hostel/ApplyForHostelPage";
+import RoomDetailsHistoryPage from "../pages/StudentModules/Hostel/RoomDetailsHistoryPage";
+import RequestRoomChangePage from "../pages/StudentModules/Hostel/RequestRoomChangePage";
 
 // New Student Modules - Leave & Movement
-import ApplyForLeavePage from "../StudentModules/Hostel/ApplyForLeavePage";
-import GenerateQRGatePassPage from "../StudentModules/Hostel/GenerateQRGatePassPage";
-import TrackLeaveReturnPage from "../StudentModules/Hostel/TrackLeaveReturnPage";
+import ApplyForLeavePage from "../pages/StudentModules/Hostel/ApplyForLeavePage";
+import GenerateQRGatePassPage from "../pages/StudentModules/Hostel/GenerateQRGatePassPage";
+import TrackLeaveReturnPage from "../pages/StudentModules/Hostel/TrackLeaveReturnPage";
 
 // New Student Modules - Fee Management
-import ViewFeeDetailsPage from "../StudentModules/Hostel/ViewFeeDetailsPage";
-import PayOnlinePage from "../StudentModules/Hostel/PayOnlinePage";
-import DownloadReceiptsPage from "../StudentModules/Hostel/DownloadReceiptsPage";
+import ViewFeeDetailsPage from "../pages/StudentModules/Hostel/ViewFeeDetailsPage";
+import PayOnlinePage from "../pages/StudentModules/Hostel/PayOnlinePage";
+import DownloadReceiptsPage from "../pages/StudentModules/Hostel/DownloadReceiptsPage";
 
 // New Student Modules - Complaints & Feedback
-import SubmitComplaintPage from "../StudentModules/Hostel/SubmitComplaintPage";
-import TrackComplaintStatusPage from "../StudentModules/Hostel/TrackComplaintStatusPage";
-import GiveFeedbackPage from "../StudentModules/Hostel/GiveFeedbackPage";
+import SubmitComplaintPage from "../pages/StudentModules/Hostel/SubmitComplaintPage";
+import TrackComplaintStatusPage from "../pages/StudentModules/Hostel/TrackComplaintStatusPage";
+import GiveFeedbackPage from "../pages/StudentModules/Hostel/GiveFeedbackPage";
 
 // New Student Modules - Visitors
-import PreRegisterVisitorPage from "../StudentModules/Hostel/PreRegisterVisitorPage";
-import VisitorLogsPage from "../StudentModules/Hostel/VisitorLogsPage";
+import PreRegisterVisitorPage from "../pages/StudentModules/Hostel/PreRegisterVisitorPage";
+import VisitorLogsPage from "../pages/StudentModules/Hostel/VisitorLogsPage";
 
 // New Student Modules - Dashboard
-import HostelDashboardPage from "../StudentModules/Hostel/HostelDashboardPage";
+import HostelDashboardPage from "../pages/StudentModules/Hostel/HostelDashboardPage";
 
 //Warden module routes
-import BuildingAndBlocks from "../WardenModules/Hostel/Hostel_Setup/BuildingAndBlocks";
-import AddNewHostel from "../WardenModules/Components/AddNewHostel";
-import CreatePolicies from "../WardenModules/Components/CreatePolicies";
-import RulesAndPolicies from "../WardenModules/Hostel/Hostel_Setup/RulesAndPolicies";
-import RoomAllotment from "../WardenModules/Hostel/Occupancy_Rooms/RoomAllotment";
-import ChangeRoomRequests from "../WardenModules/Hostel/Occupancy_Rooms/ChangeRoomRequests";
-import HostelApplications from "../WardenModules/Hostel/ApplictionAndRooms/HostelApplications";
-import LeaveRequests from "../WardenModules/Hostel/ApplictionAndRooms/LeaveRequests";
-import EntryExitLogs from "../WardenModules/Hostel/ApplictionAndRooms/EntryExitLogs";
-import FeeCollection from "../WardenModules/Hostel/FeeManagement/FeeCollection";
-import StudentFeeDetail from "../WardenModules/Hostel/FeeManagement/StudentFeesDetail";
-import FeesReport from "../WardenModules/Hostel/FeeManagement/FeesReport";
-import Complaints from "../WardenModules/Hostel/ComplaintAndDicipline/Complaints";
-import DisciplineCases from "../WardenModules/Hostel/ComplaintAndDicipline/DisciplineCases";
-import ConductReport from "../WardenModules/Hostel/ComplaintAndDicipline/ConductReport";
-import VisitorApproval from "../WardenModules/Hostel/Visitors/VisitorApproval";
-import VisitorLogs from "../WardenModules/Hostel/Visitors/VisitorLogs";
-import OccupencyAndFeesReport from "../WardenModules/Hostel/Reports/OccupencyAndFeesReport";
-import ComplaintsAndDiscipline from "../WardenModules/Hostel/Reports/ComplaintsAndDisciplineReport";
-import Notification from "../WardenModules/Hostel/Notification";
+import BuildingAndBlocks from "../pages/WardenModules/Hostel/Hostel_Setup/BuildingAndBlocks";
+import AddNewHostel from "../pages/WardenModules/Components/AddNewHostel";
+import CreatePolicies from "../pages/WardenModules/Components/CreatePolicies";
+import RulesAndPolicies from "../pages/WardenModules/Hostel/Hostel_Setup/RulesAndPolicies";
+import RoomAllotment from "../pages/WardenModules/Hostel/Occupancy_Rooms/RoomAllotment";
+import ChangeRoomRequests from "../pages/WardenModules/Hostel/Occupancy_Rooms/ChangeRoomRequests";
+import HostelApplications from "../pages/WardenModules/Hostel/ApplictionAndRooms/HostelApplications";
+import LeaveRequests from "../pages/WardenModules/Hostel/ApplictionAndRooms/LeaveRequests";
+import EntryExitLogs from "../pages/WardenModules/Hostel/ApplictionAndRooms/EntryExitLogs";
+import FeeCollection from "../pages/WardenModules/Hostel/FeeManagement/FeeCollection";
+import StudentFeeDetail from "../pages/WardenModules/Hostel/FeeManagement/StudentFeesDetail";
+import FeesReport from "../pages/WardenModules/Hostel/FeeManagement/FeesReport";
+import Complaints from "../pages/WardenModules/Hostel/ComplaintAndDicipline/Complaints";
+import DisciplineCases from "../pages/WardenModules/Hostel/ComplaintAndDicipline/DisciplineCases";
+import ConductReport from "../pages/WardenModules/Hostel/ComplaintAndDicipline/ConductReport";
+import VisitorApproval from "../pages/WardenModules/Hostel/Visitors/VisitorApproval";
+import VisitorLogs from "../pages/WardenModules/Hostel/Visitors/VisitorLogs";
+import OccupencyAndFeesReport from "../pages/WardenModules/Hostel/Reports/OccupencyAndFeesReport";
+import ComplaintsAndDiscipline from "../pages/WardenModules/Hostel/Reports/ComplaintsAndDisciplineReport";
+import Notification from "../pages/WardenModules/Hostel/Notification";
 
 const HostelRoutes: React.FC = () => {
   return (

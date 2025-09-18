@@ -1,11 +1,11 @@
  import HomeDashboard from '../components/Dashboard';
- import PostWall from '../pages/Communication/PostWall';
- import Notification from '../pages/Communication/Notification';
- import Messages from '../pages/Communication/Messages';
- import WhatsApp from '../pages/Communication/WhatsApp';
- import Mail from '../pages/Communication/Mail';
- import MCredits from '../pages/Communication/MCredits';
- import Reports from '../pages/Communication/Reports';
+ import PostWall from '../pages/ChairpersonModule/Communication/PostWall';
+ import Notification from '../pages/ChairpersonModule/Communication/Notification';
+ import Messages from '../pages/ChairpersonModule/Communication/Messages';
+ import WhatsApp from '../pages/ChairpersonModule/Communication/WhatsApp';
+ import Mail from '../pages/ChairpersonModule/Communication/Mail';
+ import MCredits from '../pages/ChairpersonModule/Communication/MCredits';
+ import Reports from '../pages/ChairpersonModule/Communication/Reports';
  
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
