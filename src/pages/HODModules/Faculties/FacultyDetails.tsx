@@ -73,9 +73,8 @@ const HARD_CODED_FACULTY: Faculty[] = [
   },
 ];
 
-type Props = {
-  department: string;
-};
+// Hardcoded HOD department
+const HOD_DEPARTMENT = "Computer Science";
 
 const styles = {
   page: "w-full max-w-7xl mx-auto p-4 md:p-6 text-sm md:text-base",
@@ -99,7 +98,7 @@ const styles = {
     "text-center text-gray-600 dark:text-gray-300 py-8 border border-dashed rounded-lg dark:border-gray-800",
 };
 
-export default function FacultyDetails({ department }: Props) {
+export default function FacultyDetails() {
   const [search, setSearch] = useState("");
   const [specialization, setSpecialization] = useState("");
   const [minExp, setMinExp] = useState<number | "">("");
@@ -107,14 +106,14 @@ export default function FacultyDetails({ department }: Props) {
 
   const allSpecs = useMemo(() => {
     const set = new Set<string>();
-    HARD_CODED_FACULTY.filter(f => f.department === department).forEach(f =>
+    HARD_CODED_FACULTY.filter(f => f.department === HOD_DEPARTMENT).forEach(f =>
       f.specialization.forEach(s => set.add(s))
     );
     return Array.from(set).sort();
-  }, [department]);
+  }, []);
 
   const filtered = useMemo(() => {
-    return HARD_CODED_FACULTY.filter(f => f.department === department)
+    return HARD_CODED_FACULTY.filter(f => f.department === HOD_DEPARTMENT)
       .filter(f =>
         search
           ? f.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -125,14 +124,14 @@ export default function FacultyDetails({ department }: Props) {
       .filter(f => (specialization ? f.specialization.includes(specialization) : true))
       .filter(f => (minExp !== "" ? f.experienceYears >= Number(minExp) : true))
       .filter(f => (maxExp !== "" ? f.experienceYears <= Number(maxExp) : true));
-  }, [department, search, specialization, minExp, maxExp]);
+  }, [search, specialization, minExp, maxExp]);
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
           <div className={styles.title}>Faculty Directory</div>
-          <div className={styles.sub}>Department: {department}</div>
+          <div className={styles.sub}>Department: {HOD_DEPARTMENT}</div>
         </div>
       </div>
 

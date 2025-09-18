@@ -51,6 +51,9 @@ import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/Studen
 
 //HOD Login Routes
 import FacultyDetails from '../pages/HODModules/Faculties/FacultyDetails'
+import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyAttendanceAndFeedback';
+import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
+import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
@@ -98,12 +101,6 @@ const AcademicsRoutes: React.FC = () => {
       <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
       <Route path='/faculty-raiseticket' element={<FacultyRiseTicket />} />
 
-
-
-
-
-
-
     {/* //student login */}
 
 
@@ -119,8 +116,11 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/my-attendance" element={<AttendanceManagement />} />
 
 
-    //Hod Routes 
-
+    //Hod Route paths
+    <Route path="/faculty/faculty-details" element={<FacultyDetails  />} />
+    <Route path="/faculty/faculty-attendance" element={<FacultyAttendanceAndFeedback  />} />
+    <Route path="/faculty/faculty-leave-requests" element={<FacultyLeaves  />} />
+    <Route path="student-attendance" element={<HODStudentAttendance  />} />
       {/* <Route path="/dashboard" element={<FacultyDashboard />} /> */}
 
       {/* Users Routes
