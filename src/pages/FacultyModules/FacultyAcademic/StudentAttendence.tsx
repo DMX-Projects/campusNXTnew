@@ -1,838 +1,1231 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { 
-  Search, 
-  Download, 
-  Users, 
-  Check, 
-  X, 
-  Clock, 
-  BarChart3,
-  Smartphone,
-  Send,
-  AlertTriangle,
-  CheckCircle,
-  XCircle
-} from 'lucide-react';
 
+
+// // import React, { useState, useEffect } from 'react';
+// // import { Moon, Sun, Users, Calendar, Clock, Filter, Save, ArrowLeft } from 'lucide-react';
+
+// // // Types
+// // interface Student {
+// //   id: string;
+// //   name: string;
+// //   rollNo: string;
+// //   status: 'Present' | 'Absent' | 'Leave';
+// // }
+
+// // interface ClassInfo {
+// //   id: string;
+// //   subject: string;
+// //   department: string;
+// //   year: number;
+// //   semester: number;
+// //   section: string;
+// //   startTime: string;
+// //   endTime: string;
+// //   students: Student[];
+// // }
+
+// // interface Filters {
+// //   department: string;
+// //   year: string;
+// //   semester: string;
+// //   section: string;
+// // }
+
+// // const FacultyStudentAttendance: React.FC = () => {
+// //   const [isDarkMode, setIsDarkMode] = useState(false);
+// //   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
+// //   const [filters, setFilters] = useState<Filters>({
+// //     department: '',
+// //     year: '',
+// //     semester: '',
+// //     section: ''
+// //   });
+// //   const [currentTime, setCurrentTime] = useState(new Date());
+
+// //   // Mock data for classes
+// //   const [classes] = useState<ClassInfo[]>([
+// //     {
+// //       id: '1',
+// //       subject: 'Data Structures',
+// //       department: 'CSE',
+// //       year: 2,
+// //       semester: 3,
+// //       section: 'A',
+// //       startTime: '09:00',
+// //       endTime: '10:00',
+// //       students: [
+// //         { id: '1', name: 'John Doe', rollNo: '20CS001', status: 'Present' },
+// //         { id: '2', name: 'Jane Smith', rollNo: '20CS002', status: 'Absent' },
+// //         { id: '3', name: 'Mike Johnson', rollNo: '20CS003', status: 'Present' },
+// //         { id: '4', name: 'Sarah Wilson', rollNo: '20CS004', status: 'Leave' },
+// //       ]
+// //     },
+// //     {
+// //       id: '2',
+// //       subject: 'Database Management',
+// //       department: 'CSE',
+// //       year: 3,
+// //       semester: 5,
+// //       section: 'B',
+// //       startTime: '11:00',
+// //       endTime: '12:00',
+// //       students: [
+// //         { id: '5', name: 'Alice Brown', rollNo: '19CS021', status: 'Present' },
+// //         { id: '6', name: 'Bob Davis', rollNo: '19CS022', status: 'Present' },
+// //         { id: '7', name: 'Carol Miller', rollNo: '19CS023', status: 'Absent' },
+// //       ]
+// //     },
+// //     {
+// //       id: '3',
+// //       subject: 'Digital Electronics',
+// //       department: 'ECE',
+// //       year: 2,
+// //       semester: 4,
+// //       section: 'A',
+// //       startTime: '14:00',
+// //       endTime: '15:00',
+// //       students: [
+// //         { id: '8', name: 'David Lee', rollNo: '20EC001', status: 'Present' },
+// //         { id: '9', name: 'Eva Garcia', rollNo: '20EC002', status: 'Present' },
+// //         { id: '10', name: 'Frank Taylor', rollNo: '20EC003', status: 'Leave' },
+// //       ]
+// //     }
+// //   ]);
+
+// //   // Update current time every minute
+// //   useEffect(() => {
+// //     const timer = setInterval(() => {
+// //       setCurrentTime(new Date());
+// //     }, 60000);
+// //     return () => clearInterval(timer);
+// //   }, []);
+
+// //   // Check if current time is within class time
+// //   const isClassActive = (classInfo: ClassInfo): boolean => {
+// //     const now = currentTime;
+// //     const currentTimeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+// //                           now.getMinutes().toString().padStart(2, '0');
+// //     return currentTimeStr >= classInfo.startTime && currentTimeStr <= classInfo.endTime;
+// //   };
+
+// //   // Filter classes based on selected filters
+// //   const filteredClasses = classes.filter(classItem => {
+// //     return (
+// //       (!filters.department || classItem.department === filters.department) &&
+// //       (!filters.year || classItem.year.toString() === filters.year) &&
+// //       (!filters.semester || classItem.semester.toString() === filters.semester) &&
+// //       (!filters.section || classItem.section === filters.section)
+// //     );
+// //   });
+
+// //   // Get unique filter options
+// //   const departments = [...new Set(classes.map(c => c.department))];
+// //   const years = [...new Set(classes.map(c => c.year.toString()))];
+// //   const semesters = [...new Set(classes.map(c => c.semester.toString()))];
+// //   const sections = [...new Set(classes.map(c => c.section))];
+
+// //   const handleStatusChange = (studentId: string, status: 'Present' | 'Absent' | 'Leave') => {
+// //     if (selectedClass && isClassActive(selectedClass)) {
+// //       const updatedStudents = selectedClass.students.map(student =>
+// //         student.id === studentId ? { ...student, status } : student
+// //       );
+// //       setSelectedClass({ ...selectedClass, students: updatedStudents });
+// //     }
+// //   };
+
+// //   const handleSaveAttendance = () => {
+// //     if (selectedClass) {
+// //       // Here you would typically save to backend
+// //       alert('Attendance saved successfully!');
+// //     }
+// //   };
+
+// //   const resetFilters = () => {
+// //     setFilters({ department: '', year: '', semester: '', section: '' });
+// //   };
+
+// //   const themeClasses = isDarkMode 
+// //     ? 'bg-gray-900 text-white' 
+// //     : 'bg-gray-50 text-gray-900';
+
+// //   if (selectedClass) {
+// //     const isActive = isClassActive(selectedClass);
+    
+// //     return (
+// //       <div className={`min-h-screen transition-colors duration-300 ${themeClasses}`}>
+// //         <div className="container mx-auto px-4 py-6">
+// //           {/* Header */}
+// //           <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-6 mb-6`}>
+// //             <div className="flex items-center justify-between mb-4">
+// //               <div className="flex items-center gap-4">
+// //                 <button
+// //                   onClick={() => setSelectedClass(null)}
+// //                   className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+// //                     isDarkMode 
+// //                       ? 'bg-gray-700 hover:bg-gray-600' 
+// //                       : 'bg-gray-200 hover:bg-gray-300'
+// //                   } transition-colors`}
+// //                 >
+// //                   <ArrowLeft size={16} />
+// //                   Back
+// //                 </button>
+// //                 <h1 className="text-2xl font-bold">Attendance - {selectedClass.subject}</h1>
+// //                 {isActive && (
+// //                   <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+// //                     LIVE
+// //                   </span>
+// //                 )}
+// //               </div>
+// //               <button
+// //                 onClick={() => setIsDarkMode(!isDarkMode)}
+// //                 className={`p-2 rounded-lg ${
+// //                   isDarkMode 
+// //                     ? 'bg-gray-700 hover:bg-gray-600' 
+// //                     : 'bg-gray-200 hover:bg-gray-300'
+// //                 } transition-colors`}
+// //               >
+// //                 {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+// //               </button>
+// //             </div>
+
+// //             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+// //               <div>
+// //                 <span className="font-medium">Department:</span> {selectedClass.department}
+// //               </div>
+// //               <div>
+// //                 <span className="font-medium">Year:</span> {selectedClass.year}
+// //               </div>
+// //               <div>
+// //                 <span className="font-medium">Semester:</span> {selectedClass.semester}
+// //               </div>
+// //               <div>
+// //                 <span className="font-medium">Section:</span> {selectedClass.section}
+// //               </div>
+// //             </div>
+
+// //             <div className="mt-4 flex items-center gap-4 text-sm">
+// //               <div className="flex items-center gap-2">
+// //                 <Clock size={16} />
+// //                 <span>Time: {selectedClass.startTime} - {selectedClass.endTime}</span>
+// //               </div>
+// //               <div className="flex items-center gap-2">
+// //                 <Calendar size={16} />
+// //                 <span>Date: {currentTime.toLocaleDateString()}</span>
+// //               </div>
+// //             </div>
+// //           </div>
+
+// //           {/* Attendance Table */}
+// //           <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md overflow-hidden`}>
+// //             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+// //               <div className="flex items-center justify-between">
+// //                 <h2 className="text-lg font-semibold">Student Attendance</h2>
+// //                 {isActive && (
+// //                   <button
+// //                     onClick={handleSaveAttendance}
+// //                     className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+// //                   >
+// //                     <Save size={16} />
+// //                     Save Attendance
+// //                   </button>
+// //                 )}
+// //               </div>
+// //               {!isActive && (
+// //                 <p className="text-yellow-600 dark:text-yellow-400 text-sm mt-2">
+// //                   Attendance marking is disabled. Class time: {selectedClass.startTime} - {selectedClass.endTime}
+// //                 </p>
+// //               )}
+// //             </div>
+
+// //             <div className="overflow-x-auto">
+// //               <table className="w-full">
+// //                 <thead className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+// //                   <tr>
+// //                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+// //                       Roll No
+// //                     </th>
+// //                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+// //                       Student Name
+// //                     </th>
+// //                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+// //                       Status
+// //                     </th>
+// //                   </tr>
+// //                 </thead>
+// //                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+// //                   {selectedClass.students.map((student) => (
+// //                     <tr key={student.id} className={`${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}`}>
+// //                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+// //                         {student.rollNo}
+// //                       </td>
+// //                       <td className="px-6 py-4 whitespace-nowrap text-sm">
+// //                         {student.name}
+// //                       </td>
+// //                       <td className="px-6 py-4 whitespace-nowrap">
+// //                         <select
+// //                           value={student.status}
+// //                           onChange={(e) => handleStatusChange(student.id, e.target.value as 'Present' | 'Absent' | 'Leave')}
+// //                           disabled={!isActive}
+// //                           className={`px-3 py-2 rounded-lg border text-sm ${
+// //                             isDarkMode 
+// //                               ? 'bg-gray-700 border-gray-600' 
+// //                               : 'bg-white border-gray-300'
+// //                           } ${!isActive ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${
+// //                             student.status === 'Present' ? 'text-green-600' :
+// //                             student.status === 'Absent' ? 'text-red-600' : 'text-yellow-600'
+// //                           }`}
+// //                         >
+// //                           <option value="Present">Present</option>
+// //                           <option value="Absent">Absent</option>
+// //                           <option value="Leave">Leave</option>
+// //                         </select>
+// //                       </td>
+// //                     </tr>
+// //                   ))}
+// //                 </tbody>
+// //               </table>
+// //             </div>
+// //           </div>
+// //         </div>
+// //       </div>
+// //     );
+// //   }
+
+// //   return (
+// //     <div className={`min-h-screen transition-colors duration-300 ${themeClasses}`}>
+// //       <div className="container mx-auto px-4 py-6">
+// //         {/* Header */}
+// //         <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-6 mb-6`}>
+// //           <div className="flex items-center justify-between mb-4">
+// //             <h1 className="text-3xl font-bold">Faculty Attendance System</h1>
+// //             <button
+// //               onClick={() => setIsDarkMode(!isDarkMode)}
+// //               className={`p-3 rounded-lg ${
+// //                 isDarkMode 
+// //                   ? 'bg-gray-700 hover:bg-gray-600' 
+// //                   : 'bg-gray-200 hover:bg-gray-300'
+// //               } transition-colors`}
+// //             >
+// //               {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+// //             </button>
+// //           </div>
+          
+// //           <div className="text-sm opacity-75">
+// //             Current Time: {currentTime.toLocaleString()}
+// //           </div>
+// //         </div>
+
+// //         {/* Filters */}
+// //         <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-6 mb-6`}>
+// //           <div className="flex items-center gap-2 mb-4">
+// //             <Filter size={20} />
+// //             <h2 className="text-lg font-semibold">Filters</h2>
+// //           </div>
+          
+// //           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+// //             <select
+// //               value={filters.department}
+// //               onChange={(e) => setFilters({...filters, department: e.target.value})}
+// //               className={`px-4 py-2 rounded-lg border ${
+// //                 isDarkMode 
+// //                   ? 'bg-gray-700 border-gray-600' 
+// //                   : 'bg-white border-gray-300'
+// //               }`}
+// //             >
+// //               <option value="">All Departments</option>
+// //               {departments.map(dept => (
+// //                 <option key={dept} value={dept}>{dept}</option>
+// //               ))}
+// //             </select>
+
+// //             <select
+// //               value={filters.year}
+// //               onChange={(e) => setFilters({...filters, year: e.target.value})}
+// //               className={`px-4 py-2 rounded-lg border ${
+// //                 isDarkMode 
+// //                   ? 'bg-gray-700 border-gray-600' 
+// //                   : 'bg-white border-gray-300'
+// //               }`}
+// //             >
+// //               <option value="">All Years</option>
+// //               {years.map(year => (
+// //                 <option key={year} value={year}>Year {year}</option>
+// //               ))}
+// //             </select>
+
+// //             <select
+// //               value={filters.semester}
+// //               onChange={(e) => setFilters({...filters, semester: e.target.value})}
+// //               className={`px-4 py-2 rounded-lg border ${
+// //                 isDarkMode 
+// //                   ? 'bg-gray-700 border-gray-600' 
+// //                   : 'bg-white border-gray-300'
+// //               }`}
+// //             >
+// //               <option value="">All Semesters</option>
+// //               {semesters.map(sem => (
+// //                 <option key={sem} value={sem}>Semester {sem}</option>
+// //               ))}
+// //             </select>
+
+// //             <select
+// //               value={filters.section}
+// //               onChange={(e) => setFilters({...filters, section: e.target.value})}
+// //               className={`px-4 py-2 rounded-lg border ${
+// //                 isDarkMode 
+// //                   ? 'bg-gray-700 border-gray-600' 
+// //                   : 'bg-white border-gray-300'
+// //               }`}
+// //             >
+// //               <option value="">All Sections</option>
+// //               {sections.map(section => (
+// //                 <option key={section} value={section}>Section {section}</option>
+// //               ))}
+// //             </select>
+// //           </div>
+
+// //           <button
+// //             onClick={resetFilters}
+// //             className={`px-4 py-2 rounded-lg ${
+// //               isDarkMode 
+// //                 ? 'bg-gray-700 hover:bg-gray-600' 
+// //                 : 'bg-gray-200 hover:bg-gray-300'
+// //             } transition-colors`}
+// //           >
+// //             Clear Filters
+// //           </button>
+// //         </div>
+
+// //         {/* Classes Grid */}
+// //         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+// //           {filteredClasses.map((classItem) => {
+// //             const isActive = isClassActive(classItem);
+// //             return (
+// //               <div
+// //                 key={classItem.id}
+// //                 onClick={() => setSelectedClass(classItem)}
+// //                 className={`${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'} 
+// //                   rounded-lg shadow-md p-6 cursor-pointer transition-all duration-200 hover:shadow-lg border-l-4 ${
+// //                   isActive ? 'border-green-500' : 'border-gray-300'
+// //                 }`}
+// //               >
+// //                 <div className="flex items-start justify-between mb-4">
+// //                   <div className="flex items-center gap-2">
+// //                     <Users size={20} className="text-blue-500" />
+// //                     <h3 className="text-lg font-semibold">{classItem.subject}</h3>
+// //                   </div>
+// //                   {isActive && (
+// //                     <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+// //                       LIVE
+// //                     </span>
+// //                   )}
+// //                 </div>
+
+// //                 <div className="space-y-2 text-sm">
+// //                   <div className="flex justify-between">
+// //                     <span className="font-medium">Department:</span>
+// //                     <span>{classItem.department}</span>
+// //                   </div>
+// //                   <div className="flex justify-between">
+// //                     <span className="font-medium">Year & Sem:</span>
+// //                     <span>{classItem.year}-{classItem.semester}</span>
+// //                   </div>
+// //                   <div className="flex justify-between">
+// //                     <span className="font-medium">Section:</span>
+// //                     <span>{classItem.section}</span>
+// //                   </div>
+// //                   <div className="flex justify-between">
+// //                     <span className="font-medium">Time:</span>
+// //                     <span>{classItem.startTime} - {classItem.endTime}</span>
+// //                   </div>
+// //                   <div className="flex justify-between">
+// //                     <span className="font-medium">Students:</span>
+// //                     <span>{classItem.students.length}</span>
+// //                   </div>
+// //                 </div>
+
+// //                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+// //                   <div className="flex items-center justify-between text-xs">
+// //                     <span className={isActive ? 'text-green-600' : 'text-gray-500'}>
+// //                       {isActive ? 'Click to mark attendance' : 'Attendance disabled'}
+// //                     </span>
+// //                     <Clock size={14} className={isActive ? 'text-green-500' : 'text-gray-400'} />
+// //                   </div>
+// //                 </div>
+// //               </div>
+// //             );
+// //           })}
+// //         </div>
+
+// //         {filteredClasses.length === 0 && (
+// //           <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-12 text-center`}>
+// //             <Users size={48} className="mx-auto mb-4 opacity-50" />
+// //             <h3 className="text-lg font-medium mb-2">No Classes Found</h3>
+// //             <p className="text-gray-500">Try adjusting your filters to see more classes.</p>
+// //           </div>
+// //         )}
+// //       </div>
+// //     </div>
+// //   );
+// // };
+
+// // export default FacultyStudentAttendance;
+
+//  import React, { useState, useEffect } from 'react';
+// import { Users, Calendar, Clock, Filter, Save, ArrowLeft } from 'lucide-react';
+
+// // Types
+// interface Student {
+//   id: string;
+//   name: string;
+//   rollNo: string;
+//   status: 'Present' | 'Absent' | 'Leave';
+// }
+
+// interface ClassInfo {
+//   id: string;
+//   subject: string;
+//   department: string;
+//   year: number;
+//   semester: number;
+//   section: string;
+//   startTime: string;
+//   endTime: string;
+//   students: Student[];
+// }
+
+// interface Filters {
+//   department: string;
+//   year: string;
+//   semester: string;
+//   section: string;
+// }
+
+// const FacultyStudentAttendance: React.FC = () => {
+//   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
+//   const [filters, setFilters] = useState<Filters>({
+//     department: '',
+//     year: '',
+//     semester: '',
+//     section: ''
+//   });
+//   const [currentTime, setCurrentTime] = useState(new Date());
+
+//   const [classes] = useState<ClassInfo[]>([
+//     {
+//       id: '1',
+//       subject: 'Data Structures',
+//       department: 'CSE',
+//       year: 2,
+//       semester: 3,
+//       section: 'A',
+//       startTime: '09:00',
+//       endTime: '10:00',
+//       students: [
+//         { id: '1', name: 'John Doe', rollNo: '20CS001', status: 'Present' },
+//         { id: '2', name: 'Jane Smith', rollNo: '20CS002', status: 'Absent' },
+//         { id: '3', name: 'Mike Johnson', rollNo: '20CS003', status: 'Present' },
+//         { id: '4', name: 'Sarah Wilson', rollNo: '20CS004', status: 'Leave' },
+//       ]
+//     },
+//     {
+//       id: '2',
+//       subject: 'Database Management',
+//       department: 'CSE',
+//       year: 3,
+//       semester: 5,
+//       section: 'B',
+//       startTime: '11:00',
+//       endTime: '12:00',
+//       students: [
+//         { id: '5', name: 'Alice Brown', rollNo: '19CS021', status: 'Present' },
+//         { id: '6', name: 'Bob Davis', rollNo: '19CS022', status: 'Present' },
+//         { id: '7', name: 'Carol Miller', rollNo: '19CS023', status: 'Absent' },
+//       ]
+//     },
+//     {
+//       id: '3',
+//       subject: 'Digital Electronics',
+//       department: 'ECE',
+//       year: 2,
+//       semester: 4,
+//       section: 'A',
+//       startTime: '14:00',
+//       endTime: '15:00',
+//       students: [
+//         { id: '8', name: 'David Lee', rollNo: '20EC001', status: 'Present' },
+//         { id: '9', name: 'Eva Garcia', rollNo: '20EC002', status: 'Present' },
+//         { id: '10', name: 'Frank Taylor', rollNo: '20EC003', status: 'Leave' },
+//       ]
+//     }
+//   ]);
+
+//   useEffect(() => {
+//     const timer = setInterval(() => {
+//       setCurrentTime(new Date());
+//     }, 60000);
+//     return () => clearInterval(timer);
+//   }, []);
+
+//   const isClassActive = (classInfo: ClassInfo): boolean => {
+//     const now = currentTime;
+//     const currentTimeStr = now.getHours().toString().padStart(2, '0') + ':' +
+//       now.getMinutes().toString().padStart(2, '0');
+//     return currentTimeStr >= classInfo.startTime && currentTimeStr <= classInfo.endTime;
+//   };
+
+//   const filteredClasses = classes.filter(classItem => {
+//     return (
+//       (!filters.department || classItem.department === filters.department) &&
+//       (!filters.year || classItem.year.toString() === filters.year) &&
+//       (!filters.semester || classItem.semester.toString() === filters.semester) &&
+//       (!filters.section || classItem.section === filters.section)
+//     );
+//   });
+
+//   const departments = [...new Set(classes.map(c => c.department))];
+//   const years = [...new Set(classes.map(c => c.year.toString()))];
+//   const semesters = [...new Set(classes.map(c => c.semester.toString()))];
+//   const sections = [...new Set(classes.map(c => c.section))];
+
+//   const handleStatusChange = (studentId: string, status: 'Present' | 'Absent' | 'Leave') => {
+//     if (selectedClass && isClassActive(selectedClass)) {
+//       const updatedStudents = selectedClass.students.map(student =>
+//         student.id === studentId ? { ...student, status } : student
+//       );
+//       setSelectedClass({ ...selectedClass, students: updatedStudents });
+//     }
+//   };
+
+//   const handleSaveAttendance = () => {
+//     if (selectedClass) alert('Attendance saved successfully!');
+//   };
+
+//   const resetFilters = () => {
+//     setFilters({ department: '', year: '', semester: '', section: '' });
+//   };
+
+//   if (selectedClass) {
+//     const isActive = isClassActive(selectedClass);
+
+//     return (
+//       <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+//         <div className="container mx-auto px-4 py-6">
+//           {/* Header */}
+//           <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+//             <div className="flex items-center justify-between mb-4">
+//               <div className="flex items-center gap-4">
+//                 <button
+//                   onClick={() => setSelectedClass(null)}
+//                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors"
+//                 >
+//                   <ArrowLeft size={16} />
+//                   Back
+//                 </button>
+//                 <h1 className="text-2xl font-bold">Attendance - {selectedClass.subject}</h1>
+//                 {isActive && (
+//                   <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+//                     LIVE
+//                   </span>
+//                 )}
+//               </div>
+//             </div>
+
+//             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+//               <div><span className="font-medium">Department:</span> {selectedClass.department}</div>
+//               <div><span className="font-medium">Year:</span> {selectedClass.year}</div>
+//               <div><span className="font-medium">Semester:</span> {selectedClass.semester}</div>
+//               <div><span className="font-medium">Section:</span> {selectedClass.section}</div>
+//             </div>
+
+//             <div className="mt-4 flex items-center gap-4 text-sm">
+//               <div className="flex items-center gap-2"><Clock size={16} /><span>Time: {selectedClass.startTime} - {selectedClass.endTime}</span></div>
+//               <div className="flex items-center gap-2"><Calendar size={16} /><span>Date: {currentTime.toLocaleDateString()}</span></div>
+//             </div>
+//           </div>
+
+//           {/* Attendance Table */}
+//           <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+//             <div className="p-4 border-b border-gray-200">
+//               <div className="flex items-center justify-between">
+//                 <h2 className="text-lg font-semibold">Student Attendance</h2>
+//                 {isActive && (
+//                   <button
+//                     onClick={handleSaveAttendance}
+//                     className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+//                   >
+//                     <Save size={16} /> Save Attendance
+//                   </button>
+//                 )}
+//               </div>
+//               {!isActive && (
+//                 <p className="text-yellow-600 text-sm mt-2">
+//                   Attendance marking is disabled. Class time: {selectedClass.startTime} - {selectedClass.endTime}
+//                 </p>
+//               )}
+//             </div>
+
+//             <div className="overflow-x-auto">
+//               <table className="w-full">
+//                 <thead className="bg-gray-50">
+//                   <tr>
+//                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Roll No</th>
+//                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Student Name</th>
+//                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+//                   </tr>
+//                 </thead>
+//                 <tbody className="divide-y divide-gray-200">
+//                   {selectedClass.students.map((student) => (
+//                     <tr key={student.id} className="hover:bg-gray-50">
+//                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{student.rollNo}</td>
+//                       <td className="px-6 py-4 whitespace-nowrap text-sm">{student.name}</td>
+//                       <td className="px-6 py-4 whitespace-nowrap">
+//                         <select
+//                           value={student.status}
+//                           onChange={(e) => handleStatusChange(student.id, e.target.value as 'Present' | 'Absent' | 'Leave')}
+//                           disabled={!isActive}
+//                           className={`px-3 py-2 rounded-lg border text-sm bg-white border-gray-300 ${
+//                             !isActive ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+//                           } ${
+//                             student.status === 'Present' ? 'text-green-600' : student.status === 'Absent' ? 'text-red-600' : 'text-yellow-600'
+//                           }`}
+//                         >
+//                           <option value="Present">Present</option>
+//                           <option value="Absent">Absent</option>
+//                           <option value="Leave">Leave</option>
+//                         </select>
+//                       </td>
+//                     </tr>
+//                   ))}
+//                 </tbody>
+//               </table>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 text-gray-900 transition-colors duration-300">
+//       <div className="container mx-auto px-4 py-6">
+//         {/* Header */}
+//         <div className=" bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+//           <div className="flex items-center justify-between mb-4">
+//             <h1 className="text-3xl font-bold">Faculty Attendance System</h1>
+//           </div>
+//           <div className="text-sm opacity-75">Current Time: {currentTime.toLocaleString()}</div>
+//         </div>
+
+//         {/* Filters */}
+//         <div className=" bg-gray-50 text-gray-900 transition-colors duration-300">
+//           <div className="flex items-center gap-2 mb-4">
+//             <Filter size={20} />
+//             <h2 className="text-lg font-semibold">Filters</h2>
+//           </div>
+
+//           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+//             <select
+//               value={filters.department}
+//               onChange={(e) => setFilters({ ...filters, department: e.target.value })}
+//               className="px-4 py-2 rounded-lg border bg-white border-gray-300"
+//             >
+//               <option value="">All Departments</option>
+//               {departments.map(dept => (
+//                 <option key={dept} value={dept}>{dept}</option>
+//               ))}
+//             </select>
+
+//             <select
+//               value={filters.year}
+//               onChange={(e) => setFilters({ ...filters, year: e.target.value })}
+//               className="px-4 py-2 rounded-lg border bg-white border-gray-300"
+//             >
+//               <option value="">All Years</option>
+//               {years.map(year => (
+//                 <option key={year} value={year}>Year {year}</option>
+//               ))}
+//             </select>
+
+//             <select
+//               value={filters.semester}
+//               onChange={(e) => setFilters({ ...filters, semester: e.target.value })}
+//               className="px-4 py-2 rounded-lg border bg-white border-gray-300"
+//             >
+//               <option value="">All Semesters</option>
+//               {semesters.map(sem => (
+//                 <option key={sem} value={sem}>Semester {sem}</option>
+//               ))}
+//             </select>
+
+//             <select
+//               value={filters.section}
+//               onChange={(e) => setFilters({ ...filters, section: e.target.value })}
+//               className="px-4 py-2 rounded-lg border bg-white border-gray-300"
+//             >
+//               <option value="">All Sections</option>
+//               {sections.map(section => (
+//                 <option key={section} value={section}>Section {section}</option>
+//               ))}
+//             </select>
+//           </div>
+
+//           <button
+//             onClick={resetFilters}
+//             className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors"
+//           >
+//             Clear Filters
+//           </button>
+//         </div>
+
+//         {/* Classes Grid */}
+//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {filteredClasses.map(classItem => {
+//             const isActive = isClassActive(classItem);
+//             return (
+//               <div
+//                 key={classItem.id}
+//                 onClick={() => setSelectedClass(classItem)}
+//                 className={`bg-white hover:bg-gray-50 rounded-lg shadow-md p-6 cursor-pointer transition-all duration-200 hover:shadow-lg border-l-4 ${
+//                   isActive ? 'border-green-500' : 'border-gray-300'
+//                 }`}
+//               >
+//                 <div className="flex items-start justify-between mb-4">
+//                   <div className="flex items-center gap-2">
+//                     <Users size={20} className="text-blue-500" />
+//                     <h3 className="text-lg font-semibold">{classItem.subject}</h3>
+//                   </div>
+//                   {isActive && (
+//                     <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+//                       LIVE
+//                     </span>
+//                   )}
+//                 </div>
+
+//                 <div className="space-y-2 text-sm">
+//                   <div className="flex justify-between">
+//                     <span className="font-medium">Department:</span>
+//                     <span>{classItem.department}</span>
+//                   </div>
+//                   <div className="flex justify-between">
+//                     <span className="font-medium">Year &amp; Sem:</span>
+//                     <span>{classItem.year}-{classItem.semester}</span>
+//                   </div>
+//                   <div className="flex justify-between">
+//                     <span className="font-medium">Section:</span>
+//                     <span>{classItem.section}</span>
+//                   </div>
+//                   <div className="flex justify-between">
+//                     <span className="font-medium">Time:</span>
+//                     <span>{classItem.startTime} - {classItem.endTime}</span>
+//                   </div>
+//                   <div className="flex justify-between">
+//                     <span className="font-medium">Students:</span>
+//                     <span>{classItem.students.length}</span>
+//                   </div>
+//                 </div>
+
+//                 <div className="mt-4 pt-4 border-t border-gray-200">
+//                   <div className="flex items-center justify-between text-xs">
+//                     <span className={isActive ? 'text-green-600' : 'text-gray-500'}>
+//                       {isActive ? 'Click to mark attendance' : 'Attendance disabled'}
+//                     </span>
+//                     <Clock size={14} className={isActive ? 'text-green-500' : 'text-gray-400'} />
+//                   </div>
+//                 </div>
+//               </div>
+//             );
+//           })}
+//         </div>
+
+//         {filteredClasses.length === 0 && (
+//           <div className="bg-gray-50 text-gray-900 transition-colors duration-300">
+//             <Users size={48} className="mx-auto mb-4 opacity-50" />
+//             <h3 className="text-lg font-medium mb-2">No Classes Found</h3>
+//             <p className="text-gray-500">Try adjusting your filters to see more classes.</p>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default FacultyStudentAttendance;
+
+
+import React, { useState, useEffect } from 'react';
+import { Users, Calendar, Clock, Filter, Save, ArrowLeft, Moon, Sun } from 'lucide-react';
+
+// Types
 interface Student {
   id: string;
   name: string;
-  rollNumber: string;
-  class: string;
-  section: string;
-  email: string;
-  phone: string;
-}
-
-interface AttendanceRecord {
-  id?: string;
-  studentId: string;
-  date: string;
-  subject: string;
-  class: string;
-  section: string;
+  rollNo: string;
   status: 'Present' | 'Absent' | 'Leave';
-  markedAt: string;
-  location?: string;
 }
 
-interface Timetable {
+interface ClassInfo {
   id: string;
   subject: string;
-  class: string;
+  department: string;
+  year: number;
+  semester: number;
   section: string;
-  facultyId: string;
-  schedule: string;
-  room: string;
-  totalStudents: number;
-  startTime: string; // e.g., "10:00"
-  endTime: string;   // e.g., "11:00"
-  days: string[];    // e.g., ["Monday", "Wednesday", "Friday"]
+  startTime: string;
+  endTime: string;
+  students: Student[];
 }
 
-const API_BASE_URL = 'http://localhost:3001';
+interface Filters {
+  department: string;
+  year: string;
+  semester: string;
+  section: string;
+}
 
 const FacultyStudentAttendance: React.FC = () => {
-  const location = useLocation();
-  const { timetableId } = location.state || {};
-
-  // Faculty information (would come from context/auth)
-  const facultyInfo = {
-    name: 'Dr. Rajesh Kumar',
-    employeeId: 'FAC001',
-    department: 'Computer Science Engineering'
-  };
-
-  const [timetables, setTimetables] = useState<Timetable[]>([]);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
-  const [popupType, setPopupType] = useState<'error' | 'success' | 'warning'>('error');
-  
-  const [selectedTimetable, setSelectedTimetable] = useState<Timetable | null>(null);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState<'mark' | 'view' | 'analytics'>('mark');
-
-  // Get current date and time
-  const currentDate = new Date().toISOString().split('T')[0];
-  const currentTime = new Date().toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5);
-  const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-  const getNextClassDate = (timetable: Timetable, currentDate: string): string | null => {
-  const today = new Date(currentDate);
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  
-  // Find the next occurrence of any scheduled day
-  for (let i = 1; i <= 7; i++) {
-    const nextDate = new Date(today);
-    nextDate.setDate(today.getDate() + i);
-    const nextDayName = daysOfWeek[nextDate.getDay()];
-    
-    if (timetable.days.includes(nextDayName)) {
-      return nextDate.toISOString().split('T')[0];
-    }
-  }
-  
-  return null;
-};
-
-  // Check if faculty can take attendance for the selected timetable and date
- const canTakeAttendance = useMemo(() => {
-  if (!selectedTimetable) return { allowed: false, message: 'No timetable selected' };
-
-  const selectedDateObj = new Date(selectedDate);
-  const currentDateObj = new Date(currentDate);
-  const selectedDay = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long' });
-
-  // Check if it's a past date
-  if (selectedDateObj < currentDateObj) {
-    const nextClassDate = getNextClassDate(selectedTimetable, currentDate);
-    const nextClassFormatted = nextClassDate 
-      ? new Date(nextClassDate).toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })
-      : 'next scheduled day';
-    
-    return { 
-      allowed: false, 
-      message: `You cannot take attendance for past lectures. Your next class is on ${nextClassFormatted}.` 
-    };
-  }
-
-  // Check if it's a future date
-  if (selectedDateObj > currentDateObj) {
-    return { 
-      allowed: false, 
-      message: 'You cannot take attendance for future lectures. Attendance can only be marked for current lectures.' 
-    };
-  }
-
-  // Check if today is a scheduled day for this subject
-  if (!selectedTimetable.days.includes(selectedDay)) {
-    const nextClassDate = getNextClassDate(selectedTimetable, currentDate);
-    const nextClassFormatted = nextClassDate 
-      ? new Date(nextClassDate).toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })
-      : 'next scheduled day';
-
-    return { 
-      allowed: false, 
-      message: `This subject is not scheduled for ${selectedDay}. Your next class is on ${nextClassFormatted}.` 
-    };
-  }
-
-  // Check if current time is within the lecture time window (with 15 minutes buffer)
-  const lectureStart = selectedTimetable.startTime;
-  const lectureEnd = selectedTimetable.endTime;
-  const bufferMinutes = 15;
-
-  const startTime = new Date(`2000-01-01T${lectureStart}:00`);
-  const endTime = new Date(`2000-01-01T${lectureEnd}:00`);
-  const currentTimeObj = new Date(`2000-01-01T${currentTime}:00`);
-
-  // Add buffer time
-  startTime.setMinutes(startTime.getMinutes() - bufferMinutes);
-  endTime.setMinutes(endTime.getMinutes() + bufferMinutes);
-
-  if (currentTimeObj < startTime || currentTimeObj > endTime) {
-    const nextClassDate = getNextClassDate(selectedTimetable, currentDate);
-    const nextClassFormatted = nextClassDate 
-      ? new Date(nextClassDate).toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })
-      : 'next scheduled day';
-
-    return { 
-      allowed: false, 
-      message: `Attendance can only be taken during lecture time (${selectedTimetable.startTime} - ${selectedTimetable.endTime}) with a 15-minute buffer. Current time: ${currentTime}. Your next class is on ${nextClassFormatted}.` 
-    };
-  }
-
-  return { allowed: true, message: '' };
-}, [selectedTimetable, selectedDate, currentDate, currentTime, currentDay]);
-  // Show popup message
-  const showMessage = (message: string, type: 'error' | 'success' | 'warning') => {
-    setPopupMessage(message);
-    setPopupType(type);
-    setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 4000);
-  };
-
-  // Fetch faculty's timetables
-  const fetchTimetables = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/timetables?facultyId=${facultyInfo.employeeId}`);
-      const data = await response.json();
-      setTimetables(data);
-      
-      if (timetableId) {
-        const timetable = data.find((tt: Timetable) => tt.id === timetableId);
-        if (timetable) {
-          setSelectedTimetable(timetable);
-          await fetchStudentsForTimetable(timetable);
-          await fetchAttendanceForDate(timetable, selectedDate);
-        }
-      } else if (data.length > 0) {
-        setSelectedTimetable(data[0]);
-        await fetchStudentsForTimetable(data[0]);
-        await fetchAttendanceForDate(data[0], selectedDate);
-      }
-    } catch (error) {
-      console.error('Error fetching timetables:', error);
-      showMessage('Error loading timetables. Please try again.', 'error');
-    }
-  };
-
-  // Fetch students for selected timetable
-  const fetchStudentsForTimetable = async (timetable: Timetable) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/students?class=${encodeURIComponent(timetable.class)}&section=${timetable.section}`);
-      const data = await response.json();
-      setStudents(data);
-    } catch (error) {
-      console.error('Error fetching students:', error);
-      showMessage('Error loading students. Please try again.', 'error');
-    }
-  };
-
-  // Fetch attendance for specific date and timetable
-  const fetchAttendanceForDate = async (timetable: Timetable, date: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/attendance?date=${date}&subject=${encodeURIComponent(timetable.subject)}&class=${encodeURIComponent(timetable.class)}&section=${timetable.section}`);
-      const data = await response.json();
-      setAttendance(data);
-    } catch (error) {
-      console.error('Error fetching attendance:', error);
-      showMessage('Error loading attendance data. Please try again.', 'error');
-    }
-  };
-
-  // Initialize attendance for all students as 'Present' if not exists
-  const initializeAttendanceForStudents = async (studentsToInitialize: Student[], timetable: Timetable, date: string) => {
-    const existingAttendance = await fetch(`${API_BASE_URL}/attendance?date=${date}&subject=${encodeURIComponent(timetable.subject)}&class=${encodeURIComponent(timetable.class)}&section=${timetable.section}`)
-      .then(res => res.json());
-
-    const existingStudentIds = existingAttendance.map((att: AttendanceRecord) => att.studentId);
-    
-    const studentsToCreate = studentsToInitialize.filter(student => 
-      !existingStudentIds.includes(student.id)
-    );
-
-    if (studentsToCreate.length > 0) {
-      const attendanceRecords = studentsToCreate.map(student => ({
-        studentId: student.id,
-        date: date,
-        subject: timetable.subject,
-        class: timetable.class,
-        section: timetable.section,
-        status: 'Present' as const,
-        markedAt: new Date().toISOString(),
-        location: 'Classroom'
-      }));
-
-      for (const record of attendanceRecords) {
-        try {
-          await fetch(`${API_BASE_URL}/attendance`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(record)
-          });
-        } catch (error) {
-          console.error('Error creating attendance record:', error);
-        }
-      }
-
-      await fetchAttendanceForDate(timetable, date);
-    }
-  };
-
-  // Filter students for selected timetable
-  const filteredStudents = useMemo(() => {
-    if (!selectedTimetable) return [];
-    
-    return students.filter(student => {
-      const matchesClass = student.class === selectedTimetable.class && student.section === selectedTimetable.section;
-      const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           student.rollNumber.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesClass && matchesSearch;
-    });
-  }, [students, selectedTimetable, searchTerm]);
-
-  // Get attendance for selected date and timetable
-  const todaysAttendance = useMemo(() => {
-    if (!selectedTimetable) return [];
-    
-    return attendance.filter(record => 
-      record.date === selectedDate && 
-      record.subject === selectedTimetable.subject &&
-      record.class === selectedTimetable.class &&
-      record.section === selectedTimetable.section
-    );
-  }, [attendance, selectedDate, selectedTimetable]);
-
-  // Mark individual attendance
-  const markAttendance = async (studentId: string, status: 'Present' | 'Absent' | 'Leave') => {
-    if (!selectedTimetable) return;
-    if (!canTakeAttendance.allowed) {
-      showMessage(canTakeAttendance.message, 'warning');
-      return;
-    }
-
-    const existingRecord = attendance.find(record => 
-      record.studentId === studentId && 
-      record.date === selectedDate &&
-      record.subject === selectedTimetable.subject
-    );
-
-    const attendanceData = {
-      studentId,
-      date: selectedDate,
-      subject: selectedTimetable.subject,
-      class: selectedTimetable.class,
-      section: selectedTimetable.section,
-      status,
-      markedAt: new Date().toISOString(),
-      location: 'Classroom'
-    };
-
-    try {
-      if (existingRecord) {
-        await fetch(`${API_BASE_URL}/attendance/${existingRecord.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...attendanceData, id: existingRecord.id })
-        });
-      } else {
-        await fetch(`${API_BASE_URL}/attendance`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(attendanceData)
-        });
-      }
-
-      await fetchAttendanceForDate(selectedTimetable, selectedDate);
-    } catch (error) {
-      console.error('Error marking attendance:', error);
-      showMessage('Error updating attendance. Please try again.', 'error');
-    }
-  };
-
-  // Submit attendance
-  const submitAttendance = async () => {
-    if (!selectedTimetable) return;
-    if (!canTakeAttendance.allowed) {
-      showMessage(canTakeAttendance.message, 'warning');
-      return;
-    }
-
-    setSubmitting(true);
-    
-    try {
-      // Initialize attendance for students who don't have records yet
-      await initializeAttendanceForStudents(filteredStudents, selectedTimetable, selectedDate);
-      
-      showMessage('Attendance submitted successfully!', 'success');
-    } catch (error) {
-      console.error('Error submitting attendance:', error);
-      showMessage('Error submitting attendance. Please try again.', 'error');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  // Bulk mark attendance
-  const bulkMarkAttendance = async (status: 'Present' | 'Absent') => {
-  if (!canTakeAttendance.allowed) {
-    showMessage(canTakeAttendance.message, 'warning');
-    return;
-  }
-
-  // Filter out students who are already on leave
-  const studentsToUpdate = filteredStudents.filter(student => {
-    const currentStatus = getAttendanceStatus(student.id);
-    return currentStatus !== 'Leave';
+ 
+  const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
+  const [filters, setFilters] = useState<Filters>({
+    department: '',
+    year: '',
+    semester: '',
+    section: ''
   });
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  for (const student of studentsToUpdate) {
-    await markAttendance(student.id, status);
-  }
-
-  // Show message about preserved leave statuses if any
-  const leaveStudents = filteredStudents.filter(student => {
-    const currentStatus = getAttendanceStatus(student.id);
-    return currentStatus === 'Leave';
-  });
-
-  
-};
-
-  // Get student attendance status
-  const getAttendanceStatus = (studentId: string) => {
-    const record = todaysAttendance.find(record => record.studentId === studentId);
-    return record?.status || null;
-  };
-
-  // Calculate attendance statistics
-  const attendanceStats = useMemo(() => {
-    const totalStudents = filteredStudents.length;
-    const present = todaysAttendance.filter(record => record.status === 'Present').length;
-    const absent = todaysAttendance.filter(record => record.status === 'Absent').length;
-    const leave = todaysAttendance.filter(record => record.status === 'Leave').length;
-    const unmarked = totalStudents - (present + absent + leave);
-    const percentage = totalStudents > 0 ? Math.round((present / totalStudents) * 100) : 0;
-
-    return { totalStudents, present, absent, leave, unmarked, percentage };
-  }, [filteredStudents, todaysAttendance]);
-
-  // Handle timetable selection change
-  const handleTimetableChange = async (timetableId: string) => {
-    const timetable = timetables.find(tt => tt.id === timetableId);
-    if (timetable) {
-      setSelectedTimetable(timetable);
-      setLoading(true);
-      await fetchStudentsForTimetable(timetable);
-      await fetchAttendanceForDate(timetable, selectedDate);
-      setLoading(false);
+  const [classes] = useState<ClassInfo[]>([
+    {
+      id: '1',
+      subject: 'Data Structures',
+      department: 'CSE',
+      year: 2,
+      semester: 3,
+      section: 'A',
+      startTime: '09:00',
+      endTime: '10:00',
+      students: [
+        { id: '1', name: 'John Doe', rollNo: '20CS001', status: 'Present' },
+        { id: '2', name: 'Jane Smith', rollNo: '20CS002', status: 'Absent' },
+        { id: '3', name: 'Mike Johnson', rollNo: '20CS003', status: 'Present' },
+        { id: '4', name: 'Sarah Wilson', rollNo: '20CS004', status: 'Leave' },
+      ]
+    },
+    {
+      id: '2',
+      subject: 'Database Management',
+      department: 'CSE',
+      year: 3,
+      semester: 5,
+      section: 'B',
+      startTime: '11:00',
+      endTime: '12:00',
+      students: [
+        { id: '5', name: 'Alice Brown', rollNo: '19CS021', status: 'Present' },
+        { id: '6', name: 'Bob Davis', rollNo: '19CS022', status: 'Present' },
+        { id: '7', name: 'Carol Miller', rollNo: '19CS023', status: 'Absent' },
+      ]
+    },
+    {
+      id: '3',
+      subject: 'Digital Electronics',
+      department: 'ECE',
+      year: 2,
+      semester: 4,
+      section: 'A',
+      startTime: '14:00',
+      endTime: '15:00',
+      students: [
+        { id: '8', name: 'David Lee', rollNo: '20EC001', status: 'Present' },
+        { id: '9', name: 'Eva Garcia', rollNo: '20EC002', status: 'Present' },
+        { id: '10', name: 'Frank Taylor', rollNo: '20EC003', status: 'Leave' },
+      ]
     }
-  };
+  ]);
 
-  // Handle date change
-  const handleDateChange = async (date: string) => {
-    setSelectedDate(date);
-    if (selectedTimetable) {
-      setLoading(true);
-      await fetchAttendanceForDate(selectedTimetable, date);
-      setLoading(false);
-    }
-  };
-
-  // Export attendance
-  const exportAttendance = () => {
-    if (!selectedTimetable) return;
-
-    const csvData = filteredStudents.map(student => {
-      const status = getAttendanceStatus(student.id) || 'Not Marked';
-      return {
-        'Roll Number': student.rollNumber,
-        'Name': student.name,
-        'Class': student.class,
-        'Section': student.section,
-        'Subject': selectedTimetable.subject,
-        'Date': selectedDate,
-        'Status': status,
-        'Email': student.email,
-        'Phone': student.phone
-      };
-    });
-
-    const csvContent = [
-      Object.keys(csvData[0]).join(','),
-      ...csvData.map(row => Object.values(row).join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `attendance_${selectedTimetable.subject}_${selectedDate}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  // Initial data fetch
+  // Update current time every minute
   useEffect(() => {
-    const initializeData = async () => {
-      setLoading(true);
-      await fetchTimetables();
-      setLoading(false);
-    };
-    
-    initializeData();
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
   }, []);
 
-  // Handle date change effect
-  useEffect(() => {
-    if (selectedTimetable) {
-      handleDateChange(selectedDate);
-    }
-  }, [selectedDate, selectedTimetable]);
+  const isClassActive = (classInfo: ClassInfo): boolean => {
+    const now = currentTime;
+    const currentTimeStr = now.getHours().toString().padStart(2, '0') + ':' +
+      now.getMinutes().toString().padStart(2, '0');
+    return currentTimeStr >= classInfo.startTime && currentTimeStr <= classInfo.endTime;
+  };
 
-  if (loading) {
+  const filteredClasses = classes.filter(classItem => {
     return (
-      <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
+      (!filters.department || classItem.department === filters.department) &&
+      (!filters.year || classItem.year.toString() === filters.year) &&
+      (!filters.semester || classItem.semester.toString() === filters.semester) &&
+      (!filters.section || classItem.section === filters.section)
     );
-  }
+  });
+
+  const departments = [...new Set(classes.map(c => c.department))];
+  const years = [...new Set(classes.map(c => c.year.toString()))];
+  const semesters = [...new Set(classes.map(c => c.semester.toString()))];
+  const sections = [...new Set(classes.map(c => c.section))];
+
+  const handleStatusChange = (studentId: string, status: 'Present' | 'Absent' | 'Leave') => {
+    if (selectedClass && isClassActive(selectedClass)) {
+      const updatedStudents = selectedClass.students.map(student =>
+        student.id === studentId ? { ...student, status } : student
+      );
+      setSelectedClass({ ...selectedClass, students: updatedStudents });
+    }
+  };
+
+  const handleSaveAttendance = () => {
+    if (selectedClass) alert('Attendance saved successfully!');
+  };
+
+  const resetFilters = () => {
+    setFilters({ department: '', year: '', semester: '', section: '' });
+  };
 
   return (
-    <div className="mx-auto p-6 bg-gray-50 min-h-screen">
-      {/* Popup Message */}
-      {showPopup && (
-        <div className="fixed top-4 right-4 z-50 max-w-md">
-          <div className={`rounded-lg shadow-lg p-4 flex items-center gap-3 ${
-            popupType === 'success' ? 'bg-green-100 text-green-800 border border-green-200' :
-            popupType === 'warning' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
-            'bg-red-100 text-red-800 border border-red-200'
-          }`}>
-            {popupType === 'success' && <CheckCircle className="w-5 h-5 flex-shrink-0" />}
-            {popupType === 'warning' && <AlertTriangle className="w-5 h-5 flex-shrink-0" />}
-            {popupType === 'error' && <XCircle className="w-5 h-5 flex-shrink-0" />}
-            <p className="text-sm">{popupMessage}</p>
-            <button 
-              onClick={() => setShowPopup(false)}
-              className="ml-auto text-lg hover:opacity-70"
-            >
-              ×
-            </button>
-          </div>
-        </div>
-      )}
+  
+      <div className="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-white transition-colors duration-300">
+        <div className="container mx-auto px-4 py-6">
 
-      {/* Header */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-blue-600" />
+          {/* Header */}
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-bold">Faculty Attendance System</h1>
+          
+          </div>
+
+          <div className="text-sm opacity-75 mb-6">Current Time: {currentTime.toLocaleString()}</div>
+
+          {/* Conditional rendering for selectedClass */}
+          {selectedClass ? (
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Student Attendance</h1>
-              <p className="text-gray-600">{facultyInfo.name} • {facultyInfo.department}</p>
-              <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                <span>Current Date: {new Date().toLocaleDateString()}</span>
-                <span>Current Time: {new Date().toLocaleTimeString()}</span>
+              {/* Back Header */}
+              <div className="flex items-center gap-4 mb-6">
+                <button
+                  onClick={() => setSelectedClass(null)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white transition-colors"
+                >
+                  <ArrowLeft size={16} /> Back
+                </button>
+                <h1 className="text-2xl font-bold">Attendance - {selectedClass.subject}</h1>
+                {isClassActive(selectedClass) && (
+                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    LIVE
+                  </span>
+                )}
+              </div>
+
+              {/* Details */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
+                <div><span className="font-medium">Department:</span> {selectedClass.department}</div>
+                <div><span className="font-medium">Year:</span> {selectedClass.year}</div>
+                <div><span className="font-medium">Semester:</span> {selectedClass.semester}</div>
+                <div><span className="font-medium">Section:</span> {selectedClass.section}</div>
+              </div>
+
+              <div className="flex items-center gap-4 text-sm mb-6">
+                <div className="flex items-center gap-2"><Clock size={16} /><span>Time: {selectedClass.startTime} - {selectedClass.endTime}</span></div>
+                <div className="flex items-center gap-2"><Calendar size={16} /><span>Date: {currentTime.toLocaleDateString()}</span></div>
+              </div>
+
+              {/* Attendance Table */}
+              <div className="rounded-lg shadow-md bg-white dark:bg-gray-800 transition-colors duration-300">
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold">Student Attendance</h2>
+                    {isClassActive(selectedClass) && (
+                      <button
+                        onClick={handleSaveAttendance}
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                      >
+                        <Save size={16} /> Save Attendance
+                      </button>
+                    )}
+                  </div>
+                  {!isClassActive(selectedClass) && (
+                    <p className="text-yellow-600 dark:text-yellow-400 text-sm mt-2">
+                      Attendance marking is disabled. Class time: {selectedClass.startTime} - {selectedClass.endTime}
+                    </p>
+                  )}
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 dark:bg-gray-700">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Roll No</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Student Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {selectedClass.students.map(student => (
+                        <tr key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{student.rollNo}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">{student.name}</td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <select
+                              value={student.status}
+                              onChange={(e) => handleStatusChange(student.id, e.target.value as 'Present' | 'Absent' | 'Leave')}
+                              disabled={!isClassActive(selectedClass)}
+                              className={`px-3 py-2 rounded-lg border text-sm bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 ${
+                                !isClassActive(selectedClass) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                              } ${
+                                student.status === 'Present' ? 'text-green-600' :
+                                  student.status === 'Absent' ? 'text-red-600' : 'text-yellow-600'
+                              }`}
+                            >
+                              <option value="Present">Present</option>
+                              <option value="Absent">Absent</option>
+                              <option value="Leave">Leave</option>
+                            </select>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={exportAttendance}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              Export
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Attendance Permission Status */}
-      {selectedTimetable && (
-        <div className={`rounded-xl shadow-sm p-4 mb-6 flex items-center gap-3 ${
-          canTakeAttendance.allowed 
-            ? 'bg-green-50 border border-green-200' 
-            : 'bg-red-50 border border-red-200'
-        }`}>
-          {canTakeAttendance.allowed ? (
-            <>
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <div>
-                <p className="text-green-800 font-medium">Attendance can be taken</p>
-                <p className="text-green-700 text-sm">
-                  {selectedTimetable.subject} • {selectedTimetable.startTime} - {selectedTimetable.endTime} • {selectedTimetable.room}
-                </p>
-              </div>
-            </>
           ) : (
             <>
-              <XCircle className="w-5 h-5 text-red-600" />
-              <div>
-                <p className="text-red-800 font-medium">Cannot take attendance</p>
-                <p className="text-red-700 text-sm">{canTakeAttendance.message}</p>
+              {/* Filters */}
+              <div className="rounded-lg shadow-md bg-white dark:bg-gray-800 p-6 mb-6 transition-colors duration-300">
+                <div className="flex items-center gap-2 mb-4">
+                  <Filter size={20} />
+                  <h2 className="text-lg font-semibold">Filters</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  <select
+                    value={filters.department}
+                    onChange={e => setFilters({ ...filters, department: e.target.value })}
+                    className="px-4 py-2 rounded-lg border bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+                  >
+                    <option value="">All Departments</option>
+                    {departments.map(dept => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={filters.year}
+                    onChange={e => setFilters({ ...filters, year: e.target.value })}
+                    className="px-4 py-2 rounded-lg border bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+                  >
+                    <option value="">All Years</option>
+                    {years.map(year => (
+                      <option key={year} value={year}>Year {year}</option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={filters.semester}
+                    onChange={e => setFilters({ ...filters, semester: e.target.value })}
+                    className="px-4 py-2 rounded-lg border bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+                  >
+                    <option value="">All Semesters</option>
+                    {semesters.map(sem => (
+                      <option key={sem} value={sem}>Semester {sem}</option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={filters.section}
+                    onChange={e => setFilters({ ...filters, section: e.target.value })}
+                    className="px-4 py-2 rounded-lg border bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+                  >
+                    <option value="">All Sections</option>
+                    {sections.map(section => (
+                      <option key={section} value={section}>Section {section}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  onClick={resetFilters}
+                  className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white transition-colors"
+                >
+                  Clear Filters
+                </button>
               </div>
+
+              {/* Classes Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredClasses.map(classItem => {
+                  const isActive = isClassActive(classItem);
+                  return (
+                    <div
+                      key={classItem.id}
+                      onClick={() => setSelectedClass(classItem)}
+                      className={`bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg shadow-md p-6 cursor-pointer transition-all duration-200 hover:shadow-lg border-l-4 ${
+                        isActive ? 'border-green-500' : 'border-gray-300 dark:border-gray-600'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <Users size={20} className="text-blue-500" />
+                          <h3 className="text-lg font-semibold">{classItem.subject}</h3>
+                        </div>
+                        {isActive && (
+                          <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                            LIVE
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="font-medium">Department:</span>
+                          <span>{classItem.department}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium">Year &amp; Sem:</span>
+                          <span>{classItem.year}-{classItem.semester}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium">Section:</span>
+                          <span>{classItem.section}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium">Time:</span>
+                          <span>{classItem.startTime} - {classItem.endTime}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium">Students:</span>
+                          <span>{classItem.students.length}</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className={isActive ? 'text-green-600' : 'text-gray-500 dark:text-gray-400'}>
+                            {isActive ? 'Click to mark attendance' : 'Attendance disabled'}
+                          </span>
+                          <Clock size={14} className={isActive ? 'text-green-500' : 'text-gray-400 dark:text-gray-500'} />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {filteredClasses.length === 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center transition-colors duration-300">
+                  <Users size={48} className="mx-auto mb-4 opacity-50" />
+                  <h3 className="text-lg font-medium mb-2">No Classes Found</h3>
+                  <p className="text-gray-500 dark:text-gray-400">Try adjusting your filters to see more classes.</p>
+                </div>
+              )}
             </>
           )}
         </div>
-      )}
-
-      {/* Navigation and Controls */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-        <div className="flex flex-col lg:flex-row gap-4 mb-6">
-          {/* Timetable Selection */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Class & Subject</label>
-            <select
-              value={selectedTimetable?.id || ''}
-              onChange={(e) => handleTimetableChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {timetables.map(timetable => (
-                <option key={timetable.id} value={timetable.id}>
-                  {timetable.subject} - {timetable.class} {timetable.section} • {timetable.startTime}-{timetable.endTime}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Date Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          
-        </div>
-
-        {/* Search and Actions */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search by name or roll number..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          {viewMode === 'mark' && (
-           <div className="flex gap-2">
-              <button
-                onClick={() => bulkMarkAttendance('Present')}
-                disabled={!canTakeAttendance.allowed}
-                className="bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Will not affect students already marked as Leave"
-              >
-                <Check className="w-4 h-4" />
-                All Present
-                <span className="text-xs opacity-75">(excl. Leave)</span>
-              </button>
-              <button
-                onClick={() => bulkMarkAttendance('Absent')}
-                disabled={!canTakeAttendance.allowed}
-                className="bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Will not affect students already marked as Leave"
-              >
-                <X className="w-4 h-4" />
-                All Absent
-                <span className="text-xs opacity-75">(excl. Leave)</span>
-              </button>
-              <button
-                onClick={submitAttendance}
-                disabled={!canTakeAttendance.allowed || submitting}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {submitting ? (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-                {submitting ? 'Submitting...' : 'Submit Attendance'}
-              </button>
-            </div>
-          )}
-        </div>
       </div>
-
-      {/* Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-blue-600" />
-            <div>
-              <div className="text-2xl font-bold text-gray-900">{attendanceStats.totalStudents}</div>
-              <div className="text-sm text-gray-600">Total Students</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center gap-3">
-            <Check className="w-8 h-8 text-green-600" />
-            <div>
-              <div className="text-2xl font-bold text-green-600">{attendanceStats.present}</div>
-              <div className="text-sm text-gray-600">Present</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center gap-3">
-            <X className="w-8 h-8 text-red-600" />
-            <div>
-              <div className="text-2xl font-bold text-red-600">{attendanceStats.absent}</div>
-              <div className="text-sm text-gray-600">Absent</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center gap-3">
-            <Clock className="w-8 h-8 text-yellow-600" />
-            <div>
-              <div className="text-2xl font-bold text-yellow-600">{attendanceStats.leave}</div>
-              <div className="text-sm text-gray-600">On Leave</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center gap-3">
-            <BarChart3 className="w-8 h-8 text-purple-600" />
-            <div>
-              <div className="text-2xl font-bold text-purple-600">{attendanceStats.percentage}%</div>
-              <div className="text-sm text-gray-600">Attendance Rate</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Attendance Grid */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900">
-                {selectedTimetable?.subject} - {selectedTimetable?.class} {selectedTimetable?.section}
-              </h2>
-              <p className="text-gray-600">
-                {new Date(selectedDate).toLocaleDateString()} • {selectedTimetable?.room}
-              </p>
-            </div>
-            <div className="text-sm text-gray-500">
-              {attendanceStats.present + attendanceStats.absent + attendanceStats.leave} of {attendanceStats.totalStudents} marked
-            </div>
-          </div>
-        </div>
-
-        {filteredStudents.length === 0 ? (
-          <div className="p-12 text-center">
-            <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">No students found for the selected class</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">Roll Number</th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">Student Name</th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-900">Contact</th>
-                  <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">Present</th>
-                  <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">Absent</th>
-                  <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">Leave</th>
-                  <th className="px-6 py-3 text-center text-sm font-medium text-gray-900">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredStudents.map(student => {
-                  const status = getAttendanceStatus(student.id);
-                  return (
-                    <tr key={student.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">{student.rollNumber}</td>
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-gray-900">{student.name}</div>
-                        <div className="text-sm text-gray-500">{student.email}</div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Smartphone className="w-4 h-4" />
-                          {student.phone}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <button
-                          onClick={() => markAttendance(student.id, 'Present')}
-                          disabled={viewMode !== 'mark' || !canTakeAttendance.allowed}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                            status === 'Present' 
-                              ? 'bg-green-500 text-white' 
-                              : 'bg-gray-100 hover:bg-green-100 text-gray-600 disabled:hover:bg-gray-100'
-                          } disabled:cursor-not-allowed disabled:opacity-50`}
-                        >
-                          <Check className="w-5 h-5" />
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <button
-                          onClick={() => markAttendance(student.id, 'Absent')}
-                          disabled={viewMode !== 'mark' || !canTakeAttendance.allowed}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                            status === 'Absent' 
-                              ? 'bg-red-500 text-white' 
-                              : 'bg-gray-100 hover:bg-red-100 text-gray-600 disabled:hover:bg-gray-100'
-                          } disabled:cursor-not-allowed disabled:opacity-50`}
-                        >
-                          <X className="w-5 h-5" />
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <button
-                          onClick={() => markAttendance(student.id, 'Leave')}
-                          disabled={viewMode !== 'mark' || !canTakeAttendance.allowed}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                            status === 'Leave' 
-                              ? 'bg-yellow-500 text-white' 
-                              : 'bg-gray-100 hover:bg-yellow-100 text-gray-600 disabled:hover:bg-gray-100'
-                          } disabled:cursor-not-allowed disabled:opacity-50`}
-                        >
-                          <Clock className="w-5 h-5" />
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {status ? (
-                          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                            status === 'Present' ? 'bg-green-100 text-green-800' :
-                            status === 'Absent' ? 'bg-red-100 text-red-800' :
-                            'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {status}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400 text-sm">Not Marked</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
+  
   );
 };
 
