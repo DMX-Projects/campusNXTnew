@@ -183,7 +183,7 @@ const SIDEBAR_ITEMS = {
     children: [
       { name: 'Faculty Details', path: '/academics/faculty-details', icon: 'Users' },
       { name: 'Faculty Attendance', path: '/academics/faculty-attendance', icon: 'CheckCircle' },
-      { name: 'Leave Requests', path: '/academics/faculty-leave-requests', icon: 'UserMinus' },
+      { name: 'Leave Requests', path: '/academics/leave-requests', icon: 'UserMinus' },
     ]
   },
 
@@ -199,7 +199,7 @@ const SIDEBAR_ITEMS = {
   { name: 'Time Table', path: '/academics/principal-timetable', icon: 'Clock' },
   { name: 'Reports', path: '/academics/principal-reports', icon: 'FileText' },
   { name: 'Inbox', path: '/academics/principal-inbox', icon: 'Mail' },
-  { name: 'Raise Tickets', path: '/academics/principal-raisetickets', icon: 'AlertCircle' }
+  { name: 'Raise Tickets', path: '/academics/raise-ticket', icon: 'AlertCircle' }
 ],
     'HoD': [
   { name: 'Dashboard', path: '/academics/hod-dashboard', icon: 'BarChart3' },
