@@ -9,7 +9,9 @@ const getRedirectPath = (role: string): string => {
 
   switch (normalizedRole) {
     case "student":
-      return "/hostel/student-dashboard";
+      return "/academics/studentdashboard";
+    case "hod":
+      return "/academics/dashboard";
     case "faculty":
       return "/academics/faculty-dashboard";
     case "admin":

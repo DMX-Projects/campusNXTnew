@@ -220,13 +220,13 @@ const Reports: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         {/* Theme toggle */}
         <div className="flex justify-end mb-4">
-          <button
+          {/* <button
             className={`${themeClasses.themeButton} px-4 py-2 rounded-md`}
             onClick={() => setIsDark(!isDark)}
             aria-label="Toggle Dark Mode"
           >
             {isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          </button>
+          </button> */}
         </div>
 
         {/* Header */}

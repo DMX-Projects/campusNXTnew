@@ -61,45 +61,39 @@ import CAT from '../pages/StudentModules/Academics/CAT';
 
 
 
-import CourseFaculties from '../pages/HODModules/Courses/CourseFaculties';
-import SyllabusLessonPlan from '../pages/HODModules/Courses/LessonPlan';
-import SyllabusTracking from '../pages/HODModules/Courses/SyllabusTracker';
-import HODLeaveRequest from '../pages/HODModules/LeaveRequest';
-import DepartmentTimetable from '../pages/HODModules/Timetable/CreateTimetable';
-import HodPersonalTimetable from '../pages/HODModules/Timetable/ViewTimetable';
-import HodDashboard from '../pages/HODModules/HodDashboard.';
+import CourseFaculties from '../pages/HODModules/Academics/Courses/CourseFaculties';
+import SyllabusLessonPlan from '../pages/HODModules/Academics/Courses/LessonPlan';
+import SyllabusTracking from '../pages/HODModules/Academics/Courses/SyllabusTracker';
+import HODLeaveRequest from '../pages/HODModules/Academics/LeaveRequest';
+import DepartmentTimetable from '../pages/HODModules/Academics/Timetable/CreateTimetable';
+import HodPersonalTimetable from '../pages/HODModules/Academics/Timetable/ViewTimetable';
+import HodDashboard from '../pages/HODModules/Academics/HodDashboard.';
 
 
 import Subject from '../pages/FacultyModules/Academic/Subject';
 import SyllabusUpdates from '../pages/FacultyModules/Academic/SyllabusUpdates';
-import LeaveRequest from '../pages/FacultyModules/Academic/LeaveRequest';
+import FacultyLeaveRequest from '../pages/FacultyModules/Academic/LeaveRequest';
 import ReportsFaculty from '../pages/FacultyModules/Academic/Reports';
 
 
 
-//HOD Login Routes
-import FacultyDetails from '../pages/HODModules/Faculties/FacultyDetails'
-import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyAttendanceAndFeedback';
-import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
-import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
-
-import TimeTable from '../pages/principalModules/TimeTable';
-import PrincipalInbox from '../pages/principalModules/inbox';
-import ReportsPrincipal from '../pages/principalModules/Reports';
+import PrincipalTimeTable from '../pages/PrincipalModules/TimeTable';
+import PrincipalInbox from '../pages/PrincipalModules/Inbox';
+import ReportsPrincipal from '../pages/PrincipalModules/Reports';
 
 
 
 
 
 //HOD Login Routes
-import FacultyDetails from '../pages/HODModules/Faculties/FacultyDetails'
-import FacultyAttendanceAndFeedback from '../pages/HODModules/Faculties/FacultyAttendanceAndFeedback';
-import FacultyLeaves from '../pages/HODModules/Faculties/FacultyLeaves';
-import HODStudentAttendance from '../pages/HODModules/Students/HODStudentAttendance';
-import HODStudentLeaveDetails from '../pages/HODModules/Students/HODStudentLeaveDetails';
-import HODStudentProjects from '../pages/HODModules/Students/HODStudentProjects';
-import HODReports from '../pages/HODModules/HODReports';
-import HODCatPage from '../pages/HODModules/HODCatPage';
+import FacultyDetails from '../pages/HODModules/Academics/Faculties/FacultyDetails'
+import FacultyAttendanceAndFeedback from '../pages/HODModules/Academics/Faculties/FacultyAttendanceAndFeedback';
+import FacultyLeaves from '../pages/HODModules/Academics/Faculties/FacultyLeaves';
+import HODStudentAttendance from '../pages/HODModules/Academics/Students/HODStudentAttendance';
+import HODStudentLeaveDetails from '../pages/HODModules/Academics/Students/HODStudentLeaveDetails';
+import HODStudentProjects from '../pages/HODModules/Academics/Students/HODStudentProjects';
+import HODReports from '../pages/HODModules/Academics/HODReports';
+import HODCatPage from '../pages/HODModules/Academics/HODCatPage';
 
 
 
@@ -113,7 +107,6 @@ const AcademicsRoutes: React.FC = () => {
       {/* Default Home Route */}
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/student-attendance" element={<StudentAttendance />} />
-      <Route path="/timetable" element={<Timetable />} />
       {/* <Route path="student-leaves" element={<StudentLeave />} /> */}
       <Route path="academic-calendar" element={<AcademicCalender />} />
       {/* <Route path="subjects-syllabus" element={<SubjectsAndSyllabus />} /> */}
@@ -211,7 +204,7 @@ const AcademicsRoutes: React.FC = () => {
             {/* //  ACADEMIC FACULTY LESSON PLAN AND SYLLABUS UPDATES */}
       <Route path="/faculty-lessonplan" element={<Subject />} />
       <Route path="/faculty-syllabus-update" element={<SyllabusUpdates />} />
-      <Route path="faculty-leave-request" element={<LeaveRequest />} />
+      <Route path="faculty-leave-request" element={<FacultyLeaveRequest />} />
       <Route path="faculty-reports" element={<ReportsFaculty />} />
 
 
@@ -235,7 +228,7 @@ const AcademicsRoutes: React.FC = () => {
 
 
 
-       <Route path='/principal-timetable' element={<TimeTable/>}/>
+      <Route path='/principal-timetable' element={<PrincipalTimeTable/>}/>
          <Route path='/principal-Inbox' element={<PrincipalInbox/>}/>
         <Route path='/principal-reports' element={<ReportsPrincipal/>}/>
       

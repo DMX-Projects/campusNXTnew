@@ -170,7 +170,7 @@ const SIDEBAR_ITEMS = {
   { name: 'My Projects', path: '/academics/student-myprojects', icon: 'FolderOpen' },
   { name: 'CAT', path: '/academics/cat', icon: 'BookOpen' },
   { name: 'Leave Request', path: '/academics/leaveRequest', icon: 'Send' },
-  { name: 'Raise Tickets', path: '/academics/student-raisetickets', icon: 'MessageSquare' }
+  { name: 'Raise Tickets', path: '/academics/raise-ticket', icon: 'MessageSquare' }
 ],
     'Principal': [
   { name: 'Dashboard', path: '/academics/principal-dashboard', icon: 'BarChart3' },
@@ -204,16 +204,12 @@ const SIDEBAR_ITEMS = {
 
 ],
     'HoD': [
-
   { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
-
   { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
 
- 
-
-  { 
-    name: 'Faculty', 
-    path: '/academics', 
+  {
+    name: 'Faculty',
+    path: '/academics',
     icon: 'GraduationCap',
     children: [
       { name: 'Faculty Details', path: '/academics/faculty/faculty-details', icon: 'GraduationCap' },
@@ -221,30 +217,30 @@ const SIDEBAR_ITEMS = {
       { name: 'Faculty Leave Requests', path: '/academics/faculty/faculty-leave-requests', icon: 'MessageSquare' },
     ]
   },
-  { 
-    name: 'Students', 
-    path: '/academics', 
+
+  {
+    name: 'Students',
+    path: '/academics/students',
     icon: 'Users',
     children: [
-
       { name: 'Student Attendance', path: '/academics/hod/student-attendance', icon: 'CheckCircle' },
       { name: 'Student Leaves', path: '/academics/hod/student-leaves', icon: 'UserMinus' },
       { name: 'Student Projects', path: '/academics/hod/student-projects', icon: 'Briefcase' },
-
     ]
   },
-  { 
-    name: 'Time Table', 
-    path: '/academics', 
+
+  {
+    name: 'Time Table',
+    path: '/academics/Timetable',
     icon: 'BookOpen',
     children: [
-
-     { name: 'Create Timetable', path: '/academics/hod/timetable', icon: 'Calendar' },
+      { name: 'Create Timetable', path: '/academics/hod/timetable', icon: 'Calendar' },
       { name: 'View Timetable', path: '/academics/hod/view-timetable', icon: 'Calendar' },
     ]
   },
-  { 
-    name: 'Courses', 
+
+  {
+    name: 'Courses',
     path: '/academics/courses',
     icon: 'BookOpen',
     children: [
@@ -254,19 +250,11 @@ const SIDEBAR_ITEMS = {
       { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
     ]
   },
-  { name: 'CAT', path: '/academics/cat', icon: 'Code' },
 
-  { name: 'Leave Requests', path: '/academics/leave-request', icon: 'FileText' },
-
-  { name: 'Reports', path: '/academics/reports', icon: 'FileText' },
-  { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
   { name: 'CAT', path: '/academics/hod/cat', icon: 'Code' },
-
-  { name: 'Leave Requests', path: '/academics/hod/leave-requests', icon: 'FileText' },
-
+  { name: 'Leave Requests', path: '/academics/leave-request', icon: 'FileText' },
   { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
-  { name: 'Raise Ticket', path: '/academics/hod/raise-ticket', icon: 'AlertCircle' }
-
+  { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
 ],
 
     'Faculty': [
@@ -296,7 +284,7 @@ const SIDEBAR_ITEMS = {
   { name: 'CAT', path: '/academics/faculty/student-cat', icon: 'FileText' },
   { name: 'Leave Request', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
   { name: 'Reports', path: '/academics/faculty-reports', icon: 'BarChart' },
-  { name: 'Raise Ticket', path: '/academics/faculty-raiseticket', icon: 'AlertCircle' }
+  { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
 ],
 
     'default': [
@@ -831,9 +819,15 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       if (user.role === 'Chairperson' || user.role === 'College Secretary') {
         initialModule = 'Home';
       } else if (user.role === 'Student') {
-        initialModule = 'Hostel';
+        initialModule = 'Academics';
       } else if (user.role === 'Hostel Incharge') {
         initialModule = 'Hostel';
+      } else if (user.role === 'Faculty') {
+        initialModule = 'Academics';
+      } else if (user.role === 'Principal') {
+        initialModule = 'Academics';
+      } else if (user.role === 'HoD'){
+        initialModule = 'Academics';
       }
       
       // Check if current path matches any module
