@@ -37,6 +37,8 @@ import ScheduleOnlinclass from '../pages/FacultyModules/FacultyAcademic/Schedule
 import FacultyReports from '../pages/FacultyModules/FacultyAcademic/FacultyReports';
 import FacultyRiseTicket  from '../pages/FacultyModules/FacultyAcademic/FacultyRiseticket'
 import CATManagementInterface from '../pages/FacultyModules/FacultyAcademic/CATManagementInterface';
+import PrincipalAcademicDashboard from '../pages/PrincipalModules/Academics/PrincipalAcademicDashboard'
+import HODAcademicDashboard from '../pages/HODModules/Academics/HODAcademicDashboard'
 // import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
 
 
@@ -196,6 +198,7 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/hod/student-projects" element={<HODStudentProjects />} />
     <Route path="/hod/reports" element={<HODReports  />} />
     <Route path="/hod/cat" element={<HODCatPage  />} />
+    <Route path="/hod/academic-dashboard" element={<HODAcademicDashboard />} />
 
     <Route path="student-attendance" element={<HODStudentAttendance  />} />
 
@@ -231,6 +234,8 @@ const AcademicsRoutes: React.FC = () => {
       <Route path='/principal-timetable' element={<PrincipalTimeTable/>}/>
          <Route path='/principal-Inbox' element={<PrincipalInbox/>}/>
         <Route path='/principal-reports' element={<ReportsPrincipal/>}/>
+        <Route path='/principal-dashboard' element={<PrincipalAcademicDashboard/>}/>
+
       
     </Routes>
   );

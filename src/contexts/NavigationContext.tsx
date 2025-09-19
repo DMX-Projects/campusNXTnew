@@ -163,7 +163,7 @@ const SIDEBAR_ITEMS = {
     ],
     'Student': [
   { name: 'Dashboard', path: '/academics/studentdashboard', icon: 'BarChart3' },
-  { name: 'Academic Calender', path: '/academics/student-academiccalender', icon: 'Calendar' },
+  { name: 'Academic Calender', path: '/common/academics/academic-calendar', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
   { name: 'My Attendance', path: '/academics/attendance', icon: 'CheckCircle' },
   { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
@@ -174,7 +174,7 @@ const SIDEBAR_ITEMS = {
 ],
     'Principal': [
   { name: 'Dashboard', path: '/academics/principal-dashboard', icon: 'BarChart3' },
-  { name: 'Academic Calendar', path: '/academics/academic-calendar', icon: 'Calendar' },
+  { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
 
   {
     name: 'Faculty',
@@ -199,12 +199,12 @@ const SIDEBAR_ITEMS = {
 
   { name: 'Time Table', path: '/academics/principal-timetable', icon: 'Clock' },
   { name: 'Reports', path: '/academics/principal-reports', icon: 'FileText' },
-  { name: 'Inbox', path: '/academics/principal-inbox', icon: 'Mail' },
+  { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Raise Tickets', path: '/academics/raise-ticket', icon: 'AlertCircle' }
 
 ],
     'HoD': [
-  { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+  { name: 'Dashboard', path: '/academics/hod/academic-dashboard', icon: 'BarChart3' },
   { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
 
   {
@@ -253,13 +253,14 @@ const SIDEBAR_ITEMS = {
 
   { name: 'CAT', path: '/academics/hod/cat', icon: 'Code' },
   { name: 'Leave Requests', path: '/academics/leave-request', icon: 'FileText' },
+  { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
 ],
 
     'Faculty': [
   { name: 'Dashboard', path: '/academics/faculty-dashboard', icon: 'BarChart3' },
-  { name: 'Academic Calendar', path: '/academics/faculty-calendar', icon: 'Calendar' },
+  { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/faculty-timetable', icon: 'Clock' },
   {
     name: 'Students',
@@ -284,6 +285,7 @@ const SIDEBAR_ITEMS = {
   { name: 'CAT', path: '/academics/faculty/student-cat', icon: 'FileText' },
   { name: 'Leave Request', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
   { name: 'Reports', path: '/academics/faculty-reports', icon: 'BarChart' },
+  { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
 ],
 
