@@ -542,13 +542,13 @@ const RaiseTicketComponent: React.FC<RaiseTicketProps> = ({
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <button
+              {/* <button
                 onClick={toggleTheme}
                 className={`${styles.button} ${styles.buttonSecondary}`}
                 title="Toggle theme"
               >
                 {isDarkMode ? '☀️' : '🌙'}
-              </button>
+              </button> */}
               {onClose && (
                 <button
                   onClick={onClose}
