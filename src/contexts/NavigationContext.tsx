@@ -518,7 +518,7 @@ const SIDEBAR_ITEMS = {
     },
     { 
       name: 'Raise Ticket', 
-      path: '/management/raise-ticket', 
+      path: '/management/student-fees/raiseticket', 
       icon: 'LifeBuoy' 
     }
   ]
