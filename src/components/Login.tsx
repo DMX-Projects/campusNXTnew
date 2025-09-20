@@ -152,7 +152,7 @@ const Login: React.FC = () => {
               <p><strong>Lab Technician:</strong> labtechnician / 1234</p>
               <p><strong>Student:</strong> student / 1234</p>
               <p><strong>Parent:</strong> parent / 1234</p>
-              <p><strong>Admin:</strong> admin / 1234</p>
+              <p><strong>Administration Officer:</strong> registor / 1234</p>
               <p><strong>Transport:</strong> transport / 1234</p>
               <p><strong>warden:</strong> hostel / 1234</p>
               <p><strong>Librarian:</strong> librarian / 1234</p>
@@ -165,6 +165,7 @@ const Login: React.FC = () => {
               <p><strong>Services:</strong> services / 1234</p>
               <p><strong>Maintenance:</strong> maintenance / 1234</p>
               <p><strong>ERP Admin:</strong> erpadmin / 1234</p>
+              <p><strong>Temporary Student:</strong> studenttemp / 1234</p>
             </div>
           </div>
         </div>

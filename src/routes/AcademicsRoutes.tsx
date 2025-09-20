@@ -22,6 +22,7 @@ import FacultyFeedback from '../pages/ChairpersonModule/Academics/FacultyFeedbac
 import SyllabusTrackingDashboard from '../pages/ChairpersonModule/Academics/SyllabusTracking/SyllabusTracking';
 import ScheduleOnlineClass from '../pages/ChairpersonModule/Academics/Scheduleonlineclass/Scheduleonlineclass';
 import Reports from '../pages/ChairpersonModule/Academics/Reports/Reports';
+import FacultyAcademicDashboard from '../pages/FacultyModules/Academic/FacultyAcademicDashboard';
 // import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
 
 import FacultyInbox from '../pages/FacultyModules/FacultyAcademic/FacultyInbox';
@@ -79,9 +80,9 @@ import ReportsFaculty from '../pages/FacultyModules/Academic/Reports';
 
 
 
-import PrincipalTimeTable from '../pages/PrincipalModules/TimeTable';
-import PrincipalInbox from '../pages/PrincipalModules/Inbox';
-import ReportsPrincipal from '../pages/PrincipalModules/Reports';
+import PrincipalTimeTable from '../pages/PrincipalModules/Academics/TimeTable';
+import PrincipalInbox from '../pages/PrincipalModules/Academics/Inbox';
+import ReportsPrincipal from '../pages/PrincipalModules/Academics/Reports';
 
 
 
@@ -137,6 +138,7 @@ const AcademicsRoutes: React.FC = () => {
        <Route path="/hod/timetable" element={<DepartmentTimetable />} />
       <Route path="/hod/view-timetable" element={< HodPersonalTimetable/>} />
       <Route path="hod-dashboard" element={< HodDashboard/>} />
+      <Route path="/faculty-dashboard" element={<FacultyAcademicDashboard />} />
       
       
 
