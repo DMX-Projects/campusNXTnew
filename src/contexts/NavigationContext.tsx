@@ -36,7 +36,7 @@ const MODULE_ACCESS = {
   'Student': ['Academics','Administration','Examination' ,'LMS','Placements', 'Library', 'Transport', 'Hostel'],
 
   'Parent': ['Parent', 'Communications'],
-  'Administration Officer': ['Administration', 'Communications'],
+  'Administration Officer': ['Admission Management', 'Infrastructure Management','Hostel Management','Transport Management','HR Management','Student Fees Management'],
   'Transportation Incharge': ['Transport'],
   'Hostel Incharge': ['Hostel'],
   'Library Incharge': ['Library'],
@@ -336,20 +336,6 @@ const SIDEBAR_ITEMS = {
         ]
       }
     ],
-    'Administration Officer': [
-      { name: 'Upload Student List', path: '/administration/upload-student-list', icon: 'Upload' },
-      { name: 'Student Details', path: '/administration/student-details', icon: 'Users' },
-      { name: 'Student Enquiry', path: '/administration/student-enquiry', icon: 'HelpCircle' },
-      { 
-        name: 'Masters', 
-        path: '/administration/masters', 
-        icon: 'Settings',
-        children: [
-          { name: 'Fee Types', path: '/administration/masters/fee-types', icon: 'DollarSign' },
-          { name: 'Leave Types', path: '/administration/masters/leave-types', icon: 'Calendar' }
-        ]
-      }
-    ],
     'default': [
       { name: 'Upload Student List', path: '/administration/upload-student-list', icon: 'Upload' },
       { name: 'Student Details', path: '/administration/student-details', icon: 'Users' },
@@ -365,6 +351,178 @@ const SIDEBAR_ITEMS = {
       }
     ]
   },
+  'Admission Management': {
+    'Administration Officer': [
+      { name: 'Dashboard', path: '/management/dashboard', icon: 'BarChart3' },
+
+      { 
+        name: 'Admission Process', 
+        path: '/management/admission-process', 
+        icon: 'GraduationCap',
+        children: [
+          { name: 'CAP (Centralized Administration Process)', path: '/management/admission-process/cap', icon: 'Users' },
+          { 
+            name: 'Seat Allotment', 
+            path: '/management/admission-process/seat-allotment', 
+            icon: 'Layers',
+            children: [
+              { name: 'Phase 1 (Initial Allotment)', path: '/management/admission-process/seat-allotment/phase-1', icon: 'Circle1' },
+              { name: 'Phase 2 (Upgradation/Sliding)', path: '/management/admission-process/seat-allotment/phase-2', icon: 'Circle2' },
+              { name: 'Phase 3 (Final Round)', path: '/management/admission-process/seat-allotment/phase-3', icon: 'Circle3' }
+            ]
+          },
+          { name: 'Management Quota Admission Process', path: '/management/admission-process/management-quota', icon: 'UserCheck' },
+          { 
+            name: 'Spot Admission', 
+            path: '/management/admission-process/spot-admission', 
+            icon: 'Zap',
+            children: [
+              { name: 'Merit-Based', path: '/management/admission-process/spot-admission/merit-based', icon: 'Award' },
+              { name: 'First-Come-First-Serve', path: '/management/admission-process/spot-admission/first-come', icon: 'Clock' }
+            ]
+          }
+        ]
+      },
+
+      { 
+        name: 'Verification', 
+        path: '/management/verification', 
+        icon: 'CheckCircle',
+        children: [
+          { name: 'Candidate Verification', path: '/management/verification/candidate', icon: 'UserCheck' },
+          { name: 'Document Verification', path: '/management/verification/document', icon: 'FileCheck' },
+          { name: 'Allotment Order Generation', path: '/management/verification/allotment-order', icon: 'FileText' }
+        ]
+      },
+
+      { 
+        name: 'Student Onboarding', 
+        path: '/management/student-onboarding', 
+        icon: 'Users',
+        children: [
+          { name: 'Temporary Student Login', path: '/management/student-onboarding/temp-login', icon: 'LogIn' },
+          { name: 'Communication Hub (Messages/Notifications)', path: '/management/student-onboarding/communication-hub', icon: 'MessageSquare' },
+          { name: 'Permanent Student Login Activation', path: '/management/student-onboarding/activate-login', icon: 'UserPlus' }
+        ]
+      },
+
+      { 
+        name: 'Reports & Logs', 
+        path: '/management/reports', 
+        icon: 'FileBarChart',
+        children: [
+          { name: 'Admission Reports', path: '/management/reports/admission', icon: 'ClipboardList' },
+          { name: 'Fee Payment Reports', path: '/management/reports/fee-payment', icon: 'DollarSign' },
+          { name: 'Verification Logs', path: '/management/reports/verification-logs', icon: 'BookOpen' }
+        ]
+      },
+
+      { name: 'Raise Ticket', path: '/management/raise-ticket', icon: 'LifeBuoy' }
+    ]
+  },
+
+  'Infrastructure Management' : {
+    'Administration Officer': [
+      
+          { 
+            name: 'Inventory Management', 
+            path: '/management/infrastructure-management/inventory/stock-control', 
+            icon: 'Boxes',
+            children: [
+              { name: 'Stock Control', path: '/management/infrastructure-management/inventory/stock-control', icon: 'PackageCheck' },
+              { name: 'Stock Management', path: '/management/infrastructure-management/inventory/stock-management', icon: 'ClipboardList' }
+            ]
+          },
+
+          { 
+            name: 'Asset Management', 
+            path: '/management/infrastructure-management/asset', 
+            icon: 'Package',
+            children: [
+              { name: 'Fixed Assets', path: '/management/infrastructure-management/asset/fixed-assets', icon: 'Database' },
+              { name: 'New Purchase', path: '/management/infrastructure-management/asset/new-purchase', icon: 'ShoppingCart' }
+            ]
+          },
+
+          { name: 'Purchase Management', path: '/management/infrastructure-management/purchase', icon: 'ShoppingBag' },
+
+          { 
+            name: 'Maintenance Costs', 
+            path: '/management/infrastructure-management/maintenance-costs', 
+            icon: 'Wrench',
+            children: [
+              { name: 'Income / Expenditure', path: '/management/infrastructure-management/maintenance-costs/income-expenditure', icon: 'DollarSign' },
+              { name: 'Vendor Management', path: '/management/infrastructure-management/maintenance-costs/vendor-management', icon: 'Users' },
+              { name: 'Management History', path: '/management/infrastructure-management/maintenance-costs/history', icon: 'BookOpen' }
+            ]
+          }
+        ]
+      },
+      'Hostel Management': {
+    'Administration Officer': [
+      { name: 'Financials & Fees', path: '/management/financials-fees', icon: 'DollarSign' },
+      { name: 'Configuration & Rules', path: '/management/configuration-rules', icon: 'Settings' },
+      { name: 'Infrastructure Overview', path: '/management/infrastructure-overview', icon: 'Building2' },
+      { name: 'Staff & Roles', path: '/management/staff-roles', icon: 'Users' },
+      { name: 'Reports', path: '/management/infra-reports', icon: 'FileText' }
+    ]
+  },
+  'Transport Management': {
+    'Administration Officer': [
+      { name: 'Dashboard', path: '/management/transport/dashboard', icon: 'BarChart3' },
+      { name: 'Financial Control & Approvals', path: '/management/transport/financial-control', icon: 'DollarSign' },
+      { name: 'Master Configuration', path: '/management/transport/master-configuration', icon: 'Settings' },
+      { name: 'Fleet & Staff Overview', path: '/management/transport/fleet-staff', icon: 'Bus' },
+      { name: 'Reports', path: '/management/transport/reports', icon: 'FileText' }
+    ]
+  },
+  'HR Management': {
+    'Administration Officer': [
+      { name: 'Dashboard', path: '/management/hr/dashboard', icon: 'BarChart3' },
+      { name: 'Recruitment Management', path: '/management/hr/recruitment', icon: 'UserPlus' },
+      { name: 'Employee Database', path: '/management/hr/employee-database', icon: 'Users' },
+      { name: 'Leave & Policy', path: '/management/hr/leave-policy', icon: 'ClipboardList' },
+      { name: 'Payroll Management', path: '/management/hr/payroll', icon: 'DollarSign' }
+    ]
+  },
+  'Student Fees Management': {
+  'Administration Officer': [
+    { 
+      name: 'Fees Dashboard', 
+      path: '/management/student-fees/dashboard', 
+      icon: 'BarChart3' 
+    },
+
+    { 
+      name: 'Fee Structure Configuration', 
+      path: '/management/student-fees/fee-structure', 
+      icon: 'Settings' 
+    },
+
+    { 
+      name: 'Collection Tracking', 
+      path: '/management/student-fees/collection-tracking', 
+      icon: 'ClipboardList' 
+    },
+
+    { 
+      name: 'Bulk Actions & Communication', 
+      path: '/management/student-fees/bulk-actions', 
+      icon: 'MessageSquare' 
+    },
+
+    { 
+      name: 'Financial Reports', 
+      path: '/management/student-fees/reports', 
+      icon: 'FileBarChart' 
+    },
+    { 
+      name: 'Raise Ticket', 
+      path: '/management/raise-ticket', 
+      icon: 'LifeBuoy' 
+    }
+  ]
+},
   Examination: {
     'Chairperson': [
       { name: 'Dashboard', path: '/examination/dashboard', icon: 'BarChart3' },
@@ -830,32 +988,48 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         initialModule = 'Academics';
       } else if (user.role === 'HoD'){
         initialModule = 'Academics';
+      } else if (user.role === 'Administration Officer') {
+        initialModule = 'Admission Management';
       }
       
       // Check if current path matches any module
       const currentPath = location.pathname;
-      const matchedModule = userModules.find(module => 
-        currentPath.includes(`/${module.toLowerCase()}`)
-      );
-      
-      if (!matchedModule && currentPath === '/') {
-        // User just logged in, redirect to appropriate module
-        setActiveModule(initialModule);
-        const sidebarItems = getSidebarItemsForModule(initialModule, user.role);
-        
-        if (sidebarItems.length > 0) {
-          const firstItem = getFirstNavigableItem(sidebarItems);
-          if (firstItem) {
-            navigate(firstItem.path);
-            setActiveSidebarItem(firstItem.path);
+      let matchedModule: string | undefined;
+      let longestMatch = '';
+
+      // Find the module that contains the current path in its sidebar items.
+      // This is more reliable than guessing from the URL, especially for roles
+      // like Administration Officer where multiple "modules" live under one URL prefix.
+      for (const moduleName of userModules) {
+        const sidebarItems = getSidebarItemsForModule(moduleName, user.role);
+
+        const findBestMatch = (items: any[]) => {
+          for (const item of items) {
+            if (item.path && currentPath.startsWith(item.path)) {
+              // We want the longest path that is a prefix of the current path.
+              if (item.path.length > longestMatch.length) {
+                longestMatch = item.path;
+                matchedModule = moduleName;
+              }
+            }
+            if (item.children) {
+              findBestMatch(item.children);
+            }
           }
-        }
-      } else if (matchedModule) {
-        // Update active module based on current path
+        };
+        findBestMatch(sidebarItems);
+      }
+      
+      if (matchedModule) {
+        // If we found a module corresponding to the current URL, set it as active.
         setActiveModule(matchedModule);
+      } else if (currentPath !== "/" && !location.pathname.startsWith('/_')) { 
+        // On refresh, if no module matches, fall back to the role's initial module.
+        // This prevents the active module from incorrectly resetting to the default 'Home'.
+        setActiveModule(initialModule);
       }
     }
-  }, [user, location.pathname, navigate]);
+  }, [user, location.pathname]);
 
   // Helper function to get the first navigable item (not a parent with children)
   const getFirstNavigableItem = (items: any[]): any | null => {

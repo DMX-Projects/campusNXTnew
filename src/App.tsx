@@ -22,6 +22,7 @@ import AdministrationRoutes from "./routes/AdministrationRoutes";
 import ExaminationRoutes from "./routes/ExaminationRoutes";
 import ParentRoutes from "./routes/ParentRoutes";
 import CommonRoutes from "./routes/CommonRoutes";
+import ManagementRoutes from "./routes/ManagementRoutes";
 
 const AppRoutes: React.FC = () => {
   const { isAuthenticated, user, loading } = useAuth();
@@ -72,6 +73,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/parent/*" element={<ParentRoutes />} />
         <Route path="/communications/*" element={<CommunicationRoutes />} />
         <Route path="/common/*" element={<CommonRoutes />} />
+        <Route path="/management/*" element={<ManagementRoutes />} />
       </Route>
 
       {/* Catch-all */}
