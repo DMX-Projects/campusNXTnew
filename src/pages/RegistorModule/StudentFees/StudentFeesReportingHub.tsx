@@ -5,7 +5,7 @@ import {
   FileText, 
   Download, 
   Calendar, 
-  DollarSign, 
+  IndianRupee, 
   Users, 
   TrendingUp, 
   Sun,
@@ -75,7 +75,7 @@ const StudentFeesReportingHub: React.FC = () => {
       id: 'collection-summary',
       title: 'Fee Collection Summary',
       description: 'Overview of total fees collected, outstanding, and defaulters',
-      icon: <DollarSign className="w-6 h-6" />,
+      icon: <IndianRupee className="w-6 h-6" />,
       category: 'collection',
       parameters: ['dateRange'],
       sampleData: [
