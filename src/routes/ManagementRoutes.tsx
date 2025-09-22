@@ -35,6 +35,10 @@ import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/F
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard"; 
+import Dashboard from "../pages/StudentModules/Adminstration/Dashboard";
+import MyProfile from "../pages/StudentModules/Adminstration/MyProfile";
+import Finance from "../pages/StudentModules/Adminstration/Finance";
+import Notifications from "../pages/StudentModules/Adminstration/Notification";
 const CommonRoutes: React.FC = () => {
   return (
     <Routes>
@@ -69,7 +73,12 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
-
+       <Route path="/student/dashboard" element={<Dashboard />} />
+       <Route path="/student/profile" element={<MyProfile />} />
+        <Route path="/student/finance" element={<Finance />} />
+        <Route path="/student/notifications" element={<Notifications/>} />
+       
+      
 
     </Routes>
   );
