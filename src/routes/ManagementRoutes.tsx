@@ -1,5 +1,12 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+
+import TransportDashboard from "../pages/RegistorModule/Transport/TransportDashboard";
+import FleetandStaffOverview from "../pages/RegistorModule/Transport/FleetandStaffOverview";
+import FinancialControlandApprovals from "../pages/RegistorModule/Transport/FinancialControlandApprovals";
+import MasterConfiguration from "../pages/RegistorModule/Transport/MasterConfiguration";
+import TransportReports from "../pages/RegistorModule/Transport/TransportReports";
+
 import FinancialsAndFees from "../pages/RegistorModule/Hostel/FinancialsAndFees";
 import ConfigurationAndRules from "../pages/RegistorModule/Hostel/ConfigurationAndRules";
 import InfrastructureOverview from "../pages/RegistorModule/Hostel/InfrastructureOverview";
@@ -18,11 +25,18 @@ import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/F
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard"; 
-  
+
 
 const CommonRoutes: React.FC = () => {
   return (
     <Routes>
+
+      <Route path="/transport/dashboard" element={<TransportDashboard />} />
+      <Route path="/transport/fleet-staff" element={<FleetandStaffOverview />} />
+      <Route path="/transport/financial-control" element={<FinancialControlandApprovals />} />
+      <Route path="/transport/master-configuration" element={<MasterConfiguration />} />
+      <Route path="/transport/reports" element={<TransportReports />} />
+
       <Route path="financials-fees" element={<FinancialsAndFees />} />
       <Route path="configuration-rules" element={<ConfigurationAndRules />} />
       <Route path="infrastructure-overview" element={<InfrastructureOverview />} />
@@ -41,6 +55,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+
     </Routes>
   );
 };
