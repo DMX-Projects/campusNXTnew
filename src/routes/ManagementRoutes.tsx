@@ -57,6 +57,12 @@ import CircularsAndEventManagement from "../pages/PrincipalModules/Administratio
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard"; 
 
+import Dashboard from "../pages/StudentModules/Adminstration/Dashboard";
+import MyProfile from "../pages/StudentModules/Adminstration/MyProfile";
+import Finance from "../pages/StudentModules/Adminstration/Finance";
+import Notifications from "../pages/StudentModules/Adminstration/Notification";
+
+
 import { HODDashboard } from "../pages/HODModules/Administration/HODDashboard";
 import { CircularMemos } from "../pages/HODModules/Administration/CircularMemos";
 import { DepartmentalBudgeting } from "../pages/HODModules/Administration/DepartmentalBudgeting";
@@ -71,6 +77,7 @@ import FeePayment from "../pages/TempStudentModule/FeePayment";
 import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
 import OnboardingForm from "../pages/TempStudentModule/OnboardingForm";
 import Notifications from "../pages/TempStudentModule/Notifications";
+
 
 
 const CommonRoutes: React.FC = () => {
@@ -116,6 +123,13 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+
+       <Route path="/student/dashboard" element={<Dashboard />} />
+       <Route path="/student/profile" element={<MyProfile />} />
+        <Route path="/student/finance" element={<Finance />} />
+        <Route path="/student/notifications" element={<Notifications/>} />
+       
+     
       <Route path="/hod/dashboard" element={<HODDashboard />} />
       <Route path="/hod/circulars-memos" element={<CircularMemos />} />
       <Route path="/hod/departmental-budgeting" element={<DepartmentalBudgeting />} />
@@ -140,6 +154,7 @@ const CommonRoutes: React.FC = () => {
    <Route path="/reports/admission" element={<AdmissionReports />} />
     <Route path="/reports/fee-payment" element={<FeePaymentReports />} />
        <Route path="/reports/verification-logs" element={<VerificationLogs />} />
+
 
 
       <Route path="/student-fees/dashboard" element={<StudentfeeDashboard />} />
