@@ -29,8 +29,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (username: string, password: string): boolean => {
+    const trimmedUsername = username.trim();
     const foundUser = usersData.users.find(
-      u => u.username === username && u.password === password
+      u => u.username === trimmedUsername && u.password === password
     );
 
     if (foundUser) {

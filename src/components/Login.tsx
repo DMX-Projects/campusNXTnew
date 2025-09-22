@@ -154,7 +154,7 @@ const Login: React.FC = () => {
               <p><strong>Parent:</strong> parent / 1234</p>
               <p><strong>Administration Officer:</strong> registor / 1234</p>
               <p><strong>Transport:</strong> transport / 1234</p>
-              <p><strong>warden:</strong> hostel / 1234</p>
+              <p><strong>Hostel Incharge (Warden):</strong> warden / 1234</p>
               <p><strong>Librarian:</strong> librarian / 1234</p>
               <p><strong>Accounts:</strong> accounts / 1234</p>
               <p><strong>Scholarship:</strong> scholarship / 1234</p>
