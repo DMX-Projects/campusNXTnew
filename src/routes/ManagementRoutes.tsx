@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Dashboard from "../pages/RegistorModule/HR_Management/Dashboard";
+import HRDashboard from "../pages/RegistorModule/HR_Management/Dashboard";
 import Employeedatabase from "../pages/RegistorModule/HR_Management/Employeedatabase";
 import LeavePolicy from "../pages/RegistorModule/HR_Management/Leave&policy";
 import PayrollManagement from "../pages/RegistorModule/HR_Management/Payrollmanagement";
@@ -76,7 +76,7 @@ import ApplicationStatus from "../pages/TempStudentModule/ApplicationStatus";
 import FeePayment from "../pages/TempStudentModule/FeePayment";
 import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
 import OnboardingForm from "../pages/TempStudentModule/OnboardingForm";
-import Notifications from "../pages/TempStudentModule/Notifications";
+import TempNotifications from "../pages/TempStudentModule/Notifications";
 
 
 
@@ -84,8 +84,8 @@ const CommonRoutes: React.FC = () => {
   return (
     <Routes>
 
-      <Route path="/hr/dashboard" element={<Dashboard />} />
-      <Route path="/hr/dashboard" element={<Dashboard />} />
+      
+      <Route path="/hr/dashboard" element={<HRDashboard />} />
       <Route path="/hr/employee-database" element={<Employeedatabase />} />
       <Route path="/hr/leave-policy" element={<LeavePolicy />} />
       <Route path="/hr/payroll" element={<PayrollManagement />} />
@@ -143,7 +143,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/temporary-student/fee-payment" element={<FeePayment />} />
       <Route path="/temporary-student/document-upload" element={<DocumentUpload />} />
       <Route path="/temporary-student/onboarding-form" element={<OnboardingForm />} />
-      <Route path="/temporary-student/notifications" element={<Notifications />} />
+      <Route path="/temporary-student/notifications" element={<TempNotifications />} />
       
       <Route path="verification/candidate" element={<CandidateVerification />} />
            <Route path="/verification/document" element={<DocumentVerification />} />
