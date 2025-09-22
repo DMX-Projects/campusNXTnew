@@ -323,19 +323,41 @@ const SIDEBAR_ITEMS = {
       
     ],
     'Principal': [
-      { name: 'Upload Student List', path: '/administration/upload-student-list', icon: 'Upload' },
-      { name: 'Student Details', path: '/administration/student-details', icon: 'Users' },
-      { name: 'Student Enquiry', path: '/administration/student-enquiry', icon: 'HelpCircle' },
-      { 
-        name: 'Masters', 
-        path: '/administration/masters', 
-        icon: 'Settings',
-        children: [
-          { name: 'Fee Types', path: '/administration/masters/fee-types', icon: 'DollarSign' },
-          { name: 'Leave Types', path: '/administration/masters/leave-types', icon: 'Calendar' }
-        ]
-      }
-    ],
+  { 
+    name: 'Dashboard', 
+    path: '/management/principal/dashboard', 
+    icon: 'BarChart3' 
+  },
+
+  { 
+    name: 'Financial Approvals', 
+    path: '/management/principal/financial-approvals', 
+    icon: 'CheckCircle' 
+  },
+
+  { 
+    name: 'Faculty & Staff Oversight', 
+    path: '/management/principal/faculty-staff', 
+    icon: 'Users' 
+  },
+
+  { 
+    name: 'Circulars & Event Management', 
+    path: '/management/principal/circulars-events', 
+    icon: 'CalendarDays' 
+  },
+
+  { 
+    name: 'Infrastructure Reports', 
+    path: '/management/principal/infrastructure-reports', 
+    icon: 'FileBarChart' 
+  },
+  { 
+    name: 'Raise Ticket', 
+    path: '/management/raise-ticket', 
+    icon: 'LifeBuoy' 
+  }
+],
     'default': [
       { name: 'Upload Student List', path: '/administration/upload-student-list', icon: 'Upload' },
       { name: 'Student Details', path: '/administration/student-details', icon: 'Users' },
@@ -353,7 +375,7 @@ const SIDEBAR_ITEMS = {
   },
   'Admission Management': {
     'Administration Officer': [
-      { name: 'Dashboard', path: '/management/dashboard', icon: 'BarChart3' },
+      { name: 'Dashboard', path: '/management/Admission/dashboard', icon: 'BarChart3' },
 
       { 
         name: 'Admission Process', 
