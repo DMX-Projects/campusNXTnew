@@ -1,5 +1,10 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import Dashboard from "../pages/RegistorModule/HR_Management/Dashboard";
+import Employeedatabase from "../pages/RegistorModule/HR_Management/Employeedatabase";
+import LeavePolicy from "../pages/RegistorModule/HR_Management/Leave&policy";
+import PayrollManagement from "../pages/RegistorModule/HR_Management/Payrollmanagement";
+import Requirementmanagement from "../pages/RegistorModule/HR_Management/Requirementmanagement";
 
 //infrastructure Routes
 import InventoryTable from "../pages/RegistorModule/Infrastructure/StockControl";
@@ -47,6 +52,13 @@ import DashBoard from "../pages/PrincipalModules/Administration/DashBoard";
 const CommonRoutes: React.FC = () => {
   return (
     <Routes>
+
+      <Route path="/hr/dashboard" element={<Dashboard />} />
+      <Route path="/hr/employee-database" element={<Employeedatabase />} />
+      <Route path="/hr/leave-policy" element={<LeavePolicy />} />
+      <Route path="/hr/payroll" element={<PayrollManagement />} />
+      <Route path="/hr/recruitment" element={<Requirementmanagement />} />
+
             <Route path="/infrastructure-management/inventory/stock-control" element={<InventoryTable/>}/>
             <Route path="/infrastructure-management/inventory/stock-management" element={<InfrastructureStockManagement/>}/>
             <Route path="/infrastructure-management/asset/fixed-assets" element={<AssetManagement/>}/>
@@ -88,6 +100,7 @@ const CommonRoutes: React.FC = () => {
    <Route path="/reports/admission" element={<AdmissionReports />} />
     <Route path="/reports/fee-payment" element={<FeePaymentReports />} />
        <Route path="/reports/verification-logs" element={<VerificationLogs />} />
+
 
 
 
