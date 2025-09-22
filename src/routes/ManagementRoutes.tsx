@@ -1,10 +1,18 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+<<<<<<< Updated upstream
 import Dashboard from "../pages/RegistorModule/HR_Management/Dashboard";
 import Employeedatabase from "../pages/RegistorModule/HR_Management/Employeedatabase";
 import LeavePolicy from "../pages/RegistorModule/HR_Management/Leave&policy";
 import PayrollManagement from "../pages/RegistorModule/HR_Management/Payrollmanagement";
 import Requirementmanagement from "../pages/RegistorModule/HR_Management/Requirementmanagement";
+=======
+import StudentfeeDashboard from "../pages/RegistorModule/StudentFees/StudentfeeDashboard";
+import  FeeStructureManagement  from "../pages/RegistorModule/StudentFees/FeeStructureManagement";
+import FeeMonitoringSystem from "../pages/RegistorModule/StudentFees/FeeMonitoringSystem";
+import BulkOperationsInterface from "../pages/RegistorModule/StudentFees/BulkOperationsInterface";
+import StudentFeesReportingHub from "../pages/RegistorModule/StudentFees/StudentFeesReportingHub";
+>>>>>>> Stashed changes
 
 //infrastructure Routes
 import InventoryTable from "../pages/RegistorModule/Infrastructure/StockControl";
@@ -52,6 +60,7 @@ import DashBoard from "../pages/PrincipalModules/Administration/DashBoard";
 const CommonRoutes: React.FC = () => {
   return (
     <Routes>
+<<<<<<< Updated upstream
 
       <Route path="/hr/dashboard" element={<Dashboard />} />
       <Route path="/hr/employee-database" element={<Employeedatabase />} />
@@ -105,8 +114,17 @@ const CommonRoutes: React.FC = () => {
 
 
 
+=======
+      <Route path="/student-fees/dashboard" element={<StudentfeeDashboard />} />
+      <Route path="/student-fees/fee-structure" element={<FeeStructureManagement />} />
+      <Route path="/student-fees/collection-tracking" element={<FeeMonitoringSystem />} />
+      <Route path="/student-fees/bulk-actions" element={<BulkOperationsInterface />} />
+      <Route path="/student-fees/reports" element={<StudentFeesReportingHub />} />
+>>>>>>> Stashed changes
     </Routes>
   );
 };
 
 export default CommonRoutes;
+
+  
