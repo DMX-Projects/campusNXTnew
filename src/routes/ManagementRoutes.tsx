@@ -25,6 +25,12 @@ import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/F
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard"; 
+import Dashboard from "../pages/TempStudentModule/Dashboard";
+import ApplicationStatus from "../pages/TempStudentModule/ApplicationStatus";
+import FeePayment from "../pages/TempStudentModule/FeePayment";
+import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
+import OnboardingForm from "../pages/TempStudentModule/OnboardingForm";
+import Notifications from "../pages/TempStudentModule/Notifications";
 
 
 const CommonRoutes: React.FC = () => {
@@ -55,6 +61,12 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+      <Route path="/temporary-student/dashboard" element={<Dashboard />} />
+      <Route path="/temporary-student/application-status" element={<ApplicationStatus />} />
+      <Route path="/temporary-student/fee-payment" element={<FeePayment />} />
+      <Route path="/temporary-student/document-upload" element={<DocumentUpload />} />
+      <Route path="/temporary-student/onboarding-form" element={<OnboardingForm />} />
+      <Route path="/temporary-student/notifications" element={<Notifications />} />
 
     </Routes>
   );
