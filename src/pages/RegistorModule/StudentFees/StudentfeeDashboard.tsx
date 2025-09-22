@@ -33,6 +33,7 @@ interface FinancialData {
 }
 
 const StudentfeeDashboard: React.FC = () => {
+    const [showAllTransactions, setShowAllTransactions] = useState(false);
   // Mock data - replace with real API calls
   const [financialData] = useState<FinancialData>({
     totalCollectible: 2850000,
@@ -91,6 +92,50 @@ const theme = {
     collected: 'bg-green-500'
   }
 };
+
+const TransactionsModal: React.FC<{
+  onClose: () => void;
+  transactions: FinancialData['recentTransactions'];
+}> = ({ onClose, transactions }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className={`w-11/12 max-w-4xl bg-white dark:bg-slate-800 rounded-lg p-6 ${theme.border} border shadow-lg`}>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className={`text-2xl font-semibold ${theme.text}`}>All Recent Transactions</h2>
+        <button onClick={onClose} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-bold text-xl">&times;</button>
+      </div>
+      
+      {/* Scrollable table container */}
+      <div className="max-h-[60vh] overflow-auto border border-gray-300 dark:border-gray-600 rounded">
+  <table className="min-w-full text-sm border-collapse border border-gray-200 dark:border-gray-700">
+          <thead>
+            <tr className={`bg-gray-100 dark:bg-slate-700 ${theme.textSecondary}`}>
+              <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Student</th>
+              <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Amount</th>
+              <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Type</th>
+              <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Date</th>
+              <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction) => (
+              <tr key={transaction.id} className={`${theme.hover} ${theme.text}`}>
+                <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">{transaction.studentName}</td>
+                <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 font-medium">{formatCurrency(transaction.amount)}</td>
+                <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-500 dark:text-gray-400">{transaction.type}</td>
+                <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-500 dark:text-gray-400">{transaction.date}</td>
+                <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${theme.status[transaction.status]}`}>
+                    {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+);
 
 
   const formatCurrency = (amount: number): string => {
@@ -273,14 +318,17 @@ const theme = {
         <div className={`bg-gray-50 dark:bg-slate-900 transition-colors duration-300${theme.cardBg} p-6 rounded-lg ${theme.border} border ${theme.shadow}`}>
           <div className="flex items-center justify-between mb-6">
             <h3 className={`text-lg font-semibold ${theme.text}`}>Recent Transactions</h3>
-            <button className="text-sm px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors">
+            <button
+              onClick={() => setShowAllTransactions(true)}
+              className="text-sm px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+            >
               View All
             </button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className={`bg-gray-50 dark:bg-slate-900 transition-colors duration-300${theme.border} border-b`}>
+                <tr className={`${theme.border} border-b`}>
                   <th className={`text-left py-3 px-4 font-medium ${theme.textSecondary}`}>Student</th>
                   <th className={`text-left py-3 px-4 font-medium ${theme.textSecondary}`}>Amount</th>
                   <th className={`text-left py-3 px-4 font-medium ${theme.textSecondary}`}>Type</th>
@@ -289,7 +337,7 @@ const theme = {
                 </tr>
               </thead>
               <tbody>
-                {financialData.recentTransactions.map((transaction) => (
+                {financialData.recentTransactions.slice(0, 4).map((transaction) => (
                   <tr key={transaction.id} className={`${theme.border} border-b last:border-b-0 ${theme.hover}`}>
                     <td className={`py-3 px-4 ${theme.text}`}>{transaction.studentName}</td>
                     <td className={`py-3 px-4 font-medium ${theme.text}`}>{formatCurrency(transaction.amount)}</td>
@@ -306,6 +354,14 @@ const theme = {
             </table>
           </div>
         </div>
+
+        {/* Modal for all transactions */}
+        {showAllTransactions && (
+          <TransactionsModal
+            transactions={financialData.recentTransactions}
+            onClose={() => setShowAllTransactions(false)}
+          />
+        )}
       </div>
     </div>
   );

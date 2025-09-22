@@ -295,10 +295,54 @@ const FeeMonitoringSystem: React.FC = () => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
+  // Utility to convert array of objects to CSV
+const toCSV = (arr: object[], columns: string[]) => {
+     const header = columns.join(',');
+      const rows = arr.map(obj =>
+      columns.map(col => {
+        let value = (obj as any)[col];
+      if (typeof value === 'string') {
+          value = `"${value.replace(/"/g, '""')}"`; // Escape quotes for CSV
+        } else if (value === null || value === undefined) {
+          return value;
+        }
+        return value;
+      }).join(',')
+ );
+ return [header, ...rows].join('\r\n');
+};
+
 
   const exportData = () => {
-    console.log('Exporting data...');
-  };
+   let data, columns, filename;
+   if (activeTab === 'monitoring') {
+     data = filteredStudents;
+     columns = [
+     'id', 'name', 'course', 'year', 'semester', 'totalPayable',
+      'amountPaid', 'balance', 'lastPaymentDate', 'status', 'email', 'phone'
+  ];
+     filename = 'students_report.csv';
+   } else {
+     data = filteredTransactions;
+     columns = [
+     'id', 'studentId', 'studentName', 'amount', 'type', 'method', 'date',
+       'status', 'reference', 'feeType'
+    ];
+   filename = 'transactions_report.csv';
+   }
+   const csv = toCSV(data, columns);
+   const blob = new Blob([csv], { type: 'text/csv' });
+   const url = window.URL.createObjectURL(blob);
+
+   const a = document.createElement('a');
+   a.href = url;
+  a.download = filename;
+   document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+};
+
 
   const courses = [...new Set(students.map(s => s.course))];
   const years = [...new Set(students.map(s => s.year))];
