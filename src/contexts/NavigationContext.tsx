@@ -26,7 +26,7 @@ const MODULE_ACCESS = {
   'Chairperson': ['Home', 'Academics', 'Administration', 'Examination', 'Placements', 'LMS', 'Library', 'Transport', 'Hostel', 'Parent', 'Communications'],
   'Principal': [ 'Academics', 'Administration', 'Examination', 'Placements', 'LMS', 'Library', 'Transport', 'Hostel', 'Communications'],
   'Dean': [ 'Academics', 'Administration', 'Examination', 'Placements', 'LMS', 'Library', 'Communications'],
-  'HoD': ['Academics', 'Examination', 'Placements', 'LMS', 'Library', 'Communications'],
+  'HoD': ['Academics', 'Administration','Examination', 'Placements', 'LMS', 'Library', 'Communications'],
   'TPO': [ 'Placements', 'Academics', 'Communications'],
   'Controller of Examination': [ 'Examination', 'Academics'],
 
@@ -49,6 +49,7 @@ const MODULE_ACCESS = {
   'Student Services': ['Administration', 'Communications'],
   'College Maintenance Incharge': ['Administration', 'Communications'],
   // 'ERP Admin': ['Administration', 'Academics', 'Examination', 'Placements', 'LMS', 'Library', 'Transport', 'Hostel', 'Parent', 'Communications']
+  'Temporary Student': ['Admission'],
 };
 
 // Sidebar items for each module based on user role
@@ -290,7 +291,7 @@ const SIDEBAR_ITEMS = {
 ],
 
     'default': [
-      { name: 'Dashboard', path: '/academics/dashboard', icon: 'BarChart3' },
+      { name: 'Dashboard', path: '/academics/hod/academic-dashboard', icon: 'BarChart3' },
       { name: 'Faculty', path: '/academics/faculty', icon: 'GraduationCap' },
       { name: 'Inbox', path: '/academics/inbox', icon: 'Mail' },
       { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'CheckCircle' },
@@ -317,25 +318,107 @@ const SIDEBAR_ITEMS = {
       }
     ],
     'Student': [
-      { name: 'Profile', path: '/administration/student-form', icon: 'Users' },
-      { name: 'Fee Management', path: '/administration/fee-management', icon: 'DollarSign' },
-      { name: 'My Certificates', path: '/administration/my-certificates', icon: 'HelpCircle' },
-      
-    ],
+    { 
+      name: 'Dashboard', 
+      path: '/management/student/dashboard', 
+      icon: 'BarChart3' 
+    },
+    { 
+      name: 'My Profile', 
+      path: '/management/student/profile', 
+      icon: 'User' 
+    },
+    { 
+      name: 'Finance', 
+      path: '/management/student/finance', 
+      icon: 'DollarSign' 
+    },
+    { 
+      name: 'Notifications', 
+      path: '/management/student/notifications', 
+      icon: 'Bell' 
+    }
+  ],
+   
     'Principal': [
-      { name: 'Upload Student List', path: '/administration/upload-student-list', icon: 'Upload' },
-      { name: 'Student Details', path: '/administration/student-details', icon: 'Users' },
-      { name: 'Student Enquiry', path: '/administration/student-enquiry', icon: 'HelpCircle' },
-      { 
-        name: 'Masters', 
-        path: '/administration/masters', 
-        icon: 'Settings',
-        children: [
-          { name: 'Fee Types', path: '/administration/masters/fee-types', icon: 'DollarSign' },
-          { name: 'Leave Types', path: '/administration/masters/leave-types', icon: 'Calendar' }
-        ]
-      }
-    ],
+  { 
+    name: 'Dashboard', 
+    path: '/management/principal/dashboard', 
+    icon: 'BarChart3' 
+  },
+
+  { 
+    name: 'Financial Approvals', 
+    path: '/management/principal/financial-approvals', 
+    icon: 'CheckCircle' 
+  },
+
+  { 
+    name: 'Faculty & Staff Oversight', 
+    path: '/management/principal/faculty-staff', 
+    icon: 'Users' 
+  },
+
+  { 
+    name: 'Circulars & Event Management', 
+    path: '/management/principal/circulars-events', 
+    icon: 'CalendarDays' 
+  },
+
+  { 
+    name: 'Infrastructure Reports', 
+    path: '/management/principal/infrastructure-reports', 
+    icon: 'FileBarChart' 
+  },
+  { 
+    name: 'Raise Ticket', 
+    path: '/management/raise-ticket', 
+    icon: 'LifeBuoy' 
+  }
+],
+'HoD': [
+  { 
+    name: 'Dashboard', 
+    path: '/management/hod/dashboard', 
+    icon: 'BarChart3' 
+  },
+
+  { 
+    name: 'Departmental Budgeting', 
+    path: '/management/hod/departmental-budgeting', 
+    icon: 'Wallet' 
+  },
+
+  { 
+    name: 'Purchase Requisitions', 
+    path: '/management/hod/purchase-requisitions', 
+    icon: 'ShoppingCart' 
+  },
+
+  { 
+    name: 'Departmental Resources', 
+    path: '/management/hod/departmental-resources', 
+    icon: 'Boxes' 
+  },
+
+  { 
+    name: 'Circulars & Memos', 
+    path: '/management/hod/circulars-memos', 
+    icon: 'FileText' 
+  },
+
+  { 
+    name: 'Departmental Reports', 
+    path: '/management/hod/departmental-reports', 
+    icon: 'FileBarChart' 
+  },
+
+  { 
+    name: 'Raise Ticket', 
+    path: '/management/raise-ticket', 
+    icon: 'LifeBuoy' 
+  }
+],
     'default': [
       { name: 'Upload Student List', path: '/administration/upload-student-list', icon: 'Upload' },
       { name: 'Student Details', path: '/administration/student-details', icon: 'Users' },
@@ -353,7 +436,7 @@ const SIDEBAR_ITEMS = {
   },
   'Admission Management': {
     'Administration Officer': [
-      { name: 'Dashboard', path: '/management/dashboard', icon: 'BarChart3' },
+      { name: 'Dashboard', path: '/management/Admission/dashboard', icon: 'BarChart3' },
 
       { 
         name: 'Admission Process', 
@@ -420,6 +503,41 @@ const SIDEBAR_ITEMS = {
       { name: 'Raise Ticket', path: '/management/raise-ticket', icon: 'LifeBuoy' }
     ]
   },
+  Admission: {
+  'Temporary Student': [
+    { 
+      name: 'Dashboard', 
+      path: '/management/temporary-student/dashboard', 
+      icon: 'BarChart3' 
+    },
+    { 
+      name: 'Application Status', 
+      path: '/management/temporary-student/application-status', 
+      icon: 'CheckCircle' 
+    },
+    { 
+      name: 'Fee Payment', 
+      path: '/management/temporary-student/fee-payment', 
+      icon: 'DollarSign' 
+    },
+    { 
+      name: 'Document Upload', 
+      path: '/management/temporary-student/document-upload', 
+      icon: 'Upload' 
+    },
+    { 
+      name: 'Onboarding Form', 
+      path: '/management/temporary-student/onboarding-form', 
+      icon: 'FileText' 
+    },
+    { 
+      name: 'Notifications', 
+      path: '/management/temporary-student/notifications', 
+      icon: 'Bell' 
+    }
+  ],
+},
+
 
   'Infrastructure Management' : {
     'Administration Officer': [
@@ -990,6 +1108,8 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         initialModule = 'Academics';
       } else if (user.role === 'Administration Officer') {
         initialModule = 'Admission Management';
+      } else if (user.role === 'Temporary Student') {
+        initialModule = 'Admission';
       }
       
       // Check if current path matches any module
