@@ -218,7 +218,7 @@ const LeavePolicyManagement: React.FC = () => {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div
-          className={`₹{
+          className={`${
             isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900"
           } rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto`}
         >
@@ -243,7 +243,7 @@ const LeavePolicyManagement: React.FC = () => {
                 type="text"
                 value={formData.name || ""}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className={`w-full p-2 rounded border ₹{
+                className={`w-full p-2 rounded border ${
                   isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                 }`}
                 placeholder="e.g., Casual Leave"
@@ -257,7 +257,7 @@ const LeavePolicyManagement: React.FC = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, type: e.target.value as LeavePolicy["type"] })
                 }
-                className={`w-full p-2 rounded border ₹{
+                className={`w-full p-2 rounded border ${
                   isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                 }`}
               >
@@ -279,7 +279,7 @@ const LeavePolicyManagement: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, daysAllowed: parseInt(e.target.value) || 0 })
                   }
-                  className={`w-full p-2 rounded border ₹{
+                  className={`w-full p-2 rounded border ${
                     isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                   }`}
                 />
@@ -294,7 +294,7 @@ const LeavePolicyManagement: React.FC = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, minAdvanceNotice: parseInt(e.target.value) || 0 })
                   }
-                  className={`w-full p-2 rounded border ₹{
+                  className={`w-full p-2 rounded border ${
                     isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                   }`}
                 />
@@ -314,7 +314,7 @@ const LeavePolicyManagement: React.FC = () => {
                   })
                 }
                 placeholder="No limit"
-                className={`w-full p-2 rounded border ₹{
+                className={`w-full p-2 rounded border ${
                   isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                 }`}
               />
@@ -347,7 +347,7 @@ const LeavePolicyManagement: React.FC = () => {
                     })
                   }
                   placeholder="No limit"
-                  className={`w-full p-2 rounded border₹{
+                  className={`w-full p-2 rounded border ${
                     isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                   }`}
                 />
@@ -402,7 +402,7 @@ const LeavePolicyManagement: React.FC = () => {
                   setShowPolicyForm(false);
                   setEditingPolicy(null);
                 }}
-                className={`flex-1 py-2 px-4 rounded border transition-colors ₹{
+                className={`flex-1 py-2 px-4 rounded border transition-colors ${
                   isDark
                     ? "border-gray-600 text-gray-400 hover:bg-gray-700"
                     : "border-gray-300 text-gray-600 hover:bg-gray-100"
@@ -449,7 +449,7 @@ const LeavePolicyManagement: React.FC = () => {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div
-          className={`₹{
+          className={`${
             isDark ? "bg-gray-800 text-white" : "bg-white text-gray-900"
           } rounded-lg p-6 w-full max-w-md`}
         >
@@ -469,7 +469,7 @@ const LeavePolicyManagement: React.FC = () => {
                 type="text"
                 value={formData.name || ""}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className={`w-full p-2 rounded border ₹{
+                className={`w-full p-2 rounded border ${
                   isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                 }`}
                 placeholder="e.g., Christmas Day"
@@ -482,7 +482,7 @@ const LeavePolicyManagement: React.FC = () => {
                 type="date"
                 value={formData.date || ""}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className={`w-full p-2 rounded border ₹{
+                className={`w-full p-2 rounded border ${
                   isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                 }`}
               />
@@ -493,7 +493,7 @@ const LeavePolicyManagement: React.FC = () => {
               <select
                 value={formData.type || "fixed"}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value as Holiday["type"] })}
-                className={`w-full p-2 rounded border ₹{
+                className={`w-full p-2 rounded border ${
                   isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                 }`}
               >
@@ -519,7 +519,7 @@ const LeavePolicyManagement: React.FC = () => {
             <div>
               <label className="block text-sm font-medium mb-1">Description (optional)</label>
               <textarea
-                className={`w-full p-2 rounded border ₹{
+                className={`w-full p-2 rounded border ${
                   isDark ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
                 }`}
                 value={formData.description || ""}
@@ -539,7 +539,7 @@ const LeavePolicyManagement: React.FC = () => {
               </button>
               <button
                 onClick={() => setShowHolidayForm(false)}
-                className={`flex-1 py-2 px-4 rounded border transition-colors ₹{
+                className={`flex-1 py-2 px-4 rounded border transition-colors ${
                   isDark
                     ? "border-gray-600 text-gray-400 hover:bg-gray-700"
                     : "border-gray-300 text-gray-600 hover:bg-gray-100"
@@ -579,7 +579,7 @@ const LeavePolicyManagement: React.FC = () => {
 
   const getHolidayForDate = (day: number) => {
     if (!day) return undefined;
-    const dateStr = `₹{selectedYear}-₹{String(selectedMonth + 1).padStart(2, "0")}-₹{String(day).padStart(2, "0")}`;
+    const dateStr = `${selectedYear}-${String(selectedMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     return holidays.find((h) => h.date === dateStr);
   };
 
@@ -591,14 +591,14 @@ const LeavePolicyManagement: React.FC = () => {
 
   const handleDateClick = (day: number) => {
     if (!day) return;
-    const dateStr = `₹{selectedYear}-₹{String(selectedMonth + 1).padStart(2, "0")}-₹{String(day).padStart(2, "0")}`;
+    const dateStr = `${selectedYear}-${String(selectedMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     setSelectedDate(dateStr);
     setShowHolidayForm(true);
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ₹{isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
-      <header className={` ₹{isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} border-b px-4 py-3 sticky top-0 z-40`}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
+      <header className={` ${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} border-b px-4 py-3 sticky top-0 z-40`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold">Leave Policy Management</h1>
@@ -606,10 +606,10 @@ const LeavePolicyManagement: React.FC = () => {
         </div>
       </header>
 
-      <div className={`₹{isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} border-b px-4 flex space-x-8 overflow-x-auto`}>
+      <div className={`${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} border-b px-4 flex space-x-8 overflow-x-auto`}>
         <button
           onClick={() => setActiveTab("policies")}
-          className={`py-3 px-1 border-b-2 whitespace-nowrap flex items-center space-x-2 ₹{
+          className={`py-3 px-1 border-b-2 whitespace-nowrap flex items-center space-x-2 ${
             activeTab === "policies" ? "border-blue-500 text-blue-500" : "border-transparent text-gray-500 hover:text-gray-700"
           }`}
         >
@@ -619,7 +619,7 @@ const LeavePolicyManagement: React.FC = () => {
 
         <button
           onClick={() => setActiveTab("calendar")}
-          className={`py-3 px-1 border-b-2 whitespace-nowrap flex items-center space-x-2 ₹{
+          className={`py-3 px-1 border-b-2 whitespace-nowrap flex items-center space-x-2 ${
             activeTab === "calendar" ? "border-blue-500 text-blue-500" : "border-transparent text-gray-500 hover:text-gray-700"
           }`}
         >
@@ -629,7 +629,7 @@ const LeavePolicyManagement: React.FC = () => {
 
         <button
           onClick={() => setActiveTab("approvals")}
-          className={`py-3 px-1 border-b-2 whitespace-nowrap flex items-center space-x-2 ₹{
+          className={`py-3 px-1 border-b-2 whitespace-nowrap flex items-center space-x-2 ${
             activeTab === "approvals" ? "border-blue-500 text-blue-500" : "border-transparent text-gray-500 hover:text-gray-700"
           }`}
         >
@@ -662,13 +662,13 @@ const LeavePolicyManagement: React.FC = () => {
                 return (
                   <div
                     key={policy.id}
-                    className={`₹{isDark ? "bg-gray-800" : "bg-white"} rounded-lg p-6 shadow-sm border ₹{
+                    className={`${isDark ? "bg-gray-800" : "bg-white"} rounded-lg p-6 shadow-sm border ${
                       isDark ? "border-gray-700" : "border-gray-200"
                     }`}
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-4 h-4 rounded-full ₹{leaveType?.color || "bg-gray-400"}`}></div>
+                        <div className={`w-4 h-4 rounded-full ${leaveType?.color || "bg-gray-400"}`}></div>
                         <h3 className="font-medium">{policy.name}</h3>
                       </div>
                       <div className="flex space-x-1">
@@ -689,7 +689,7 @@ const LeavePolicyManagement: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                    <p className={`text-sm ₹{isDark ? "text-gray-400" : "text-gray-600"}`}>{leaveType?.label || policy.type}</p>
+                    <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>{leaveType?.label || policy.type}</p>
                     <div className="space-y-1 mt-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-400">Days Allowed</span>
@@ -710,7 +710,7 @@ const LeavePolicyManagement: React.FC = () => {
                         <span>
                           {policy.carryForward
                             ? policy.maxCarryForward
-                              ? `₹{policy.maxCarryForward} days`
+                              ? `${policy.maxCarryForward} days`
                               : "Unlimited"
                             : "No"}
                         </span>
@@ -718,7 +718,7 @@ const LeavePolicyManagement: React.FC = () => {
                       <div className="flex justify-between items-center">
                         <span className="text-gray-400">Status</span>
                         <span
-                          className={`px-2 py-1 rounded-full text-xs ₹{
+                          className={`px-2 py-1 rounded-full text-xs ${
                             policy.isActive
                               ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                               : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
@@ -746,7 +746,7 @@ const LeavePolicyManagement: React.FC = () => {
         {activeTab === "calendar" && (
           <div>
             <h2 className="mb-2 text-lg font-semibold">Holiday Calendar Management</h2>
-            <p className={`mb-6 text-sm ₹{isDark ? "text-gray-400" : "text-gray-600"}`}>Configure official college holidays. Click on any date to add or edit holidays.</p>
+            <p className={`mb-6 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>Configure official college holidays. Click on any date to add or edit holidays.</p>
 
             <div className="lg:grid lg:grid-cols-3 lg:gap-6">
               <div className="lg:col-span-1 mb-6 lg:mb-0">
@@ -771,18 +771,18 @@ const LeavePolicyManagement: React.FC = () => {
                     .map((holiday) => (
                       <div
                         key={holiday.id}
-                        className={`flex items-start space-x-3 p-3 rounded-lg border ₹{
+                        className={`flex items-start space-x-3 p-3 rounded-lg border ${
                           isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
                         }`}
                       >
                         <div
-                          className={`w-3 h-3 rounded-full ₹{
+                          className={`w-3 h-3 rounded-full ${
                             holiday.isOptional ? "bg-yellow-400" : "bg-red-400"
                           } mt-1 flex-shrink-0`}
                         ></div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm">{holiday.name}</p>
-                          <p className={`text-xs ₹{isDark ? "text-gray-400" : "text-gray-600"}`}>
+                          <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                             {new Date(holiday.date).toLocaleDateString('en-US', {
                               weekday: 'short',
                               month: 'short',
@@ -791,7 +791,7 @@ const LeavePolicyManagement: React.FC = () => {
                             })}
                           </p>
                           {holiday.description && (
-                            <p className={`text-xs ₹{isDark ? "text-gray-500" : "text-gray-500"} mt-1`}>
+                            <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}>
                               {holiday.description}
                             </p>
                           )}
@@ -805,7 +805,7 @@ const LeavePolicyManagement: React.FC = () => {
                       </div>
                     ))}
                   {holidays.filter((h) => new Date(h.date) >= new Date()).length === 0 && (
-                    <p className={`text-sm ₹{isDark ? "text-gray-400" : "text-gray-600"} text-center py-4`}>
+                    <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} text-center py-4`}>
                       No upcoming holidays scheduled
                     </p>
                   )}
@@ -848,12 +848,12 @@ const LeavePolicyManagement: React.FC = () => {
                   </div>
                 </div>
 
-                <div className={`rounded-lg border ₹{isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} p-4`}>
+                <div className={`rounded-lg border ${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} p-4`}>
                   <div className="grid grid-cols-7 gap-1 mb-2">
                     {dayNames.map((day) => (
                       <div
                         key={day}
-                        className={`p-2 text-center text-sm font-medium ₹{
+                        className={`p-2 text-center text-sm font-medium ${
                           isDark ? "text-gray-400" : "text-gray-600"
                         }`}
                       >
@@ -875,10 +875,10 @@ const LeavePolicyManagement: React.FC = () => {
                           onClick={() => day && handleDateClick(day)}
                           className={`
                             p-2 h-10 flex items-center justify-center text-sm cursor-pointer rounded
-                            ₹{day ? "hover:bg-blue-100 dark:hover:bg-blue-900" : ""}
-                            ₹{isToday ? "bg-blue-500 text-white font-bold" : ""}
-                            ₹{holiday ? (holiday.isOptional ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200") : ""}
-                            ₹{!day ? "cursor-default" : ""}
+                            ${day ? "hover:bg-blue-100 dark:hover:bg-blue-900" : ""}
+                            ${isToday ? "bg-blue-500 text-white font-bold" : ""}
+                            ${holiday ? (holiday.isOptional ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200") : ""}
+                            ${!day ? "cursor-default" : ""}
                           `}
                         >
                           {day || ""}
@@ -918,9 +918,9 @@ const LeavePolicyManagement: React.FC = () => {
                 .map((request) => (
                   <div
                     key={request.id}
-                    className={`₹{isDark ? "bg-gray-800" : "bg-white"} rounded-lg p-6 shadow-sm border ₹{
+                    className={`${isDark ? "bg-gray-800" : "bg-white"} rounded-lg p-6 shadow-sm border ${
                       isDark ? "border-gray-700" : "border-gray-200"
-                    } ₹{request.isExceptional ? "border-l-4 border-l-yellow-500" : ""}`}
+                    } ${request.isExceptional ? "border-l-4 border-l-yellow-500" : ""}`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -982,10 +982,10 @@ const LeavePolicyManagement: React.FC = () => {
               {leaveRequests.filter((req) => req.status === "pending").length === 0 && (
                 <div className="text-center py-8">
                   <Users size={48} className="mx-auto text-gray-300 mb-4" />
-                  <p className={`text-lg ₹{isDark ? "text-gray-400" : "text-gray-600"}`}>
+                  <p className={`text-lg ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                     No pending leave requests
                   </p>
-                  <p className={`text-sm ₹{isDark ? "text-gray-500" : "text-gray-500"} mt-1`}>
+                  <p className={`text-sm ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}>
                     All caught up! New requests will appear here.
                   </p>
                 </div>
@@ -1002,7 +1002,7 @@ const LeavePolicyManagement: React.FC = () => {
                       .map((request) => (
                         <div
                           key={request.id}
-                          className={`₹{isDark ? "bg-gray-800" : "bg-white"} rounded-lg p-4 shadow-sm border ₹{
+                          className={`${isDark ? "bg-gray-800" : "bg-white"} rounded-lg p-4 shadow-sm border ${
                             isDark ? "border-gray-700" : "border-gray-200"
                           }`}
                         >
@@ -1019,7 +1019,7 @@ const LeavePolicyManagement: React.FC = () => {
                                 <XCircle size={16} className="text-red-500" />
                               )}
                               <span
-                                className={`px-2 py-1 rounded-full text-xs font-medium ₹{
+                                className={`px-2 py-1 rounded-full text-xs font-medium ${
                                   request.status === "approved"
                                     ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                                     : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"

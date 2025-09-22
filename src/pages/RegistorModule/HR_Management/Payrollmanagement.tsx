@@ -1,19 +1,18 @@
 
+
 import React, { useState } from 'react';
-import { 
-  Users, 
-  IndianRupee, 
-  DollarSign, 
-  FileText, 
-  Upload, 
-  Calculator, 
-  CheckCircle, 
+import {
+  Users,
+  DollarSign,
+  FileText,
+  Upload,
+  Calculator,
+  CheckCircle,
   Download,
-  Menu,
-  X,
   ChevronRight,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  IndianRupee,
 } from 'lucide-react';
 
 import { useTheme } from '../../../contexts/ThemeContext';
@@ -35,12 +34,11 @@ const PayrollManagement: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
-  
   const [employees, setEmployees] = useState<Employee[]>([
     {
       id: '001',
       name: 'John Smith',
-      position: 'Software Engineer',
+      position: 'lecturer',
       basicSalary: 75000,
       deductions: 8500,
       overtime: 2400,
@@ -50,7 +48,7 @@ const PayrollManagement: React.FC = () => {
     {
       id: '002',
       name: 'Sarah Johnson',
-      position: 'Product Manager',
+      position: 'Accountant',
       basicSalary: 85000,
       deductions: 9200,
       overtime: 1800,
@@ -60,7 +58,7 @@ const PayrollManagement: React.FC = () => {
     {
       id: '003',
       name: 'Mike Davis',
-      position: 'UI/UX Designer',
+      position: 'Administrator',
       basicSalary: 65000,
       deductions: 7100,
       overtime: 3200,
@@ -68,6 +66,8 @@ const PayrollManagement: React.FC = () => {
       status: 'pending'
     }
   ]);
+
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const stats = {
     totalEmployees: employees.length,
@@ -98,7 +98,6 @@ const PayrollManagement: React.FC = () => {
     })));
   };
 
-  // Import attendance data handler
   const handleImportData = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -110,7 +109,7 @@ const PayrollManagement: React.FC = () => {
         reader.onload = (event) => {
           const content = event.target?.result as string;
           console.log('Imported Data:', content);
-          // Parsing logic can be implemented here if needed
+          // Parsing logic can be added
         };
         reader.readAsText(file);
       }
@@ -118,13 +117,11 @@ const PayrollManagement: React.FC = () => {
     input.click();
   };
 
-  // Preview reports handler
+  // Replacing alert with modal for preview reports
   const handlePreviewReports = () => {
-    const reportPreview = JSON.stringify(employees, null, 2);
-    alert(`Payroll Report Preview:\n₹{reportPreview}`);
+    setIsReportModalOpen(true);
   };
 
-  // Download reports handler
   const handleDownloadReports = () => {
     const header = ['ID', 'Name', 'Position', 'Basic Salary', 'Deductions', 'Overtime', 'Net Pay', 'Status'];
     const csvRows = [
@@ -132,8 +129,8 @@ const PayrollManagement: React.FC = () => {
       ...employees.map(emp =>
         [
           emp.id,
-          `"₹{emp.name.replace(/"/g, '""')}"`,
-          `"₹{emp.position.replace(/"/g, '""')}"`,
+          `"${emp.name.replace(/"/g, '""')}"`,
+          `"${emp.position.replace(/"/g, '""')}"`,
           emp.basicSalary,
           emp.deductions,
           emp.overtime,
@@ -149,49 +146,62 @@ const PayrollManagement: React.FC = () => {
 
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `payroll-report-₹{selectedMonth}.csv`);
+    link.setAttribute('download', `payroll-report-${selectedMonth}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  // Improved dark theme status badge classes for mobile visibility
+  const getStatusBadgeClasses = (status: Employee['status']) => {
+    if (status === 'processed') {
+      return isDark
+        ? 'bg-green-900 text-green-300'
+        : 'bg-green-100 text-green-800';
+    }
+    if (status === 'calculated') {
+      return isDark
+        ? 'bg-blue-900 text-blue-300'
+        : 'bg-blue-100 text-blue-800';
+    }
+    // pending
+    return isDark
+      ? 'bg-yellow-900 text-yellow-300'
+      : 'bg-yellow-100 text-yellow-800';
+  };
+
   return (
-    <div className={`min-h-screen transition-colors duration-200 ₹{
-      isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
-    }`}>
+    <div className={`min-h-screen transition-colors duration-200 ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Header */}
-      <header className={`₹{isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b px-4 lg:px-6 h-16 flex items-center justify-between`}>
+      <header className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b px-4 lg:px-6 h-16 flex items-center justify-between`}>
         <div className="flex items-center gap-4">
-          
           <div className="flex items-center gap-2">
             <IndianRupee className="h-6 w-6 text-blue-600" />
             <h1 className="text-xl font-bold">Payroll Management</h1>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <input
             type="month"
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className={`px-3 py-2 rounded-md border text-sm ₹{
-              isDark 
-                ? 'bg-gray-700 border-gray-600 text-white' 
+            className={`px-3 py-2 rounded-md border text-sm ${
+              isDark
+                ? 'bg-gray-700 border-gray-600 text-white'
                 : 'bg-white border-gray-300 text-gray-900'
             }`}
           />
-          {/* Theme toggle button */}
-          {/* You can implement your own toggle button here if needed */}
         </div>
       </header>
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className={`₹{isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 ₹{isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r transition-transform duration-200 ease-in-out`}>
+        <aside className={`${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-r transition-transform duration-200 ease-in-out`}>
           <div className="p-6 space-y-6">
             {/* Stats Cards */}
             <div className="space-y-4">
-              <div className={`p-4 rounded-lg ₹{isDark ? 'bg-gray-700' : 'bg-blue-50'}`}>
+              <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-blue-50'}`}>
                 <div className="flex items-center gap-3">
                   <Users className="h-5 w-5 text-blue-600" />
                   <div>
@@ -200,8 +210,8 @@ const PayrollManagement: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
-              <div className={`p-4 rounded-lg ₹{isDark ? 'bg-gray-700' : 'bg-green-50'}`}>
+
+              <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-700' : 'bg-green-50'}`}>
                 <div className="flex items-center gap-3">
                   <TrendingUp className="h-5 w-5 text-green-600" />
                   <div>
@@ -221,16 +231,16 @@ const PayrollManagement: React.FC = () => {
                 const Icon = step.icon;
                 const isActive = currentStep === step.id;
                 const isCompleted = currentStep > step.id;
-                
+
                 return (
                   <div
                     key={step.id}
-                    className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ₹{
-                      isActive 
+                    className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
+                      isActive
                         ? isDark ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-700'
                         : isCompleted
-                        ? isDark ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-700'
-                        : isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                          ? isDark ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-700'
+                          : isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
                     }`}
                     onClick={() => setCurrentStep(step.id)}
                   >
@@ -249,7 +259,7 @@ const PayrollManagement: React.FC = () => {
 
         {/* Mobile overlay */}
         {isMobileMenuOpen && (
-          <div 
+          <div
             className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
             onClick={() => setIsMobileMenuOpen(false)}
           />
@@ -258,13 +268,13 @@ const PayrollManagement: React.FC = () => {
         {/* Main Content */}
         <main className="flex-1 p-4 lg:p-6 space-y-6">
           {/* Step Header */}
-          <div className={`p-6 rounded-lg ₹{isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
+          <div className={`p-6 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold">{steps[currentStep - 1].title}</h2>
                 <p className="opacity-75">{steps[currentStep - 1].description}</p>
               </div>
-              <div className={`px-3 py-1 rounded-full text-sm ₹{isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
+              <div className={`px-3 py-1 rounded-full text-sm ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
                 Step {currentStep} of {steps.length}
               </div>
             </div>
@@ -273,18 +283,18 @@ const PayrollManagement: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               {currentStep === 1 && (
                 <>
-                  <button 
-                    onClick={handleImportData} 
+                  <button
+                    onClick={handleImportData}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                   >
                     <Upload size={16} />
                     Import Attendance Data
                   </button>
-                  <button 
+                  <button
                     onClick={() => setCurrentStep(2)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ₹{
-                      isDark 
-                        ? 'bg-gray-700 hover:bg-gray-600' 
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                      isDark
+                        ? 'bg-gray-700 hover:bg-gray-600'
                         : 'bg-gray-200 hover:bg-gray-300'
                     }`}
                   >
@@ -293,21 +303,21 @@ const PayrollManagement: React.FC = () => {
                   </button>
                 </>
               )}
-             
+
               {currentStep === 2 && (
                 <>
-                  <button 
+                  <button
                     onClick={calculatePayroll}
                     className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
                   >
                     <Calculator size={16} />
                     Calculate Payroll
                   </button>
-                  <button 
+                  <button
                     onClick={handlePreviewReports}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ₹{
-                      isDark 
-                        ? 'bg-gray-700 hover:bg-gray-600' 
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                      isDark
+                        ? 'bg-gray-700 hover:bg-gray-600'
                         : 'bg-gray-200 hover:bg-gray-300'
                     }`}
                   >
@@ -316,18 +326,18 @@ const PayrollManagement: React.FC = () => {
                   </button>
                 </>
               )}
-             
+
               {currentStep === 3 && (
                 <>
-                  <button 
+                  <button
                     onClick={processPayroll}
                     className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
                   >
                     <CheckCircle size={16} />
                     Process Payments
                   </button>
-                  <button 
-                    onClick={handleDownloadReports} 
+                  <button
+                    onClick={handleDownloadReports}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                   >
                     <Download size={16} />
@@ -339,31 +349,29 @@ const PayrollManagement: React.FC = () => {
           </div>
 
           {/* Employee Table */}
-          <div className={`rounded-lg border overflow-hidden ₹{isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+
+          <div className={`rounded-lg border overflow-hidden ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-semibold">Employee Payroll Data</h3>
             </div>
-            
+
             {/* Mobile Cards */}
             <div className="block lg:hidden">
               {employees.map((employee) => (
-                <div key={employee.id} className={`p-4 border-b ₹{isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                <div key={employee.id} className={`p-4 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                   <div className="flex items-center justify-between mb-3">
                     <div>
                       <h4 className="font-medium">{employee.name}</h4>
                       <p className="text-sm opacity-75">{employee.position}</p>
                     </div>
-                    <span className={`px-2 py-1 text-xs rounded-full ₹{
-                      employee.status === 'processed' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                        : employee.status === 'calculated'
-                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
-                        : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-                    }`}>
+                    <span
+                      className={`px-2 py-1 text-xs rounded-full capitalize ${getStatusBadgeClasses(employee.status)}`}
+                      style={{ minWidth: '70px', textAlign: 'center' }}
+                    >
                       {employee.status}
                     </span>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <p className="opacity-75">Basic Salary</p>
@@ -389,7 +397,7 @@ const PayrollManagement: React.FC = () => {
             {/* Desktop Table */}
             <div className="hidden lg:block overflow-x-auto">
               <table className="w-full">
-                <thead className={`₹{isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                <thead className={`${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Employee</th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Basic Salary</th>
@@ -399,9 +407,9 @@ const PayrollManagement: React.FC = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
                   </tr>
                 </thead>
-                <tbody className={`divide-y ₹{isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
+                <tbody className={`divide-y ${isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
                   {employees.map((employee) => (
-                    <tr key={employee.id} className={`hover:₹{isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                    <tr key={employee.id} className={`hover:${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
                       <td className="px-6 py-4">
                         <div>
                           <div className="font-medium">{employee.name}</div>
@@ -413,12 +421,12 @@ const PayrollManagement: React.FC = () => {
                       <td className="px-6 py-4 text-red-600 font-medium">₹{employee.deductions.toLocaleString()}</td>
                       <td className="px-6 py-4 font-bold">₹{employee.netPay.toLocaleString()}</td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs rounded-full capitalize ₹{
-                          employee.status === 'processed' 
+                        <span className={`px-2 py-1 text-xs rounded-full capitalize ${
+                          employee.status === 'processed'
                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                             : employee.status === 'calculated'
-                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                              : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
                         }`}>
                           {employee.status}
                         </span>
@@ -432,7 +440,7 @@ const PayrollManagement: React.FC = () => {
 
           {/* Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className={`p-6 rounded-lg ₹{isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
+            <div className={`p-6 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-md">
                   <DollarSign className="h-5 w-5 text-blue-600" />
@@ -443,8 +451,8 @@ const PayrollManagement: React.FC = () => {
                 </div>
               </div>
             </div>
-            
-            <div className={`p-6 rounded-lg ₹{isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
+
+            <div className={`p-6 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 dark:bg-red-900 rounded-md">
                   <AlertCircle className="h-5 w-5 text-red-600" />
@@ -455,8 +463,8 @@ const PayrollManagement: React.FC = () => {
                 </div>
               </div>
             </div>
-            
-            <div className={`p-6 rounded-lg ₹{isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
+
+            <div className={`p-6 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green-100 dark:bg-green-900 rounded-md">
                   <CheckCircle className="h-5 w-5 text-green-600" />
@@ -469,9 +477,31 @@ const PayrollManagement: React.FC = () => {
             </div>
           </div>
         </main>
-      </div>
+
+      {/* Preview Report Modal */}
+      {isReportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-6">
+          <div className={`w-full max-w-4xl max-h-full overflow-auto rounded-lg p-6 ${isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Payroll Report Preview</h3>
+              <button
+                aria-label="Close Preview"
+                onClick={() => setIsReportModalOpen(false)}
+                className="text-xl font-bold px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+              >
+                &times;
+              </button>
+            </div>
+            <pre className="whitespace-pre-wrap text-sm leading-relaxed font-mono bg-gray-900 dark:bg-gray-900 p-4 rounded text-green-300">
+              {JSON.stringify(employees, null, 2)}
+            </pre>
+          </div>
+        </div>
+      )}
+    </div>
     </div>
   );
-};
+}
 
 export default PayrollManagement;
+
