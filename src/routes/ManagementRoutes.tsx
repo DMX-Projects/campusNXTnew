@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-
 //infrastructure Routes
 import InventoryTable from "../pages/RegistorModule/Infrastructure/StockControl";
 import InfrastructureStockManagement from "../pages/RegistorModule/Infrastructure/StockManagement";
@@ -16,6 +15,16 @@ import FleetandStaffOverview from "../pages/RegistorModule/Transport/FleetandSta
 import FinancialControlandApprovals from "../pages/RegistorModule/Transport/FinancialControlandApprovals";
 import MasterConfiguration from "../pages/RegistorModule/Transport/MasterConfiguration";
 import TransportReports from "../pages/RegistorModule/Transport/TransportReports";
+      
+import CandidateVerification from "../pages/RegistorModule/Admission/Verification/CandidateVerification";
+import DocumentVerification from "../pages/RegistorModule/Admission/Verification/DocumentVerification";
+import AllotmentOrderGeneration from "../pages/RegistorModule/Admission/Verification/AllotmentOrderGeneration";
+import TemporaryStudentLogin from "../pages/RegistorModule/Admission/StudentOnboarding/TemporaryStudentLogin";
+import CommunicationHub from "../pages/RegistorModule/Admission/StudentOnboarding/CommunicationHub";
+import PermanentStudentLoginPage from "../pages/RegistorModule/Admission/StudentOnboarding/PermanentStudentLogin";
+import AdmissionReports from "../pages/RegistorModule/Admission/ReportsAndLogs/AdmissionReports";
+import FeePaymentReports from "../pages/RegistorModule/Admission/ReportsAndLogs/FeePaymentReports";
+import VerificationLogs from "../pages/RegistorModule/Admission/ReportsAndLogs/VerificationLogs";
 
 import FinancialsAndFees from "../pages/RegistorModule/Hostel/FinancialsAndFees";
 import ConfigurationAndRules from "../pages/RegistorModule/Hostel/ConfigurationAndRules";
@@ -69,6 +78,17 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+      
+      <Route path="verification/candidate" element={<CandidateVerification />} />
+           <Route path="/verification/document" element={<DocumentVerification />} />
+              <Route path="/verification/allotment-order" element={<AllotmentOrderGeneration />} />
+               <Route path="/student-onboarding/temp-login" element={<TemporaryStudentLogin />} />
+  <Route path="/student-onboarding/communication-hub" element={<CommunicationHub />} />
+  <Route path="/student-onboarding/activate-login" element={<PermanentStudentLoginPage />} />
+   <Route path="/reports/admission" element={<AdmissionReports />} />
+    <Route path="/reports/fee-payment" element={<FeePaymentReports />} />
+       <Route path="/reports/verification-logs" element={<VerificationLogs />} />
+
 
 
     </Routes>
