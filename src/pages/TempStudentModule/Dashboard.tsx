@@ -75,38 +75,38 @@ const Dashboard = () => {
         consequences: "Incomplete documentation may delay your enrollment process."
       }
     },
-    {
-      id: 3,
-      title: "Complete Health Form",
-      description: "Fill out required health information",
-      deadline: "March 25, 2024",
-      completed: true,
-      urgent: false,
-      icon: FileText,
-      link: "/health-form",
-      detailedInfo: {
-        sections: [
-          "Medical History",
-          "Current Medications",
-          "Emergency Contacts",
-          "Insurance Information",
-          "Vaccination Records"
-        ],
-        instructions: [
-          "Complete all required sections",
-          "Provide accurate medical information",
-          "Include emergency contact details",
-          "Upload vaccination records",
-          "Submit by the deadline"
-        ],
-        requirements: [
-          "Must be completed by a licensed healthcare provider",
-          "All vaccinations must be up to date",
-          "Emergency contacts must be reachable"
-        ],
-        consequences: "Incomplete health forms may restrict campus access and activities."
-      }
-    }
+    // {
+    //   id: 3,
+    //   title: "Complete Health Form",
+    //   description: "Fill out required health information",
+    //   deadline: "March 25, 2024",
+    //   completed: true,
+    //   urgent: false,
+    //   icon: FileText,
+    //   link: "/health-form",
+    //   detailedInfo: {
+    //     sections: [
+    //       "Medical History",
+    //       "Current Medications",
+    //       "Emergency Contacts",
+    //       "Insurance Information",
+    //       "Vaccination Records"
+    //     ],
+    //     instructions: [
+    //       "Complete all required sections",
+    //       "Provide accurate medical information",
+    //       "Include emergency contact details",
+    //       "Upload vaccination records",
+    //       "Submit by the deadline"
+    //     ],
+    //     requirements: [
+    //       "Must be completed by a licensed healthcare provider",
+    //       "All vaccinations must be up to date",
+    //       "Emergency contacts must be reachable"
+    //     ],
+    //     consequences: "Incomplete health forms may restrict campus access and activities."
+    //   }
+    // }
   ]);
   
   const timeline = [

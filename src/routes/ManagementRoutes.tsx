@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-
 import Dashboard from "../pages/RegistorModule/HR_Management/Dashboard";
 import Employeedatabase from "../pages/RegistorModule/HR_Management/Employeedatabase";
 import LeavePolicy from "../pages/RegistorModule/HR_Management/Leave&policy";
@@ -66,7 +65,7 @@ import { DepartmentalResources } from "../pages/HODModules/Administration/Depart
 import { PurchaseRequisitions } from "../pages/HODModules/Administration/PurchaseRequisitions";
 import HODRaiseTicket from "../pages/HODModules/Administration/HODRaiseTicket";
 
-import Dashboard from "../pages/TempStudentModule/Dashboard";
+import TempStudentDashboard from "../pages/TempStudentModule/Dashboard";
 import ApplicationStatus from "../pages/TempStudentModule/ApplicationStatus";
 import FeePayment from "../pages/TempStudentModule/FeePayment";
 import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
@@ -78,7 +77,7 @@ const CommonRoutes: React.FC = () => {
   return (
     <Routes>
 
-
+      <Route path="/hr/dashboard" element={<Dashboard />} />
       <Route path="/hr/dashboard" element={<Dashboard />} />
       <Route path="/hr/employee-database" element={<Employeedatabase />} />
       <Route path="/hr/leave-policy" element={<LeavePolicy />} />
@@ -125,7 +124,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/hod/purchase-requisitions" element={<PurchaseRequisitions />} />
       <Route path="/raise-ticket" element={<HODRaiseTicket />} />
 
-      <Route path="/temporary-student/dashboard" element={<Dashboard />} />
+      <Route path="/temporary-student/dashboard" element={<TempStudentDashboard />} />
       <Route path="/temporary-student/application-status" element={<ApplicationStatus />} />
       <Route path="/temporary-student/fee-payment" element={<FeePayment />} />
       <Route path="/temporary-student/document-upload" element={<DocumentUpload />} />
