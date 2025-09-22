@@ -59,6 +59,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/transport/financial-control" element={<FinancialControlandApprovals />} />
       <Route path="/transport/master-configuration" element={<MasterConfiguration />} />
       <Route path="/transport/reports" element={<TransportReports />} />
+      <Route path="/transport/dashboard" element={<TransportDashboard />} />
 
       <Route path="financials-fees" element={<FinancialsAndFees />} />
       <Route path="configuration-rules" element={<ConfigurationAndRules />} />
