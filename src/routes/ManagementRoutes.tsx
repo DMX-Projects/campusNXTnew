@@ -1,6 +1,16 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
+
+//infrastructure Routes
+import InventoryTable from "../pages/RegistorModule/Infrastructure/StockControl";
+import InfrastructureStockManagement from "../pages/RegistorModule/Infrastructure/StockManagement";
+import AssetManagement from "../pages/RegistorModule/Infrastructure/FixedAssesment";
+import NewPurchaseKanban from "../pages/RegistorModule/Infrastructure/NewAssetPurchase";
+import PurchaseManagement from "../pages/RegistorModule/Infrastructure/PurchaseManagement";
+import MaintenanceCosts from "../pages/RegistorModule/Infrastructure/MaintenanceCosts";
+import VendorManagement from "../pages/RegistorModule/Infrastructure/VendorManagement";
+import ManagementHistory from "../pages/RegistorModule/Infrastructure/ManagementHistory";
 import TransportDashboard from "../pages/RegistorModule/Transport/TransportDashboard";
 import FleetandStaffOverview from "../pages/RegistorModule/Transport/FleetandStaffOverview";
 import FinancialControlandApprovals from "../pages/RegistorModule/Transport/FinancialControlandApprovals";
@@ -25,14 +35,18 @@ import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/F
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard"; 
-
-
 const CommonRoutes: React.FC = () => {
   return (
     <Routes>
-
-      <Route path="/transport/dashboard" element={<TransportDashboard />} />
-      <Route path="/transport/fleet-staff" element={<FleetandStaffOverview />} />
+            <Route path="/infrastructure-management/inventory/stock-control" element={<InventoryTable/>}/>
+            <Route path="/infrastructure-management/inventory/stock-management" element={<InfrastructureStockManagement/>}/>
+            <Route path="/infrastructure-management/asset/fixed-assets" element={<AssetManagement/>}/>
+            <Route path="/infrastructure-management/asset/new-purchase" element={<NewPurchaseKanban/>}/>
+            <Route path="/infrastructure-management/purchase" element={<PurchaseManagement/>}/>
+            <Route path="/infrastructure-management/maintenance-costs/income-expenditure" element={<MaintenanceCosts/>}/>
+            <Route path="/infrastructure-management/maintenance-costs/vendor-management" element={<VendorManagement/>}/>
+            <Route path="/infrastructure-management/maintenance-costs/history" element={<ManagementHistory/>}/>
+            <Route path="/transport/fleet-staff" element={<FleetandStaffOverview />} />
       <Route path="/transport/financial-control" element={<FinancialControlandApprovals />} />
       <Route path="/transport/master-configuration" element={<MasterConfiguration />} />
       <Route path="/transport/reports" element={<TransportReports />} />
@@ -55,6 +69,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+
 
     </Routes>
   );
