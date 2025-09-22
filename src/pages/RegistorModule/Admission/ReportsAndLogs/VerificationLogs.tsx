@@ -60,6 +60,11 @@ const VerificationLogs: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
 
+  // Advanced filter states
+  const [adminFilter, setAdminFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [itemFilter, setItemFilter] = useState("");
+
   // Filter logs
   const filteredLogs = useMemo(() => {
     return logs.filter((log) => {
@@ -69,14 +74,35 @@ const VerificationLogs: React.FC = () => {
         log.admin.toLowerCase().includes(searchTerm.toLowerCase()) ||
         log.item.toLowerCase().includes(searchTerm.toLowerCase()) ||
         log.id.toLowerCase().includes(searchTerm.toLowerCase());
+
       const matchesStatus =
         statusFilter === "All" || log.status === statusFilter;
-      return matchesSearch && matchesStatus;
+
+      const matchesAdmin =
+        adminFilter === "" ||
+        log.admin.toLowerCase().includes(adminFilter.toLowerCase());
+
+      const matchesItem =
+        itemFilter === "" ||
+        log.item.toLowerCase().includes(itemFilter.toLowerCase());
+
+      const matchesDate =
+        dateFilter === "" ||
+        log.timestamp.startsWith(dateFilter); // crude check using YYYY-MM-DD
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesAdmin &&
+        matchesItem &&
+        matchesDate
+      );
     });
-  }, [searchTerm, statusFilter]);
+  }, [searchTerm, statusFilter, adminFilter, itemFilter, dateFilter]);
 
   const getStatusBadge = (status: string) => {
-    const base = "px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1";
+    const base =
+      "px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1";
     switch (status) {
       case "Approved":
         return `${base} bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200`;
@@ -89,9 +115,12 @@ const VerificationLogs: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "Approved": return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "Rejected": return <XCircle className="w-4 h-4 text-red-500" />;
-      default: return <Clock className="w-4 h-4 text-gray-500" />;
+      case "Approved":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case "Rejected":
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      default:
+        return <Clock className="w-4 h-4 text-gray-500" />;
     }
   };
 
@@ -104,7 +133,6 @@ const VerificationLogs: React.FC = () => {
             <FileText className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             Verification Logs
           </h1>
-         
         </div>
 
         {/* Filters and Search */}
@@ -155,24 +183,36 @@ const VerificationLogs: React.FC = () => {
             <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Verifier/Admin</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Verifier/Admin
+                  </label>
                   <input
                     type="text"
+                    value={adminFilter}
+                    onChange={(e) => setAdminFilter(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     placeholder="Search by admin name"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Date
+                  </label>
                   <input
                     type="date"
+                    value={dateFilter}
+                    onChange={(e) => setDateFilter(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Document/Item</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Document/Item
+                  </label>
                   <input
                     type="text"
+                    value={itemFilter}
+                    onChange={(e) => setItemFilter(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     placeholder="Search by item"
                   />
@@ -195,25 +235,48 @@ const VerificationLogs: React.FC = () => {
             <table className="w-full ">
               <thead className="bg-gray-50 dark:bg-gray-750 border-b border-gray-200 dark:border-gray-700">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Log ID</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Candidate</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Admin</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Document/Item</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Remarks</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Timestamp</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Log ID
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Candidate
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Admin
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Document/Item
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Remarks
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Timestamp
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                  <tr
+                    key={log.id}
+                    className="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors"
+                  >
                     <td className="px-4 py-4">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{log.id}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {log.id}
+                      </span>
                     </td>
                     <td className="px-4 py-4">
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">{log.candidateName}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-300">{log.candidateId}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                          {log.candidateName}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-300">
+                          {log.candidateId}
+                        </div>
                       </div>
                     </td>
                     <td className="px-4 py-4">
@@ -223,7 +286,9 @@ const VerificationLogs: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-4 py-4">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">{log.item}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {log.item}
+                      </span>
                     </td>
                     <td className="px-4 py-4">
                       <span className={getStatusBadge(log.status)}>
@@ -232,10 +297,14 @@ const VerificationLogs: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-4 py-4">
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{log.remarks}</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {log.remarks}
+                      </span>
                     </td>
                     <td className="px-4 py-4">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">{log.timestamp}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {log.timestamp}
+                      </span>
                     </td>
                   </tr>
                 ))}
@@ -248,8 +317,12 @@ const VerificationLogs: React.FC = () => {
               <div className="text-gray-400 mb-2">
                 <Search className="w-12 h-12 mx-auto" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No logs found</h3>
-              <p className="text-gray-500 dark:text-gray-400">Try changing your filters or search terms.</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
+                No logs found
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                Try changing your filters or search terms.
+              </p>
             </div>
           )}
         </div>
@@ -258,13 +331,19 @@ const VerificationLogs: React.FC = () => {
         {filteredLogs.length > 0 && (
           <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              Showing 1 to {Math.min(10, filteredLogs.length)} of {filteredLogs.length} results
+              Showing 1 to {Math.min(10, filteredLogs.length)} of{" "}
+              {filteredLogs.length} results
             </div>
             <div className="flex gap-2">
-              <button className="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50" disabled>
+              <button
+                className="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+                disabled
+              >
                 Previous
               </button>
-              <button className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm">1</button>
+              <button className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm">
+                1
+              </button>
               <button className="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
                 Next
               </button>

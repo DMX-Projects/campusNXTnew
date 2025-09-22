@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Download, Filter, Calendar, DollarSign, Users, AlertCircle, CheckCircle, Clock, X } from 'lucide-react';
+import { Search, Download, Filter, Calendar, IndianRupee, Users, AlertCircle, CheckCircle, Clock, X } from 'lucide-react';
 
 const FeePaymentReports = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -96,7 +96,7 @@ const FeePaymentReports = () => {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Total Amount</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{stats.totalAmount.toLocaleString()}</p>
               </div>
-              <DollarSign className="w-8 h-8 text-green-500" />
+              <IndianRupee className="w-8 h-8 text-green-500" />
             </div>
           </div>
 
