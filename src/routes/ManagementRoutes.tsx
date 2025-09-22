@@ -58,12 +58,21 @@ import CircularsAndEventManagement from "../pages/PrincipalModules/Administratio
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard"; 
 
+import { HODDashboard } from "../pages/HODModules/Administration/HODDashboard";
+import { CircularMemos } from "../pages/HODModules/Administration/CircularMemos";
+import { DepartmentalBudgeting } from "../pages/HODModules/Administration/DepartmentalBudgeting";
+import { DepartmentalReports } from "../pages/HODModules/Administration/DepartmentalReports";
+import { DepartmentalResources } from "../pages/HODModules/Administration/DepartmentalResources";
+import { PurchaseRequisitions } from "../pages/HODModules/Administration/PurchaseRequisitions";
+import HODRaiseTicket from "../pages/HODModules/Administration/HODRaiseTicket";
+
 import Dashboard from "../pages/TempStudentModule/Dashboard";
 import ApplicationStatus from "../pages/TempStudentModule/ApplicationStatus";
 import FeePayment from "../pages/TempStudentModule/FeePayment";
 import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
 import OnboardingForm from "../pages/TempStudentModule/OnboardingForm";
 import Notifications from "../pages/TempStudentModule/Notifications";
+
 
 const CommonRoutes: React.FC = () => {
   return (
@@ -108,6 +117,13 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+      <Route path="/hod/dashboard" element={<HODDashboard />} />
+      <Route path="/hod/circulars-memos" element={<CircularMemos />} />
+      <Route path="/hod/departmental-budgeting" element={<DepartmentalBudgeting />} />
+      <Route path="/hod/departmental-reports" element={<DepartmentalReports />} />
+      <Route path="/hod/departmental-resources" element={<DepartmentalResources />} />
+      <Route path="/hod/purchase-requisitions" element={<PurchaseRequisitions />} />
+      <Route path="/raise-ticket" element={<HODRaiseTicket />} />
 
       <Route path="/temporary-student/dashboard" element={<Dashboard />} />
       <Route path="/temporary-student/application-status" element={<ApplicationStatus />} />
