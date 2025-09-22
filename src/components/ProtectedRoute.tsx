@@ -16,6 +16,8 @@ const getRedirectPath = (role: string): string => {
       return "/academics/principal-dashboard";
     case "faculty":
       return "/academics/faculty-dashboard";
+    case "temporary student":
+      return "/administration/student-form";
     case "registor":
     case "administration officer":
       return "/management/Admission/dashboard";
