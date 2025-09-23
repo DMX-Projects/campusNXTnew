@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigation } from '../../contexts/NavigationContext';
 import { 
-  LogOut, ChevronLeft, ChevronRight, School, ChevronDown,
+  ChevronLeft, ChevronRight, School, ChevronDown,
   BarChart3, Users, GraduationCap, BookOpen, Calendar, 
   ClipboardCheck, Award, Library, DollarSign, Settings,
   Eye, Zap, Clock, Building, FileText, Target, CheckCircle,
@@ -24,7 +24,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { activeModule, getSidebarItemsForModule, expandedItems, toggleExpanded } = useNavigation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,10 +46,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
 
   const menuItems = user ? getSidebarItemsForModule(activeModule, user.role) : [];
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
 
   const truncateText = (text: string, maxLength: number = 25) => {
     if (text.length <= maxLength) return text;
@@ -99,7 +95,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
             )}
           </button>
           
-          {/* Tooltip for collapsed state */}
           {isCollapsed && (
             <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
               {item.name}
@@ -107,24 +102,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           )}
         </div>
         
-        {/* Render children with proper scrolling */}
         {hasChildren && !isCollapsed && isExpanded && (
-  <div className="mt-1">
-    <div className="max-h-80 overflow-y-auto overflow-x-hidden space-y-1 border-l border-gray-200 dark:border-gray-600">
-      <div className="space-y-1">
-        {item.children.map((child: any) => renderMenuItem(child, level + 1))}
-      </div>
-    </div>
-  </div>
-)}
-
+          <div className="mt-1">
+            <div className="max-h-80 overflow-y-auto overflow-x-hidden space-y-1 border-l border-gray-200 dark:border-gray-600">
+              <div className="space-y-1">
+                {item.children.map((child: any) => renderMenuItem(child, level + 1))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
 
   return (
     <div className={`${isCollapsed ? 'w-12' : 'w-64'} bg-white dark:bg-gray-800 shadow-sm h-full flex flex-col transition-all duration-300 ease-in-out border-r border-gray-200 dark:border-gray-700`}>
-      {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
@@ -152,7 +144,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         </button>
       </div>
 
-      {/* User Info */}
       {!isCollapsed && (
         <div className="p-3 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-3">
@@ -171,9 +162,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         </div>
       )}
 
-      {/* Navigation */}
       <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
-        {/* Module Title */}
         {!isCollapsed && (
           <div className="mb-2 pb-1 border-b border-gray-200 dark:border-gray-700">
             <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
@@ -191,16 +180,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         )}
       </nav>
 
-      {/* Footer */}
       <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center space-x-2 px-2 py-2 rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm"
-          title={isCollapsed ? 'Logout' : ''}
-        >
-          <LogOut className={`w-4 h-4 ${isCollapsed ? 'mx-auto' : ''}`} />
-          {!isCollapsed && <span className="font-medium text-xs">Logout</span>}
-        </button>
       </div>
     </div>
   );
