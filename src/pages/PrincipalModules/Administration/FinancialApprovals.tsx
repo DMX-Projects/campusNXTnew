@@ -20,7 +20,21 @@ const FinancialApprovals = () => {
   const [expandedItems, setExpandedItems] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterDepartment, setFilterDepartment] = useState('all');
   const [actionLoading, setActionLoading] = useState(false);
+  
+  // Common departments array - moved inside component
+  const commonDepartments = [
+    'Computer Science & Engineering',
+    'Mechanical Engineering', 
+    'Electrical & Electronics Engineering',
+    'Electronics & Communication Engineering',
+    'Civil Engineering',
+    'Chemical Engineering',
+    'Information Technology',
+    'Artificial Intelligence & Machine Learning',
+    'Computer Science & Engineering (Data Science)'
+  ];
   
   // Confirmation modal state
   const [confirmationModal, setConfirmationModal] = useState({
@@ -37,7 +51,7 @@ const FinancialApprovals = () => {
   const purchaseRequests = [
     {
       id: 'PR001',
-      department: 'Computer Science',
+      department: 'Computer Science & Engineering',
       item: 'Dell Laptops (10 units)',
       cost: 75000,
       requestDate: '2024-09-15',
@@ -50,7 +64,7 @@ const FinancialApprovals = () => {
     },
     {
       id: 'PR002',
-      department: 'Chemistry',
+      department: 'Chemical Engineering',
       item: 'Laboratory Equipment Set',
       cost: 125000,
       requestDate: '2024-09-14',
@@ -63,7 +77,7 @@ const FinancialApprovals = () => {
     },
     {
       id: 'PR003',
-      department: 'Library',
+      department: 'Information Technology',
       item: 'Digital Database Subscription',
       cost: 45000,
       requestDate: '2024-09-13',
@@ -98,7 +112,7 @@ const FinancialApprovals = () => {
     },
     {
       id: 'BR002',
-      department: 'Mathematics',
+      department: 'Electronics & Communication Engineering',
       totalAmount: 320000,
       requestDate: '2024-09-08',
       period: 'Academic Year 2024-25',
@@ -167,18 +181,32 @@ const FinancialApprovals = () => {
     setSelectedRequest(null);
   };
 
+  // Get unique departments for filter dropdown - now includes all common departments
+  const getAllDepartments = () => {
+    const purchaseDepts = purchaseRequests.map(req => req.department);
+    const budgetDepts = budgetRequests.map(req => req.department);
+    const currentDataDepts = [...purchaseDepts, ...budgetDepts];
+    
+    // Combine common departments with departments from current data
+    const allDepts = [...new Set([...commonDepartments, ...currentDataDepts])];
+    return allDepts.sort();
+  };
+
+  // Rest of your component code remains the same...
   const filteredPurchaseRequests = purchaseRequests.filter(request => {
     const matchesSearch = request.item.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          request.department.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || request.status === filterStatus;
-    return matchesSearch && matchesFilter;
+    const matchesStatus = filterStatus === 'all' || request.status === filterStatus;
+    const matchesDepartment = filterDepartment === 'all' || request.department === filterDepartment;
+    return matchesSearch && matchesStatus && matchesDepartment;
   });
 
   const filteredBudgetRequests = budgetRequests.filter(request => {
     const matchesSearch = request.department.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          request.hodName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || request.status === filterStatus;
-    return matchesSearch && matchesFilter;
+    const matchesStatus = filterStatus === 'all' || request.status === filterStatus;
+    const matchesDepartment = filterDepartment === 'all' || request.department === filterDepartment;
+    return matchesSearch && matchesStatus && matchesDepartment;
   });
 
   const formatCurrency = (amount) => {
@@ -276,7 +304,7 @@ const FinancialApprovals = () => {
   const PurchaseRequestCard = ({ request }) => (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 mb-4">
       <div 
-        className="p-4 cursor-pointer hover:bg-dark-50 dark:hover:bg-slate-750 transition-colors"
+        className="p-4 cursor-pointer hover: dark:hover:bg-slate-750 transition-colors"
         onClick={() => toggleExpanded(request.id)}
       >
         <div className="flex items-start justify-between">
@@ -309,7 +337,7 @@ const FinancialApprovals = () => {
       </div>
 
       {expandedItems[request.id] && (
-        <div className="border-t border-slate-200 dark:border-slate-700 p-4 bg-dark-50 dark:bg-slate-750">
+        <div className="border-t border-slate-200 dark:border-slate-700 p-4  dark:bg-slate-750">
           <div className="space-y-4">
             <div>
               <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">Justification</h4>
@@ -383,7 +411,7 @@ const FinancialApprovals = () => {
   const BudgetRequestCard = ({ request }) => (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 mb-4">
       <div
-        className="p-4 cursor-pointer hover:bg-dark-50 dark:hover:bg-slate-750 transition-colors"
+        className="p-4 cursor-pointer hover: dark:hover:bg-slate-750 transition-colors"
         onClick={() => toggleExpanded(request.id)}
       >
         <div className="flex items-start justify-between">
@@ -405,7 +433,7 @@ const FinancialApprovals = () => {
       </div>
 
       {expandedItems[request.id] && (
-        <div className="border-t border-slate-200 dark:border-slate-700 p-4 bg-dark-50 dark:bg-slate-750">
+        <div className="border-t border-slate-200 dark:border-slate-700 p-4  dark:bg-slate-750">
           <div className="space-y-4">
             <div>
               <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">Budget Breakdown</h4>
@@ -508,9 +536,9 @@ const FinancialApprovals = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+    <div className="min-h-screen bg--to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
       <div className="container mx-auto px-4 py-6">
-        {/* Tabs */}
+       {/* Tabs */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex bg-white dark:bg-slate-800 rounded-lg p-1 shadow-sm border border-slate-200 dark:border-slate-700">
             <button
@@ -552,16 +580,28 @@ const FinancialApprovals = () => {
               className="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="all">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </select>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <select
+              value={filterDepartment}
+              onChange={(e) => setFilterDepartment(e.target.value)}
+              className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Departments</option>
+              {getAllDepartments().map(dept => (
+                <option key={dept} value={dept}>{dept}</option>
+              ))}
+            </select>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
         </div>
 
         {/* Content */}
