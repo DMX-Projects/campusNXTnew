@@ -646,7 +646,7 @@ const DocumentUpload = () => {
   const rejectedDocs = documents.filter(doc => doc.status === 'rejected').length;
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
+    <div className={`min-h-screen bg--to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
       <div className="container mx-auto px-4 py-6">
         {/* Progress Overview */}
         <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 sm:p-6 mb-6">

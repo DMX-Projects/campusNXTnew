@@ -28,7 +28,7 @@ const CircularsAndEventManagement = () => {
   const [activeTab, setActiveTab] = useState('circulars');
   const [showCreateCircular, setShowCreateCircular] = useState(false);
   const [showEditCircular, setShowEditCircular] = useState(null);
-  const [showCircularDetails, setShowCircularDetails] = useState(null); // Added this state
+  const [showCircularDetails, setShowCircularDetails] = useState(null);
   const [showEventDetails, setShowEventDetails] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -66,12 +66,24 @@ const CircularsAndEventManagement = () => {
     };
   }, []);
 
+  // Common departments array with the specific ones you requested
+  const commonDepartments = [
+    'Computer Science & Engineering',
+    'Mechanical Engineering', 
+    'Electrical & Electronics Engineering',
+    'Electronics & Communication Engineering',
+    'Civil Engineering',
+    'Chemical Engineering',
+    'Artificial Intelligence & Machine Learning',
+
+  ];
+
   // Mock data for circulars
   const [circulars, setCirculars] = useState([
     {
       id: 1,
       title: "Semester End Examination Schedule",
-      content: "Please note the examination schedule for the upcoming semester end exams...",
+      content: "Please note the examination schedule for the upcoming semester end exams. All students are required to check their examination hall tickets and ensure they have the necessary documents for the examination. The examination will be conducted from October 15th to October 30th, 2025. Students should report to their respective examination halls 30 minutes before the scheduled time.",
       date: "2025-09-18",
       author: "Principal Office",
       audience: ["All Students", "Faculty"],
@@ -81,7 +93,7 @@ const CircularsAndEventManagement = () => {
     {
       id: 2,
       title: "New Library Operating Hours",
-      content: "Effective from next week, the library will have extended hours...",
+      content: "Effective from next week, the library will have extended hours to accommodate students' study needs during the examination period. The new operating hours will be from 7:00 AM to 11:00 PM on weekdays and 8:00 AM to 10:00 PM on weekends. All students are encouraged to make use of these extended hours for their preparation.",
       date: "2025-09-15",
       author: "Principal Office",
       audience: ["All Students", "All Staff"],
@@ -91,7 +103,7 @@ const CircularsAndEventManagement = () => {
     {
       id: 3,
       title: "Faculty Development Program",
-      content: "We are pleased to announce a comprehensive faculty development program...",
+      content: "We are pleased to announce a comprehensive faculty development program focusing on modern teaching methodologies and technology integration in education. The program will span over three days and will include workshops on digital pedagogy, assessment strategies, and student engagement techniques.",
       date: "2025-09-12",
       author: "HR Department",
       audience: ["Faculty", "Administrative Staff"],
@@ -105,50 +117,52 @@ const CircularsAndEventManagement = () => {
     {
       id: 1,
       title: "Annual Tech Symposium 2025",
-      department: "Computer Science",
+      department: "Computer Science & Engineering",
       requestedBy: "Dr. Sarah Johnson",
       date: "2025-10-15",
       time: "9:00 AM - 5:00 PM",
       venue: "Main Auditorium",
       expectedAttendees: 500,
       budget: 25000,
-      description: "A comprehensive technology symposium featuring industry experts and student presentations.",
+      description: "A comprehensive technology symposium featuring industry experts and student presentations on cutting-edge technologies including AI, blockchain, and cybersecurity.",
       resources: ["Audio/Visual Equipment", "Catering Services", "Security", "Parking"],
       status: "Pending Review",
       submittedDate: "2025-09-10",
       priority: "High"
     },
+    
+   
     {
-      id: 2,
-      title: "Cultural Festival - Freshers Welcome",
-      department: "Student Affairs",
-      requestedBy: "Ms. Emily Chen",
-      date: "2025-09-25",
-      time: "6:00 PM - 10:00 PM",
-      venue: "College Grounds",
-      expectedAttendees: 800,
-      budget: 15000,
-      description: "Welcome event for new students with cultural performances and activities.",
-      resources: ["Stage Setup", "Sound System", "Lighting", "Decoration"],
-      status: "Approved",
-      submittedDate: "2025-09-01",
+      id: 4,
+      title: "Industrial Visit to Manufacturing Plant",
+      department: "Mechanical Engineering",
+      requestedBy: "Prof. David Wilson",
+      date: "2025-10-05",
+      time: "8:00 AM - 6:00 PM",
+      venue: "ABC Manufacturing Ltd.",
+      expectedAttendees: 120,
+      budget: 8000,
+      description: "Educational visit to manufacturing plant for mechanical engineering students to understand industrial processes and modern manufacturing techniques.",
+      resources: ["Transportation", "Lunch", "Safety Equipment", "Guide"],
+      status: "Pending Review",
+      submittedDate: "2025-09-11",
       priority: "Medium"
     },
     {
-      id: 3,
-      title: "Research Paper Presentation",
-      department: "Physics",
-      requestedBy: "Prof. Michael Brown",
-      date: "2025-09-30",
-      time: "2:00 PM - 4:00 PM",
-      venue: "Physics Lab 1",
-      expectedAttendees: 50,
-      budget: 2000,
-      description: "Student research paper presentations for final year physics students.",
-      resources: ["Projector", "Microphone", "Refreshments"],
-      status: "Needs Information",
-      submittedDate: "2025-09-08",
-      priority: "Low"
+      id: 5,
+      title: "Electronics Workshop",
+      department: "Electronics & Communication Engineering",
+      requestedBy: "Dr. Priya Sharma",
+      date: "2025-10-12",
+      time: "10:00 AM - 4:00 PM",
+      venue: "ECE Lab Complex",
+      expectedAttendees: 80,
+      budget: 5000,
+      description: "Hands-on workshop on advanced electronics concepts including IoT, embedded systems, and circuit design for final year students.",
+      resources: ["Lab Equipment", "Components", "Laptops", "Refreshments"],
+      status: "Approved",
+      submittedDate: "2025-09-09",
+      priority: "High"
     }
   ]);
 
@@ -159,9 +173,29 @@ const CircularsAndEventManagement = () => {
     "Administrative Staff",
     "Department Heads",
     "First Year Students",
+    "Second Year Students",
+    "Third Year Students",
     "Final Year Students",
-    "Parents"
+    "Research Scholars",
+    "PhD Students",
+    "Parents",
+    "Alumni",
+    "Industry Partners",
+    "Visitors"
   ];
+
+  // Get all departments for event filters - now includes common departments
+  const getAllDepartments = () => {
+    const eventDepts = eventProposals.map(event => event.department);
+    const currentDataDepts = [...eventDepts];
+    
+    // Combine common departments with departments from current data
+    const allDepts = [...new Set([...commonDepartments, ...currentDataDepts])];
+    return allDepts.sort();
+  };
+
+  // Use the new function instead of departmentOptions
+  const departmentOptions = getAllDepartments();
 
   const handleAudienceChange = (audience) => {
     setSelectedAudience(prev => 
@@ -171,9 +205,77 @@ const CircularsAndEventManagement = () => {
     );
   };
 
+  // Filter data based on current filters and search term
+  const getFilteredCirculars = () => {
+    return circulars.filter(circular => {
+      const matchesSearch = searchTerm === '' || 
+        circular.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        circular.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        circular.author.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesStatus = filters.status === '' || circular.status === filters.status;
+      
+      const matchesAudience = filters.audience === '' || 
+        circular.audience.includes(filters.audience);
+
+      const matchesDate = filters.dateRange === '' || checkDateRange(circular.date, filters.dateRange);
+
+      return matchesSearch && matchesStatus && matchesAudience && matchesDate;
+    });
+  };
+
+  const getFilteredEvents = () => {
+    return eventProposals.filter(event => {
+      const matchesSearch = searchTerm === '' || 
+        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.requestedBy.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesStatus = filters.status === '' || event.status === filters.status;
+      const matchesDepartment = filters.department === '' || event.department === filters.department;
+      const matchesPriority = filters.priority === '' || event.priority === filters.priority;
+
+      return matchesSearch && matchesStatus && matchesDepartment && matchesPriority;
+    });
+  };
+
+  // Helper function to check date range
+  const checkDateRange = (dateStr, range) => {
+    const date = new Date(dateStr);
+    const today = new Date();
+    
+    switch(range) {
+      case 'today':
+        return date.toDateString() === today.toDateString();
+      case 'week':
+        const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+        return date >= weekAgo && date <= today;
+      case 'month':
+        const monthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+        return date >= monthAgo && date <= today;
+      default:
+        return true;
+    }
+  };
+
+  // Count active filters
+  const getActiveFilterCount = () => {
+    return Object.values(filters).filter(value => value !== '').length;
+  };
+
+  // Get active filter labels for display
+  const getActiveFilterLabels = () => {
+    const labels = [];
+    if (filters.status) labels.push(`Status: ${filters.status}`);
+    if (filters.audience) labels.push(`Audience: ${filters.audience}`);
+    if (filters.dateRange) labels.push(`Date: ${filters.dateRange}`);
+    if (filters.department) labels.push(`Department: ${filters.department}`);
+    if (filters.priority) labels.push(`Priority: ${filters.priority}`);
+    return labels;
+  };
+
   // Filter functions
   const applyFilters = () => {
-    // Apply filters logic here
     setShowFilters(false);
   };
 
@@ -220,6 +322,7 @@ const CircularsAndEventManagement = () => {
       event.id === id ? { ...event, status: 'Approved' } : event
     ));
     setShowApprovalConfirm(null);
+    setShowEventDetails(null);
   };
 
   const handleRejectEvent = (id) => {
@@ -227,6 +330,7 @@ const CircularsAndEventManagement = () => {
       event.id === id ? { ...event, status: 'Rejected' } : event
     ));
     setShowRejectConfirm(null);
+    setShowEventDetails(null);
   };
 
   const handleRequestInfo = (id) => {
@@ -234,6 +338,7 @@ const CircularsAndEventManagement = () => {
       event.id === id ? { ...event, status: 'Needs Information' } : event
     ));
     setShowRequestInfo(null);
+    setShowEventDetails(null);
   };
 
   const resetForm = () => {
@@ -258,6 +363,10 @@ const CircularsAndEventManagement = () => {
     resetForm();
   };
 
+  // Use filtered data
+  const displayedCirculars = getFilteredCirculars();
+  const displayedEvents = getFilteredEvents();
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'Published': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
@@ -280,7 +389,7 @@ const CircularsAndEventManagement = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`min-h-screen bg--to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Tab Navigation */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
@@ -342,6 +451,11 @@ const CircularsAndEventManagement = () => {
                 >
                   <Filter className="w-4 h-4" />
                   <span>Filter</span>
+                  {getActiveFilterCount() > 0 && (
+                    <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs">
+                      {getActiveFilterCount()}
+                    </span>
+                  )}
                   <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
                 </button>
                 
@@ -415,77 +529,110 @@ const CircularsAndEventManagement = () => {
               </div>
             </div>
 
+            {/* Active Filters Display */}
+            {getActiveFilterCount() > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm text-slate-600 dark:text-slate-400">Active filters:</span>
+                {getActiveFilterLabels().map((label, index) => (
+                  <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm">
+                    {label}
+                  </span>
+                ))}
+                <button
+                  onClick={clearFilters}
+                  className="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+
+            {/* Results count */}
+            <div className="text-sm text-slate-600 dark:text-slate-400">
+              Showing {displayedCirculars.length} of {circulars.length} circulars
+            </div>
+
             {/* Circulars List */}
             <div className="grid gap-4 sm:gap-6">
-              {circulars.map((circular) => (
-                <div key={circular.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 sm:p-6 border border-slate-200 dark:border-slate-700">
-                  <div className="flex flex-col space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-2 sm:space-y-0">
-                      <div className="flex-1 pr-0 sm:pr-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-2 sm:mb-0">
-                            {circular.title}
-                          </h3>
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium self-start ${getStatusColor(circular.status)}`}>
-                            {circular.status}
-                          </span>
-                        </div>
-                        
-                        <p className="text-slate-600 dark:text-slate-300 mb-4 line-clamp-2 text-sm sm:text-base">
-                          {circular.content}
-                        </p>
-                        
-                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">
-                          <div className="flex items-center space-x-1">
-                            <User className="w-3 h-3 sm:w-4 sm:h-4" />
-                            <span>{circular.author}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                            <span>{circular.date}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
-                            <span>{circular.views} views</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {circular.audience.map((aud, index) => (
-                            <span key={index} className="px-2 sm:px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
-                              {aud}
+              {displayedCirculars.length > 0 ? (
+                displayedCirculars.map((circular) => (
+                  <div key={circular.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 sm:p-6 border border-slate-200 dark:border-slate-700">
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-2 sm:space-y-0">
+                        <div className="flex-1 pr-0 sm:pr-4">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                            <h3 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-2 sm:mb-0">
+                              {circular.title}
+                            </h3>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium self-start ${getStatusColor(circular.status)}`}>
+                              {circular.status}
                             </span>
-                          ))}
+                          </div>
+                          
+                          <p className="text-slate-600 dark:text-slate-300 mb-4 line-clamp-2 text-sm sm:text-base">
+                            {circular.content}
+                          </p>
+                          
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">
+                            <div className="flex items-center space-x-1">
+                              <User className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span>{circular.author}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span>{circular.date}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span>{circular.views} views</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-wrap gap-2 mb-4">
+                            {circular.audience.map((aud, index) => (
+                              <span key={index} className="px-2 sm:px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
+                                {aud}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-2 sm:gap-0 sm:flex-row sm:space-x-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-                      <button 
-                        onClick={() => setShowCircularDetails(circular)}
-                        className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors text-sm"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>View</span>
-                      </button>
-                      <button 
-                        onClick={() => handleEditCircular(circular)}
-                        className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm"
-                      >
-                        <Edit className="w-4 h-4" />
-                        <span>Edit</span>
-                      </button>
-                      <button 
-                        onClick={() => setShowDeleteConfirm(circular.id)}
-                        className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-red-50 dark:bg-red-900/30 text-red-600 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors text-sm"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        <span>Delete</span>
-                      </button>
+                      
+                      <div className="flex flex-wrap gap-2 sm:gap-0 sm:flex-row sm:space-x-2 pt-2 border-t border-slate-200 dark:border-slate-700">
+                        <button 
+                          onClick={() => setShowCircularDetails(circular)}
+                          className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors text-sm"
+                        >
+                          <Eye className="w-4 h-4" />
+                          <span>View</span>
+                        </button>
+                        <button 
+                          onClick={() => handleEditCircular(circular)}
+                          className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors text-sm"
+                        >
+                          <Edit className="w-4 h-4" />
+                          <span>Edit</span>
+                        </button>
+                        <button 
+                          onClick={() => setShowDeleteConfirm(circular.id)}
+                          className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-red-50 dark:bg-red-900/30 text-red-600 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors text-sm"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          <span>Delete</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center py-12">
+                  <FileText className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+                  <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No circulars found</h3>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    {getActiveFilterCount() > 0 || searchTerm ? 'Try adjusting your search or filters.' : 'No circulars available.'}
+                  </p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         )}
@@ -500,123 +647,182 @@ const CircularsAndEventManagement = () => {
                 <input
                   type="text"
                   placeholder="Search event proposals..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-900 dark:text-white placeholder-slate-500 text-sm sm:text-base"
                 />
               </div>
-              <select className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base">
-                <option>All Statuses</option>
-                <option>Pending Review</option>
-                <option>Approved</option>
-                <option>Needs Information</option>
-                <option>Rejected</option>
-              </select>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <select 
+                  value={filters.status}
+                  onChange={(e) => setFilters({...filters, status: e.target.value})}
+                  className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                >
+                  <option value="">All Statuses</option>
+                  <option value="Pending Review">Pending Review</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Needs Information">Needs Information</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+                <select 
+                  value={filters.department}
+                  onChange={(e) => setFilters({...filters, department: e.target.value})}
+                  className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                >
+                  <option value="">All Departments</option>
+                  {departmentOptions.map(dept => (
+                    <option key={dept} value={dept}>{dept}</option>
+                  ))}
+                </select>
+                <select 
+                  value={filters.priority}
+                  onChange={(e) => setFilters({...filters, priority: e.target.value})}
+                  className="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                >
+                  <option value="">All Priorities</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Active Filters Display for Events */}
+            {getActiveFilterCount() > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm text-slate-600 dark:text-slate-400">Active filters:</span>
+                {getActiveFilterLabels().map((label, index) => (
+                  <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm">
+                    {label}
+                  </span>
+                ))}
+                <button
+                  onClick={clearFilters}
+                  className="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+
+            {/* Results count */}
+            <div className="text-sm text-slate-600 dark:text-slate-400">
+              Showing {displayedEvents.length} of {eventProposals.length} events
             </div>
 
             {/* Event Proposals Grid */}
             <div className="grid gap-4 sm:gap-6">
-              {eventProposals.map((event) => (
-                <div key={event.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 sm:p-6 border border-slate-200 dark:border-slate-700">
-                  <div className="flex flex-col space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-2 sm:space-y-0">
-                      <div className="flex-1 pr-0 sm:pr-4">
-                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3">
-                          <div className="flex-1">
-                            <h3 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-1">
-                              {event.title}
-                            </h3>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">
-                              {event.department} • Requested by {event.requestedBy}
-                            </p>
+              {displayedEvents.length > 0 ? (
+                displayedEvents.map((event) => (
+                  <div key={event.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-4 sm:p-6 border border-slate-200 dark:border-slate-700">
+                    <div className="flex flex-col space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-2 sm:space-y-0">
+                        <div className="flex-1 pr-0 sm:pr-4">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3">
+                            <div className="flex-1">
+                              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-1">
+                                {event.title}
+                              </h3>
+                              <p className="text-sm text-slate-500 dark:text-slate-400">
+                                {event.department} • Requested by {event.requestedBy}
+                              </p>
+                            </div>
+                            <div className="flex items-center space-x-2 mt-2 sm:mt-0">
+                              <span className={`w-2 h-2 rounded-full ${getPriorityColor(event.priority)}`}></span>
+                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(event.status)}`}>
+                                {event.status}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-2 mt-2 sm:mt-0">
-                            <span className={`w-2 h-2 rounded-full ${getPriorityColor(event.priority)}`}></span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(event.status)}`}>
-                              {event.status}
-                            </span>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-4">
+                            <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
+                              <Calendar className="w-4 h-4 flex-shrink-0" />
+                              <span className="truncate">{event.date}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
+                              <Clock className="w-4 h-4 flex-shrink-0" />
+                              <span className="truncate">{event.time}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
+                              <MapPin className="w-4 h-4 flex-shrink-0" />
+                              <span className="truncate">{event.venue}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
+                              <Users className="w-4 h-4 flex-shrink-0" />
+                              <span>{event.expectedAttendees} attendees</span>
+                            </div>
                           </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-4">
-                          <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
-                            <Calendar className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">{event.date}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
-                            <Clock className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">{event.time}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
-                            <MapPin className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">{event.venue}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-300">
-                            <Users className="w-4 h-4 flex-shrink-0" />
-                            <span>{event.expectedAttendees} attendees</span>
-                          </div>
-                        </div>
-                        
-                        <p className="text-slate-600 dark:text-slate-300 mb-4 text-sm sm:text-base">
-                          {event.description}
-                        </p>
-                        
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-sm">
-                          <div className="flex items-center space-x-1 text-green-600">
-                            <DollarSign className="w-4 h-4" />
-                            <span>Budget: ${event.budget.toLocaleString()}</span>
-                          </div>
-                          <div className="text-slate-500 dark:text-slate-400">
-                            Submitted: {event.submittedDate}
+                          
+                          <p className="text-slate-600 dark:text-slate-300 mb-4 text-sm sm:text-base">
+                            {event.description}
+                          </p>
+                          
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-sm">
+                            <div className="flex items-center space-x-1 text-green-600">
+                              <DollarSign className="w-4 h-4" />
+                              <span>Budget: ${event.budget.toLocaleString()}</span>
+                            </div>
+                            <div className="text-slate-500 dark:text-slate-400">
+                              Submitted: {event.submittedDate}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-2 sm:gap-0 sm:flex-row sm:space-x-2 pt-4 border-t border-slate-200 dark:border-slate-700">
-                      <button 
-                        onClick={() => setShowEventDetails(event)}
-                        className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors text-sm"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>Details</span>
-                      </button>
-                      {event.status === 'Pending Review' && (
-                        <>
-                          <button 
-                            onClick={() => setShowApprovalConfirm(event.id)}
-                            className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-600 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors text-sm"
-                          >
-                            <Check className="w-4 h-4" />
-                            <span>Approve</span>
-                          </button>
-                          <button 
-                            onClick={() => setShowRejectConfirm(event.id)}
-                            className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-red-50 dark:bg-red-900/30 text-red-600 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors text-sm"
-                          >
-                            <X className="w-4 h-4" />
-                            <span>Reject</span>
-                          </button>
-                        </>
-                      )}
-                      {event.status === 'Pending Review' && (
+                      
+                      <div className="flex flex-wrap gap-2 sm:gap-0 sm:flex-row sm:space-x-2 pt-4 border-t border-slate-200 dark:border-slate-700">
                         <button 
-                          onClick={() => setShowRequestInfo(event.id)}
-                          className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-orange-50 dark:bg-orange-900/30 text-orange-600 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors text-sm"
+                          onClick={() => setShowEventDetails(event)}
+                          className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors text-sm"
                         >
-                          <AlertCircle className="w-4 h-4" />
-                          <span className="hidden sm:inline">Request Info</span>
-                          <span className="sm:hidden">Info</span>
+                          <Eye className="w-4 h-4" />
+                          <span>Details</span>
                         </button>
-                      )}
+                        {event.status === 'Pending Review' && (
+                          <>
+                            <button 
+                              onClick={() => setShowApprovalConfirm(event.id)}
+                              className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-600 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors text-sm"
+                            >
+                              <Check className="w-4 h-4" />
+                              <span>Approve</span>
+                            </button>
+                            <button 
+                              onClick={() => setShowRejectConfirm(event.id)}
+                              className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-red-50 dark:bg-red-900/30 text-red-600 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors text-sm"
+                            >
+                              <X className="w-4 h-4" />
+                              <span>Reject</span>
+                            </button>
+                            <button 
+                              onClick={() => setShowRequestInfo(event.id)}
+                              className="flex-1 sm:flex-none flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 bg-orange-50 dark:bg-orange-900/30 text-orange-600 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors text-sm"
+                            >
+                              <AlertCircle className="w-4 h-4" />
+                              <span className="hidden sm:inline">Request Info</span>
+                              <span className="sm:hidden">Info</span>
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center py-12">
+                  <Calendar className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+                  <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">No events found</h3>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    {getActiveFilterCount() > 0 || searchTerm ? 'Try adjusting your search or filters.' : 'No events available.'}
+                  </p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         )}
       </div>
 
-      {/* Circular Details Modal - NEW */}
+      {/* Circular Details Modal */}
       {showCircularDetails && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -687,7 +893,6 @@ const CircularsAndEventManagement = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="p-4 sm:p-6 border-t border-slate-200 dark:border-slate-700 flex justify-end">
               <button 
                 onClick={() => setShowCircularDetails(null)}
@@ -720,7 +925,6 @@ const CircularsAndEventManagement = () => {
             </div>
             
             <div className="p-4 sm:p-6 space-y-6">
-              {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Circular Title
@@ -734,7 +938,6 @@ const CircularsAndEventManagement = () => {
                 />
               </div>
 
-              {/* Content */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Content
@@ -748,7 +951,6 @@ const CircularsAndEventManagement = () => {
                 />
               </div>
 
-              {/* Target Audience */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
                   Target Audience
@@ -769,7 +971,6 @@ const CircularsAndEventManagement = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="p-4 sm:p-6 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
               <button 
                 onClick={() => {
@@ -813,7 +1014,6 @@ const CircularsAndEventManagement = () => {
             </div>
             
             <div className="p-4 sm:p-6 space-y-6">
-              {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Circular Title
@@ -826,7 +1026,6 @@ const CircularsAndEventManagement = () => {
                 />
               </div>
 
-              {/* Content */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Content
@@ -839,7 +1038,6 @@ const CircularsAndEventManagement = () => {
                 />
               </div>
 
-              {/* Target Audience */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
                   Target Audience
@@ -860,7 +1058,6 @@ const CircularsAndEventManagement = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="p-4 sm:p-6 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
               <button 
                 onClick={() => {
@@ -999,7 +1196,6 @@ const CircularsAndEventManagement = () => {
                 </div>
               </div>
 
-              {/* Calendar Integration Preview */}
               <div>
                 <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Schedule Conflict Check</h4>
                 <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
@@ -1014,7 +1210,6 @@ const CircularsAndEventManagement = () => {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="p-4 sm:p-6 border-t border-slate-200 dark:border-slate-700">
               {showEventDetails.status === 'Pending Review' && (
                 <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">

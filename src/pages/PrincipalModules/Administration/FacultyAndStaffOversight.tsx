@@ -377,7 +377,7 @@ const FacultyAndStaffOversight = () => {
               <button
                 onClick={() => handleLeaveAction(request.id, 'approve')}
                 disabled={processingAction === request.id + '_approve'}
-                className="flex-1 bg-dark-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 <CheckCircle size={18} />
                 {processingAction === request.id + '_approve' ? 'Processing...' : 'Approve Request'}
@@ -385,7 +385,7 @@ const FacultyAndStaffOversight = () => {
               <button
                 onClick={() => handleLeaveAction(request.id, 'reject')}
                 disabled={processingAction === request.id + '_reject'}
-                className="flex-1 bg-dark-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 <XCircle size={18} />
                 {processingAction === request.id + '_reject' ? 'Processing...' : 'Reject Request'}
@@ -471,47 +471,47 @@ const FacultyAndStaffOversight = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-4">
-              <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-xl">
+              <div className="bg-white dark:bg-slate-700 p-4 rounded-xl">
                 <div className="flex items-center gap-3 mb-2">
                   <Mail size={16} className="text-blue-500" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Email</span>
                 </div>
                 <span className="text-sm text-slate-600 dark:text-slate-400 ml-7">{staff.email}</span>
               </div>
-              
-              <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-xl">
+
+              <div className="bg-white dark:bg-slate-700 p-4 rounded-xl">
                 <div className="flex items-center gap-3 mb-2">
                   <Phone size={16} className="text-green-500" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Phone</span>
                 </div>
                 <span className="text-sm text-slate-600 dark:text-slate-400 ml-7">{staff.phone}</span>
               </div>
-              
-              <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-xl">
+
+              <div className="bg-white dark:bg-slate-700 p-4 rounded-xl">
                 <div className="flex items-start gap-3 mb-2">
                   <MapPin size={16} className="text-red-500 mt-0.5" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Address</span>
                 </div>
                 <span className="text-sm text-slate-600 dark:text-slate-400 ml-7">{staff.address}</span>
               </div>
-              
-              <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-xl">
+
+              <div className="bg-white dark:bg-slate-700 p-4 rounded-xl">
                 <div className="flex items-center gap-3 mb-2">
                   <GraduationCap size={16} className="text-purple-500" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Qualification</span>
                 </div>
                 <span className="text-sm text-slate-600 dark:text-slate-400 ml-7">{staff.qualification}</span>
               </div>
-              
-              <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-xl">
+
+              <div className="bg-white dark:bg-slate-700 p-4 rounded-xl">
                 <div className="flex items-center gap-3 mb-2">
                   <Clock size={16} className="text-orange-500" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Experience</span>
                 </div>
                 <span className="text-sm text-slate-600 dark:text-slate-400 ml-7">{staff.experience}</span>
               </div>
-              
-              <div className="bg-slate-50 dark:bg-slate-750 p-4 rounded-xl">
+
+              <div className="bg-white dark:bg-slate-700 p-4 rounded-xl">
                 <div className="flex items-center gap-3 mb-2">
                   <Calendar size={16} className="text-teal-500" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Joining Date</span>
@@ -520,7 +520,7 @@ const FacultyAndStaffOversight = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-750 dark:to-slate-800 p-4 rounded-xl">
+            <div className="bg-white dark:bg-slate-700 p-4 rounded-xl">
               <h5 className="font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
                 <Award size={16} className="text-blue-600" />
                 Specialization
@@ -534,7 +534,7 @@ const FacultyAndStaffOversight = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-all duration-500">
+    <div className="min-h-screen bg--to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-all duration-500">
       <div className="container mx-auto px-4 py-8">
     {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

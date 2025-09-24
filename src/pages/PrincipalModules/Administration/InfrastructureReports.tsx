@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  FileText, 
-  DollarSign, 
-  Calendar, 
-  Building, 
-  CheckCircle, 
-  XCircle, 
-  RotateCcw, 
+  FileText,
+  DollarSign,
+  Calendar,
+  Building,
+  CheckCircle,
+  XCircle,
+  RotateCcw,
   Eye,
   Clock,
   AlertCircle,
@@ -16,16 +16,51 @@ import {
 } from 'lucide-react';
 
 const InfrastructureReports = () => {
+  // Mock navigation and params for demo
+  const navigate = (url) => {
+    console.log('Navigate called with:', url);
+    // In real app, this would be useNavigate() from react-router-dom
+    window.history.pushState({}, '', url);
+    // Trigger a re-render by updating state
+    setCurrentPath(url);
+  };
+  
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  
+  // Extract id from URL path manually
+  const getIdFromPath = () => {
+    const pathSegments = currentPath.split('/');
+    const viewIndex = pathSegments.findIndex(segment => segment === 'View');
+    return viewIndex !== -1 && viewIndex < pathSegments.length - 1 
+      ? pathSegments[viewIndex + 1] 
+      : null;
+  };
+  
+  const id = getIdFromPath();
   const [activeTab, setActiveTab] = useState('new-assets');
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterDepartment, setFilterDepartment] = useState('all');
+
+  // Common departments array
+  const commonDepartments = [
+    'Computer Science & Engineering',
+    'Mechanical Engineering', 
+    'Electrical & Electronics Engineering',
+    'Electronics & Communication Engineering',
+    'Civil Engineering',
+    'Chemical Engineering',
+    'Artificial Intelligence & Machine Learning',
+    'Library',
+ 
+  ];
 
   // Mock data for requests
   const newAssetRequests = [
     {
       id: 1,
-      department: 'Computer Science',
+      department: 'Computer Science & Engineering',
       title: 'High-Performance Computing Lab Setup',
       estimatedCost: 125000,
       dateSubmitted: '2024-09-15',
@@ -43,7 +78,7 @@ const InfrastructureReports = () => {
     },
     {
       id: 2,
-      department: 'Chemistry',
+      department: 'Chemical Engineering',
       title: 'Fume Hood Replacement',
       estimatedCost: 45000,
       dateSubmitted: '2024-09-12',
@@ -118,25 +153,104 @@ const InfrastructureReports = () => {
     }
   ];
 
-  const allRequests = activeTab === 'new-assets' ? newAssetRequests : maintenanceRequests;
+  const allRequests = [...newAssetRequests, ...maintenanceRequests];
 
-  const filteredRequests = allRequests.filter(request => {
+  // Get unique departments for filter dropdown
+  const getAllDepartments = () => {
+    const newAssetDepts = newAssetRequests.map(req => req.department);
+    const maintenanceDepts = maintenanceRequests.map(req => req.department);
+    const currentDataDepts = [...newAssetDepts, ...maintenanceDepts];
+    
+    // Combine common departments with departments from current data
+    const allDepts = [...new Set([...commonDepartments, ...currentDataDepts])];
+    return allDepts.sort();
+  };
+
+  // Debug current path and URL params
+  useEffect(() => {
+    console.log('Current pathname:', window.location.pathname);
+    console.log('URL params - id:', id);
+  }, [id]);
+
+  // Determine which tab should be active based on current route
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    console.log('Setting tab based on path:', currentPath);
+    
+    if (currentPath.includes('new-asset-requests')) {
+      setActiveTab('new-assets');
+    } else if (currentPath.includes('major-maintenance-requests')) {
+      setActiveTab('maintenance');
+    }
+  }, []);
+
+  // Load selected request based on URL parameter
+  useEffect(() => {
+    if (id) {
+      const request = allRequests.find(req => req.id === parseInt(id));
+      setSelectedRequest(request);
+      console.log('Selected request:', request);
+    } else {
+      setSelectedRequest(null);
+    }
+  }, [id]);
+
+  const currentTabRequests = activeTab === 'new-assets' ? newAssetRequests : maintenanceRequests;
+  
+  const filteredRequests = currentTabRequests.filter(request => {
     const matchesSearch = request.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          request.department.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || request.priority === filterStatus;
-    return matchesSearch && matchesFilter;
+    const matchesPriority = filterStatus === 'all' || request.priority === filterStatus;
+    const matchesDepartment = filterDepartment === 'all' || request.department === filterDepartment;
+    return matchesSearch && matchesPriority && matchesDepartment;
   });
+
+  const handleViewRequest = (request) => {
+    console.log('Viewing request:', request);
+    
+    // Determine the correct path based on the request type
+    const requestType = newAssetRequests.find(req => req.id === request.id) 
+      ? 'new-asset-requests' 
+      : 'major-maintenance-requests';
+    
+    console.log('Request type:', requestType);
+    console.log('Request ID:', request.id);
+    
+    // Construct the URL
+    const url = `/principal/infrastructure-reports/${requestType}/View/${request.id}`;
+    console.log('Navigating to:', url);
+    
+    // Navigate to the appropriate URL
+    navigate(url);
+  };
+
+  const handleBackToList = () => {
+    // Navigate back to the list view
+    const requestType = newAssetRequests.find(req => req.id === selectedRequest?.id) 
+      ? 'new-asset-requests' 
+      : 'major-maintenance-requests';
+    
+    console.log('Going back to list, request type:', requestType);
+    navigate(`/principal/infrastructure-reports/${requestType}`);
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    const requestType = tab === 'new-assets' ? 'new-asset-requests' : 'major-maintenance-requests';
+    console.log('Tab changed to:', tab, 'navigating to:', requestType);
+    navigate(`/principal/infrastructure-reports/${requestType}`);
+  };
 
   const handleApprove = (requestId) => {
     alert(`Request #${requestId} approved and forwarded to Registrar/Admin for final sanctioning.`);
-    setSelectedRequest(null);
+    handleBackToList();
   };
 
   const handleReject = (requestId) => {
     const reason = prompt('Please provide a reason for rejection:');
     if (reason) {
       alert(`Request #${requestId} rejected. Reason: ${reason}`);
-      setSelectedRequest(null);
+      handleBackToList();
     }
   };
 
@@ -144,7 +258,7 @@ const InfrastructureReports = () => {
     const clarification = prompt('What clarification is needed?');
     if (clarification) {
       alert(`Request #${requestId} returned for clarification: ${clarification}`);
-      setSelectedRequest(null);
+      handleBackToList();
     }
   };
 
@@ -168,13 +282,13 @@ const InfrastructureReports = () => {
 
   if (selectedRequest) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 p-4">
+      <div className="min-h-screen bg--to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 p-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <button
-                onClick={() => setSelectedRequest(null)}
+                onClick={handleBackToList}
                 className="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
@@ -283,14 +397,14 @@ const InfrastructureReports = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 p-4">
+    <div className="min-h-screen bg--to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Tabs */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg mb-6">
           <div className="border-b border-slate-200 dark:border-slate-700">
             <nav className="flex">
               <button
-                onClick={() => setActiveTab('new-assets')}
+                onClick={() => handleTabChange('new-assets')}
                 className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'new-assets'
                     ? 'border-blue-500 text-blue-600 dark:text-blue-400'
@@ -300,7 +414,7 @@ const InfrastructureReports = () => {
                 New Asset Requests ({newAssetRequests.length})
               </button>
               <button
-                onClick={() => setActiveTab('maintenance')}
+                onClick={() => handleTabChange('maintenance')}
                 className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
                   activeTab === 'maintenance'
                     ? 'border-blue-500 text-blue-600 dark:text-blue-400'
@@ -325,18 +439,33 @@ const InfrastructureReports = () => {
                   className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
                 />
               </div>
-              <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="pl-10 pr-8 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
-                >
-                  <option value="all">All Priorities</option>
-                  <option value="high">High Priority</option>
-                  <option value="medium">Medium Priority</option>
-                  <option value="low">Low Priority</option>
-                </select>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+                  <select
+                    value={filterDepartment}
+                    onChange={(e) => setFilterDepartment(e.target.value)}
+                    className="pl-10 pr-8 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+                  >
+                    <option value="all">All Departments</option>
+                    {getAllDepartments().map(dept => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="pl-10 pr-8 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+                  >
+                    <option value="all">All Priorities</option>
+                    <option value="high">High Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="low">Low Priority</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -348,7 +477,7 @@ const InfrastructureReports = () => {
                 <div
                   key={request.id}
                   className="p-6 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
-                  onClick={() => setSelectedRequest(request)}
+                  onClick={() => handleViewRequest(request)}
                 >
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex-1">
@@ -391,7 +520,7 @@ const InfrastructureReports = () => {
                   No requests found
                 </h3>
                 <p className="text-slate-500 dark:text-slate-500">
-                  {searchTerm || filterStatus !== 'all' 
+                  {searchTerm || filterStatus !== 'all' || filterDepartment !== 'all'
                     ? 'Try adjusting your search or filter criteria.'
                     : 'All requests have been processed.'}
                 </p>

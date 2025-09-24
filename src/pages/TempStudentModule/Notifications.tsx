@@ -492,7 +492,7 @@ const Notifications = () => {
   );
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
+    <div className={`min-h-screen bg--to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
       <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-6">
         {/* Quick Stats */}
         <div className="mb-4 sm:mb-8 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
