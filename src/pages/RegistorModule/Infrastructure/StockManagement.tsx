@@ -263,7 +263,7 @@ export default function StockManagementTable() {
   return (
     <div className={styles.page}>
       <div className={styles.headerContainer}>
-        <h1 className={styles.header}>Stock Management Dashboard</h1>
+        <h1 className={styles.header}>Stock Management </h1>
         <button onClick={() => setIsAdding(true)} className={`${styles.button} ${styles.buttonPrimary}`}><PlusCircle size={18} /> Add New Stock</button>
       </div>
       
