@@ -20,9 +20,11 @@ interface FeeStructureItem {
 interface FeeStructure {
   id: string;
   name: string;
-  course: string;
+  Department: string;
   Program: string;
   academicYear: string;
+    Semester: string;
+    Year: string;
   items: FeeStructureItem[];
   totalAmount: number;
   isActive: boolean;
@@ -45,7 +47,7 @@ const FeeStructureManagement: React.FC = () => {
 
   // Sample data
   const [feeHeads, setFeeHeads] = useState<FeeHead[]>([
-    { id: '1', name: 'Tuition Fee', description: 'Main academic fee for course instruction', isActive: true, createdAt: '2024-01-15' },
+    { id: '1', name: 'Tuition Fee', description: 'Main academic fee for Department instruction', isActive: true, createdAt: '2024-01-15' },
     { id: '2', name: 'Exam Fee', description: 'Fee for examinations and assessments', isActive: true, createdAt: '2024-01-15' },
     { id: '3', name: 'Library Fee', description: 'Access to library resources and facilities', isActive: true, createdAt: '2024-01-15' },
     { id: '4', name: 'Lab Fee', description: 'Laboratory equipment and materials', isActive: true, createdAt: '2024-01-15' }
@@ -55,9 +57,11 @@ const FeeStructureManagement: React.FC = () => {
     {
       id: '1',
       name: 'Computer Science - Standard',
-      course: 'Computer Science',
+      Department: 'Computer Science',
       Program: 'Engineering',
       academicYear: '2024-25',
+      Semester: 'I-Semester',
+      Year: 'Year-1',
       items: [
         { feeHeadId: '1', amount: 50000, isOptional: false },
         { feeHeadId: '2', amount: 5000, isOptional: false },
@@ -72,9 +76,11 @@ const FeeStructureManagement: React.FC = () => {
     {
       id: '2',
       name: 'Business Administration - Premium',
-      course: 'Business Administration',
+      Department: 'Business Administration',
       Program: 'Management',
       academicYear: '2024-25',
+      Semester: 'II-Semester',
+      Year: 'Year-2',
       items: [
         { feeHeadId: '1', amount: 40000, isOptional: false },
         { feeHeadId: '2', amount: 4000, isOptional: false },
@@ -217,13 +223,14 @@ const FeeStructureManagement: React.FC = () => {
   const FeeStructureModal: React.FC = () => {
     const [formData, setFormData] = useState({
       name: editingItem?.name || '',
-      course: editingItem?.course || '',
+      Department: editingItem?.Department || '',
       Program: editingItem?.Program || '',
       academicYear: editingItem?.academicYear || '2024-25',
       items: editingItem?.items || [],
       isActive: editingItem?.isActive ?? true,
       FeeStatus: editingItem?.FeeStatus || '',
       Semester: editingItem?.Semester || '',
+      Year: editingItem?.Year || ''
     });
 
     const addFeeItem = () => {
@@ -286,7 +293,7 @@ const FeeStructureManagement: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-              <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Fee Status</label>
+              <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Fee Type</label>
                 <select
                   value={formData.FeeStatus}
                   onChange={(e) => setFormData(prev => ({ ...prev, FeeStatus: e.target.value }))}
@@ -301,14 +308,14 @@ const FeeStructureManagement: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Course</label>
+                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Department</label>
                 <select
-                  value={formData.course}
-                  onChange={(e) => setFormData(prev => ({ ...prev, course: e.target.value }))}
+                  value={formData.Department}
+                  onChange={(e) => setFormData(prev => ({ ...prev, Department: e.target.value }))}
                   className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
                   required
                 >
-                  <option value="">Select Course</option>
+                  <option value="">Select Department</option>
                   <option value="Computer Science">Computer Science</option>
                   <option value="Electronics">Electronics</option>
                   <option value="Mechanical">Mechanical</option>
@@ -330,6 +337,22 @@ const FeeStructureManagement: React.FC = () => {
                   <option value="Science">Science</option>
                 </select>
               </div>
+              <div>
+                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Year</label>
+                <select
+                  value={formData.Year}
+                  onChange={(e) => setFormData(prev => ({ ...prev, Year: e.target.value }))}
+                  className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
+                  required
+                >
+                  <option value="">Select Year</option>
+                  <option value="Year-1">Year-1</option>
+                  <option value="Year-2">Year-2</option>
+                  <option value="Year-3">Year-3</option>
+                  <option value="Year-4">Year-4</option>
+                </select>
+              </div>
+                           
                            <div>
                 <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Semester</label>
                 <select
@@ -481,8 +504,8 @@ const FeeStructureManagement: React.FC = () => {
                 <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.name}</p>
               </div>
               <div>
-                <span className={`text-sm ${currentTheme.textMuted}`}>Course:</span>
-                <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.course}</p>
+                <span className={`text-sm ${currentTheme.textMuted}`}>Department:</span>
+                <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.Department}</p>
               </div>
               <div>
                 <span className={`text-sm ${currentTheme.textMuted}`}>Program:</span>
@@ -493,6 +516,10 @@ const FeeStructureManagement: React.FC = () => {
                 <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.academicYear}</p>
               </div>
             </div>
+            <div>
+  <span className={`text-sm ${currentTheme.textMuted}`}>Semester:</span>
+  <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.Semester}</p>
+</div>
 
             <div>
               <h4 className={`text-md font-medium ${currentTheme.text} mb-4`}>Fee Breakdown</h4>
@@ -548,7 +575,7 @@ const FeeStructureManagement: React.FC = () => {
 
   const filteredFeeStructures = feeStructures.filter(structure => {
     const matchesSearch = structure.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         structure.course.toLowerCase().includes(searchTerm.toLowerCase());
+                         structure.Department.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterProgram === 'all' || structure.Program === filterProgram;
     return matchesSearch && matchesFilter;
   });
@@ -703,8 +730,8 @@ const FeeStructureManagement: React.FC = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                           <div className="flex items-center gap-2">
                             <GraduationCap size={16} className={currentTheme.textMuted} />
-                            <span className={`text-sm ${currentTheme.textSecondary}`}>Course:</span>
-                            <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.course}</span>
+                            <span className={`text-sm ${currentTheme.textSecondary}`}>Department:</span>
+                            <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Department}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Filter size={16} className={currentTheme.textMuted} />
@@ -713,10 +740,27 @@ const FeeStructureManagement: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-2">
                             <Calendar size={16} className={currentTheme.textMuted} />
-                            <span className={`text-sm ${currentTheme.textSecondary}`}>Year:</span>
+                            <span className={`text-sm ${currentTheme.textSecondary}`}>Academic Year:</span>
                             <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.academicYear}</span>
                           </div>
                         </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
+  {/* ...existing columns... */}
+  <div className="flex items-center gap-2">
+    <Calendar size={16} className={currentTheme.textMuted} />
+    <span className={`text-sm ${currentTheme.textSecondary}`}>Semester:</span>
+    <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Semester}</span>
+</div>
+
+<div className="flex items-center gap-2">
+    <Calendar size={16} className={currentTheme.textMuted} />
+    <span className={`text-sm ${currentTheme.textSecondary}`}>Year:</span>
+    <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Year}</span>
+  </div>
+  </div>
+  
+
+
                         <div className="flex flex-wrap items-center gap-6">
                           <div className="flex items-center gap-2">
                             <span className={`text-sm ${currentTheme.textSecondary}`}>Fee Items:</span>
@@ -769,7 +813,7 @@ const FeeStructureManagement: React.FC = () => {
                   No Fee Structures Found
                 </h3>
                 <p className={`${currentTheme.textSecondary} mb-8 max-w-md mx-auto`}>
-                  Create your first fee structure to define course pricing. Fee structures combine multiple fee heads into comprehensive packages.
+                  Create your first fee structure to define Department pricing. Fee structures combine multiple fee heads into comprehensive packages.
                 </p>
                 <button
                   onClick={() => setActiveModal('fee-structure')}
