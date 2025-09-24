@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { 
   Car, 
@@ -20,24 +21,28 @@ import {
 
 const MasterConfiguration = () => {
   const { isDark } = useTheme();
-  const [activeSection, setActiveSection] = useState('vehicles');
+  const navigate = useNavigate();
+  const params = useParams();
+  const location = useLocation();
+  
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentView, setCurrentView] = useState('list'); // 'list', 'add', 'edit'
-  const [editingItem, setEditingItem] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
 
+  // Sample data with relationships
   const [vehicles, setVehicles] = useState([
-    { id: 'BUS-001', type: 'Bus', capacity: 50, status: 'active', route: 'Route A', driver: 'John Smith' },
-    { id: 'BUS-002', type: 'Bus', capacity: 45, status: 'maintenance', route: 'Route B', driver: 'Sarah Johnson' },
-    { id: 'VAN-001', type: 'Van', capacity: 12, status: 'active', route: 'Route C', driver: 'Mike Davis' },
-    { id: 'BUS-003', type: 'Bus', capacity: 55, status: 'active', route: 'Route D', driver: 'Emily Wilson' }
+    { id: 'BUS-001', type: 'Bus', capacity: 50, status: 'active', route: 'RT-001', driver: 'DRV-001' },
+    { id: 'BUS-002', type: 'Bus', capacity: 45, status: 'maintenance', route: 'RT-002', driver: 'DRV-002' },
+    { id: 'VAN-001', type: 'Van', capacity: 12, status: 'active', route: 'RT-003', driver: 'DRV-003' },
+    { id: 'BUS-003', type: 'Bus', capacity: 55, status: 'active', route: 'RT-004', driver: 'DRV-004' }
   ]);
 
   const [drivers, setDrivers] = useState([
     { id: 'DRV-001', name: 'John Smith', license: 'CDL-A', experience: '8 years', status: 'active', vehicle: 'BUS-001' },
     { id: 'DRV-002', name: 'Sarah Johnson', license: 'CDL-B', experience: '5 years', status: 'active', vehicle: 'BUS-002' },
     { id: 'DRV-003', name: 'Mike Davis', license: 'CDL-A', experience: '12 years', status: 'active', vehicle: 'VAN-001' },
-    { id: 'DRV-004', name: 'Emily Wilson', license: 'CDL-B', experience: '3 years', status: 'training', vehicle: 'BUS-003' }
+    { id: 'DRV-004', name: 'Emily Wilson', license: 'CDL-B', experience: '3 years', status: 'training', vehicle: 'BUS-003' },
+    { id: 'DRV-005', name: 'Robert Brown', license: 'CDL-A', experience: '6 years', status: 'active', vehicle: '' },
+    { id: 'DRV-006', name: 'Lisa Anderson', license: 'CDL-B', experience: '4 years', status: 'active', vehicle: '' }
   ]);
 
   const [routes, setRoutes] = useState([
@@ -47,11 +52,83 @@ const MasterConfiguration = () => {
     { id: 'RT-004', name: 'Route D', distance: '30 km', stops: 15, duration: '55 min', status: 'inactive' }
   ]);
 
+  // Determine current state from URL - Default to vehicles
+  const getCurrentSection = () => {
+    const path = location.pathname;
+    if (path.includes('vehicle-master')) return 'vehicles';
+    if (path.includes('driver-master')) return 'drivers';
+    if (path.includes('route-master')) return 'routes';
+    return 'vehicles'; // default to vehicles
+  };
+
+  const getCurrentView = () => {
+    const path = location.pathname;
+    if (path.includes('/add-')) return 'add';
+    if (path.includes('/edit-')) return 'edit';
+    return 'list';
+  };
+
+  const [activeSection, setActiveSection] = useState(getCurrentSection());
+  const [currentView, setCurrentView] = useState(getCurrentView());
+  const [editingItem, setEditingItem] = useState(null);
+
+  // Update state when URL changes
+  useEffect(() => {
+    const newSection = getCurrentSection();
+    const newView = getCurrentView();
+    
+    setActiveSection(newSection);
+    setCurrentView(newView);
+    
+    // If editing, find the item
+    if (newView === 'edit' && params.id) {
+      const currentData = newSection === 'vehicles' ? vehicles :
+                         newSection === 'drivers' ? drivers : routes;
+      const item = currentData.find(item => item.id === params.id);
+      setEditingItem(item);
+    } else {
+      setEditingItem(null);
+    }
+  }, [location.pathname, params.id, vehicles, drivers, routes]);
+
+  // Default redirect effect - if user lands on base route, redirect to vehicle-master
+  useEffect(() => {
+    if (location.pathname === '/management/transport/master-configuration' || 
+        location.pathname === '/management/transport/master-configuration/') {
+      navigate('/management/transport/master-configuration/vehicle-master', { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
   const sections = [
-    { id: 'vehicles', label: 'Vehicle Master', icon: Car },
-    { id: 'drivers', label: 'Driver Master', icon: Users },
-    { id: 'routes', label: 'Route Master', icon: MapPin }
+    { id: 'vehicles', label: 'Vehicle Master', icon: Car, path: 'vehicle-master' },
+    { id: 'drivers', label: 'Driver Master', icon: Users, path: 'driver-master' },
+    { id: 'routes', label: 'Route Master', icon: MapPin, path: 'route-master' }
   ];
+
+  // Navigation functions with correct path structure
+  const handleSectionChange = (sectionId) => {
+    const section = sections.find(s => s.id === sectionId);
+    navigate(`/management/transport/master-configuration/${section.path}`);
+  };
+
+  const handleAdd = () => {
+    const sectionPath = sections.find(s => s.id === activeSection)?.path;
+    const addPath = activeSection === 'vehicles' ? 'add-vehicle' :
+                   activeSection === 'drivers' ? 'add-driver' : 'add-route';
+    navigate(`/management/transport/master-configuration/${sectionPath}/${addPath}`);
+  };
+
+  const handleEdit = (item) => {
+    const sectionPath = sections.find(s => s.id === activeSection)?.path;
+    const editPath = activeSection === 'vehicles' ? 'edit-vehicle' :
+                     activeSection === 'drivers' ? 'edit-driver' : 'edit-route';
+    navigate(`/management/transport/master-configuration/${sectionPath}/${editPath}/${item.id}`);
+  };
+
+  const handleBackToList = () => {
+    const sectionPath = sections.find(s => s.id === activeSection)?.path;
+    navigate(`/management/transport/master-configuration/${sectionPath}`);
+  };
 
   // Show toast message
   const showToast = (message, type = 'success') => {
@@ -74,7 +151,7 @@ const MasterConfiguration = () => {
     
     return data.filter((item) => {
       const searchFields = activeSection === 'vehicles' 
-        ? [item.id, item.type, item.driver, item.route]
+        ? [item.id, item.type, getDriverName(item.driver), getRouteName(item.route)]
         : activeSection === 'drivers'
         ? [item.id, item.name, item.license, item.vehicle]
         : [item.id, item.name, item.distance];
@@ -85,19 +162,15 @@ const MasterConfiguration = () => {
     });
   };
 
-  const handleAdd = () => {
-    setEditingItem(null);
-    setCurrentView('add');
+  // Helper functions to get names
+  const getDriverName = (driverId) => {
+    const driver = drivers.find(d => d.id === driverId);
+    return driver ? driver.name : driverId;
   };
 
-  const handleEdit = (item) => {
-    setEditingItem(item);
-    setCurrentView('edit');
-  };
-
-  const handleBackToList = () => {
-    setCurrentView('list');
-    setEditingItem(null);
+  const getRouteName = (routeId) => {
+    const route = routes.find(r => r.id === routeId);
+    return route ? route.name : routeId;
   };
 
   const handleDelete = (item) => {
@@ -148,8 +221,7 @@ const MasterConfiguration = () => {
         break;
     }
     
-    setCurrentView('list');
-    setEditingItem(null);
+    handleBackToList();
   };
 
   const renderActionButtons = () => (
@@ -160,10 +232,6 @@ const MasterConfiguration = () => {
       >
         <Plus className="w-4 h-4 mr-2" />
         Add New
-      </button>
-      <button className={`px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center`}>
-        <Upload className="w-4 h-4 mr-2" />
-        Import
       </button>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -224,6 +292,9 @@ const MasterConfiguration = () => {
               onSave={handleSave}
               onCancel={handleBackToList}
               isDark={isDark}
+              drivers={drivers}
+              routes={routes}
+              vehicles={vehicles}
             />
           </div>
         </div>
@@ -265,7 +336,7 @@ const MasterConfiguration = () => {
                 return (
                   <button
                     key={section.id}
-                    onClick={() => setActiveSection(section.id)}
+                    onClick={() => handleSectionChange(section.id)}
                     className={`flex items-center space-x-2 py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                       activeSection === section.id
                         ? `border-blue-500 ${isDark ? 'text-blue-400' : 'text-blue-600'}`
@@ -317,6 +388,8 @@ const MasterConfiguration = () => {
                             onEdit={() => handleEdit(vehicle)}
                             onDelete={() => handleDelete(vehicle)}
                             isDark={isDark}
+                            drivers={drivers}
+                            routes={routes}
                           />
                         ))}
                       </tbody>
@@ -421,41 +494,53 @@ const Toast = ({ message, type, onClose }) => (
 );
 
 // Vehicle Row Component
-const VehicleRow = ({ vehicle, onEdit, onDelete, isDark }) => (
-  <tr className={`border-b transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${
-    isDark ? 'border-gray-700' : 'border-gray-200'
-  }`}>
-    <td className="py-3 px-4 font-medium">{vehicle.id}</td>
-    <td className="py-3 px-4">{vehicle.type}</td>
-    <td className="py-3 px-4">{vehicle.capacity}</td>
-    <td className="py-3 px-4">
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-        vehicle.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-      }`}>
-        {vehicle.status}
-      </span>
-    </td>
-    <td className="py-3 px-4">{vehicle.route}</td>
-    <td className="py-3 px-4">{vehicle.driver}</td>
-    <td className="py-3 px-4">
-      <div className="flex space-x-2">
-        <button 
-          onClick={onEdit}
-          className="p-1.5 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition-colors"
-        >
-          <Edit className="w-4 h-4" />
-        </button>
-        <button 
-          onClick={onDelete}
-          className="p-1.5 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition-colors"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
-      </div>
-    </td>
-  </tr>
-);
+const VehicleRow = ({ vehicle, onEdit, onDelete, isDark, drivers, routes }) => {
+  const getDriverName = (driverId) => {
+    const driver = drivers.find(d => d.id === driverId);
+    return driver ? driver.name : driverId;
+  };
+
+  const getRouteName = (routeId) => {
+    const route = routes.find(r => r.id === routeId);
+    return route ? route.name : routeId;
+  };
+
+  return (
+    <tr className={`border-b transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-700/50 ${
+      isDark ? 'border-gray-700' : 'border-gray-200'
+    }`}>
+      <td className="py-3 px-4 font-medium">{vehicle.id}</td>
+      <td className="py-3 px-4">{vehicle.type}</td>
+      <td className="py-3 px-4">{vehicle.capacity}</td>
+      <td className="py-3 px-4">
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+          vehicle.status === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+          'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+        }`}>
+          {vehicle.status}
+        </span>
+      </td>
+      <td className="py-3 px-4">{getRouteName(vehicle.route)}</td>
+      <td className="py-3 px-4">{getDriverName(vehicle.driver)}</td>
+      <td className="py-3 px-4">
+        <div className="flex space-x-2">
+          <button 
+            onClick={onEdit}
+            className="p-1.5 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded transition-colors"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={onDelete}
+            className="p-1.5 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+};
 
 // Driver Row Component
 const DriverRow = ({ driver, onEdit, onDelete, isDark }) => (
@@ -539,13 +624,36 @@ const RouteCard = ({ route, onEdit, onDelete, isDark }) => (
   </div>
 );
 
-// Master Form Component
-const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
+// Master Form Component with Fixed Dropdowns
+const MasterForm = ({ type, data, onSave, onCancel, isDark, drivers, routes, vehicles }) => {
   const [formData, setFormData] = useState(data || {});
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
+  };
+
+  const getAvailableDrivers = () => {
+    return drivers.filter(driver => 
+      driver.status === 'active' && (
+        !driver.vehicle || 
+        driver.vehicle === '' || 
+        (data && driver.vehicle === data.id)
+      )
+    );
+  };
+
+  const getAvailableVehicles = () => {
+    return vehicles.filter(vehicle => 
+      vehicle.status === 'active' && (
+        !drivers.find(driver => driver.vehicle === vehicle.id) ||
+        (data && drivers.find(driver => driver.vehicle === vehicle.id && driver.id === data.id))
+      )
+    );
+  };
+
+  const getAvailableRoutes = () => {
+    return routes.filter(route => route.status === 'active');
   };
 
   const renderFields = () => {
@@ -569,19 +677,23 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 <option value="Minibus">Minibus</option>
               </select>
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Capacity *</label>
               <input
                 type="number"
                 value={formData.capacity || ''}
-                onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) || '' })}
                 className={`w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
                 }`}
                 placeholder="Enter capacity"
+                min="1"
+                max="100"
                 required
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Status *</label>
               <select
@@ -598,32 +710,59 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Assigned Route</label>
-              <input
-                type="text"
+              <select
                 value={formData.route || ''}
                 onChange={(e) => setFormData({ ...formData, route: e.target.value })}
                 className={`w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
                 }`}
-                placeholder="Enter route name"
-              />
+              >
+                <option value="">Select Route</option>
+                {getAvailableRoutes().map(route => (
+                  <option key={route.id} value={route.id}>
+                    {route.name} ({route.id}) - {route.distance}
+                  </option>
+                ))}
+              </select>
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Assigned Driver</label>
-              <input
-                type="text"
-                value={formData.driver || ''}
-                onChange={(e) => setFormData({ ...formData, driver: e.target.value })}
-                className={`w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                  isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
-                }`}
-                placeholder="Enter driver name"
-              />
+              <div className="relative">
+                <select
+                  value={formData.driver || ''}
+                  onChange={(e) => setFormData({ ...formData, driver: e.target.value })}
+                  className={`w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none ${
+                    isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                >
+                  <option value="">Select Driver</option>
+                  {getAvailableDrivers().length > 0 ? (
+                    getAvailableDrivers().map(driver => (
+                      <option key={driver.id} value={driver.id}>
+                        {driver.name} ({driver.id}) - {driver.license}
+                      </option>
+                    ))
+                  ) : null}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              {getAvailableDrivers().length === 0 && (
+                <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-1">
+                  No active drivers available for assignment
+                </p>
+              )}
             </div>
           </>
         );
+        
       case 'drivers':
         return (
           <>
@@ -640,6 +779,7 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 required
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">License Type *</label>
               <select
@@ -651,11 +791,12 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 required
               >
                 <option value="">Select License</option>
-                <option value="CDL-A">CDL-A</option>
-                <option value="CDL-B">CDL-B</option>
-                <option value="CDL-C">CDL-C</option>
+                <option value="CDL-A">CDL-A (Commercial Driver's License Class A)</option>
+                <option value="CDL-B">CDL-B (Commercial Driver's License Class B)</option>
+                <option value="CDL-C">CDL-C (Commercial Driver's License Class C)</option>
               </select>
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Experience *</label>
               <input
@@ -669,6 +810,7 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 required
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Status *</label>
               <select
@@ -685,20 +827,41 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Assigned Vehicle</label>
-              <input
-                type="text"
-                value={formData.vehicle || ''}
-                onChange={(e) => setFormData({ ...formData, vehicle: e.target.value })}
-                className={`w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                  isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
-                }`}
-                placeholder="Enter vehicle ID"
-              />
+              <div className="relative">
+                <select
+                  value={formData.vehicle || ''}
+                  onChange={(e) => setFormData({ ...formData, vehicle: e.target.value })}
+                  className={`w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none ${
+                    isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
+                  }`}
+                >
+                  <option value="">Select Vehicle</option>
+                  {getAvailableVehicles().length > 0 ? (
+                    getAvailableVehicles().map(vehicle => (
+                      <option key={vehicle.id} value={vehicle.id}>
+                        {vehicle.type} - {vehicle.id} (Capacity: {vehicle.capacity})
+                      </option>
+                    ))
+                  ) : null}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              {getAvailableVehicles().length === 0 && (
+                <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-1">
+                  No active vehicles available for assignment
+                </p>
+              )}
             </div>
           </>
         );
+        
       case 'routes':
         return (
           <>
@@ -715,6 +878,7 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 required
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Distance *</label>
               <input
@@ -728,19 +892,22 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 required
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Number of Stops *</label>
               <input
                 type="number"
                 value={formData.stops || ''}
-                onChange={(e) => setFormData({ ...formData, stops: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, stops: parseInt(e.target.value) || '' })}
                 className={`w-full p-3 rounded-lg border transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                   isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'
                 }`}
                 placeholder="Enter number of stops"
+                min="1"
                 required
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Duration *</label>
               <input
@@ -754,6 +921,7 @@ const MasterForm = ({ type, data, onSave, onCancel, isDark }) => {
                 required
               />
             </div>
+            
             <div>
               <label className="block text-sm font-medium mb-2">Status *</label>
               <select

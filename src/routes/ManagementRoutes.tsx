@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import HRDashboard from "../pages/RegistorModule/HR_Management/Dashboard";
 import Employeedatabase from "../pages/RegistorModule/HR_Management/Employeedatabase";
 import LeavePolicy from "../pages/RegistorModule/HR_Management/Leave&policy";
@@ -7,7 +7,7 @@ import PayrollManagement from "../pages/RegistorModule/HR_Management/Payrollmana
 import Requirementmanagement from "../pages/RegistorModule/HR_Management/Requirementmanagement";
 
 import StudentfeeDashboard from "../pages/RegistorModule/StudentFees/StudentfeeDashboard";
-import  FeeStructureManagement  from "../pages/RegistorModule/StudentFees/FeeStructureManagement";
+import FeeStructureManagement from "../pages/RegistorModule/StudentFees/FeeStructureManagement";
 import FeeMonitoringSystem from "../pages/RegistorModule/StudentFees/FeeMonitoringSystem";
 import BulkOperationsInterface from "../pages/RegistorModule/StudentFees/BulkOperationsInterface";
 import StudentFeesReportingHub from "../pages/RegistorModule/StudentFees/StudentFeesReportingHub";
@@ -25,9 +25,15 @@ import ManagementHistory from "../pages/RegistorModule/Infrastructure/Management
 import TransportDashboard from "../pages/RegistorModule/Transport/TransportDashboard";
 import FleetandStaffOverview from "../pages/RegistorModule/Transport/FleetandStaffOverview";
 import FinancialControlandApprovals from "../pages/RegistorModule/Transport/FinancialControlandApprovals";
+import FuelConsumptionDetails from "../pages/RegistorModule/Transport/FuelConsumptionDetails";
+import VehicleCostAnalysisDetails from "../pages/RegistorModule/Transport/VehicleCostAnalysisDetails";
+import InsuranceDetails from "../pages/RegistorModule/Transport/InsuranceDetails";
+import DriverOvertimeDetails from "../pages/RegistorModule/Transport/DriverOvertimeDetails";
+import RouteProfitabilityDetails from "../pages/RegistorModule/Transport/RouteProfitabilityDetails";
+import AccidentAllocationDetails from "../pages/RegistorModule/Transport/AccidentAllocationDetails";
 import MasterConfiguration from "../pages/RegistorModule/Transport/MasterConfiguration";
 import TransportReports from "../pages/RegistorModule/Transport/TransportReports";
-      
+
 import CandidateVerification from "../pages/RegistorModule/Admission/Verification/CandidateVerification";
 import DocumentVerification from "../pages/RegistorModule/Admission/Verification/DocumentVerification";
 import AllotmentOrderGeneration from "../pages/RegistorModule/Admission/Verification/AllotmentOrderGeneration";
@@ -50,12 +56,12 @@ import SeatAllotmentPhaseII from "../pages/RegistorModule/Admission/AdminssionPr
 import SeatAllotmentPhaseIII from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/SeatAllotmentPhaseIII";
 import ManagementAdmissionProcess from "../pages/RegistorModule/Admission/AdminssionProcess/ManagementAdmission/ManagementAdmissionProcess";
 import SpotAdmissionMerit from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionMerit";
-import SpotAdmissionFCFS from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionFCFS";  
+import SpotAdmissionFCFS from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionFCFS";
 import FinancialApprovals from "../pages/PrincipalModules/Administration/FinancialApprovals";
 import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/FacultyAndStaffOversight";
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
-import DashBoard from "../pages/PrincipalModules/Administration/DashBoard"; 
+import DashBoard from "../pages/PrincipalModules/Administration/DashBoard";
 
 import Dashboard from "../pages/StudentModules/Adminstration/Dashboard";
 import MyProfile from "../pages/StudentModules/Adminstration/MyProfile";
@@ -84,26 +90,48 @@ const CommonRoutes: React.FC = () => {
   return (
     <Routes>
 
-      
+
       <Route path="/hr/dashboard" element={<HRDashboard />} />
       <Route path="/hr/employee-database" element={<Employeedatabase />} />
       <Route path="/hr/leave-policy" element={<LeavePolicy />} />
       <Route path="/hr/payroll" element={<PayrollManagement />} />
       <Route path="/hr/recruitment" element={<Requirementmanagement />} />
 
-            <Route path="/infrastructure-management/inventory/stock-control" element={<InventoryTable/>}/>
-            <Route path="/infrastructure-management/inventory/stock-management" element={<InfrastructureStockManagement/>}/>
-            <Route path="/infrastructure-management/asset/fixed-assets" element={<AssetManagement/>}/>
-            <Route path="/infrastructure-management/asset/new-purchase" element={<NewPurchaseKanban/>}/>
-            <Route path="/infrastructure-management/purchase" element={<PurchaseManagement/>}/>
-            <Route path="/infrastructure-management/maintenance-costs/income-expenditure" element={<MaintenanceCosts/>}/>
-            <Route path="/infrastructure-management/maintenance-costs/vendor-management" element={<VendorManagement/>}/>
-            <Route path="/infrastructure-management/maintenance-costs/history" element={<ManagementHistory/>}/>
-            <Route path="/transport/fleet-staff" element={<FleetandStaffOverview />} />
+      <Route path="/infrastructure-management/inventory/stock-control" element={<InventoryTable />} />
+      <Route path="/infrastructure-management/inventory/stock-management" element={<InfrastructureStockManagement />} />
+      <Route path="/infrastructure-management/asset/fixed-assets" element={<AssetManagement />} />
+      <Route path="/infrastructure-management/asset/new-purchase" element={<NewPurchaseKanban />} />
+      <Route path="/infrastructure-management/purchase" element={<PurchaseManagement />} />
+      <Route path="/infrastructure-management/maintenance-costs/income-expenditure" element={<MaintenanceCosts />} />
+      <Route path="/infrastructure-management/maintenance-costs/vendor-management" element={<VendorManagement />} />
+      <Route path="/infrastructure-management/maintenance-costs/history" element={<ManagementHistory />} />
+
+      <Route path="/transport/fleet-staff" element={<FleetandStaffOverview />} />
       <Route path="/transport/financial-control" element={<FinancialControlandApprovals />} />
-      <Route path="/transport/master-configuration" element={<MasterConfiguration />} />
-      <Route path="/transport/reports" element={<TransportReports />} />
+      {/* Financial Control Detail Routes */}
+      <Route path="/transport/financial-control/fuel-consumption/:requestId" element={<FuelConsumptionDetails />} />
+      <Route path="/transport/financial-control/vehicle-cost-analysis/:requestId" element={<VehicleCostAnalysisDetails />} />
+      <Route path="/transport/financial-control/insurance-details/:requestId" element={<InsuranceDetails />} />
+<Route path="/transport/financial-control/driver-overtime/:requestId" element={<DriverOvertimeDetails />} />
+<Route path="/transport/financial-control/route-profitability/:requestId" element={<RouteProfitabilityDetails />} />
+<Route path="/transport/financial-control/accident-allocation/:requestId" element={<AccidentAllocationDetails />} />
+
+      {/* Master Configuration Routes - Default to vehicle-master */}
+      <Route path="/transport/master-configuration" element={<Navigate to="/management/transport/master-configuration/vehicle-master" replace />} />
+      <Route path="/transport/master-configuration/vehicle-master" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/driver-master" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/route-master" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/vehicle-master/add-vehicle" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/vehicle-master/edit-vehicle/:id" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/driver-master/add-driver" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/driver-master/edit-driver/:id" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/route-master/add-route" element={<MasterConfiguration />} />
+      <Route path="/transport/master-configuration/route-master/edit-route/:id" element={<MasterConfiguration />} />
+      {/* Transport Reports Routes - Default redirect to vehicle-cost-report */}
+      <Route path="/transport/reports" element={<Navigate to="/management/transport/reports/vehicle-cost-report" replace />} />
+      <Route path="/transport/reports/:reportType" element={<TransportReports />} />
       <Route path="/transport/dashboard" element={<TransportDashboard />} />
+
 
       <Route path="financials-fees" element={<FinancialsAndFees />} />
       <Route path="configuration-rules" element={<ConfigurationAndRules />} />
@@ -124,12 +152,12 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
 
-       <Route path="/student/dashboard" element={<Dashboard />} />
-       <Route path="/student/profile" element={<MyProfile />} />
-        <Route path="/student/finance" element={<Finance />} />
-        <Route path="/student/notifications" element={<Notifications/>} />
-       
-     
+      <Route path="/student/dashboard" element={<Dashboard />} />
+      <Route path="/student/profile" element={<MyProfile />} />
+      <Route path="/student/finance" element={<Finance />} />
+      <Route path="/student/notifications" element={<Notifications />} />
+
+
       <Route path="/hod/dashboard" element={<HODDashboard />} />
       <Route path="/hod/circulars-memos" element={<CircularMemos />} />
       <Route path="/hod/departmental-budgeting" element={<DepartmentalBudgeting />} />
@@ -144,16 +172,16 @@ const CommonRoutes: React.FC = () => {
       <Route path="/temporary-student/document-upload" element={<DocumentUpload />} />
       <Route path="/temporary-student/onboarding-form" element={<OnboardingForm />} />
       <Route path="/temporary-student/notifications" element={<TempNotifications />} />
-      
+
       <Route path="verification/candidate" element={<CandidateVerification />} />
-           <Route path="/verification/document" element={<DocumentVerification />} />
-              <Route path="/verification/allotment-order" element={<AllotmentOrderGeneration />} />
-               <Route path="/student-onboarding/temp-login" element={<TemporaryStudentLogin />} />
-  <Route path="/student-onboarding/communication-hub" element={<CommunicationHub />} />
-  <Route path="/student-onboarding/activate-login" element={<PermanentStudentLoginPage />} />
-   <Route path="/reports/admission" element={<AdmissionReports />} />
-    <Route path="/reports/fee-payment" element={<FeePaymentReports />} />
-       <Route path="/reports/verification-logs" element={<VerificationLogs />} />
+      <Route path="/verification/document" element={<DocumentVerification />} />
+      <Route path="/verification/allotment-order" element={<AllotmentOrderGeneration />} />
+      <Route path="/student-onboarding/temp-login" element={<TemporaryStudentLogin />} />
+      <Route path="/student-onboarding/communication-hub" element={<CommunicationHub />} />
+      <Route path="/student-onboarding/activate-login" element={<PermanentStudentLoginPage />} />
+      <Route path="/reports/admission" element={<AdmissionReports />} />
+      <Route path="/reports/fee-payment" element={<FeePaymentReports />} />
+      <Route path="/reports/verification-logs" element={<VerificationLogs />} />
 
 
 
@@ -168,4 +196,3 @@ const CommonRoutes: React.FC = () => {
 
 export default CommonRoutes;
 
-  
