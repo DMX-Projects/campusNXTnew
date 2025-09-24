@@ -76,6 +76,8 @@ const CommunicationHub = () => {
       template: 'fee-reminder'
     }
   ]);
+const [viewingMessage, setViewingMessage] = useState<Message | null>(null);
+
 
   const [templates] = useState<Template[]>([
     {
@@ -546,11 +548,12 @@ const CommunicationHub = () => {
                    <div className="flex items-center gap-2">
   {/* View */}
   <button
-    onClick={() => alert(`Viewing message:\n\n${message.subject}\n\n${message.content}`)}
-    className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
-  >
-    <Eye className="w-4 h-4" />
-  </button>
+  onClick={() => setViewingMessage(message)}
+  className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
+>
+  <Eye className="w-4 h-4" />
+</button>
+
 
   {/* Copy */}
   <button
@@ -591,7 +594,6 @@ const CommunicationHub = () => {
     <Trash2 className="w-4 h-4" />
   </button>
 </div>
-
                   </div>
                 </div>
               ))}
@@ -615,6 +617,83 @@ const CommunicationHub = () => {
           </div>
         )}
       </div>
+      {viewingMessage && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-2xl p-6">
+      <h2 className="text-lg font-semibold mb-4 text-slate-900 dark:text-white">
+        View Message
+      </h2>
+
+      <div className="space-y-4">
+        {/* Subject */}
+        <div>
+          <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">Subject</label>
+          <input
+            type="text"
+            value={viewingMessage.subject}
+            readOnly
+            className="w-full px-3 py-2 border rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white"
+          />
+        </div>
+
+        {/* Content */}
+        <div>
+          <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">Content</label>
+          <textarea
+            value={viewingMessage.content}
+            readOnly
+            rows={6}
+            className="w-full px-3 py-2 border rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white"
+          />
+        </div>
+
+        {/* Type & Status */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">Type</label>
+            <input
+              type="text"
+              value={viewingMessage.type}
+              readOnly
+              className="w-full px-3 py-2 border rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">Status</label>
+            <input
+              type="text"
+              value={viewingMessage.status}
+              readOnly
+              className="w-full px-3 py-2 border rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white"
+            />
+          </div>
+        </div>
+
+        {/* Recipients */}
+        <div>
+          <label className="block text-sm font-medium text-slate-600 dark:text-slate-400">Recipients</label>
+          <textarea
+            value={viewingMessage.recipients.join(", ")}
+            readOnly
+            rows={3}
+            className="w-full px-3 py-2 border rounded-lg bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white"
+          />
+        </div>
+      </div>
+
+      {/* Close button */}
+      <div className="flex justify-end mt-6">
+        <button
+          onClick={() => setViewingMessage(null)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
