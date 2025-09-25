@@ -25,7 +25,26 @@ const AllotmentOrderGeneration: React.FC = () => {
   const handleSelect = (id: number, checked: boolean) => {
     setSelected(prev => checked ? [...prev, id] : prev.filter(s => s !== id));
   };
+const handleDownload = async (selectedCandidates) => {
+  // Replace this with your PDF URL or obtain dynamically
+  const pdfUrl = selectedCandidates[0].pdfUrl; // adjust for your data structure
+  const response = await fetch(pdfUrl);
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
 
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = 'SelectedCandidate.pdf'; // Change the filename as needed
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url); // Clean-up
+};
+const handleSendToCandidate = (selectedCandidates) => {
+   alert(`Sending allotment letters to: ${selectedCandidates.map(c => c.name).join(", ")}`);
+  alert('Email sent successfully!');
+  // Implement actual email sending logic here
+}
   const filteredCandidates = candidates.filter(c =>
     (filterCourse ? c.course === filterCourse : true) &&
     (filterAdmission ? c.admission === filterAdmission : true) &&
@@ -128,7 +147,7 @@ const AllotmentOrderGeneration: React.FC = () => {
               className={`px-8 py-3 rounded-lg text-lg font-bold shadow hover:scale-105 transition-all ${
                 selected.length > 0
                   ? "bg-gradient-to-r from-green-500 to-teal-500 text-white hover:bg-green-600"
-                  : "bg-gray-300 text-gray-100 cursor-not-allowed"
+                  : "bg-gray-400 text-gray-100 cursor-not-allowed"
               }`}
               disabled={selected.length === 0}
               onClick={() => setShowPreview(true)}
@@ -159,10 +178,10 @@ const AllotmentOrderGeneration: React.FC = () => {
                 </div>
               ))}
               <div className="flex gap-3 justify-end mt-6">
-                <button className="py-2 px-5 rounded bg-blue-500 hover:bg-blue-600 text-white font-bold transition-all">
+               <button onClick={() => handleDownload(selectedCandidates)} className="py-2 px-5 rounded bg-blue-500 hover:bg-blue-600 text-white font-bold transition-all">
                   Download PDF(s)
                 </button>
-                <button className="py-2 px-5 rounded bg-green-500 hover:bg-green-600 text-white font-bold transition-all">
+                <button onClick={() => handleSendToCandidate(selectedCandidates)} className="py-2 px-5 rounded bg-green-500 hover:bg-green-600 text-white font-bold transition-all">
                   Send to Candidate
                 </button>
               </div>

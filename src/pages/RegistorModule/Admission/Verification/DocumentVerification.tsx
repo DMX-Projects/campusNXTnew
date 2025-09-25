@@ -51,7 +51,7 @@ const DocumentVerification = () => {
   const [filterStatus, setFilterStatus] = useState('all');
   const [viewerDocument, setViewerDocument] = useState<Document | null>(null);
   const [toastMessage, setToastMessage] = useState<{ message: string; type: string } | null>(null);
-  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  // const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
   // Mock data for applicants
   const [applicants, setApplicants] = useState<Applicant[]>([
@@ -328,20 +328,20 @@ const DocumentVerification = () => {
   };
 
   // Handle download document
-  const handleDownloadDocument = (document: Document) => {
-    if (document.fileUrl && document.fileName) {
-      // Create a temporary link to download
-      const link = document.createElement('a');
-      link.href = document.fileUrl;
-      link.download = document.fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast(`Downloading ${document.fileName}...`, 'success');
-    } else {
-      showToast('No file available for download', 'warning');
-    }
-  };
+ const handleDownloadDocument = (doc: Document) => {
+  if (doc.fileUrl && doc.fileName) {
+    const link = window.document.createElement('a');
+    link.href = doc.fileUrl;
+    link.download = doc.fileName;
+    window.document.body.appendChild(link);
+    link.click();
+    window.document.body.removeChild(link);
+    showToast(`Downloading ${doc.fileName}...`, 'success');
+  } else {
+    showToast('No file available for download', 'warning');
+  }
+};
+
 
   // Finalize verification
   const handleFinalizeVerification = () => {
@@ -558,13 +558,13 @@ const DocumentVerification = () => {
                         applicantId={selectedApplicant.id}
                         onApprove={(comments) => handleDocumentApproval(selectedApplicant.id, document.id, 'approve', comments)}
                         onReject={(comments) => handleDocumentApproval(selectedApplicant.id, document.id, 'reject', comments)}
-                        onUpload={(file) => handleFileUpload(selectedApplicant.id, document.id, file)}
+                        // onUpload={(file) => handleFileUpload(selectedApplicant.id, document.id, file)}
                         onView={() => handleViewDocument(document)}
-                        onUploadClick={() => handleUploadClick(selectedApplicant.id, document.id)}
-                        fileInputRef={(ref) => {
-                          const key = `${selectedApplicant.id}-${document.id}`;
-                          fileInputRefs.current[key] = ref;
-                        }}
+                        // onUploadClick={() => handleUploadClick(selectedApplicant.id, document.id)}
+                        // fileInputRef={(ref) => {
+                        //   const key = `${selectedApplicant.id}-${document.id}`;
+                          // fileInputRefs.current[key] = ref;
+                        // }}
                         isDark={isDark}
                       />
                     ))}
@@ -661,10 +661,10 @@ const DocumentCard: React.FC<{
   applicantId: string;
   onApprove: (comments?: string) => void;
   onReject: (comments?: string) => void;
-  onUpload: (file: File) => void;
+  // onUpload: (file: File) => void;
   onView: () => void;
-  onUploadClick: () => void;
-  fileInputRef: (ref: HTMLInputElement | null) => void;
+  // onUploadClick: () => void;
+  // fileInputRef: (ref: HTMLInputElement | null) => void;
   isDark: boolean;
 }> = ({ document, onApprove, onReject, onUpload, onView, onUploadClick, fileInputRef, isDark }) => {
   const [comments, setComments] = useState(document.comments || '');
@@ -735,18 +735,18 @@ const DocumentCard: React.FC<{
         </div>
       </div>
 
-      {/* Hidden file input */}
+      {/* Hidden file input
       <input
         ref={fileInputRef}
         type="file"
         onChange={handleFileUpload}
         className="hidden"
         accept={document.fileType === 'image' ? 'image/*' : '.pdf'}
-      />
+      /> */}
 
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-2 mb-3">
-        {document.status === 'pending' && (
+        {/* {document.status === 'pending' && (
           <button
             onClick={onUploadClick}
             className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center text-sm"
@@ -754,7 +754,7 @@ const DocumentCard: React.FC<{
             <Upload className="w-4 h-4 mr-1" />
             Upload
           </button>
-        )}
+        )} */}
         
         {(document.status === 'uploaded' || document.status === 'approved' || document.status === 'rejected') && (
           <button

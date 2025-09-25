@@ -5,19 +5,44 @@ const FeePaymentReports = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [dateRange, setDateRange] = useState('All');
+  const [paymentModeFilter, setPaymentModeFilter] = useState('All');
+  const [courseFilter, setCourseFilter] = useState('All');
   const [showFilters, setShowFilters] = useState(false);
 
   // Mock data
   const transactions = [
-    { id: 'TXN001', studentName: 'John Doe', studentId: 'ST2024001', amount: 15000, paymentMode: 'Online', status: 'Paid', timestamp: '2024-09-15 10:30 AM', course: 'Computer Science' },
-    { id: 'TXN002', studentName: 'Jane Smith', studentId: 'ST2024002', amount: 12000, paymentMode: 'Bank Transfer', status: 'Pending', timestamp: '2024-09-14 02:15 PM', course: 'Business Administration' },
-    { id: 'TXN003', studentName: 'Michael Johnson', studentId: 'ST2024003', amount: 18000, paymentMode: 'Cash', status: 'Failed', timestamp: '2024-09-13 09:45 AM', course: 'Engineering' },
-    { id: 'TXN004', studentName: 'Emily Brown', studentId: 'ST2024004', amount: 14500, paymentMode: 'Credit Card', status: 'Paid', timestamp: '2024-09-12 04:20 PM', course: 'Arts & Literature' },
-    { id: 'TXN005', studentName: 'David Wilson', studentId: 'ST2024005', amount: 16000, paymentMode: 'Online', status: 'Paid', timestamp: '2024-09-11 11:00 AM', course: 'Science' },
-    { id: 'TXN006', studentName: 'Sarah Davis', studentId: 'ST2024006', amount: 13000, paymentMode: 'Bank Transfer', status: 'Pending', timestamp: '2024-09-10 03:30 PM', course: 'Mathematics' },
-    { id: 'TXN007', studentName: 'Robert Miller', studentId: 'ST2024007', amount: 17500, paymentMode: 'Online', status: 'Failed', timestamp: '2024-09-09 08:15 AM', course: 'Physics' },
-    { id: 'TXN008', studentName: 'Lisa Anderson', studentId: 'ST2024008', amount: 15500, paymentMode: 'Credit Card', status: 'Paid', timestamp: '2024-09-08 01:45 PM', course: 'Chemistry' }
+    { id: 'TXN001', studentName: 'John Doe', studentId: 'ST2024001', amount: 15000, paymentMode: 'Online', status: 'Paid', timestamp: '2024-09-15 10:30 AM', course: 'Computer Science', date: '2024-09-15' },
+    { id: 'TXN002', studentName: 'Jane Smith', studentId: 'ST2024002', amount: 12000, paymentMode: 'Bank Transfer', status: 'Pending', timestamp: '2024-09-14 02:15 PM', course: 'Business Administration', date: '2024-09-14' },
+    { id: 'TXN003', studentName: 'Michael Johnson', studentId: 'ST2024003', amount: 18000, paymentMode: 'Cash', status: 'Failed', timestamp: '2024-09-13 09:45 AM', course: 'Engineering', date: '2024-09-13' },
+    { id: 'TXN004', studentName: 'Emily Brown', studentId: 'ST2024004', amount: 14500, paymentMode: 'Credit Card', status: 'Paid', timestamp: '2024-09-12 04:20 PM', course: 'Arts & Literature', date: '2024-09-12' },
+    { id: 'TXN005', studentName: 'David Wilson', studentId: 'ST2024005', amount: 16000, paymentMode: 'Online', status: 'Paid', timestamp: '2024-09-11 11:00 AM', course: 'Science', date: '2024-09-11' },
+    { id: 'TXN006', studentName: 'Sarah Davis', studentId: 'ST2024006', amount: 13000, paymentMode: 'Bank Transfer', status: 'Pending', timestamp: '2024-09-10 03:30 PM', course: 'Mathematics', date: '2024-09-10' },
+    { id: 'TXN007', studentName: 'Robert Miller', studentId: 'ST2024007', amount: 17500, paymentMode: 'Online', status: 'Failed', timestamp: '2024-09-09 08:15 AM', course: 'Physics', date: '2024-09-09' },
+    { id: 'TXN008', studentName: 'Lisa Anderson', studentId: 'ST2024008', amount: 15500, paymentMode: 'Credit Card', status: 'Paid', timestamp: '2024-09-08 01:45 PM', course: 'Chemistry', date: '2024-09-08' }
   ];
+
+  // Helper function to check if date falls within selected range
+  const isDateInRange = (transactionDate, range) => {
+    const today = new Date();
+    const transDate = new Date(transactionDate);
+    
+    switch (range) {
+      case 'Today':
+        return transDate.toDateString() === today.toDateString();
+      case 'Week':
+        const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+        return transDate >= weekAgo;
+      case 'Month':
+        const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+        return transDate >= monthAgo;
+      case 'Quarter':
+        const quarterAgo = new Date(today.getTime() - 90 * 24 * 60 * 60 * 1000);
+        return transDate >= quarterAgo;
+      case 'All':
+      default:
+        return true;
+    }
+  };
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter(transaction => {
@@ -25,20 +50,37 @@ const FeePaymentReports = () => {
         transaction.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         transaction.studentId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         transaction.id.toLowerCase().includes(searchTerm.toLowerCase());
+      
       const matchesStatus = statusFilter === 'All' || transaction.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      
+      const matchesPaymentMode = paymentModeFilter === 'All' || transaction.paymentMode === paymentModeFilter;
+      
+      const matchesCourse = courseFilter === 'All' || transaction.course === courseFilter;
+      
+      const matchesDateRange = dateRange === 'All' || isDateInRange(transaction.date, dateRange);
+      
+      return matchesSearch && matchesStatus && matchesPaymentMode && matchesCourse && matchesDateRange;
     });
-  }, [searchTerm, statusFilter]);
+  }, [searchTerm, statusFilter, paymentModeFilter, courseFilter, dateRange]);
 
   const stats = useMemo(() => {
-    const totalTransactions = transactions.length;
-    const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0);
-    const paidTransactions = transactions.filter(t => t.status === 'Paid').length;
-    const pendingTransactions = transactions.filter(t => t.status === 'Pending').length;
-    const failedTransactions = transactions.filter(t => t.status === 'Failed').length;
+    const filteredStats = filteredTransactions;
+    const totalTransactions = filteredStats.length;
+    const totalAmount = filteredStats.reduce((sum, t) => sum + t.amount, 0);
+    const paidTransactions = filteredStats.filter(t => t.status === 'Paid').length;
+    const pendingTransactions = filteredStats.filter(t => t.status === 'Pending').length;
+    const failedTransactions = filteredStats.filter(t => t.status === 'Failed').length;
 
     return { totalTransactions, totalAmount, paidTransactions, pendingTransactions, failedTransactions };
-  }, []);
+  }, [filteredTransactions]);
+
+  const clearAllFilters = () => {
+    setSearchTerm('');
+    setStatusFilter('All');
+    setDateRange('All');
+    setPaymentModeFilter('All');
+    setCourseFilter('All');
+  };
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -64,7 +106,20 @@ const FeePaymentReports = () => {
   };
 
   const handleGenerateReport = () => {
-    alert('Report generated successfully! Download will begin shortly.');
+    const reportData = {
+      totalRecords: filteredTransactions.length,
+      filters: {
+        search: searchTerm,
+        status: statusFilter,
+        dateRange,
+        paymentMode: paymentModeFilter,
+        course: courseFilter
+      },
+      stats
+    };
+    
+    console.log('Generating report with data:', reportData);
+    alert(`Report generated successfully!\n\nFiltered Records: ${filteredTransactions.length}\nTotal Amount: ₹${stats.totalAmount.toLocaleString()}\n\nDownload will begin shortly.`);
   };
 
   return (
@@ -74,11 +129,31 @@ const FeePaymentReports = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">Fee Payment Reports</h1>
-            {/* <p className="text-gray-600 dark:text-gray-400 mt-1">Monitor and generate reports on all admission-related fee transactions</p> */}
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Monitor and generate reports on all admission-related fee transactions</p>
           </div>
         </div>
 
-        {/* Stats */}
+        {/* Active Filters Indicator */}
+        {(searchTerm || statusFilter !== 'All' || dateRange !== 'All' || paymentModeFilter !== 'All' || courseFilter !== 'All') && (
+          <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Active Filters:</span>
+              {searchTerm && <span className="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 text-xs rounded">Search: "{searchTerm}"</span>}
+              {statusFilter !== 'All' && <span className="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 text-xs rounded">Status: {statusFilter}</span>}
+              {dateRange !== 'All' && <span className="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 text-xs rounded">Date: {dateRange}</span>}
+              {paymentModeFilter !== 'All' && <span className="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 text-xs rounded">Payment: {paymentModeFilter}</span>}
+              {courseFilter !== 'All' && <span className="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 text-xs rounded">Course: {courseFilter}</span>}
+              <button 
+                onClick={clearAllFilters}
+                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline"
+              >
+                Clear all
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Stats - Now showing filtered data */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
             <div className="flex items-center justify-between">
@@ -205,7 +280,11 @@ const FeePaymentReports = () => {
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Mode</label>
-                  <select className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                  <select 
+                    value={paymentModeFilter}
+                    onChange={(e) => setPaymentModeFilter(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  >
                     <option value="All">All Methods</option>
                     <option value="Online">Online</option>
                     <option value="Bank Transfer">Bank Transfer</option>
@@ -215,11 +294,20 @@ const FeePaymentReports = () => {
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Course</label>
-                  <select className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+                  <select 
+                    value={courseFilter}
+                    onChange={(e) => setCourseFilter(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                  >
                     <option value="All">All Courses</option>
                     <option value="Computer Science">Computer Science</option>
                     <option value="Business Administration">Business Administration</option>
                     <option value="Engineering">Engineering</option>
+                    <option value="Arts & Literature">Arts & Literature</option>
+                    <option value="Science">Science</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
                   </select>
                 </div>
                 <button

@@ -248,7 +248,7 @@ const PermanentStudentLoginPage: React.FC = () => {
                 <button
                   onClick={activatePermanentIDs}
                   disabled={selectedStudents.length === 0 || loading}
-                  className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2"
+                  className="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2"
                 >
                   {loading ? (
                     <>
