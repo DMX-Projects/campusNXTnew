@@ -152,12 +152,25 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
 
+
       <Route path="/student/dashboard" element={<Dashboard />} />
       <Route path="/student/profile" element={<MyProfile />} />
       <Route path="/student/finance" element={<Finance />} />
       <Route path="/student/notifications" element={<Notifications />} />
 
 
+     <Route path="/principal/infrastructure-reports/new-asset-requests" element={<InfrastructureReports />} />
+     <Route path="/principal/infrastructure-reports/major-maintenance-requests" element={<InfrastructureReports />} />
+     <Route path="/principal/infrastructure-reports/new-asset-requests/View/:id" element={<InfrastructureReports />} />
+     <Route path="/principal/infrastructure-reports/major-maintenance-requests/View/:id" element={<InfrastructureReports />} />
+     <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
+     
+       <Route path="/student/dashboard" element={<Dashboard />} />
+       <Route path="/student/profile" element={<MyProfile />} />
+        <Route path="/student/finance" element={<Finance />} />
+        <Route path="/student/notifications" element={<Notifications/>} />
+       
+     
       <Route path="/hod/dashboard" element={<HODDashboard />} />
       <Route path="/hod/circulars-memos" element={<CircularMemos />} />
       <Route path="/hod/departmental-budgeting" element={<DepartmentalBudgeting />} />

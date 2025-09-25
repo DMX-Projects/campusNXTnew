@@ -10,7 +10,7 @@ interface FinancialData {
   totalCollectible: number;
   totalCollected: number;
   totalOutstanding: number;
-  numberOfDefaulters: number;
+  numberOfOverDue: number;
   collectionByType: Array<{
     name: string;
     value: number;
@@ -39,7 +39,7 @@ const StudentfeeDashboard: React.FC = () => {
     totalCollectible: 2850000,
     totalCollected: 2130000,
     totalOutstanding: 720000,
-    numberOfDefaulters: 156,
+    numberOfOverDue: 156,
     collectionByType: [
       { name: 'Tuition Fees', value: 1200000, color: '#3B82F6' },
       { name: 'Hostel Fees', value: 450000, color: '#10B981' },
@@ -88,7 +88,7 @@ const theme = {
   kpi: {
     collectionRate: 'bg-blue-500',
     outstanding: 'bg-orange-500',
-    defaulters: 'bg-red-500',
+    OverDue: 'bg-red-500',
     collected: 'bg-green-500'
   }
 };
@@ -203,7 +203,7 @@ const TransactionsModal: React.FC<{
         {/* Header */}
         <div>
           <h1 className={`text-3xl font-bold ${theme.text}`}>Financial Dashboard</h1>
-          <p className={`${theme.textSecondary} mt-1`}>Real-time student fee collection overview</p>
+    
         </div>
 
         {/* KPI Cards */}
@@ -223,11 +223,11 @@ const TransactionsModal: React.FC<{
             color={theme.kpi.outstanding}
           />
           <KPICard
-            title="Defaulters"
-            value={financialData.numberOfDefaulters.toString()}
+            title="Over Due "
+            value={financialData.numberOfOverDue.toString()}
             icon={<AlertTriangle className="h-6 w-6 text-white" />}
             trend={-5.3}
-            color={theme.kpi.defaulters}
+            color={theme.kpi.OverDue}
           />
           <KPICard
             title="Total Collected"

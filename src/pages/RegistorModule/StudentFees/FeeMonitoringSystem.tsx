@@ -5,14 +5,14 @@ import { useTheme } from '../../../contexts/ThemeContext';
 interface Student {
   id: string;
   name: string;
-  course: string;
+  Department: string;
   year: number;
   semester: string;
   totalPayable: number;
   amountPaid: number;
   balance: number;
   lastPaymentDate: string;
-  status: 'paid' | 'partial' | 'defaulter';
+  status: 'paid' | 'partial' | 'Over Due' ;
   email: string;
   phone: string;
 }
@@ -36,7 +36,7 @@ const FeeMonitoringSystem: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'monitoring' | 'transactions'>('monitoring');
   const [searchTerm, setSearchTerm] = useState('');
-  const [courseFilter, setCourseFilter] = useState('all');
+  const [DepartmentFilter, setDepartmentFilter] = useState('all');
   const [yearFilter, setYearFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [transactionSearch, setTransactionSearch] = useState('');
@@ -49,8 +49,8 @@ const FeeMonitoringSystem: React.FC = () => {
     {
       id: 'STU001',
       name: 'John Doe',
-      course: 'Computer Science',
-      year: 2,
+      Department: 'Computer Science',
+      year: 1,
       semester: 'Semester-I',
       totalPayable: 50000,
       amountPaid: 50000,
@@ -63,8 +63,8 @@ const FeeMonitoringSystem: React.FC = () => {
     {
       id: 'STU002',
       name: 'Jane Smith',
-      course: 'Engineering',
-      year: 3,
+      Department: 'Engineering',
+      year: 2,
       semester: 'Semester-I',
       totalPayable: 60000,
       amountPaid: 35000,
@@ -77,22 +77,22 @@ const FeeMonitoringSystem: React.FC = () => {
     {
       id: 'STU003',
       name: 'Mike Johnson',
-      course: 'Business',
+      Department: 'Business',
       year: 1,
       semester: 'Semester-II',
       totalPayable: 45000,
       amountPaid: 15000,
       balance: 30000,
       lastPaymentDate: '2024-06-10',
-      status: 'defaulter',
+      status: 'Over Due',
       email: 'mike.johnson@email.com',
       phone: '+1234567892'
     },
     {
       id: 'STU004',
       name: 'Sarah Wilson',
-      course: 'Computer Science',
-      year: 4,
+      Department: 'Computer Science',
+      year: 3,
       semester: 'Semester-III',
       totalPayable: 55000,
       amountPaid: 55000,
@@ -105,14 +105,14 @@ const FeeMonitoringSystem: React.FC = () => {
     {
       id: 'STU005',
       name: 'David Brown',
-      course: 'Engineering',
-      year: 2,
+      Department: 'Engineering',
+      year: 4,
       semester: 'Semester-IV',
       totalPayable: 58000,
       amountPaid: 20000,
       balance: 38000,
       lastPaymentDate: '2024-05-15',
-      status: 'defaulter',
+      status: 'Over Due',
       email: 'david.brown@email.com',
       phone: '+1234567894'
     }
@@ -199,7 +199,7 @@ const FeeMonitoringSystem: React.FC = () => {
       inactiveTab: 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300',
       statusPaid: 'bg-emerald-100 text-emerald-800',
       statusPartial: 'bg-yellow-100 text-yellow-800',
-      statusDefaulter: 'bg-red-100 text-red-800',
+      statusOverDue: 'bg-red-100 text-red-800',
       statusCompleted: 'bg-emerald-100 text-emerald-800',
       statusPending: 'bg-yellow-100 text-yellow-800',
       statusFailed: 'bg-red-100 text-red-800',
@@ -222,7 +222,7 @@ const FeeMonitoringSystem: React.FC = () => {
       inactiveTab: 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-600',
       statusPaid: 'bg-emerald-900 text-emerald-300',
       statusPartial: 'bg-yellow-900 text-yellow-300',
-      statusDefaulter: 'bg-red-900 text-red-300',
+      statusOverDue: 'bg-red-900 text-red-300',
       statusCompleted: 'bg-emerald-900 text-emerald-300',
       statusPending: 'bg-yellow-900 text-yellow-300',
       statusFailed: 'bg-red-900 text-red-300',
@@ -237,14 +237,14 @@ const FeeMonitoringSystem: React.FC = () => {
   return students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           student.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCourse = courseFilter === 'all' || student.course === courseFilter;
+    const matchesDepartment = DepartmentFilter === 'all' || student.Department === DepartmentFilter;
     const matchesYear = yearFilter === 'all' || student.year.toString() === yearFilter;
     const matchesSemester = semesterFilter === 'all' || student.semester === semesterFilter;
     const matchesStatus = statusFilter === 'all' || student.status === statusFilter;
-    
-    return matchesSearch && matchesCourse && matchesYear && matchesSemester && matchesStatus;
+
+    return matchesSearch && matchesDepartment && matchesYear && matchesSemester && matchesStatus;
   });
-}, [students, searchTerm, courseFilter, yearFilter, semesterFilter, statusFilter]);
+}, [students, searchTerm, DepartmentFilter, yearFilter, semesterFilter, statusFilter]);
 
 
   const filteredTransactions = useMemo(() => {
@@ -264,7 +264,7 @@ const FeeMonitoringSystem: React.FC = () => {
         return <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />;
       case 'partial':
         return <Clock className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />;
-      case 'defaulter':
+      case 'Over Due':
         return <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />;
       default:
         return null;
@@ -318,7 +318,7 @@ const toCSV = (arr: object[], columns: string[]) => {
    if (activeTab === 'monitoring') {
      data = filteredStudents;
      columns = [
-     'id', 'name', 'course', 'year', 'semester', 'totalPayable',
+     'id', 'name', 'Department', 'year', 'semester', 'totalPayable',
       'amountPaid', 'balance', 'lastPaymentDate', 'status', 'email', 'phone'
   ];
      filename = 'students_report.csv';
@@ -344,7 +344,7 @@ const toCSV = (arr: object[], columns: string[]) => {
 };
 
 
-  const courses = [...new Set(students.map(s => s.course))];
+  const Departments = [...new Set(students.map(s => s.Department))];
   const years = [...new Set(students.map(s => s.year))];
   const semesters = [...new Set(students.map(s => s.semester))];
 
@@ -454,9 +454,9 @@ const toCSV = (arr: object[], columns: string[]) => {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <p className={`text-sm font-medium ${currentTheme.textSecondary}`}>Defaulters</p>
+                    <p className={`text-sm font-medium ${currentTheme.textSecondary}`}>Over Due</p>
                     <p className="text-2xl font-semibold text-red-600 dark:text-red-400">
-                      {students.filter(s => s.status === 'defaulter').length}
+                      {students.filter(s => s.status === 'Over Due').length}
                     </p>
                   </div>
                 </div>
@@ -479,12 +479,12 @@ const toCSV = (arr: object[], columns: string[]) => {
                 
                 <select
                   className={`px-3 py-2.5 border rounded-lg ${currentTheme.input} transition-colors`}
-                  value={courseFilter}
-                  onChange={(e) => setCourseFilter(e.target.value)}
+                  value={DepartmentFilter}
+                  onChange={(e) => setDepartmentFilter(e.target.value)}
                 >
-                  <option value="all">All Courses</option>
-                  {courses.map(course => (
-                    <option key={course} value={course}>{course}</option>
+                  <option value="all">Department</option>
+                  {Departments.map(Department => (
+                    <option key={Department} value={Department}>{Department}</option>
                   ))}
                 </select>
 
@@ -518,13 +518,10 @@ const toCSV = (arr: object[], columns: string[]) => {
                   <option value="all">All Status</option>
                   <option value="paid">Paid</option>
                   <option value="partial">Partial</option>
-                  <option value="defaulter">Defaulter</option>
+                  <option value="Over Due">Over Due</option>
                 </select>
 
-                <button className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg ${currentTheme.button} font-medium transition-colors`}>
-                  <Filter className="w-4 h-4" />
-                  Apply Filters
-                </button>
+              
               </div>
             </div>
 
@@ -538,7 +535,7 @@ const toCSV = (arr: object[], columns: string[]) => {
                         Student Details
                       </th>
                       <th className={`px-6 py-4 text-left text-xs font-medium uppercase tracking-wider ${currentTheme.textSecondary}`}>
-                        Course & Year
+                        Department & Year
                       </th>
                    
                        <th className={`px-6 py-4 text-left text-xs font-medium uppercase tracking-wider ${currentTheme.textSecondary}`}>
@@ -571,7 +568,7 @@ const toCSV = (arr: object[], columns: string[]) => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className={`text-sm ${currentTheme.text}`}>{student.course}</div>
+                          <div className={`text-sm ${currentTheme.text}`}>{student.Department}</div>
                           <div className={`text-sm ${currentTheme.textSecondary}`}>Year {student.year}</div>
                         </td>
                          <td className="px-6 py-4 whitespace-nowrap">
@@ -596,7 +593,7 @@ const toCSV = (arr: object[], columns: string[]) => {
                             <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                               student.status === 'paid' ? currentTheme.statusPaid :
                               student.status === 'partial' ? currentTheme.statusPartial :
-                              currentTheme.statusDefaulter
+                              currentTheme.statusOverDue
                             }`}>
                               {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
                             </span>
@@ -700,10 +697,6 @@ const toCSV = (arr: object[], columns: string[]) => {
                   <option value="failed">Failed</option>
                 </select>
 
-                <button className="flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                  <Filter className="w-4 h-4" />
-                  <span>Apply Filters</span>
-                </button>
               </div>
             </div>
 

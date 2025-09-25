@@ -431,7 +431,7 @@ const OnboardingForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-indigo transition-colors duration-300 py-2 px-1 sm:py-2 sm:px-4">
+    <div className="min-h-screen bg--to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-indigo transition-colors duration-300 py-2 px-1 sm:py-2 sm:px-4">
       <div className="container mx-auto px-4 py-6">
         {/* Main Form Card */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 border border-slate-200 dark:border-slate-700">

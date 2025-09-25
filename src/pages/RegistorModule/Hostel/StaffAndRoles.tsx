@@ -142,10 +142,10 @@ const StaffAndRoles = () => {
 
   // Sample available staff from central database
   const [availableStaff] = useState([
-    { id: 101, name: 'Dr. Vikash Tiwari', designation: 'Professor', department: 'Computer Science', employeeId: 'EMP101' },
-    { id: 102, name: 'Mrs. Kavita Jain', designation: 'Assistant Professor', department: 'Management', employeeId: 'EMP102' },
-    { id: 103, name: 'Mr. Suresh Kumar', designation: 'Lab Assistant', department: 'Engineering', employeeId: 'EMP103' },
-    { id: 104, name: 'Ms. Pooja Reddy', designation: 'Librarian', department: 'Library', employeeId: 'EMP104' }
+    { id: 101, name: 'Dr. Vikash Tiwari', employeeId: 'EMP101' },
+    { id: 102, name: 'Mrs. Kavita Jain',  employeeId: 'EMP102' },
+    { id: 103, name: 'Mr. Suresh Kumar',  employeeId: 'EMP103' },
+    { id: 104, name: 'Ms. Pooja Reddy', employeeId: 'EMP104' }
   ]);
 
   const filteredStaff = staff.filter(member => {
