@@ -14,8 +14,8 @@ import StudentFeesReportingHub from "../pages/RegistorModule/StudentFees/Student
 
 
 //infrastructure Routes
-import InventoryTable from "../pages/RegistorModule/Infrastructure/StockControl";
-import InfrastructureStockManagement from "../pages/RegistorModule/Infrastructure/StockManagement";
+import { StockControl } from "../pages/RegistorModule/Infrastructure/StockControl";
+import {StockManagement} from "../pages/RegistorModule/Infrastructure/StockManagement";
 import AssetManagement from "../pages/RegistorModule/Infrastructure/FixedAssesment";
 import NewPurchaseKanban from "../pages/RegistorModule/Infrastructure/NewAssetPurchase";
 import PurchaseManagement from "../pages/RegistorModule/Infrastructure/PurchaseManagement";
@@ -97,8 +97,8 @@ const CommonRoutes: React.FC = () => {
       <Route path="/hr/payroll" element={<PayrollManagement />} />
       <Route path="/hr/recruitment" element={<Requirementmanagement />} />
 
-      <Route path="/infrastructure-management/inventory/stock-control" element={<InventoryTable />} />
-      <Route path="/infrastructure-management/inventory/stock-management" element={<InfrastructureStockManagement />} />
+      <Route path="/infrastructure-management/inventory/stock-control" element={<StockControl />} />
+      <Route path="/infrastructure-management/inventory/stock-management" element={<StockManagement />} />
       <Route path="/infrastructure-management/asset/fixed-assets" element={<AssetManagement />} />
       <Route path="/infrastructure-management/asset/new-purchase" element={<NewPurchaseKanban />} />
       <Route path="/infrastructure-management/purchase" element={<PurchaseManagement />} />
