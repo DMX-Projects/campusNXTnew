@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '../../../contexts/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 import { 
   DollarSign, 
   FileText, 
@@ -13,21 +14,88 @@ import {
   AlertCircle,
   ChevronDown,
   Calendar,
-  User
+  User,
+  Eye,
+  ArrowLeft,
+  Car,
+  Fuel,
+  Wrench,
+  Shield,
+  Users,
+  MapPin,
+  Route,
+  Activity
 } from 'lucide-react';
 
 const FinancialControlAndApprovals = () => {
   const { isDark } = useTheme();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('approvals');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [toastMessage, setToastMessage] = useState(null);
 
   const [pendingApprovals, setPendingApprovals] = useState([
-    { id: 'REQ-001', type: 'Fuel Purchase', amount: '₹1,250', requestedBy: 'Fleet Manager', date: '2024-01-15', priority: 'high', description: 'Monthly fuel procurement for transport fleet' },
-    { id: 'REQ-002', type: 'Vehicle Maintenance', amount: '₹3,500', requestedBy: 'Maintenance Team', date: '2024-01-14', priority: 'medium', description: 'Routine maintenance for BUS-001 and VAN-015' },
-    { id: 'REQ-003', type: 'Insurance Premium', amount: '₹8,900', requestedBy: 'Admin', date: '2024-01-14', priority: 'high', description: 'Annual insurance renewal for entire fleet' },
-    { id: 'REQ-004', type: 'Driver Overtime', amount: '₹680', requestedBy: 'HR Department', date: '2024-01-13', priority: 'low', description: 'Overtime compensation for extra shifts' }
+    { 
+      id: 'REQ-001', 
+      type: 'Fuel Purchase', 
+      amount: '₹3,920', 
+      requestedBy: 'Transport Manager', 
+      date: '2024-01-15', 
+      priority: 'high', 
+      description: 'Monthly fuel procurement for transport fleet',
+      category: 'fuel'
+    },
+    { 
+      id: 'REQ-002', 
+      type: 'Vehicle Maintenance', 
+      amount: '₹45,230', 
+      requestedBy: 'Transport Manager', 
+      date: '2024-01-14', 
+      priority: 'medium', 
+      description: 'Routine maintenance for BUS-001 and VAN-015',
+      category: 'maintenance'
+    },
+    { 
+      id: 'REQ-003', 
+      type: 'Insurance Premium', 
+      amount: '₹8,900', 
+      requestedBy: 'Admin', 
+      date: '2024-01-14', 
+      priority: 'high', 
+      description: 'Annual insurance renewal for entire fleet',
+      category: 'insurance'
+    },
+    { 
+      id: 'REQ-004', 
+      type: 'Driver Overtime', 
+      amount: '₹680', 
+      requestedBy: 'Transport Manager', 
+      date: '2024-01-13', 
+      priority: 'low', 
+      description: 'Overtime compensation for extra shifts',
+      category: 'overtime'
+    },
+    { 
+      id: 'REQ-005', 
+      type: 'Route Profitability Analysis', 
+      amount: '₹2,500', 
+      requestedBy: 'Transport Manager', 
+      date: '2024-01-12', 
+      priority: 'medium', 
+      description: 'Quarterly route performance and profitability assessment',
+      category: 'route_profitability'
+    },
+    { 
+      id: 'REQ-006', 
+      type: 'Accident Allocation Summary', 
+      amount: '₹12,300', 
+      requestedBy: 'Transport Manager', 
+      date: '2024-01-11', 
+      priority: 'high', 
+      description: 'Monthly accident costs and insurance claim allocation',
+      category: 'accident_allocation'
+    }
   ]);
 
   const expenseOverview = [
@@ -37,10 +105,97 @@ const FinancialControlAndApprovals = () => {
     { category: 'Salaries', amount: '₹15,820', percentage: 22, trend: '+3.4%', color: 'orange' }
   ];
 
+  // Route Profitability Data
+  const routeProfitability = [
+    { 
+      id: 'RT-001', 
+      name: 'Route A', 
+      revenue: '₹45,200', 
+      expenses: '₹32,800', 
+      profit: '₹12,400', 
+      margin: '27.4%', 
+      vehicles: 3, 
+      students: 85,
+      status: 'profitable'
+    },
+    { 
+      id: 'RT-002', 
+      name: 'Route B', 
+      revenue: '₹38,600', 
+      expenses: '₹29,200', 
+      profit: '₹9,400', 
+      margin: '24.4%', 
+      vehicles: 2, 
+      students: 68,
+      status: 'profitable'
+    },
+    { 
+      id: 'RT-003', 
+      name: 'Route C', 
+      revenue: '₹22,800', 
+      expenses: '₹25,100', 
+      profit: '-₹2,300', 
+      margin: '-10.1%', 
+      vehicles: 2, 
+      students: 42,
+      status: 'loss'
+    },
+    { 
+      id: 'RT-004', 
+      name: 'Route D', 
+      revenue: '₹31,500', 
+      expenses: '₹28,900', 
+      profit: '₹2,600', 
+      margin: '8.3%', 
+      vehicles: 2, 
+      students: 56,
+      status: 'marginal'
+    }
+  ];
+
+  // Accident Allocation Data
+  const accidentAllocation = [
+    {
+      id: 'ACC-001',
+      date: '2024-01-10',
+      vehicle: 'BUS-001',
+      route: 'Route A',
+      type: 'Minor Collision',
+      cost: '₹8,500',
+      insurance: '₹6,000',
+      selfPay: '₹2,500',
+      status: 'settled'
+    },
+    {
+      id: 'ACC-002',
+      date: '2024-01-08',
+      vehicle: 'VAN-003',
+      route: 'Route C',
+      type: 'Property Damage',
+      cost: '₹12,300',
+      insurance: '₹10,000',
+      selfPay: '₹2,300',
+      status: 'pending'
+    },
+    {
+      id: 'ACC-003',
+      date: '2024-01-05',
+      vehicle: 'BUS-002',
+      route: 'Route B',
+      type: 'Mechanical Failure',
+      cost: '₹5,800',
+      insurance: '₹0',
+      selfPay: '₹5,800',
+      status: 'settled'
+    }
+  ];
+
   const tabs = [
     { id: 'approvals', label: 'Pending Approvals', icon: Clock },
     { id: 'expenses', label: 'Expense Overview', icon: TrendingUp },
-    { id: 'revenue', label: 'Fee Revenue', icon: DollarSign }
+    { id: 'revenue', label: 'Fee Revenue', icon: DollarSign },
+    { id: 'route_profitability', label: 'Route Profitability', icon: Route },
+    { id: 'accident_allocation', label: 'Accident Allocation', icon: Shield }
   ];
 
   const filteredApprovals = pendingApprovals.filter(request => {
@@ -53,35 +208,60 @@ const FinancialControlAndApprovals = () => {
   // Show toast message
   const showToast = (message, type = 'success') => {
     setToastMessage({ message, type });
-    setTimeout(() => setToastMessage(null), 4000); // Auto hide after 4 seconds
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  // Handle view request details
+  const handleViewRequest = (request) => {
+    const routeMap = {
+      'fuel': 'fuel-consumption',
+      'maintenance': 'vehicle-cost-analysis',
+      'insurance': 'insurance-details',
+      'overtime': 'driver-overtime',
+      'route_profitability': 'route-profitability',
+      'accident_allocation': 'accident-allocation'
+    };
+    
+    const route = routeMap[request.category] || 'details';
+    navigate(`/management/transport/financial-control/${route}/${request.id}`);
   };
 
   // Direct approval/rejection with toast
   const handleApprovalAction = (request, action) => {
-    // Remove the request from pending approvals
     setPendingApprovals(prev => prev.filter(req => req.id !== request.id));
     
-    // Show success toast
     const actionText = action === 'approve' ? 'approved' : 'rejected';
     showToast(
       `Request ${request.id} (${request.type}) has been ${actionText} successfully!`,
       action === 'approve' ? 'success' : 'warning'
     );
     
-    // Log for API integration
     console.log(`${action} request ${request.id}`);
   };
 
   const handleExport = (format) => {
-    const data = activeTab === 'approvals' ? filteredApprovals : expenseOverview;
+    const data = activeTab === 'approvals' ? filteredApprovals : 
+                 activeTab === 'route_profitability' ? routeProfitability :
+                 activeTab === 'accident_allocation' ? accidentAllocation :
+                 expenseOverview;
     console.log(`Exporting ${activeTab} data to ${format}:`, data);
     
     if (format === 'excel') {
-      const csvContent = activeTab === 'approvals' 
-        ? 'ID,Type,Amount,Requested By,Date,Priority\n' + 
-          filteredApprovals.map(req => `${req.id},${req.type},${req.amount},${req.requestedBy},${req.date},${req.priority}`).join('\n')
-        : 'Category,Amount,Percentage,Trend\n' + 
+      let csvContent = '';
+      
+      if (activeTab === 'approvals') {
+        csvContent = 'ID,Type,Amount,Requested By,Date,Priority\n' + 
+          filteredApprovals.map(req => `${req.id},${req.type},${req.amount},${req.requestedBy},${req.date},${req.priority}`).join('\n');
+      } else if (activeTab === 'route_profitability') {
+        csvContent = 'Route ID,Name,Revenue,Expenses,Profit,Margin,Vehicles,Students,Status\n' + 
+          routeProfitability.map(route => `${route.id},${route.name},${route.revenue},${route.expenses},${route.profit},${route.margin},${route.vehicles},${route.students},${route.status}`).join('\n');
+      } else if (activeTab === 'accident_allocation') {
+        csvContent = 'ID,Date,Vehicle,Route,Type,Total Cost,Insurance,Self Pay,Status\n' + 
+          accidentAllocation.map(acc => `${acc.id},${acc.date},${acc.vehicle},${acc.route},${acc.type},${acc.cost},${acc.insurance},${acc.selfPay},${acc.status}`).join('\n');
+      } else {
+        csvContent = 'Category,Amount,Percentage,Trend\n' + 
           expenseOverview.map(exp => `${exp.category},${exp.amount},${exp.percentage}%,${exp.trend}`).join('\n');
+      }
       
       const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
@@ -174,14 +354,14 @@ const FinancialControlAndApprovals = () => {
 
           {/* Tab Navigation */}
           <div className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-            <nav className="flex space-x-8" aria-label="Tabs">
+            <nav className="flex space-x-8 overflow-x-auto" aria-label="Tabs">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-2 py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                    className={`flex items-center space-x-2 py-3 px-1 border-b-2 font-medium text-sm transition-colors duration-200 whitespace-nowrap ${
                       activeTab === tab.id
                         ? `border-blue-500 ${isDark ? 'text-blue-400' : 'text-blue-600'}`
                         : `border-transparent ${isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'} hover:border-gray-300`
@@ -261,6 +441,7 @@ const FinancialControlAndApprovals = () => {
                     <RequestCard 
                       key={request.id}
                       request={request}
+                      onView={() => handleViewRequest(request)}
                       onApprove={() => handleApprovalAction(request, 'approve')}
                       onReject={() => handleApprovalAction(request, 'reject')}
                       isDark={isDark}
@@ -306,6 +487,91 @@ const FinancialControlAndApprovals = () => {
                     </p>
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'route_profitability' && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold flex items-center">
+                  <Route className="w-5 h-5 mr-2 text-green-500" />
+                  Route Profitability Analysis
+                </h3>
+                <button 
+                  onClick={() => handleExport('excel')}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Export Report
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {routeProfitability.map((route, index) => (
+                  <RouteProfitabilityCard key={route.id} route={route} isDark={isDark} />
+                ))}
+              </div>
+
+              {/* Summary Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Revenue</p>
+                  <p className="text-xl font-bold text-green-600">₹1,38,100</p>
+                </div>
+                <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Expenses</p>
+                  <p className="text-xl font-bold text-red-600">₹1,16,000</p>
+                </div>
+                <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Net Profit</p>
+                  <p className="text-xl font-bold text-blue-600">₹22,100</p>
+                </div>
+                <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Avg Margin</p>
+                  <p className="text-xl font-bold text-purple-600">16.0%</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'accident_allocation' && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold flex items-center">
+                  <Shield className="w-5 h-5 mr-2 text-red-500" />
+                  Accident Allocation Summary
+                </h3>
+                <button 
+                  onClick={() => handleExport('excel')}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Export Report
+                </button>
+              </div>
+
+              {/* Accident Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Accident Cost</p>
+                  <p className="text-xl font-bold text-red-600">₹26,600</p>
+                </div>
+                <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Insurance Coverage</p>
+                  <p className="text-xl font-bold text-green-600">₹16,000</p>
+                </div>
+                <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Self Payment</p>
+                  <p className="text-xl font-bold text-orange-600">₹10,600</p>
+                </div>
+              </div>
+
+              {/* Accident Details */}
+              <div className="space-y-4">
+                {accidentAllocation.map((accident, index) => (
+                  <AccidentCard key={accident.id} accident={accident} isDark={isDark} />
+                ))}
               </div>
             </div>
           )}
@@ -384,7 +650,7 @@ const Toast = ({ message, type, onClose, isDark }) => {
 };
 
 // Request Card Component
-const RequestCard = ({ request, onApprove, onReject, isDark }) => (
+const RequestCard = ({ request, onView, onApprove, onReject, isDark }) => (
   <div className={`p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
     isDark ? 'bg-gray-800' : 'bg-white'
   }`}>
@@ -421,7 +687,14 @@ const RequestCard = ({ request, onApprove, onReject, isDark }) => (
         </p>
       </div>
       
-      <div className="flex space-x-3 lg:ml-6">
+      <div className="flex flex-wrap gap-3 lg:ml-6">
+        <button 
+          onClick={onView}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center font-medium"
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          View
+        </button>
         <button 
           onClick={onApprove}
           className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center font-medium"
@@ -476,6 +749,104 @@ const ExpenseCard = ({ expense, isDark }) => (
     <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
       {expense.percentage}% of total budget allocated
     </p>
+  </div>
+);
+
+// Route Profitability Card Component
+const RouteProfitabilityCard = ({ route, isDark }) => (
+  <div className={`p-6 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className="flex justify-between items-start mb-4">
+      <div>
+        <h4 className="font-semibold text-lg mb-1 flex items-center">
+          <MapPin className="w-4 h-4 mr-2 text-blue-500" />
+          {route.name}
+        </h4>
+        <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{route.id}</p>
+      </div>
+      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+        route.status === 'profitable' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+        route.status === 'loss' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
+        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+      }`}>
+        {route.status === 'loss' ? 'Loss Making' : 
+         route.status === 'marginal' ? 'Marginal' : 'Profitable'}
+      </span>
+    </div>
+    
+    <div className="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Revenue</p>
+        <p className="text-lg font-semibold text-green-600">{route.revenue}</p>
+      </div>
+      <div>
+        <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Expenses</p>
+        <p className="text-lg font-semibold text-red-600">{route.expenses}</p>
+      </div>
+      <div>
+        <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Profit/Loss</p>
+        <p className={`text-lg font-semibold ${
+          route.profit.startsWith('-') ? 'text-red-600' : 'text-blue-600'
+        }`}>{route.profit}</p>
+      </div>
+      <div>
+        <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Margin</p>
+        <p className={`text-lg font-semibold ${
+          route.margin.startsWith('-') ? 'text-red-600' : 'text-green-600'
+        }`}>{route.margin}</p>
+      </div>
+    </div>
+    
+    <div className="flex justify-between text-sm pt-4 border-t border-gray-200 dark:border-gray-700">
+      <span><Car className="w-4 h-4 inline mr-1" />{route.vehicles} vehicles</span>
+      <span><Users className="w-4 h-4 inline mr-1" />{route.students} students</span>
+    </div>
+  </div>
+);
+
+// Accident Card Component  
+const AccidentCard = ({ accident, isDark }) => (
+  <div className={`p-4 rounded-xl shadow-md ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-4 lg:space-y-0">
+      <div className="flex-1">
+        <div className="flex items-center space-x-3 mb-3">
+          <h4 className="font-semibold text-lg">{accident.type}</h4>
+          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+            accident.status === 'settled' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+            'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+          }`}>
+            {accident.status.toUpperCase()}
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
+          <div className="flex items-center">
+            <Calendar className="w-4 h-4 text-gray-400 mr-2" />
+            <span className="text-sm">{accident.date}</span>
+          </div>
+          <div className="flex items-center">
+            <Car className="w-4 h-4 text-gray-400 mr-2" />
+            <span className="text-sm">{accident.vehicle}</span>
+          </div>
+          <div className="flex items-center">
+            <MapPin className="w-4 h-4 text-gray-400 mr-2" />
+            <span className="text-sm">{accident.route}</span>
+          </div>
+          <div className="flex items-center">
+            <DollarSign className="w-4 h-4 text-gray-400 mr-2" />
+            <span className="text-sm font-semibold">{accident.cost}</span>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-green-600 font-medium">Insurance: {accident.insurance}</span>
+          </div>
+          <div>
+            <span className="text-orange-600 font-medium">Self Pay: {accident.selfPay}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 );
 
