@@ -34,9 +34,8 @@ import AccidentAllocationDetails from "../pages/RegistorModule/Transport/Acciden
 import MasterConfiguration from "../pages/RegistorModule/Transport/MasterConfiguration";
 import TransportReports from "../pages/RegistorModule/Transport/TransportReports";
 
-import CandidateVerification from "../pages/RegistorModule/Admission/Verification/CandidateVerification";
-import DocumentVerification from "../pages/RegistorModule/Admission/Verification/DocumentVerification";
-import AllotmentOrderGeneration from "../pages/RegistorModule/Admission/Verification/AllotmentOrderGeneration";
+import AdministrationVerification from "../pages/RegistorModule/Admission/Verification/AdministrationVerification";
+import StudentAcademicVerification from "../pages/RegistorModule/Admission/Verification/StudentAcademicVerification";
 import TemporaryStudentLogin from "../pages/RegistorModule/Admission/StudentOnboarding/TemporaryStudentLogin";
 import CommunicationHub from "../pages/RegistorModule/Admission/StudentOnboarding/CommunicationHub";
 import PermanentStudentLoginPage from "../pages/RegistorModule/Admission/StudentOnboarding/PermanentStudentLogin";
@@ -50,10 +49,7 @@ import InfrastructureOverview from "../pages/RegistorModule/Hostel/Infrastructur
 import StaffAndRoles from "../pages/RegistorModule/Hostel/StaffAndRoles";
 import Reports from "../pages/RegistorModule/Hostel/Reports";
 import AdmissionDashboard from "../pages/RegistorModule/Admission/RegistrarDashboard";
-import CAPAdmin from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/CAPAdmin";
 import SeatAllotmentPhaseI from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/SeatAllotmentPhaseI";
-import SeatAllotmentPhaseII from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/SeatAllotmentPhaseII";
-import SeatAllotmentPhaseIII from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/SeatAllotmentPhaseIII";
 import ManagementAdmissionProcess from "../pages/RegistorModule/Admission/AdminssionProcess/ManagementAdmission/ManagementAdmissionProcess";
 import SpotAdmissionMerit from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionMerit";
 import SpotAdmissionFCFS from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionFCFS";
@@ -139,10 +135,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="staff-roles" element={<StaffAndRoles />} />
       <Route path="infra-reports" element={<Reports />} />
       <Route path="/Admission/dashboard" element={<AdmissionDashboard />} />
-      <Route path="/admission-process/cap" element={<CAPAdmin />} />
-      <Route path="/admission-process/seat-allotment/phase-1" element={<SeatAllotmentPhaseI />} />
-      <Route path="/admission-process/seat-allotment/phase-2" element={<SeatAllotmentPhaseII />} />
-      <Route path="/admission-process/seat-allotment/phase-3" element={<SeatAllotmentPhaseIII />} />
+      <Route path="/admission-process/seat-allotment/cap-phases" element={<SeatAllotmentPhaseI />} />
       <Route path="/admission-process/management-quota" element={<ManagementAdmissionProcess />} />
       <Route path="/admission-process/spot-admission/merit-based" element={<SpotAdmissionMerit />} />
       <Route path="/admission-process/spot-admission/first-come" element={<SpotAdmissionFCFS />} />
@@ -151,12 +144,6 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
-
-
-      <Route path="/student/dashboard" element={<Dashboard />} />
-      <Route path="/student/profile" element={<MyProfile />} />
-      <Route path="/student/finance" element={<Finance />} />
-      <Route path="/student/notifications" element={<Notifications />} />
 
 
      <Route path="/principal/infrastructure-reports/new-asset-requests" element={<InfrastructureReports />} />
@@ -186,9 +173,8 @@ const CommonRoutes: React.FC = () => {
       <Route path="/temporary-student/onboarding-form" element={<OnboardingForm />} />
       <Route path="/temporary-student/notifications" element={<TempNotifications />} />
 
-      <Route path="verification/candidate" element={<CandidateVerification />} />
-      <Route path="/verification/document" element={<DocumentVerification />} />
-      <Route path="/verification/allotment-order" element={<AllotmentOrderGeneration />} />
+      <Route path="verification/candidate" element={<AdministrationVerification />} />
+      <Route path="/verification/document" element={<StudentAcademicVerification />} />
       <Route path="/student-onboarding/temp-login" element={<TemporaryStudentLogin />} />
       <Route path="/student-onboarding/communication-hub" element={<CommunicationHub />} />
       <Route path="/student-onboarding/activate-login" element={<PermanentStudentLoginPage />} />

@@ -445,13 +445,8 @@ const SIDEBAR_ITEMS = {
         children: [
           { 
             name: 'CAP (Centralized Administration Process)', 
-            path: '/management/admission-process/seat-allotment', 
+            path: '/management/admission-process/seat-allotment/cap-phases', 
             icon: 'Layers',
-            children: [
-              { name: 'Phase 1', path: '/management/admission-process/seat-allotment/phase-1', icon: 'Circle1' },
-              { name: 'Phase 2 ', path: '/management/admission-process/seat-allotment/phase-2', icon: 'Circle2' },
-              { name: 'Phase 3 ', path: '/management/admission-process/seat-allotment/phase-3', icon: 'Circle3' }
-            ]
           },
           { name: 'Management Quota Admission Process', path: '/management/admission-process/management-quota', icon: 'UserCheck' },
           { 
