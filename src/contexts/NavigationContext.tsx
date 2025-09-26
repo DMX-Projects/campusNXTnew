@@ -440,19 +440,13 @@ const SIDEBAR_ITEMS = {
 
       { 
         name: 'Admission Process', 
-        path: '/management/admission-process', 
+        path: '/management/', 
         icon: 'GraduationCap',
         children: [
-          { name: 'CAP (Centralized Administration Process)', path: '/management/admission-process/cap', icon: 'Users' },
           { 
-            name: 'Seat Allotment', 
-            path: '/management/admission-process/seat-allotment', 
+            name: 'CAP (Centralized Administration Process)', 
+            path: '/management/admission-process/seat-allotment/cap-phases', 
             icon: 'Layers',
-            children: [
-              { name: 'Phase 1 (Initial Allotment)', path: '/management/admission-process/seat-allotment/phase-1', icon: 'Circle1' },
-              { name: 'Phase 2 (Upgradation/Sliding)', path: '/management/admission-process/seat-allotment/phase-2', icon: 'Circle2' },
-              { name: 'Phase 3 (Final Round)', path: '/management/admission-process/seat-allotment/phase-3', icon: 'Circle3' }
-            ]
           },
           { name: 'Management Quota Admission Process', path: '/management/admission-process/management-quota', icon: 'UserCheck' },
           { 
@@ -472,20 +466,9 @@ const SIDEBAR_ITEMS = {
         path: '/management/verification', 
         icon: 'CheckCircle',
         children: [
-          { name: 'Candidate Verification', path: '/management/verification/candidate', icon: 'UserCheck' },
-          { name: 'Document Verification', path: '/management/verification/document', icon: 'FileCheck' },
-          { name: 'Allotment Order Generation', path: '/management/verification/allotment-order', icon: 'FileText' }
-        ]
-      },
-
-      { 
-        name: 'Student Onboarding', 
-        path: '/management/student-onboarding', 
-        icon: 'Users',
-        children: [
-          { name: 'Temporary Student Login', path: '/management/student-onboarding/temp-login', icon: 'LogIn' },
-          { name: 'Communication Hub (Messages/Notifications)', path: '/management/student-onboarding/communication-hub', icon: 'MessageSquare' },
-          { name: 'Permanent Student Login Activation', path: '/management/student-onboarding/activate-login', icon: 'UserPlus' }
+          { name: 'Administration Verification', path: '/management/verification/candidate', icon: 'UserCheck' },
+          { name: 'Academic Verification', path: '/management/verification/document', icon: 'FileCheck' },
+          { name: 'Fees Confirmation', path: '/management/verification/allotment-order', icon: 'FileText' }
         ]
       },
 
@@ -493,11 +476,6 @@ const SIDEBAR_ITEMS = {
         name: 'Reports & Logs', 
         path: '/management/reports', 
         icon: 'FileBarChart',
-        children: [
-          { name: 'Admission Reports', path: '/management/reports/admission', icon: 'ClipboardList' },
-          { name: 'Fee Payment Reports', path: '/management/reports/fee-payment', icon: 'DollarSign' },
-          { name: 'Verification Logs', path: '/management/reports/verification-logs', icon: 'BookOpen' }
-        ]
       },
 
       { name: 'Raise Ticket', path: '/management/raise-ticket', icon: 'LifeBuoy' }
@@ -511,7 +489,7 @@ const SIDEBAR_ITEMS = {
       icon: 'BarChart3' 
     },
     { 
-      name: 'Application Status', 
+      name: 'Admission Status', 
       path: '/management/temporary-student/application-status', 
       icon: 'CheckCircle' 
     },
@@ -520,21 +498,6 @@ const SIDEBAR_ITEMS = {
       path: '/management/temporary-student/fee-payment', 
       icon: 'DollarSign' 
     },
-    { 
-      name: 'Document Upload', 
-      path: '/management/temporary-student/document-upload', 
-      icon: 'Upload' 
-    },
-    { 
-      name: 'Onboarding Form', 
-      path: '/management/temporary-student/onboarding-form', 
-      icon: 'FileText' 
-    },
-    { 
-      name: 'Notifications', 
-      path: '/management/temporary-student/notifications', 
-      icon: 'Bell' 
-    }
   ],
 },
 

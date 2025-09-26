@@ -443,7 +443,7 @@ const PayrollManagement: React.FC = () => {
             <div className={`p-6 rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border`}>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-md">
-                  <DollarSign className="h-5 w-5 text-blue-600" />
+                  <IndianRupee className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm opacity-75">Total Payroll</p>

@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { CheckCircle, Clock, FileText, CreditCard, Upload, Calendar, ChevronRight, User, Bell, X, ExternalLink, AlertCircle, IndianRupee, FileCheck, Heart, Check, Loader } from 'lucide-react';
+import { CheckCircle, Clock, FileText, CreditCard, Upload, Calendar, ChevronRight, X, ExternalLink, AlertCircle, Heart, Loader } from 'lucide-react';
+
+const requiredDocuments = [
+  "Official High School TC",
+  "Government-issued Photo ID", 
+  "Passport-size photograph",
+  "Birth certificate (if applicable)"
+];
 
 const Dashboard = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -10,11 +17,11 @@ const Dashboard = () => {
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState({});
   const [uploadProgress, setUploadProgress] = useState({});
-  
-  // Sample data - in real app this would come from props or API
+
+  // Sample data, ideally from API/backend
   const studentName = "Alex Johnson";
   const admissionStatus = "Confirmed";
-  
+
   const [nextSteps, setNextSteps] = useState([
     {
       id: 1,
@@ -53,12 +60,7 @@ const Dashboard = () => {
       icon: Upload,
       link: "/documents",
       detailedInfo: {
-        requiredDocs: [
-          "Official High School TC",
-          "Government-issued Photo ID", 
-          "Passport-size photograph",
-          "Birth certificate (if applicable)"
-        ],
+        requiredDocs: requiredDocuments,
         format: "PDF format, maximum 5MB per file",
         instructions: [
           "Select the document type",
@@ -75,40 +77,9 @@ const Dashboard = () => {
         consequences: "Incomplete documentation may delay your enrollment process."
       }
     },
-    // {
-    //   id: 3,
-    //   title: "Complete Health Form",
-    //   description: "Fill out required health information",
-    //   deadline: "March 25, 2024",
-    //   completed: true,
-    //   urgent: false,
-    //   icon: FileText,
-    //   link: "/health-form",
-    //   detailedInfo: {
-    //     sections: [
-    //       "Medical History",
-    //       "Current Medications",
-    //       "Emergency Contacts",
-    //       "Insurance Information",
-    //       "Vaccination Records"
-    //     ],
-    //     instructions: [
-    //       "Complete all required sections",
-    //       "Provide accurate medical information",
-    //       "Include emergency contact details",
-    //       "Upload vaccination records",
-    //       "Submit by the deadline"
-    //     ],
-    //     requirements: [
-    //       "Must be completed by a licensed healthcare provider",
-    //       "All vaccinations must be up to date",
-    //       "Emergency contacts must be reachable"
-    //     ],
-    //     consequences: "Incomplete health forms may restrict campus access and activities."
-    //   }
-    // }
   ]);
-  
+
+  // Timelines for upcoming deadlines and events
   const timeline = [
     {
       id: 1,
@@ -133,70 +104,48 @@ const Dashboard = () => {
       time: "9:00 AM",
       type: "event",
       urgent: false
-    },
-    {
-      id: 4,
-      title: "Classes Begin",
-      date: "April 8, 2024",
-      time: "8:00 AM",
-      type: "event",
-      urgent: false
     }
   ];
 
-  const requiredDocuments = [
-    "Official High School TC",
-    "Government-issued Photo ID", 
-    "Passport-size photograph",
-    "Birth certificate (if applicable)"
-  ];
-
+  // Count pending tasks
   const pendingTasks = nextSteps.filter(step => !step.completed).length;
 
+  // Handle click on next step cards
   const handleStepClick = (step) => {
     if (step.completed) return;
-    
-    if (step.id === 1) { // Payment step
-      setShowPayment(true);
-    } else if (step.id === 2) { // Document upload step
-      setShowDocuments(true);
-    } else {
-      setSelectedStep(step);
-    }
+
+    if (step.id === 1) setShowPayment(true);
+    else if (step.id === 2) setShowDocuments(true);
+    else setSelectedStep(step);
   };
 
+  // Close all modals/details
   const closeModal = () => {
     setSelectedStep(null);
     setShowPayment(false);
     setShowDocuments(false);
   };
 
+  // Simulate fee payment processing
   const handlePayment = async () => {
     if (!paymentMethod) {
       alert('Please select a payment method');
       return;
     }
-    
     setPaymentProcessing(true);
-    
-    // Simulate payment processing
     await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    // Update the step as completed
-    setNextSteps(prev => prev.map(step => 
-      step.id === 1 ? { ...step, completed: true } : step
-    ));
-    
+    setNextSteps(prev => prev.map(step => step.id === 1 ? { ...step, completed: true } : step));
     setPaymentProcessing(false);
     setShowPayment(false);
     alert('Payment successful! Your admission fee has been processed.');
   };
 
+  // Handle each document upload with checks and simulated progress
   const handleFileUpload = async (event, docType) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+    if (file.size > 5 * 1024 * 1024) {
       alert('File size must be less than 5MB');
       return;
     }
@@ -205,33 +154,26 @@ const Dashboard = () => {
       alert('Please upload PDF files only');
       return;
     }
-
-    // Start upload progress
     setUploadProgress(prev => ({ ...prev, [docType]: 0 }));
 
-    // Simulate file upload with progress
     for (let i = 0; i <= 100; i += 10) {
       await new Promise(resolve => setTimeout(resolve, 100));
       setUploadProgress(prev => ({ ...prev, [docType]: i }));
     }
 
-    // Mark as uploaded
     setUploadedFiles(prev => ({ ...prev, [docType]: file.name }));
     setUploadProgress(prev => ({ ...prev, [docType]: 100 }));
 
-    // Check if all documents are uploaded
     const newUploadedFiles = { ...uploadedFiles, [docType]: file.name };
     if (Object.keys(newUploadedFiles).length === requiredDocuments.length) {
-      // Update the step as completed
       setTimeout(() => {
-        setNextSteps(prev => prev.map(step => 
-          step.id === 2 ? { ...step, completed: true } : step
-        ));
+        setNextSteps(prev => prev.map(step => step.id === 2 ? { ...step, completed: true } : step));
         alert('All documents uploaded successfully!');
       }, 1000);
     }
   };
 
+  // Payment modal JSX
   const PaymentModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-md">
@@ -241,7 +183,7 @@ const Dashboard = () => {
             <X className="h-5 w-5 text-slate-500" />
           </button>
         </div>
-        
+
         <div className="p-6 space-y-6">
           <div className="text-center">
             <div className="text-3xl font-bold text-slate-900 dark:text-white">₹2,500</div>
@@ -292,86 +234,81 @@ const Dashboard = () => {
     </div>
   );
 
+  // Documents modal JSX
   const DocumentsModal = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white dark:bg-slate-800 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-auto">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+        <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between pb-4 mb-4">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Upload Documents</h2>
           <button onClick={closeModal} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
             <X className="h-5 w-5 text-slate-500" />
           </button>
         </div>
-        
-        <div className="p-6 space-y-6">
+        <div className="space-y-6">
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm font-medium text-blue-700 dark:text-blue-400">Upload Requirements</span>
+            <div className="flex items-center space-x-2 mb-2 text-blue-600 dark:text-blue-400 font-medium">
+              <AlertCircle className="h-5 w-5" />
+              <span>Upload Requirements:</span>
             </div>
-            <ul className="text-sm text-blue-600 dark:text-blue-400 space-y-1">
-              <li>• PDF format only, maximum 5MB per file</li>
-              <li>• Ensure all text is clearly readable</li>
-              <li>• All pages must be included</li>
+            <ul className="text-sm text-blue-600 dark:text-blue-400 space-y-1 list-disc list-inside">
+              <li>PDF format only, max 5MB per file</li>
+              <li>All pages must be clear and legible</li>
+              <li>Upload will be verified by admissions office</li>
             </ul>
           </div>
 
-          <div className="space-y-4">
-            {requiredDocuments.map((docType, index) => (
-              <div key={index} className="border border-slate-200 dark:border-slate-600 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-medium text-slate-900 dark:text-white">{docType}</h3>
-                  {uploadedFiles[docType] && (
-                    <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
-                      <CheckCircle className="h-4 w-4" />
-                      <span className="text-sm">Uploaded</span>
-                    </div>
-                  )}
-                </div>
-                
-                {uploadedFiles[docType] ? (
-                  <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded p-3">
-                    <div className="flex items-center space-x-2">
-                      <FileCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
-                      <span className="text-sm text-green-700 dark:text-green-400">{uploadedFiles[docType]}</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <input
-                      type="file"
-                      accept=".pdf"
-                      onChange={(e) => handleFileUpload(e, docType)}
-                      className="hidden"
-                      id={`upload-${index}`}
-                    />
-                    <label
-                      htmlFor={`upload-${index}`}
-                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50"
-                    >
-                      <Upload className="h-8 w-8 text-slate-400 mb-2" />
-                      <span className="text-sm text-slate-600 dark:text-slate-400">Click to upload {docType}</span>
-                      <span className="text-xs text-slate-500 dark:text-slate-500">PDF only, max 5MB</span>
-                    </label>
-                    
-                    {uploadProgress[docType] !== undefined && uploadProgress[docType] < 100 && (
-                      <div className="mt-3">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-slate-600 dark:text-slate-400">Uploading...</span>
-                          <span className="text-xs text-slate-600 dark:text-slate-400">{uploadProgress[docType]}%</span>
-                        </div>
-                        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${uploadProgress[docType]}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )}
+          {requiredDocuments.map((docType, index) => (
+            <div key={index} className="border border-slate-200 dark:border-slate-600 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-medium text-slate-900 dark:text-white">{docType}</h3>
+                {uploadedFiles[docType] && (
+                  <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
+                    <CheckCircle className="h-4 w-4" />
+                    <span className="text-sm">Uploaded</span>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
+              {uploadedFiles[docType] ? (
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded p-3 flex items-center space-x-2">
+                  <FileText className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  <span className="text-green-700 dark:text-green-400">{uploadedFiles[docType]}</span>
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleFileUpload(e, docType)}
+                    className="hidden"
+                    id={`upload-${index}`}
+                  />
+                  <label
+                    htmlFor={`upload-${index}`}
+                    className="cursor-pointer flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-400 dark:text-slate-400 select-none"
+                  >
+                    <Upload className="h-8 w-8 mb-2" />
+                    <span>Click to upload {docType}</span>
+                    <span className="text-xs mt-1">PDF only, max 5MB</span>
+                  </label>
+
+                  {uploadProgress[docType] !== undefined && uploadProgress[docType] < 100 && (
+                    <div className="mt-3">
+                      <div className="flex justify-between text-xs mb-1 text-slate-600 dark:text-slate-400">
+                        <span>Uploading...</span>
+                        <span>{uploadProgress[docType]}%</span>
+                      </div>
+                      <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${uploadProgress[docType]}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          ))}
 
           <div className="flex justify-between items-center pt-4 border-t border-slate-200 dark:border-slate-700">
             <span className="text-sm text-slate-600 dark:text-slate-400">
@@ -389,141 +326,68 @@ const Dashboard = () => {
     </div>
   );
 
+  // Detail modal for additional step info
   const DetailModal = ({ step, onClose }) => {
     if (!step) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-          <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className={`p-2 rounded-full ${
-                step.urgent ? 'bg-red-100 dark:bg-red-800' : 'bg-blue-100 dark:bg-blue-800'
-              }`}>
-                <step.icon className={`h-5 w-5 ${
-                  step.urgent ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'
-                }`} />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-                  {step.title}
-                </h2>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Due: {step.deadline}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"
-            >
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-auto">
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+          <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between pb-4 mb-4">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{step.title}</h2>
+            <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full">
               <X className="h-5 w-5 text-slate-500 dark:text-slate-400" />
             </button>
           </div>
 
-          <div className="p-6 space-y-6">
-            {step.urgent && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                <div className="flex items-center space-x-2">
-                  <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
-                  <span className="text-sm font-medium text-red-700 dark:text-red-400">
-                    Urgent Action Required
-                  </span>
-                </div>
-                <p className="text-sm text-red-600 dark:text-red-400 mt-1">
-                  This task has a close deadline and requires immediate attention.
-                </p>
+          {step.urgent && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
+              <div className="flex items-center space-x-2 text-red-600 dark:text-red-400 font-medium">
+                <AlertCircle className="h-5 w-5" />
+                <span>Urgent Action Required</span>
               </div>
-            )}
-
-            <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-                Overview
-              </h3>
-              <p className="text-slate-600 dark:text-slate-400">
-                {step.description}
-              </p>
+              <p>This task has a close deadline and requires immediate attention.</p>
             </div>
+          )}
 
-            {step.detailedInfo.sections && (
-              <div>
-                <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-                  Form Sections
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {step.detailedInfo.sections.map((section, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg"
-                    >
-                      <Heart className="h-4 w-4 text-green-600 dark:text-green-400" />
-                      <span className="text-sm text-green-700 dark:text-green-300">{section}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          <p className="text-slate-700 dark:text-slate-400 mb-4">{step.description}</p>
 
-            <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-                Step-by-Step Instructions
-              </h3>
-              <div className="space-y-2">
-                {step.detailedInfo.instructions.map((instruction, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start space-x-3 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg"
-                  >
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-medium">
-                      {index + 1}
-                    </span>
-                    <span className="text-sm text-slate-700 dark:text-slate-300">{instruction}</span>
-                  </div>
+          {step.detailedInfo?.instructions && (
+            <div className="mb-4">
+              <h3 className="font-semibold mb-2">Step by Step Instructions:</h3>
+              <ol className="list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300">
+                {step.detailedInfo.instructions.map((inst, idx) => (
+                  <li key={idx}>{inst}</li>
                 ))}
-              </div>
+              </ol>
             </div>
+          )}
 
-            <div>
-              <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-                Requirements
-              </h3>
-              <ul className="space-y-2">
-                {step.detailedInfo.requirements.map((requirement, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start space-x-2 text-sm text-slate-600 dark:text-slate-400"
-                  >
-                    <span className="text-blue-600 dark:text-blue-400 mt-1">•</span>
-                    <span>{requirement}</span>
-                  </li>
+          {step.detailedInfo?.requirements && (
+            <div className="mb-4">
+              <h3 className="font-semibold mb-2">Requirements:</h3>
+              <ul className="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
+                {step.detailedInfo.requirements.map((req, idx) => (
+                  <li key={idx}>{req}</li>
                 ))}
               </ul>
             </div>
+          )}
 
+          {step.detailedInfo?.consequences && (
             <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-              <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-400 mb-1">
-                Important Note
-              </h3>
-              <p className="text-sm text-yellow-700 dark:text-yellow-400">
-                {step.detailedInfo.consequences}
-              </p>
+              <h3 className="font-semibold mb-1">Important Note</h3>
+              <p>{step.detailedInfo.consequences}</p>
             </div>
+          )}
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
-              <button
-                onClick={() => console.log(`Navigate to ${step.link}`)}
-                className="flex-1 flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                <ExternalLink className="h-4 w-4" />
-                <span>Complete Task</span>
-              </button>
-              <button
-                onClick={onClose}
-                className="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-              >
-                Close
-              </button>
-            </div>
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -531,149 +395,120 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={`min-h-screen bg--to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
+    <div className={`${darkMode ? 'dark' : ''} min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300`}>
       <div className="container mx-auto px-4 py-6">
-        {/* Enhanced Welcome Message */}
-        <div className="mb-8">
-           <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-700 to-indigo-700 dark:from-slate-850 dark:via-blue-750 dark:to-indigo-850 rounded-2xl p-6 sm:p-8 border border-blue-800 dark:border-blue-900 shadow-2xl">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-            
-            <div className="relative">
-              {/* Greeting with Animation */}
-              <div className="flex items-center gap-3 mb-3">
-                <div className="text-3xl sm:text-4xl animate-wave">👋</div>
-               <h2 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-300 via-cyan-300 to-indigo-300 bg-clip-text text-transparent filter drop-shadow-2xl">
-                  Welcome back, {studentName}!
-                </h2>
-              </div>
-              
-              {/* Subtext with Icon */}
-              <div className="flex items-start gap-2">
-                <div className="text-blue-500 dark:text-blue-400 mt-1">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-               <p className="text-lg text-slate-200 leading-relaxed">
-                  Ready to continue your admission journey? Here's your 
-                  <span className="font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"> progress overview</span> and 
-          <span className="font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent"> upcoming deadlines</span>.
-                </p>
-              </div>
-              
-              {/* Quick Stats Badge */}
-              <div className="mt-4 inline-flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-sm border border-slate-200 dark:border-slate-600">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                  All systems active
-                </span>
-              </div>
-            </div>
-          </div>
+
+        {/* Header with Dark Mode Toggle */}
+        <div className="flex justify-between items-center mb-6">
+          
+         
         </div>
 
-        {/* Admission Status Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 sm:p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Admission Status</h3>
-            <div className="flex items-center space-x-2 bg-green-100 dark:bg-green-900/30 px-3 py-1 rounded-full">
-              <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-              <span className="text-sm font-medium text-green-700 dark:text-green-400">{admissionStatus}</span>
+        {/* Admission Status and Tasks */}
+        <div className="grid gap-6 md:grid-cols-3">
+
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Admission Status</h2>
+              <div className="flex items-center space-x-2 bg-green-100 dark:bg-green-900/30 px-3 py-1 rounded-full">
+                <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <span className="text-sm font-medium text-green-700 dark:text-green-400">{admissionStatus}</span>
+              </div>
             </div>
-          </div>
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-4">
-            <p className="text-sm text-slate-700 dark:text-slate-300">
-              Congratulations! Your admission has been confirmed. Complete the remaining steps below to secure your enrollment.
+            <p className="text-slate-700 dark:text-slate-300">
+              Congratulations! Your admission has been confirmed. Remember to complete the required steps.
             </p>
           </div>
+
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 text-center">
+            <Clock className="mx-auto mb-2 h-10 w-10 text-blue-600 dark:text-blue-400" />
+            <p className="text-3xl font-bold text-slate-900 dark:text-white">{pendingTasks}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Pending Tasks</p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 text-center">
+            <Calendar className="mx-auto mb-2 h-10 w-10 text-purple-600 dark:text-purple-400" />
+            <p className="text-3xl font-bold text-slate-900 dark:text-white">{timeline.length}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">Upcoming Events</p>
+          </div>
+
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
-            <div className="flex items-center space-x-2">
-              <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              <div>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{pendingTasks}</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Pending Tasks</p>
-              </div>
-            </div>
+        {/* Next Steps */}
+        <section className="mt-8 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Next Steps</h2>
+            <span className="text-sm text-slate-500 dark:text-slate-400">
+              {pendingTasks} remaining
+            </span>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
-            <div className="flex items-center space-x-2">
-              <Calendar className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-              <div>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white">{timeline.length}</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Upcoming Events</p>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Next Steps Checklist */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 sm:p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Next Steps</h3>
-            <span className="text-sm text-slate-500 dark:text-slate-400">{pendingTasks} remaining</span>
-          </div>
-          
-          <div className="space-y-3">
+          <div className="space-y-4">
             {nextSteps.map((step) => (
               <div
                 key={step.id}
-                className={`p-4 rounded-lg border transition-all duration-200 ${
+                onClick={() => handleStepClick(step)}
+                className={`p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
                   step.completed
                     ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
                     : step.urgent
-                    ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 hover:shadow-md cursor-pointer transform hover:scale-[1.02]'
-                    : 'bg-slate-50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 hover:shadow-md cursor-pointer transform hover:scale-[1.02]'
-                } ${!step.completed ? 'hover:shadow-sm' : ''}`}
-                onClick={() => handleStepClick(step)}
+                    ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 hover:shadow-md transform hover:scale-[1.02]'
+                    : 'bg-slate-50 dark:bg-slate-700/50 border-slate-200 dark:border-slate-600 hover:shadow-md transform hover:scale-[1.02]'
+                }`}
               >
                 <div className="flex items-start space-x-3">
-                  <div className={`p-2 rounded-full ${
-                    step.completed
-                      ? 'bg-green-100 dark:bg-green-800'
-                      : step.urgent
-                      ? 'bg-red-100 dark:bg-red-800'
-                      : 'bg-blue-100 dark:bg-blue-800'
-                  }`}>
-                    <step.icon className={`h-4 w-4 ${
+                  <div
+                    className={`p-2 rounded-full ${
                       step.completed
-                        ? 'text-green-600 dark:text-green-400'
+                        ? 'bg-green-100 dark:bg-green-800'
                         : step.urgent
-                        ? 'text-red-600 dark:text-red-400'
-                        : 'text-blue-600 dark:text-blue-400'
-                    }`} />
+                        ? 'bg-red-100 dark:bg-red-800'
+                        : 'bg-blue-100 dark:bg-blue-800'
+                    }`}
+                  >
+                    <step.icon
+                      className={`h-5 w-5 ${
+                        step.completed
+                          ? 'text-green-600 dark:text-green-400'
+                          : step.urgent
+                          ? 'text-red-600 dark:text-red-400'
+                          : 'text-blue-600 dark:text-blue-400'
+                      }`}
+                    />
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <h4 className={`text-sm font-medium ${
-                        step.completed
-                          ? 'text-green-900 dark:text-green-100 line-through'
-                          : 'text-slate-900 dark:text-white'
-                      }`}>
+                      <h3
+                        className={`text-sm font-medium ${
+                          step.completed
+                            ? 'text-green-900 dark:text-green-100 line-through'
+                            : 'text-slate-900 dark:text-white'
+                        }`}
+                      >
                         {step.title}
-                      </h4>
+                      </h3>
                       {!step.completed && (
                         <ChevronRight className="h-4 w-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
                       )}
                     </div>
-                    <p className={`text-xs mt-1 ${
-                      step.completed
-                        ? 'text-green-600 dark:text-green-400'
-                        : 'text-slate-600 dark:text-slate-400'
-                    }`}>
+                    <p
+                      className={`text-xs mt-1 ${
+                        step.completed
+                          ? 'text-green-600 dark:text-green-400'
+                          : 'text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
                       {step.description}
                     </p>
                     <div className="flex items-center justify-between mt-2">
-                      <p className={`text-xs font-medium ${
-                        step.urgent && !step.completed
-                          ? 'text-red-600 dark:text-red-400'
-                          : 'text-slate-500 dark:text-slate-500'
-                      }`}>
+                      <p
+                        className={`text-xs font-medium ${
+                          step.urgent && !step.completed
+                            ? 'text-red-600 dark:text-red-400'
+                            : 'text-slate-500 dark:text-slate-500'
+                        }`}
+                      >
                         Due: {step.deadline}
                       </p>
                       {!step.completed && (
@@ -687,33 +522,28 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Timeline Widget */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 sm:p-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Important Dates</h3>
-          
+        {/* Timeline */}
+        <section className="mt-8 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Important Dates</h2>
           <div className="space-y-4">
             {timeline.map((event, index) => (
               <div key={event.id} className="flex items-start space-x-4">
                 <div className="flex-shrink-0 relative">
-                  <div className={`w-3 h-3 rounded-full ${
-                    event.urgent
-                      ? 'bg-red-500'
-                      : event.type === 'deadline'
-                      ? 'bg-yellow-500'
-                      : 'bg-blue-500'
-                  }`} />
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      event.urgent ? 'bg-red-500' : event.type === 'deadline' ? 'bg-yellow-500' : 'bg-blue-500'
+                    }`}
+                  />
                   {index < timeline.length - 1 && (
                     <div className="absolute top-3 left-1/2 w-px h-8 bg-slate-200 dark:bg-slate-600 transform -translate-x-1/2" />
                   )}
                 </div>
-                
+
                 <div className="flex-1 min-w-0 pb-4">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                    <h4 className="text-sm font-medium text-slate-900 dark:text-white">
-                      {event.title}
-                    </h4>
+                    <h4 className="text-sm font-medium text-slate-900 dark:text-white">{event.title}</h4>
                     {event.urgent && (
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 mt-1 sm:mt-0 w-fit">
                         Urgent
@@ -727,13 +557,13 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
+
       </div>
 
-      {/* Modals */}
       {showPayment && <PaymentModal />}
       {showDocuments && <DocumentsModal />}
-      <DetailModal step={selectedStep} onClose={closeModal} />
+      {selectedStep && <DetailModal step={selectedStep} onClose={closeModal} />}
     </div>
   );
 };
