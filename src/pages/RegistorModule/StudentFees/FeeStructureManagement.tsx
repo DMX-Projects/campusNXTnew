@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Eye, Trash2, Search, Filter, GraduationCap, Calendar, Sun, Moon, IndianRupee } from 'lucide-react';
+import { Plus, Edit, Eye, Trash2, Search, Filter, GraduationCap, Calendar, Sun, Moon, IndianRupee, UserRound ,} from 'lucide-react';
 import { useTheme } from '../../../contexts/ThemeContext';
+import { CategoryScale } from 'chart.js';
 
 // Types
 interface FeeHead {
@@ -25,6 +26,7 @@ interface FeeStructure {
   academicYear: string;
     Semester: string;
     Year: string;
+    Category: string;
   items: FeeStructureItem[];
   totalAmount: number;
   isActive: boolean;
@@ -61,6 +63,7 @@ const FeeStructureManagement: React.FC = () => {
       Program: 'Engineering',
       academicYear: '2024-25',
       Semester: 'I-Semester',
+      Category: 'General',
       Year: 'Year-1',
       items: [
         { feeHeadId: '1', amount: 50000, isOptional: false },
@@ -80,6 +83,7 @@ const FeeStructureManagement: React.FC = () => {
       Program: 'Management',
       academicYear: '2024-25',
       Semester: 'II-Semester',
+      Category: 'sc',
       Year: 'Year-2',
       items: [
         { feeHeadId: '1', amount: 40000, isOptional: false },
@@ -230,7 +234,8 @@ const FeeStructureManagement: React.FC = () => {
       isActive: editingItem?.isActive ?? true,
       FeeStatus: editingItem?.FeeStatus || '',
       Semester: editingItem?.Semester || '',
-      Year: editingItem?.Year || ''
+      Year: editingItem?.Year || '',
+      Category: editingItem?.Category || '',
     });
 
     const addFeeItem = () => {
@@ -369,6 +374,21 @@ const FeeStructureManagement: React.FC = () => {
                   <option value="VI-Semester">VI-Semester</option>
                   <option value="VII-Semester">VII-Semester</option>
                   <option value="VIII-Semester">VIII-Semester</option>
+                </select>
+              </div>
+               <div>
+                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Category</label>
+                <select
+                  value={formData.Category}
+                  onChange={(e) => setFormData(prev => ({ ...prev, Category: e.target.value }))}
+                  className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
+                  required
+                >
+                  <option value="General">General</option>
+                  <option value="SC">SC</option>
+                  <option value="ST">ST</option>
+                  <option value="OBC">OBC</option>
+                  <option value="EWS">EWS</option>
                 </select>
               </div>
               
@@ -515,6 +535,7 @@ const FeeStructureManagement: React.FC = () => {
                 <span className={`text-sm ${currentTheme.textMuted}`}>Academic Year:</span>
                 <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.academicYear}</p>
               </div>
+              
             </div>
             <div>
   <span className={`text-sm ${currentTheme.textMuted}`}>Semester:</span>
@@ -743,6 +764,7 @@ const FeeStructureManagement: React.FC = () => {
                             <span className={`text-sm ${currentTheme.textSecondary}`}>Academic Year:</span>
                             <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.academicYear}</span>
                           </div>
+                          
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
   {/* ...existing columns... */}
@@ -757,6 +779,11 @@ const FeeStructureManagement: React.FC = () => {
     <span className={`text-sm ${currentTheme.textSecondary}`}>Year:</span>
     <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Year}</span>
   </div>
+    <div className="flex items-center gap-2">
+                            <UserRound size={16} className={currentTheme.textMuted} />
+                            <span className={`text-sm ${currentTheme.textSecondary}`}>Category:</span>
+                            <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Category}</span>
+                          </div>
   </div>
   
 
@@ -768,7 +795,7 @@ const FeeStructureManagement: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-2">
                             <IndianRupee size={16} className={currentTheme.textMuted} />
-                            <span className={`text-lg font-bold ${currentTheme.text}`}>₹{structure.totalAmount.toLocaleString()}</span>
+                            <span className={`text-lg font-bold ${currentTheme.text}`}>{structure.totalAmount.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
