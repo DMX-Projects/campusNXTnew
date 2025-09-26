@@ -11,6 +11,7 @@ import FeeStructureManagement from "../pages/RegistorModule/StudentFees/FeeStruc
 import FeeMonitoringSystem from "../pages/RegistorModule/StudentFees/FeeMonitoringSystem";
 import BulkOperationsInterface from "../pages/RegistorModule/StudentFees/BulkOperationsInterface";
 import StudentFeesReportingHub from "../pages/RegistorModule/StudentFees/StudentFeesReportingHub";
+import EmployeeLeaves from "../pages/PrincipalModules/Administration/Employee/EmployeeLeaves";
 
 
 //infrastructure Routes
@@ -79,6 +80,11 @@ import FeePayment from "../pages/TempStudentModule/FeePayment";
 import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
 import OnboardingForm from "../pages/TempStudentModule/OnboardingForm";
 import TempNotifications from "../pages/TempStudentModule/Notifications";
+import EmployeeAttendance from "../pages/PrincipalModules/Administration/Employee/EmployeeAttendance";
+import StudentDetails from "../pages/PrincipalModules/Administration/StudentDetails";
+import FacultyDetails from "../pages/PrincipalModules/Administration/FacultyDetails";
+import StudentTransfers from "../pages/PrincipalModules/Administration/StudentTransfers";
+import InfrastructureManagement from "../pages/PrincipalModules/Administration/InfrastructureManagement";
 
 
 
@@ -144,6 +150,13 @@ const CommonRoutes: React.FC = () => {
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+      <Route path="/principal/employee/attendance" element={<EmployeeAttendance/>}/>
+      <Route path="/principal/employee/leaves" element={<EmployeeLeaves/>}/>
+       <Route path="/principal/student-details" element={<StudentDetails/>}/>
+      <Route path="/principal/faculty-details" element={<FacultyDetails/>}/>
+       <Route path="/principal/student-transfers" element={<StudentTransfers/>}/>
+      <Route path="/principal/infrastructure-management" element={<InfrastructureManagement/>}/>
+
 
 
      <Route path="/principal/infrastructure-reports/new-asset-requests" element={<InfrastructureReports />} />
@@ -162,6 +175,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/hod/circulars-memos" element={<CircularMemos />} />
       <Route path="/hod/departmental-budgeting" element={<DepartmentalBudgeting />} />
       <Route path="/hod/departmental-reports" element={<DepartmentalReports />} />
+      <Route path="/hod/student-transfers" element={<StudentTransfers />} />
       <Route path="/hod/departmental-resources" element={<DepartmentalResources />} />
       <Route path="/hod/purchase-requisitions" element={<PurchaseRequisitions />} />
       <Route path="/raise-ticket" element={<HODRaiseTicket />} />
