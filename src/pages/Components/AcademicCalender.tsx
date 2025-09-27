@@ -227,11 +227,11 @@ const AcademicCalendar: React.FC = () => {
                 <select id="year-filter" className={styles.filterSelect} value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}><option value="2024-25">2024-25</option><option value="2023-24">2023-24</option></select>
             </div>
             <div className={styles.filterGroup}>
-                <label htmlFor="dept-filter" className={styles.filterLabel}>Program</label>
+                <label htmlFor="dept-filter" className={styles.filterLabel}>Department</label>
                 <select id="dept-filter" className={styles.filterSelect} value={selectedDept} onChange={(e) => { setSelectedDept(e.target.value); setSelectedProg('All'); }}>{departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}</select>
             </div>
             <div className={styles.filterGroup}>
-                <label htmlFor="prog-filter" className={styles.filterLabel}>Course</label>
+                <label htmlFor="prog-filter" className={styles.filterLabel}>Program</label>
                 <select id="prog-filter" className={styles.filterSelect} value={selectedProg} onChange={(e) => setSelectedProg(e.target.value)}>{programs.map(prog => <option key={prog} value={prog}>{prog}</option>)}</select>
             </div>
             <div className={styles.filterGroup}>
