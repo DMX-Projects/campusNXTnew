@@ -1,9 +1,11 @@
 import React from 'react'
-
-const StudentDetails = () => {
+import StudentDetails from '../../../pages/PrincipalModules/Academics/Students/StudentDetails'
+const StudentDetail = () => {
   return (
-    <div>StudentDetails</div>
+    <div>
+      <StudentDetails />
+    </div>
   )
 }
 
-export default StudentDetails
+export default StudentDetail

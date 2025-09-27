@@ -16,7 +16,7 @@ import EmployeeLeaves from "../pages/PrincipalModules/Administration/Employee/Em
 
 //infrastructure Routes
 import { StockControl } from "../pages/RegistorModule/Infrastructure/StockControl";
-import {StockManagement} from "../pages/RegistorModule/Infrastructure/StockManagement";
+import StockManagement from "../pages/RegistorModule/Infrastructure/StockManagement";
 import AssetManagement from "../pages/RegistorModule/Infrastructure/FixedAssesment";
 import NewPurchaseKanban from "../pages/RegistorModule/Infrastructure/NewAssetPurchase";
 import PurchaseManagement from "../pages/RegistorModule/Infrastructure/PurchaseManagement";
@@ -55,7 +55,7 @@ import ManagementAdmissionProcess from "../pages/RegistorModule/Admission/Admins
 import SpotAdmissionMerit from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionMerit";
 import SpotAdmissionFCFS from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionFCFS";
 import FinancialApprovals from "../pages/PrincipalModules/Administration/FinancialApprovals";
-import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/FacultyAndStaffOversight";
+// import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/FacultyAndStaffOversight";
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard";
@@ -146,7 +146,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/admission-process/spot-admission/merit-based" element={<SpotAdmissionMerit />} />
       <Route path="/admission-process/spot-admission/first-come" element={<SpotAdmissionFCFS />} />
       <Route path="/principal/financial-approvals" element={<FinancialApprovals />} />
-      <Route path="/principal/faculty-staff" element={<FacultyAndStaffOversight />} />
+      {/* <Route path="/principal/faculty-staff" element={<FacultyAndStaffOversight />} /> */}
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />

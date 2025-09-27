@@ -407,11 +407,11 @@ const SIDEBAR_ITEMS = {
     icon: 'CheckCircle' 
   },
 
-  { 
-    name: 'Faculty & Staff Oversight', 
-    path: '/management/principal/faculty-staff', 
-    icon: 'Users' 
-  },
+  // { 
+  //   name: 'Faculty & Staff Oversight', 
+  //   path: '/management/principal/faculty-staff', 
+  //   icon: 'Users' 
+  // },
 
   { 
     name: 'Circulars & Event Management', 
@@ -419,11 +419,11 @@ const SIDEBAR_ITEMS = {
     icon: 'CalendarDays' 
   },
 
-  { 
-    name: 'Infrastructure Reports', 
-    path: '/management/principal/infrastructure-reports', 
-    icon: 'FileBarChart' 
-  },
+  // { 
+  //   name: 'Infrastructure Reports', 
+  //   path: '/management/principal/infrastructure-reports', 
+  //   icon: 'FileBarChart' 
+  // },
   { 
     name: 'Raise Ticket', 
     path: '/management/raise-ticket', 
