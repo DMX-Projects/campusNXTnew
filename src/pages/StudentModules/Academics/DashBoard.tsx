@@ -568,17 +568,7 @@ const StudentDashboard: React.FC = () => {
                   </div>
                   
                   <div className="relative">
-                    <button 
-                      onClick={() => setShowNotifications(!showNotifications)}
-                      className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-                    >
-                      <Bell className="w-5 h-5" />
-                      {stats.unreadNotifications > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
-                          {stats.unreadNotifications}
-                        </span>
-                      )}
-                    </button>
+                 
                   </div>
                 </div>
               </div>

@@ -329,8 +329,8 @@ const SIDEBAR_ITEMS = {
       { name: 'Lesson Plan', path: '/academics/faculty-lessonplan', icon: 'ClipboardList' },
       { name: 'Syllabus Update', path: '/academics/faculty-syllabus-update', icon: 'Edit3' },
       { name: 'Study Material', path: '/academics/faculty-study-material', icon: 'FolderOpen' },
-      { name: 'Exam Preparation', path: '/academics/faculty-exam-preparation', icon: 'FileText' },
-      {name:'Subject List', path:'/academics/faculty-subject-list', icon:'List'},
+      { name: 'Exam Preparation', path: '/academics/sem-exam-preparation', icon: 'FileText' },
+      {name:'Subject List', path:'/academics/subject-list', icon:'List'},
     ]
   },
     {
@@ -338,9 +338,9 @@ const SIDEBAR_ITEMS = {
     path: '/academics/faculty-Tests',
     icon: 'BookOpen',
     children: [
-      { name: 'Assignments', path: '/academics/faculty-Assignements', icon: 'ClipboardList' },
-      { name: 'Online Tests', path: '/academics/faculty-Online_tests', icon: 'Edit3' },
-      {name:'Coding Assesments', path:'/academics/faculty-coding-assesments', icon: 'Edit3'}
+      { name: 'Assignments', path: '/academics/tests/assignment', icon: 'ClipboardList' },
+      { name: 'Online Tests', path: '/academics/hod/tests/online-tests', icon: 'Edit3' },
+      {name:'Coding Assesments', path:'/academics/tests/coding-assessment', icon: 'Edit3'}
     ]
   },
 
