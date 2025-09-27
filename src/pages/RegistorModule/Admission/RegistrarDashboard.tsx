@@ -1,182 +1,205 @@
-// src/components/RegistrarDashboard.tsx
+import React, { useState, ElementType } from 'react';
+import { BarChart, PieChart, CheckCircle, Clock, XCircle, Users, ExternalLink, ArrowRight, University, Zap, UserCheck } from 'lucide-react';
 
-import React from 'react';
-import { AreaChart, Area, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { Users, UserCheck, CheckSquare, Building, ArrowRight, UserPlus, FileCheck, FileWarning, CalendarClock } from 'lucide-react';
+// --- MOCK DATA FOR DASHBOARD ---
+const dashboardData = {
+  kpi: {
+    totalApplicants: 1250,
+    seatsFilled: 890,
+    pendingVerification: 125,
+    actionRequired: 45,
+  },
+  admissionBreakdown: [
+    { name: 'Phase I', value: 350, color: '#4F46E5' },
+    { name: 'Phase II', value: 250, color: '#7C3AED' },
+    { name: 'Phase III', value: 150, color: '#A78BFA' },
+    { name: 'Management', value: 80, color: '#D8B4FE' },
+    { name: 'Spot (Merit)', value: 40, color: '#FBCFE8' },
+    { name: 'Spot (FCFS)', value: 20, color: '#FDA4AF' },
+  ],
+  verificationStatus: [
+    { name: 'Admin Verified', value: 1080, color: '#10B981' },
+    { name: 'Academic Verified', value: 950, color: '#34D399' },
+    { name: 'Pending', value: 125, color: '#F59E0B' },
+    { name: 'Action Required', value: 45, color: '#EF4444' },
+  ],
+  recentActivities: [
+    { id: 1, studentName: 'Ishita Sharma', activity: 'Marked as Verified (Academic)', time: '2 mins ago' },
+    { id: 2, studentName: 'Anika Reddy', activity: 'Status changed to Action Required', time: '15 mins ago' },
+    { id: 3, studentName: 'Rohan Verma', activity: 'Details updated by Admin', time: '1 hour ago' },
+    { id: 4, studentName: 'New Applicant', activity: 'Management Quota form submitted', time: '3 hours ago' },
+    { id: 5, studentName: 'Aryan Singh', activity: 'Marked as Verified (Admin)', time: '5 hours ago' },
+  ],
+  quickNav: [
+    { title: 'CAP Allotment', href: '/management/admission-process/seat-allotment/cap-phases', icon: ExternalLink },
+    { title: 'Management Admission', href: '/management/admission-process/management-quota', icon: Zap },
+    { title: 'Spot Admission', href: '/management/admission-process/spot-admission/merit-based', icon: Zap },
+    { title: 'Admin Verification', href: '/management/verification/candidate', icon: UserCheck },
+    { title: 'Academic Verification', href: '/management/verification/document', icon: UserCheck },
+  ]
+};
 
-// --- MOCK DATA (EXPANDED) ---
-const totalSeats = 5000;
-const seatsFilled = 4120;
-const kpiData = [
-  { title: "Total Applications", value: "12,450", icon: Users, color: "text-blue-500", bgColor: "bg-blue-100 dark:bg-blue-900/50" },
-  { title: "Verified Applicants", value: "9,870", icon: UserCheck, color: "text-green-500", bgColor: "bg-green-100 dark:bg-green-900/50" },
-  { title: "Seats Filled", value: `${seatsFilled}`, icon: CheckSquare, color: "text-indigo-500", bgColor: "bg-indigo-100 dark:bg-indigo-900/50", progress: (seatsFilled / totalSeats) * 100 },
-  { title: "Remaining Seats", value: `${totalSeats - seatsFilled}`, icon: Building, color: "text-amber-500", bgColor: "bg-amber-100 dark:bg-amber-900/50", progress: ((totalSeats - seatsFilled) / totalSeats) * 100 },
-];
 
-const pieChartData = [
-  { name: 'B.Tech CSE', value: 1250 },
-  { name: 'B.Tech ECE', value: 850 },
-  { name: 'B.Com Hons', value: 700 },
-  { name: 'MBA Finance', value: 450 },
-  { name: 'B.Sc Physics', value: 550 },
-  { name: 'Other', value: 320 },
-];
-const COLORS = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#64748b'];
+// --- CUSTOM CHART COMPONENTS (NO EXTERNAL LIBRARIES) ---
 
-const areaChartData = [
-    { day: 'Day 1', total: 400, verified: 240 }, { day: 'Day 3', total: 700, verified: 450 },
-    { day: 'Day 5', total: 1100, verified: 780 }, { day: 'Day 7', total: 1500, verified: 1100 },
-    { day: 'Day 9', total: 1900, verified: 1450 }, { day: 'Day 11', total: 2200, verified: 1800 },
-    { day: 'Day 13', total: 2500, verified: 2100 },
-];
-
-const pendingTasks = [
-  { title: "Pending Application Verifications", count: 125, link: "#", icon: FileCheck, color: "text-blue-500" },
-  { title: "Awaiting Fee Confirmations", count: 78, link: "#", icon: CalendarClock, color: "text-amber-500" },
-  { title: "Document Discrepancies to Resolve", count: 32, link: "#", icon: FileWarning, color: "text-red-500" },
-];
-
-const recentActivities = [
-    { text: "New registration #APP12451 by R. Kumar.", icon: UserPlus, time: "2m ago" },
-    { text: "Document verification successful for #APP12389.", icon: FileCheck, time: "15m ago" },
-    { text: "An HOD has approved a management quota seat.", icon: UserCheck, time: "45m ago" },
-    { text: "Fee payment confirmed for #APP12391.", icon: Building, time: "1h ago" },
-    { text: "Bulk reminder sent to 78 pending fee applicants.", icon: CalendarClock, time: "2h ago" },
-];
-
-const importantDates = [
-    { date: "Sep 25, 2025", event: "Last Date for Phase 1 Applications" },
-    { date: "Sep 30, 2025", event: "Phase 1 Seat Allotment Publication" },
-    { date: "Oct 05, 2025", event: "Start of Phase 2 (Upgradation)" },
-    { date: "Oct 15, 2025", event: "Final Admission Confirmation Deadline" },
-];
-
-const RegistrarDashboard = () => {
+const CustomBarChart = ({ data }: { data: { name: string; value: number; color: string }[] }) => {
+  const maxValue = Math.max(...data.map(item => item.value));
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-6 lg:p-8 font-sans">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Admission Command Center</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Live overview of the 2025-2026 admission cycle.</p>
-      </header>
-      
-      {/* KPI Widgets */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {kpiData.map((item, index) => (
-          <div key={index} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 transform hover:-translate-y-1 transition-transform duration-300">
-            <div className="flex items-start justify-between">
-              <div className={`p-3 rounded-lg ${item.bgColor}`}>
-                <item.icon className={`w-6 h-6 ${item.color}`} />
-              </div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{item.value}</p>
-            </div>
-            <div className="mt-4">
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">{item.title}</p>
-                {item.progress !== undefined && (
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
-                        <div className={`${item.color.replace('text-','bg-')}`} style={{ width: `${item.progress}%`, height: '100%', borderRadius: 'inherit' }}></div>
-                    </div>
-                )}
-            </div>
+    <div className="w-full h-64 flex justify-around items-end gap-2 p-4 border-l border-b border-gray-200 dark:border-gray-700">
+      {data.map((item, index) => (
+        <div key={index} className="flex-1 flex flex-col items-center justify-end h-full group">
+          <div className="relative w-full h-full flex items-end">
+             <div
+                className="w-full transition-all duration-500 ease-out"
+                style={{ height: `${(item.value / maxValue) * 100}%`, backgroundColor: item.color }}
+             >
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-70 text-white text-xs rounded py-1 px-2 absolute -top-8 left-1/2 -translate-x-1/2">
+                    {item.name}: {item.value}
+                </div>
+             </div>
+          </div>
+          <span className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">{item.name}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const CustomPieChart = ({ data }: { data: { name: string; value: number; color: string }[] }) => {
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  let cumulative = 0;
+
+  const segments = data.map(item => {
+    const percentage = (item.value / total) * 100;
+    const startAngle = (cumulative / total) * 360;
+    cumulative += item.value;
+    const endAngle = (cumulative / total) * 360;
+
+    return { ...item, percentage, startAngle, endAngle };
+  });
+
+  return (
+    <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-8">
+      <div className="relative w-48 h-48">
+        <svg viewBox="0 0 100 100" className="transform -rotate-90">
+          {segments.map((segment, index) => {
+              const largeArcFlag = segment.percentage > 50 ? 1 : 0;
+              const x1 = 50 + 50 * Math.cos(2 * Math.PI * segment.startAngle / 360);
+              const y1 = 50 + 50 * Math.sin(2 * Math.PI * segment.startAngle / 360);
+              const x2 = 50 + 50 * Math.cos(2 * Math.PI * segment.endAngle / 360);
+              const y2 = 50 + 50 * Math.sin(2 * Math.PI * segment.endAngle / 360);
+              
+              return (
+                  <path key={index} fill="none" stroke={segment.color} strokeWidth="20"
+                    d={`M ${x1} ${y1} A 50 50 0 ${largeArcFlag} 1 ${x2} ${y2}`}
+                    strokeDasharray="157" // Circumference of a 50 radius circle
+                  />
+              );
+          })}
+        </svg>
+      </div>
+      <div className="flex flex-col gap-2 text-sm">
+        {data.map((item, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+            <span className="font-medium text-gray-700 dark:text-gray-300">{item.name}:</span>
+            <span className="text-gray-500 dark:text-gray-400">{item.value}</span>
           </div>
         ))}
       </div>
+    </div>
+  );
+};
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
-        <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Application Funnel</h3>
-           <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={areaChartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <defs>
-                    <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorVerified" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                    </linearGradient>
-                </defs>
-                <XAxis dataKey="day" stroke="currentColor" fontSize={12} />
-                <YAxis stroke="currentColor" fontSize={12} />
-                <Tooltip contentStyle={{ backgroundColor: 'rgba(17, 24, 39, 0.8)', border: 'none', color: '#fff', borderRadius: '0.75rem' }}/>
-                <Legend />
-                <Area type="monotone" dataKey="total" stroke="#3b82f6" fillOpacity={1} fill="url(#colorTotal)" strokeWidth={2} name="Total Applications"/>
-                <Area type="monotone" dataKey="verified" stroke="#10b981" fillOpacity={1} fill="url(#colorVerified)" strokeWidth={2} name="Verified Applications" />
-            </AreaChart>
-           </ResponsiveContainer>
+
+// --- MAIN DASHBOARD COMPONENT ---
+const AdminDashboard = () => {
+  const { kpi, admissionBreakdown, verificationStatus, recentActivities, quickNav } = dashboardData;
+
+  const KpiCard = ({ title, value, icon: Icon, iconBg, textColor }: { title: string, value: number, icon: ElementType, iconBg: string, textColor: string }) => (
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md flex items-center gap-6 transform hover:-translate-y-1 transition-transform duration-300">
+        <div className={`p-4 rounded-lg ${iconBg}`}>
+            <Icon className={`w-7 h-7 ${textColor}`} />
         </div>
-        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Applicants by Course</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={100} fill="#8884d8" paddingAngle={5}>
-                {pieChartData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} className="focus:outline-none"/>)}
-              </Pie>
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(17, 24, 39, 0.8)', border: 'none', color: '#fff', borderRadius: '0.75rem' }}/>
-            </PieChart>
-          </ResponsiveContainer>
+        <div>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{value.toLocaleString()}</p>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{title}</p>
         </div>
-      </div>
-      
-      {/* Action Center & Key Dates */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Action Center</h3>
-              <ul className="space-y-4">
-                {pendingTasks.map((task, index) => (
-                  <li key={index} className="flex justify-between items-center bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl">
-                    <div className="flex items-center gap-4">
-                        <task.icon className={`w-6 h-6 ${task.color}`}/>
-                        <div>
-                            <p className="font-semibold text-gray-900 dark:text-white">{task.title}</p>
-                            <span className="text-sm text-red-500 font-medium">{task.count} items need attention</span>
-                        </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-6 lg:p-8 font-sans">
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Admission Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">A complete overview of the 2025 admission cycle.</p>
+        </header>
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <KpiCard title="Total Applicants" value={kpi.totalApplicants} icon={Users} iconBg="bg-indigo-100 dark:bg-indigo-900/50" textColor="text-indigo-600 dark:text-indigo-400" />
+          <KpiCard title="Seats Filled" value={kpi.seatsFilled} icon={CheckCircle} iconBg="bg-green-100 dark:bg-green-900/50" textColor="text-green-600 dark:text-green-400" />
+          <KpiCard title="Pending Verification" value={kpi.pendingVerification} icon={Clock} iconBg="bg-amber-100 dark:bg-amber-900/50" textColor="text-amber-600 dark:text-amber-400" />
+          <KpiCard title="Action Required" value={kpi.actionRequired} icon={XCircle} iconBg="bg-red-100 dark:bg-red-900/50" textColor="text-red-600 dark:text-red-400" />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Column */}
+            <div className="lg:col-span-2 space-y-8">
+                 <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
+                    <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Admission Type Breakdown</h2>
+                    <CustomBarChart data={admissionBreakdown} />
+                 </div>
+                 <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
+                    <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Recent Activities</h2>
+                    <div className="flow-root">
+                        <ul role="list" className="-mb-4">
+                            {recentActivities.map((activity, index) => (
+                                <li key={activity.id}>
+                                    <div className="relative pb-4">
+                                         {index !== recentActivities.length - 1 ? <span className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-gray-700" aria-hidden="true" /> : null}
+                                        <div className="relative flex space-x-3">
+                                            <div><span className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center ring-8 ring-white dark:ring-gray-800"><UserCheck className="h-5 w-5 text-indigo-500" /></span></div>
+                                            <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                                <div><p className="text-sm text-gray-500 dark:text-gray-400">{activity.activity} on behalf of <a href="#" className="font-medium text-gray-900 dark:text-white">{activity.studentName}</a></p></div>
+                                                <div className="text-right text-xs whitespace-nowrap text-gray-500 dark:text-gray-400"><time>{activity.time}</time></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    <a href={task.link} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                      <ArrowRight className="w-5 h-5" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                 </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Activities</h3>
-              <ul className="space-y-4">
-                {recentActivities.map((activity, index) => (
-                   <li key={index} className="flex items-start gap-4">
-                     <div className="p-2 bg-gray-100 dark:bg-gray-700 rounded-full mt-1">
-                        <activity.icon className="w-5 h-5 text-gray-500 dark:text-gray-400"/>
-                     </div>
-                     <div className="flex-1">
-                        <p className="text-sm text-gray-800 dark:text-gray-200">{activity.text}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{activity.time}</p>
-                     </div>
-                   </li>
-                ))}
-              </ul>
-            </div>
-        </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Key Admission Dates</h3>
-            <ul className="space-y-4">
-                {importantDates.map((item, index) => (
-                    <li key={index} className="flex items-center gap-4">
-                        <div className="flex flex-col items-center justify-center w-16 h-16 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg">
-                            <span className="text-xs font-bold text-indigo-500">{item.date.split(',')[0].slice(0, 3).toUpperCase()}</span>
-                            <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-300">{item.date.split(' ')[1].replace(',', '')}</span>
-                        </div>
-                        <p className="font-medium text-sm flex-1 text-gray-700 dark:text-gray-300">{item.event}</p>
-                    </li>
-                ))}
-            </ul>
+            {/* Sidebar Column */}
+            <div className="space-y-8">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
+                    <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Verification Status</h2>
+                    <CustomPieChart data={verificationStatus} />
+                </div>
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md">
+                     <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Quick Navigation</h2>
+                     <div className="space-y-3">
+                        {quickNav.map((nav) => (
+                             <a key={nav.title} href={nav.href} className="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group">
+                                <div className="flex items-center gap-3">
+                                    <nav.icon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                                    <span className="font-semibold text-gray-800 dark:text-gray-200">{nav.title}</span>
+                                </div>
+                                <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:translate-x-1 transition-transform" />
+                            </a>
+                        ))}
+                     </div>
+                </div>
+            </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default RegistrarDashboard;
+export default AdminDashboard;
+

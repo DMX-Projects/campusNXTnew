@@ -11,11 +11,12 @@ import FeeStructureManagement from "../pages/RegistorModule/StudentFees/FeeStruc
 import FeeMonitoringSystem from "../pages/RegistorModule/StudentFees/FeeMonitoringSystem";
 import BulkOperationsInterface from "../pages/RegistorModule/StudentFees/BulkOperationsInterface";
 import StudentFeesReportingHub from "../pages/RegistorModule/StudentFees/StudentFeesReportingHub";
+import EmployeeLeaves from "../pages/PrincipalModules/Administration/Employee/EmployeeLeaves";
 
 
 //infrastructure Routes
-import InventoryTable from "../pages/RegistorModule/Infrastructure/StockControl";
-import InfrastructureStockManagement from "../pages/RegistorModule/Infrastructure/StockManagement";
+import { StockControl } from "../pages/RegistorModule/Infrastructure/StockControl";
+import StockManagement from "../pages/RegistorModule/Infrastructure/StockManagement";
 import AssetManagement from "../pages/RegistorModule/Infrastructure/FixedAssesment";
 import NewPurchaseKanban from "../pages/RegistorModule/Infrastructure/NewAssetPurchase";
 import PurchaseManagement from "../pages/RegistorModule/Infrastructure/PurchaseManagement";
@@ -34,9 +35,8 @@ import AccidentAllocationDetails from "../pages/RegistorModule/Transport/Acciden
 import MasterConfiguration from "../pages/RegistorModule/Transport/MasterConfiguration";
 import TransportReports from "../pages/RegistorModule/Transport/TransportReports";
 
-import CandidateVerification from "../pages/RegistorModule/Admission/Verification/CandidateVerification";
-import DocumentVerification from "../pages/RegistorModule/Admission/Verification/DocumentVerification";
-import AllotmentOrderGeneration from "../pages/RegistorModule/Admission/Verification/AllotmentOrderGeneration";
+import AdministrationVerification from "../pages/RegistorModule/Admission/Verification/AdministrationVerification";
+import StudentAcademicVerification from "../pages/RegistorModule/Admission/Verification/StudentAcademicVerification";
 import TemporaryStudentLogin from "../pages/RegistorModule/Admission/StudentOnboarding/TemporaryStudentLogin";
 import CommunicationHub from "../pages/RegistorModule/Admission/StudentOnboarding/CommunicationHub";
 import PermanentStudentLoginPage from "../pages/RegistorModule/Admission/StudentOnboarding/PermanentStudentLogin";
@@ -50,15 +50,12 @@ import InfrastructureOverview from "../pages/RegistorModule/Hostel/Infrastructur
 import StaffAndRoles from "../pages/RegistorModule/Hostel/StaffAndRoles";
 import Reports from "../pages/RegistorModule/Hostel/Reports";
 import AdmissionDashboard from "../pages/RegistorModule/Admission/RegistrarDashboard";
-import CAPAdmin from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/CAPAdmin";
 import SeatAllotmentPhaseI from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/SeatAllotmentPhaseI";
-import SeatAllotmentPhaseII from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/SeatAllotmentPhaseII";
-import SeatAllotmentPhaseIII from "../pages/RegistorModule/Admission/AdminssionProcess/CAPAdmission/SeatAllotmentPhaseIII";
 import ManagementAdmissionProcess from "../pages/RegistorModule/Admission/AdminssionProcess/ManagementAdmission/ManagementAdmissionProcess";
 import SpotAdmissionMerit from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionMerit";
 import SpotAdmissionFCFS from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionFCFS";
 import FinancialApprovals from "../pages/PrincipalModules/Administration/FinancialApprovals";
-import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/FacultyAndStaffOversight";
+// import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/FacultyAndStaffOversight";
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
 import DashBoard from "../pages/PrincipalModules/Administration/DashBoard";
@@ -83,7 +80,14 @@ import FeePayment from "../pages/TempStudentModule/FeePayment";
 import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
 import OnboardingForm from "../pages/TempStudentModule/OnboardingForm";
 import TempNotifications from "../pages/TempStudentModule/Notifications";
+
 import BlockManagement from "../pages/RegistorModule/Infrastructure/BlockManagement";
+import EmployeeAttendance from "../pages/PrincipalModules/Administration/Employee/EmployeeAttendance";
+import StudentDetails from "../pages/PrincipalModules/Administration/StudentDetails";
+import FacultyDetails from "../pages/PrincipalModules/Administration/FacultyDetails";
+import StudentTransfers from "../pages/PrincipalModules/Administration/StudentTransfers";
+import InfrastructureManagement from "../pages/PrincipalModules/Administration/InfrastructureManagement";
+
 
 
 
@@ -98,8 +102,8 @@ const CommonRoutes: React.FC = () => {
       <Route path="/hr/payroll" element={<PayrollManagement />} />
       <Route path="/hr/recruitment" element={<Requirementmanagement />} />
 
-      <Route path="/infrastructure-management/inventory/stock-control" element={<InventoryTable />} />
-      <Route path="/infrastructure-management/inventory/stock-management" element={<InfrastructureStockManagement />} />
+      <Route path="/infrastructure-management/inventory/stock-control" element={<StockControl />} />
+      <Route path="/infrastructure-management/inventory/stock-management" element={<StockManagement />} />
       <Route path="/infrastructure-management/asset/fixed-assets" element={<AssetManagement />} />
       <Route path="/infrastructure-management/asset/new-purchase" element={<NewPurchaseKanban />} />
       <Route path="/infrastructure-management/purchase" element={<PurchaseManagement />} />
@@ -141,24 +145,22 @@ const CommonRoutes: React.FC = () => {
       <Route path="staff-roles" element={<StaffAndRoles />} />
       <Route path="infra-reports" element={<Reports />} />
       <Route path="/Admission/dashboard" element={<AdmissionDashboard />} />
-      <Route path="/admission-process/cap" element={<CAPAdmin />} />
-      <Route path="/admission-process/seat-allotment/phase-1" element={<SeatAllotmentPhaseI />} />
-      <Route path="/admission-process/seat-allotment/phase-2" element={<SeatAllotmentPhaseII />} />
-      <Route path="/admission-process/seat-allotment/phase-3" element={<SeatAllotmentPhaseIII />} />
+      <Route path="/admission-process/seat-allotment/cap-phases" element={<SeatAllotmentPhaseI />} />
       <Route path="/admission-process/management-quota" element={<ManagementAdmissionProcess />} />
       <Route path="/admission-process/spot-admission/merit-based" element={<SpotAdmissionMerit />} />
       <Route path="/admission-process/spot-admission/first-come" element={<SpotAdmissionFCFS />} />
       <Route path="/principal/financial-approvals" element={<FinancialApprovals />} />
-      <Route path="/principal/faculty-staff" element={<FacultyAndStaffOversight />} />
+      {/* <Route path="/principal/faculty-staff" element={<FacultyAndStaffOversight />} /> */}
       <Route path="/principal/circulars-events" element={<CircularsAndEventManagement />} />
       <Route path="/principal/infrastructure-reports" element={<InfrastructureReports />} />
       <Route path="/principal/dashboard" element={<DashBoard />} />
+      <Route path="/principal/employee/attendance" element={<EmployeeAttendance/>}/>
+      <Route path="/principal/employee/leaves" element={<EmployeeLeaves/>}/>
+       <Route path="/principal/student-details" element={<StudentDetails/>}/>
+      <Route path="/principal/faculty-details" element={<FacultyDetails/>}/>
+       <Route path="/principal/student-transfers" element={<StudentTransfers/>}/>
+      <Route path="/principal/infrastructure-management" element={<InfrastructureManagement/>}/>
 
-
-      <Route path="/student/dashboard" element={<Dashboard />} />
-      <Route path="/student/profile" element={<MyProfile />} />
-      <Route path="/student/finance" element={<Finance />} />
-      <Route path="/student/notifications" element={<Notifications />} />
 
 
      <Route path="/principal/infrastructure-reports/new-asset-requests" element={<InfrastructureReports />} />
@@ -177,6 +179,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/hod/circulars-memos" element={<CircularMemos />} />
       <Route path="/hod/departmental-budgeting" element={<DepartmentalBudgeting />} />
       <Route path="/hod/departmental-reports" element={<DepartmentalReports />} />
+      <Route path="/hod/student-transfers" element={<StudentTransfers />} />
       <Route path="/hod/departmental-resources" element={<DepartmentalResources />} />
       <Route path="/hod/purchase-requisitions" element={<PurchaseRequisitions />} />
       <Route path="/raise-ticket" element={<HODRaiseTicket />} />
@@ -188,9 +191,8 @@ const CommonRoutes: React.FC = () => {
       <Route path="/temporary-student/onboarding-form" element={<OnboardingForm />} />
       <Route path="/temporary-student/notifications" element={<TempNotifications />} />
 
-      <Route path="verification/candidate" element={<CandidateVerification />} />
-      <Route path="/verification/document" element={<DocumentVerification />} />
-      <Route path="/verification/allotment-order" element={<AllotmentOrderGeneration />} />
+      <Route path="verification/candidate" element={<AdministrationVerification />} />
+      <Route path="/verification/document" element={<StudentAcademicVerification />} />
       <Route path="/student-onboarding/temp-login" element={<TemporaryStudentLogin />} />
       <Route path="/student-onboarding/communication-hub" element={<CommunicationHub />} />
       <Route path="/student-onboarding/activate-login" element={<PermanentStudentLoginPage />} />
