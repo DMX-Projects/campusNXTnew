@@ -167,6 +167,35 @@ const SIDEBAR_ITEMS = {
   { name: 'Academic Calender', path: '/common/academics/academic-calendar', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
   { name: 'My Attendance', path: '/academics/attendance', icon: 'CheckCircle' },
+  {
+    name: 'Subjects',
+    path: '/academics/Student-Subjects',
+    icon: 'GraduationCap',
+    children: [
+      { name: 'Lesson Plan', path: '/academics/student/lesson-plan', icon: 'Users' },
+      { name: 'Study Material', path: '/academics/student/study-material', icon: 'CheckCircle' },
+      { name: 'Sem Exam Preparation', path: '/academics/student/sem-exam-preparation', icon: 'UserMinus' },
+       { name: 'Syllabus Tracking', path: '/academics/student/syllabus-tracking', icon: 'MessageSquare' },
+        { name: 'Subject List', path: '/academics/student/subject-list', icon: 'List' },
+
+    ]
+  },
+   {
+    name: 'Tests',
+    path: '/academics/Student-Tests',
+    icon: 'GraduationCap',
+    children: [
+      { name: 'Assignment', path: '/academics/student/assignment', icon: 'Users' },
+      { name: 'Online Test', path: '/academics/student/online-test', icon: 'CheckCircle' },
+      { name: 'Coding Assessment', path: '/academics/student/coding-assessment', icon: 'UserMinus' },
+       
+
+    ]
+  },
+  
+  {name:'Faculty Feedback', path:'/academics/student/faculty-feedback', icon:'MessageSquare'},
+
+  {name:'Online Classes', path:'/academics/student/online-classes', icon:'Video'},
   { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
   { name: 'My Projects', path: '/academics/student-myprojects', icon: 'FolderOpen' },
   { name: 'CAT', path: '/academics/cat', icon: 'BookOpen' },
@@ -185,6 +214,8 @@ const SIDEBAR_ITEMS = {
       { name: 'Faculty Details', path: '/academics/faculty-details', icon: 'Users' },
       { name: 'Faculty Attendance', path: '/academics/faculty-attendance', icon: 'CheckCircle' },
       { name: 'Leave Requests', path: '/academics/leave-requests', icon: 'UserMinus' },
+       { name: 'Faculty Feedback', path: '/academics/principal/faculty-feedback', icon: 'MessageSquare' },
+
     ]
   },
 
@@ -193,7 +224,10 @@ const SIDEBAR_ITEMS = {
     path: '/academics/principal-students',
     icon: 'User',
     children: [
+      { name: 'Student Details', path: '/academics/principal/student-details', icon: 'UserMinus' },
+      { name: 'Student Permissions', path: '/academics/principal/student-permissions', icon: 'BookOpen' },
       { name: 'Student Attendance', path: '/academics/student-attendance', icon: 'ClipboardList' }
+
     ]
   },
 
@@ -241,14 +275,27 @@ const SIDEBAR_ITEMS = {
   },
 
   {
-    name: 'Courses',
+    name: 'Subjects',
     path: '/academics/courses',
     icon: 'BookOpen',
     children: [
       { name: 'Course Faculties', path: '/academics/course-faculties', icon: 'BookOpen' },
+      {name:'subject List', path:'/academics/subject-list', icon:'List'},
       { name: 'Lesson Plan', path: '/academics/lesson-plan', icon: 'Target' },
-      { name: 'Track Syllabus', path: '/academics/syllabus-track', icon: 'Target' },
+
       { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
+      { name: 'Sem Exam Preparation', path: '/academics/sem-exam-preparation', icon: 'Monitor' },
+      { name: 'Syllabus Tracking', path: '/academics/hod/syllabus-tracking', icon: 'Code' }
+    ]
+  },
+   {
+    name: 'Tests',
+    path: '/academics/tests',
+    icon: 'Users',
+    children: [
+      { name: 'Assignment', path: '/academics/tests/assignment', icon: 'CheckCircle' },
+      { name: 'Online Tests', path: '/academics/hod/tests/online-tests', icon: 'Briefcase' },
+      { name: 'Coding Assessment', path: '/academics/tests/coding-assessment', icon: 'BookOpen' },
     ]
   },
 
@@ -269,7 +316,8 @@ const SIDEBAR_ITEMS = {
     icon: 'Users',
     children: [
       { name: 'Attendance', path: '/academics/faculty-student-attendance', icon: 'CheckCircle' },
-      { name: 'Student Projects', path: '/academics/faculty-student-projects', icon: 'Briefcase' }
+      { name: 'Student Projects', path: '/academics/faculty-student-projects', icon: 'Briefcase' },
+      { name: 'Student Permissions', path: '/academics/faculty-student-permissions', icon: 'BookOpen' },
     ]
   },
 
@@ -279,11 +327,25 @@ const SIDEBAR_ITEMS = {
     icon: 'BookOpen',
     children: [
       { name: 'Lesson Plan', path: '/academics/faculty-lessonplan', icon: 'ClipboardList' },
-      { name: 'Syllabus Update', path: '/academics/faculty-syllabus-update', icon: 'Edit3' }
+      { name: 'Syllabus Update', path: '/academics/faculty-syllabus-update', icon: 'Edit3' },
+      { name: 'Study Material', path: '/academics/faculty-study-material', icon: 'FolderOpen' },
+      { name: 'Exam Preparation', path: '/academics/faculty-exam-preparation', icon: 'FileText' },
+      {name:'Subject List', path:'/academics/faculty-subject-list', icon:'List'},
+    ]
+  },
+    {
+    name: 'Tests',
+    path: '/academics/faculty-Tests',
+    icon: 'BookOpen',
+    children: [
+      { name: 'Assignments', path: '/academics/faculty-Assignements', icon: 'ClipboardList' },
+      { name: 'Online Tests', path: '/academics/faculty-Online_tests', icon: 'Edit3' },
+      {name:'Coding Assesments', path:'/academics/faculty-coding-assesments', icon: 'Edit3'}
     ]
   },
 
   { name: 'CAT', path: '/academics/faculty/student-cat', icon: 'FileText' },
+  { name: 'Online Classes', path: '/academics/faculty/online-classes', icon: 'Video' },
   { name: 'Leave Request', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
   { name: 'Reports', path: '/academics/faculty-reports', icon: 'BarChart' },
   { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
@@ -346,6 +408,36 @@ const SIDEBAR_ITEMS = {
     path: '/management/principal/dashboard', 
     icon: 'BarChart3' 
   },
+   { 
+        name: 'Employee', 
+        path: '/management/principal/employee', 
+        icon: 'Settings',
+        children: [
+          { name: 'Employee Attendance', path: '/management/principal/employee/attendance', icon: 'DollarSign' },
+          { name: 'Employee Leaves', path: '/management/principal/employee/leaves', icon: 'Calendar' }
+        ]
+      },
+       { 
+    name: 'Infrastructure Management', 
+    path: '/management/principal/infrastructure-management', 
+    icon: 'CheckCircle' 
+  },
+     { 
+    name: 'Student Details', 
+    path: '/management/principal/student-details', 
+    icon: 'CheckCircle' 
+  },
+    { 
+    name: 'Faculty Details', 
+    path: '/management/principal/faculty-details', 
+    icon: 'CheckCircle' 
+  },
+     { 
+    name: 'Student Transfers', 
+    path: '/management/principal/student-transfers', 
+    icon: 'User' 
+  },
+
 
   { 
     name: 'Financial Approvals', 
@@ -353,11 +445,11 @@ const SIDEBAR_ITEMS = {
     icon: 'CheckCircle' 
   },
 
-  { 
-    name: 'Faculty & Staff Oversight', 
-    path: '/management/principal/faculty-staff', 
-    icon: 'Users' 
-  },
+  // { 
+  //   name: 'Faculty & Staff Oversight', 
+  //   path: '/management/principal/faculty-staff', 
+  //   icon: 'Users' 
+  // },
 
   { 
     name: 'Circulars & Event Management', 
@@ -365,11 +457,11 @@ const SIDEBAR_ITEMS = {
     icon: 'CalendarDays' 
   },
 
-  { 
-    name: 'Infrastructure Reports', 
-    path: '/management/principal/infrastructure-reports', 
-    icon: 'FileBarChart' 
-  },
+  // { 
+  //   name: 'Infrastructure Reports', 
+  //   path: '/management/principal/infrastructure-reports', 
+  //   icon: 'FileBarChart' 
+  // },
   { 
     name: 'Raise Ticket', 
     path: '/academics/raise-ticket', 
@@ -387,6 +479,11 @@ const SIDEBAR_ITEMS = {
     name: 'Departmental Budgeting', 
     path: '/management/hod/departmental-budgeting', 
     icon: 'Wallet' 
+  },
+   { 
+    name: 'Student Transfers', 
+    path: '/management/hod/student-transfers', 
+    icon: 'User' 
   },
 
   { 
@@ -508,6 +605,7 @@ const SIDEBAR_ITEMS = {
 
   'Infrastructure Management' : {
     'Administration Officer': [
+       { name: 'Infrastructure Management', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
       
           { 
             name: 'Inventory Management', 
