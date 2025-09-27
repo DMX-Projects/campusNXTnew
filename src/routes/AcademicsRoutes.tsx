@@ -55,9 +55,18 @@ import StudentRecordsResults from '../pages/FacultyModules/FacultyAcademic/Stude
 import StudentClassSchedule from '../pages/FacultyModules/FacultyAcademic/StudentClassSchedule';
 import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/StudentCourse';
 import FacultyFeedbackStudent from '../pages/StudentModules/Academics/FacultyFeedbackStudent';
+
+import StudyMaterial from '../pages/StudentModules/Academics/Subjects/StudyMaterial';
+
+import StudentSubjectList from '../pages/StudentModules/Academics/Subjects/StudentSubjectList';
+import StudentSyllabusTracking from '../pages/StudentModules/Academics/Subjects/StudentSyllabusTracking';
+import StudentSemExamPreparation from '../pages/StudentModules/Academics/Subjects/StudentSemExamPreparation';
+import LessonPlan from '../pages/StudentModules/Academics/Subjects/LessonPlan';
+import StudentOnlineTests from '../pages/StudentModules/Academics/StudentOnlineTests';
+import StudentAssignements from '../pages/StudentModules/Academics/StudentAssignements';
+import StudentCodingAssesments from '../pages/StudentModules/Academics/StudentCodingAssesments';
 // import StudentAssigment from '../pages/FacultyModules/FacultyAcademic/StudentAssigment';
-import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
-import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
+
 import StudentStudyMaterial from '../pages/FacultyModules/FacultyAcademic/StudentStudyMaterial';
 import TimeTable from '../pages/StudentModules/Academics/TimeTable';
 import StudentAttendence from '../pages/StudentModules/Academics/StudentAttendence';
@@ -66,7 +75,7 @@ import LeaveRequest from '../pages/StudentModules/Academics/LeaveRequest';
 import Dashboard from '../pages/StudentModules/Academics/Dashboard';
 import MyProjects from '../pages/StudentModules/Academics/MyProjects';
 import CAT from '../pages/StudentModules/Academics/CAT';
-import Tests from '../pages/StudentModules/Academics/Tests';
+
 
 
 
@@ -116,6 +125,14 @@ import OnlineClasses from '../pages/StudentModules/Academics/OnlineClasses';
 import Subjects from '../pages/StudentModules/Academics/Subjects';
 import Assignment from '../pages/HODModules/Academics/Tests/Assignment';
 import CodingAssements from '../pages/HODModules/Academics/Tests/CodingAssements';
+import FacultyAssignements from '../pages/FacultyModules/FacultyAcademic/FacultyAssignements';
+import FacultyOnlineTests from '../pages/FacultyModules/FacultyAcademic/FacultyOnlineTests';
+import FacultyCodingAssignements from '../pages/FacultyModules/FacultyAcademic/FacultyCodingAssignements';
+import SubjectsList from '../pages/FacultyModules/FacultyAcademic/SubjectsList';
+import SemExamPrepararation from '../pages/FacultyModules/FacultyAcademic/SemExamPrepararation';
+
+import { i } from 'framer-motion/client';
+
 
 
 const AcademicsRoutes: React.FC = () => {
@@ -197,8 +214,7 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-classschedule" element={<StudentClassSchedule />} />
     <Route path="/student-courses" element={<StudentCourseAcademic />} />
     {/* <Route path="/student-assignments" element={<StudentAssigment />} /> */}
-    <Route path="/student-exams" element={<StudentExam />} />
-    <Route path="/student-profile" element={<StudentProfile />} />
+
     <Route path="/student-studymaterial" element={<StudentStudyMaterial />} />
     <Route path="/my-attendance" element={<AttendanceManagement />} />
 
@@ -211,8 +227,16 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student/online-classes" element={<OnlineClasses />} />
     <Route path="/student-subjects-syllabus" element={<Subjects />} />
     <Route path="/student/faculty-feedback" element={<FacultyFeedbackStudent />} />
-    <Route path="/tests" element={<Tests />} />
-    
+
+    <Route path="/student/coding-assessment" element={<StudentCodingAssesments />} />
+    <Route path="/student/assignment" element={<StudentAssignements />} />
+    <Route path="/student/online-test" element={<StudentOnlineTests />} />
+    <Route path="/student/lesson-plan" element={<LessonPlan />} />
+    <Route path="/student/syllabus-tracking" element={<StudentSyllabusTracking />} />
+    <Route path="/student/subject-list" element={<StudentSubjectList />} />
+    <Route path="/student/sem-exam-preparation" element={<StudentSemExamPreparation />} />
+    <Route path="/student/study-material" element={<StudyMaterial />} />
+
     <Route path="/student-myprojects" element={<MyProjects />} />
     <Route path="/cat" element={<CAT />} />
 
@@ -238,6 +262,15 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/faculty-syllabus-update" element={<SyllabusUpdates />} />
       <Route path="faculty-leave-request" element={<FacultyLeaveRequest />} />
       <Route path="faculty-reports" element={<ReportsFaculty />} />
+      <Route path='/faculty-exam-preparation' element={<SemExamPrepararation/>}/>
+      <Route path='/faculty-subject-list' element={<SubjectsList/>}/>
+      <Route path='/faculty-study-material' element={<FacultyStudyMaterial/>}/>
+      
+   
+      <Route path='/faculty-Assignements' element={<FacultyAssignements/>}/>
+      <Route path='/faculty-Online_tests' element={<FacultyOnlineTests/>}/>
+      <Route path='/faculty-coding-assesments' element={<FacultyCodingAssignements/>}/>
+    
 
 
       {/* Users Routes

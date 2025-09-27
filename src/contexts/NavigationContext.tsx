@@ -167,9 +167,34 @@ const SIDEBAR_ITEMS = {
   { name: 'Academic Calender', path: '/common/academics/academic-calendar', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
   { name: 'My Attendance', path: '/academics/attendance', icon: 'CheckCircle' },
-  { name: 'Subjects & Syllabus', path: '/academics/student-subjects-syllabus', icon: 'BookOpen' },
+  {
+    name: 'Subjects',
+    path: '/academics/Student-Subjects',
+    icon: 'GraduationCap',
+    children: [
+      { name: 'Lesson Plan', path: '/academics/student/lesson-plan', icon: 'Users' },
+      { name: 'Study Material', path: '/academics/student/study-material', icon: 'CheckCircle' },
+      { name: 'Sem Exam Preparation', path: '/academics/student/sem-exam-preparation', icon: 'UserMinus' },
+       { name: 'Syllabus Tracking', path: '/academics/student/syllabus-tracking', icon: 'MessageSquare' },
+        { name: 'Subject List', path: '/academics/student/subject-list', icon: 'List' },
+
+    ]
+  },
+   {
+    name: 'Tests',
+    path: '/academics/Student-Tests',
+    icon: 'GraduationCap',
+    children: [
+      { name: 'Assignment', path: '/academics/student/assignment', icon: 'Users' },
+      { name: 'Online Test', path: '/academics/student/online-test', icon: 'CheckCircle' },
+      { name: 'Coding Assessment', path: '/academics/student/coding-assessment', icon: 'UserMinus' },
+       
+
+    ]
+  },
+  
   {name:'Faculty Feedback', path:'/academics/student/faculty-feedback', icon:'MessageSquare'},
-  {name:'Tests', path:'/academics/tests', icon:'FileText'},
+
   {name:'Online Classes', path:'/academics/student/online-classes', icon:'Video'},
   { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
   { name: 'My Projects', path: '/academics/student-myprojects', icon: 'FolderOpen' },
@@ -257,7 +282,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Course Faculties', path: '/academics/course-faculties', icon: 'BookOpen' },
       {name:'subject List', path:'/academics/subject-list', icon:'List'},
       { name: 'Lesson Plan', path: '/academics/lesson-plan', icon: 'Target' },
-      { name: 'Track Syllabus', path: '/academics/syllabus-track', icon: 'Target' },
+
       { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
       { name: 'Sem Exam Preparation', path: '/academics/sem-exam-preparation', icon: 'Monitor' },
       { name: 'Syllabus Tracking', path: '/academics/hod/syllabus-tracking', icon: 'Code' }
@@ -302,7 +327,20 @@ const SIDEBAR_ITEMS = {
     icon: 'BookOpen',
     children: [
       { name: 'Lesson Plan', path: '/academics/faculty-lessonplan', icon: 'ClipboardList' },
-      { name: 'Syllabus Update', path: '/academics/faculty-syllabus-update', icon: 'Edit3' }
+      { name: 'Syllabus Update', path: '/academics/faculty-syllabus-update', icon: 'Edit3' },
+      { name: 'Study Material', path: '/academics/faculty-study-material', icon: 'FolderOpen' },
+      { name: 'Exam Preparation', path: '/academics/faculty-exam-preparation', icon: 'FileText' },
+      {name:'Subject List', path:'/academics/faculty-subject-list', icon:'List'},
+    ]
+  },
+    {
+    name: 'Tests',
+    path: '/academics/faculty-Tests',
+    icon: 'BookOpen',
+    children: [
+      { name: 'Assignments', path: '/academics/faculty-Assignements', icon: 'ClipboardList' },
+      { name: 'Online Tests', path: '/academics/faculty-Online_tests', icon: 'Edit3' },
+      {name:'Coding Assesments', path:'/academics/faculty-coding-assesments', icon: 'Edit3'}
     ]
   },
 
