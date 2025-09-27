@@ -13,10 +13,12 @@ import {
   Moon,
   Calendar,
   BarChart3,
-  Settings
+  Settings,
+  Blocks
 } from 'lucide-react';
 
-// Import your existing components - adjust paths according to your file structure
+// Import your existing components - correct component names
+import BlockManagement from '../../../pages/RegistorModule/Infrastructure/BlockManagement';
 import FixedAssessment from '../../../pages/RegistorModule/Infrastructure/FixedAssesment';
 import MaintenanceCosts from '../../../pages/RegistorModule/Infrastructure/MaintenanceCosts';
 import ManagementHistory from '../../../pages/RegistorModule/Infrastructure/ManagementHistory';
@@ -40,7 +42,7 @@ const InfrastructureManagement: React.FC = () => {
     return savedTheme ? savedTheme === 'dark' : false;
   });
 
-  const [activeTab, setActiveTab] = useState<string>('fixed-assessment');
+  const [activeTab, setActiveTab] = useState<string>('block-management');
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
@@ -54,8 +56,15 @@ const InfrastructureManagement: React.FC = () => {
 
   const tabs: TabConfig[] = [
     {
+      id: 'block-management',
+      label: 'Block Management',
+      icon: <Blocks className="w-5 h-5" />,
+      component: BlockManagement,
+      description: 'Manage college blocks, buildings, and physical infrastructure'
+    },
+    {
       id: 'fixed-assessment',
-      label: 'Fixed Assets',
+      label: 'Fixed Assessment',
       icon: <Building2 className="w-5 h-5" />,
       component: FixedAssessment,
       description: 'Assess and evaluate fixed assets and infrastructure'
@@ -144,7 +153,7 @@ const InfrastructureManagement: React.FC = () => {
               Infrastructure Management
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Comprehensive management of college infrastructure, assets, and vendor relationships
+              Comprehensive management of college infrastructure, blocks, assets, and vendor relationships
             </p>
           </div>
           <div className="flex items-center space-x-4">
@@ -235,16 +244,22 @@ const InfrastructureManagement: React.FC = () => {
           <p className="text-sm text-gray-600 dark:text-gray-400">Real-time overview of infrastructure metrics</p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-4">
+          <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
+            <Blocks className="w-6 h-6 mx-auto mb-1" />
+            <div className="text-lg font-bold">12</div>
+            <div className="text-xs text-indigo-100">Blocks</div>
+          </div>
+
           <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
             <Building2 className="w-6 h-6 mx-auto mb-1" />
             <div className="text-lg font-bold">248</div>
-            <div className="text-xs text-blue-100">Total Assets</div>
+            <div className="text-xs text-blue-100">Fixed Assets</div>
           </div>
           
           <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
             <Wrench className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">12</div>
+            <div className="text-lg font-bold">15</div>
             <div className="text-xs text-green-100">Maintenance</div>
           </div>
           
@@ -260,16 +275,16 @@ const InfrastructureManagement: React.FC = () => {
             <div className="text-xs text-purple-100">Stock Items</div>
           </div>
           
-          <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
+          <div className="bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
             <Users className="w-6 h-6 mx-auto mb-1" />
             <div className="text-lg font-bold">42</div>
-            <div className="text-xs text-indigo-100">Vendors</div>
+            <div className="text-xs text-pink-100">Vendors</div>
           </div>
           
-          <div className="bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
+          <div className="bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
             <TrendingUp className="w-6 h-6 mx-auto mb-1" />
             <div className="text-lg font-bold">98%</div>
-            <div className="text-xs text-pink-100">Efficiency</div>
+            <div className="text-xs text-cyan-100">Efficiency</div>
           </div>
           
           <div className="bg-gradient-to-br from-teal-400 to-teal-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
