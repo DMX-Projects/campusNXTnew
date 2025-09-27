@@ -509,6 +509,7 @@ const SIDEBAR_ITEMS = {
 
   'Infrastructure Management' : {
     'Administration Officer': [
+       { name: 'Infrastructure Management', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
       
           { 
             name: 'Inventory Management', 
