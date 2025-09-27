@@ -23,6 +23,7 @@ import SyllabusTrackingDashboard from '../pages/ChairpersonModule/Academics/Syll
 import ScheduleOnlineClass from '../pages/ChairpersonModule/Academics/Scheduleonlineclass/Scheduleonlineclass';
 import Reports from '../pages/ChairpersonModule/Academics/Reports/Reports';
 import FacultyAcademicDashboard from '../pages/FacultyModules/Academic/FacultyAcademicDashboard';
+import FacultyFeedbackPrincipal from '../pages/PrincipalModules/Academics/Faculty/FacultyFeedbackPrincipal';
 // import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
 
 import FacultyInbox from '../pages/FacultyModules/FacultyAcademic/FacultyInbox';
@@ -40,6 +41,9 @@ import FacultyRiseTicket  from '../pages/FacultyModules/FacultyAcademic/FacultyR
 import CATManagementInterface from '../pages/FacultyModules/FacultyAcademic/CATManagementInterface';
 import PrincipalAcademicDashboard from '../pages/PrincipalModules/Academics/PrincipalAcademicDashboard'
 import HODAcademicDashboard from '../pages/HODModules/Academics/HODAcademicDashboard'
+import StudentDetails from '../pages/PrincipalModules/Academics/Students/StudentDetails';
+import StudentPermissions from '../pages/PrincipalModules/Academics/Students/StudentPermissions';
+// import FacultyDashboard from '../pages/FacultyModules/Academic/FacultyDashboard';
 // import FacultyDashboard from '../FacultyModules/Examination/Dashboard';
 
 
@@ -50,6 +54,7 @@ import StudentfeeManagement from '../pages/FacultyModules/FacultyAcademic/studen
 import StudentRecordsResults from '../pages/FacultyModules/FacultyAcademic/StudentRecords&Results';
 import StudentClassSchedule from '../pages/FacultyModules/FacultyAcademic/StudentClassSchedule';
 import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/StudentCourse';
+import FacultyFeedbackStudent from '../pages/StudentModules/Academics/FacultyFeedbackStudent';
 // import StudentAssigment from '../pages/FacultyModules/FacultyAcademic/StudentAssigment';
 import StudentExam from '../pages/FacultyModules/FacultyAcademic/StudentExam';
 import StudentProfile from '../pages/FacultyModules/FacultyAcademic/StudentProfile';
@@ -61,6 +66,8 @@ import LeaveRequest from '../pages/StudentModules/Academics/LeaveRequest';
 import Dashboard from '../pages/StudentModules/Academics/Dashboard';
 import MyProjects from '../pages/StudentModules/Academics/MyProjects';
 import CAT from '../pages/StudentModules/Academics/CAT';
+import Tests from '../pages/StudentModules/Academics/Tests';
+
 
 
 
@@ -71,6 +78,9 @@ import HODLeaveRequest from '../pages/HODModules/Academics/LeaveRequest';
 import DepartmentTimetable from '../pages/HODModules/Academics/Timetable/CreateTimetable';
 import HodPersonalTimetable from '../pages/HODModules/Academics/Timetable/ViewTimetable';
 import HodDashboard from '../pages/HODModules/Academics/HodDashboard.';
+import SubjectList from '../pages/HODModules/Academics/Courses/SubjectList';
+import SemExamPreparation from '../pages/HODModules/Academics/Courses/SemExamPreparation';
+import OnlineTestHod from '../pages/HODModules/Academics/Tests/OnlineTestHod';
 
 
 import Subject from '../pages/FacultyModules/Academic/Subject';
@@ -102,6 +112,10 @@ import HODCatPage from '../pages/HODModules/Academics/HODCatPage';
 
 import React from 'react';
 import { Routes, Route} from 'react-router-dom';
+import OnlineClasses from '../pages/StudentModules/Academics/OnlineClasses';
+import Subjects from '../pages/StudentModules/Academics/Subjects';
+import Assignment from '../pages/HODModules/Academics/Tests/Assignment';
+import CodingAssements from '../pages/HODModules/Academics/Tests/CodingAssements';
 
 
 const AcademicsRoutes: React.FC = () => {
@@ -133,7 +147,12 @@ const AcademicsRoutes: React.FC = () => {
       {/* Academic login Hod Routes */}
        <Route path="course-faculties" element={<CourseFaculties />} />
        <Route path="lesson-plan" element={<SyllabusLessonPlan />} />
-      <Route path="syllabus-track" element={<SyllabusTracking />} />
+      <Route path="/hod/syllabus-tracking" element={<SyllabusTracking />} />
+      <Route path="/subject-list" element={<SubjectList />} />
+      <Route path="/sem-exam-preparation" element={<SemExamPreparation />} />
+      <Route path="/tests/assignment" element={<Assignment />} />
+      <Route path="/tests/coding-assessment" element={<CodingAssements />} />
+      <Route path="/hod/tests/online-tests" element={<OnlineTestHod />} />
        <Route path="leave-request" element={<HODLeaveRequest />} />
        <Route path="/hod/timetable" element={<DepartmentTimetable />} />
       <Route path="/hod/view-timetable" element={< HodPersonalTimetable/>} />
@@ -162,6 +181,8 @@ const AcademicsRoutes: React.FC = () => {
       <Route path='/faculty-subjects-syllabus' element ={<FacultySubjectsSyllabus />} />
       <Route path='/faculty-StudyMaterial' element ={<FacultyStudyMaterial/>}/>
       <Route path='/faculty-student-projects' element ={<FacultyStudentProject/>}/>
+      <Route path='/faculty-student-permissions' element ={<StudentPermissions/>}/>
+      <Route path='/faculty/online-classes' element ={<OnlineClasses/>}/>
       <Route path='/faculty-FacultyOnlineTest' element ={<FacultyOnlineTest/>}/>
       <Route path='/faculty-schedule-onlineclass' element ={<ScheduleOnlinclass/>}/>
       <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
@@ -186,6 +207,12 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/student-results" element={<Results />} />
     <Route path="/leaveRequest" element={<LeaveRequest />} />
     <Route path="/studentdashboard" element={<Dashboard />} />
+
+    <Route path="/student/online-classes" element={<OnlineClasses />} />
+    <Route path="/student-subjects-syllabus" element={<Subjects />} />
+    <Route path="/student/faculty-feedback" element={<FacultyFeedbackStudent />} />
+    <Route path="/tests" element={<Tests />} />
+    
     <Route path="/student-myprojects" element={<MyProjects />} />
     <Route path="/cat" element={<CAT />} />
 
@@ -237,6 +264,10 @@ const AcademicsRoutes: React.FC = () => {
          <Route path='/principal-Inbox' element={<PrincipalInbox/>}/>
         <Route path='/principal-reports' element={<ReportsPrincipal/>}/>
         <Route path='/principal-dashboard' element={<PrincipalAcademicDashboard/>}/>
+        <Route path='/principal/faculty-feedback' element={<FacultyFeedbackPrincipal/>}/>
+        <Route path='/principal/student-details' element={<StudentDetails/>}/>
+        <Route path='/principal/student-permissions' element={<StudentPermissions/>}/>
+
 
       
     </Routes>
