@@ -690,7 +690,7 @@ const OnlineTestHod = () => {
           <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-4 lg:p-6 rounded-t-lg">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h1 className="text-2xl lg:text-3xl font-bold mb-2">HOD Online Test Management</h1>
+                <h1 className="text-2xl lg:text-3xl font-bold mb-2">Online Test Management</h1>
                 <p className="text-blue-100">Manage online tests and monitor student performance</p>
               </div>
               <div className="flex items-center mt-4 lg:mt-0 space-x-4">
