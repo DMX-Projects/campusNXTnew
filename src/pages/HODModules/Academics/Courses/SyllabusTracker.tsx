@@ -1,221 +1,198 @@
-// import React, { useState, useMemo } from 'react';
+import React, { useState } from "react";
+import { CheckCircle, Circle, XCircle, User } from "lucide-react";
 
-// const courses = [
-//   {
-//     id: 'CS201',
-//     name: 'Data Structures',
-//     faculty: 'Prof. S. Rao',
-//     semester: 3,
-//     durationDays: 180, // semester length in days
-//     lessonPlan: [
-//       { topic: 'Arrays & Linked Lists', plannedDate: '2025-09-25', completed: true },
-//       { topic: 'Stacks & Queues', plannedDate: '2025-10-05', completed: false },
-//       { topic: 'Trees', plannedDate: '2025-10-20', completed: false },
-//       { topic: 'Graphs', plannedDate: '2025-11-05', completed: false },
-//       { topic: 'Hashing', plannedDate: '2025-11-20', completed: false },
-//       { topic: 'Sorting Algorithms', plannedDate: '2025-12-05', completed: true },
-//     ],
-//   },
-//   {
-//     id: 'CS301',
-//     name: 'Computer Networks',
-//     faculty: 'Dr. L. Jain',
-//     semester: 4,
-//     durationDays: 180,
-//     lessonPlan: [
-//       { topic: 'Network Layers', plannedDate: '2025-09-30', completed: true },
-//       { topic: 'Signaling', plannedDate: '2025-10-10', completed: true },
-//       { topic: 'Routing Algorithms', plannedDate: '2025-10-25', completed: false },
-//       { topic: 'Wireless Networks', plannedDate: '2025-11-10', completed: false },
-//       { topic: 'Network Security', plannedDate: '2025-11-25', completed: false },
-//     ],
-//   },
-// ];
-
-// const facultyNames = Array.from(new Set(courses.map(c => c.faculty)));
-
-// function daysBetween(startDate, endDate) {
-//   const diff = new Date(endDate) - new Date(startDate);
-//   return Math.ceil(diff / (1000 * 60 * 60 * 24));
-// }
-
-// export default function AdvancedSyllabusTracking() {
-//   const [filters, setFilters] = useState({ course: '', faculty: '' });
-//   const [expandedCourse, setExpandedCourse] = useState(null);
-//   const today = new Date().toISOString().split('T')[0];
-
-//   // Calculate completion stats per course on the fly
-//   const filteredCourses = useMemo(() => {
-//     return courses.filter(course =>
-//       (filters.course ? course.name.toLowerCase().includes(filters.course.toLowerCase()) : true) &&
-//       (filters.faculty ? course.faculty === filters.faculty : true)
-//     );
-//   }, [filters]);
-
-//   const handleFilterChange = e =>
-//     setFilters(f => ({ ...f, [e.target.name]: e.target.value }));
-
-//   const toggleExpand = (courseId) =>
-//     setExpandedCourse(expandedCourse === courseId ? null : courseId);
-
-//   return (
-//     <div className="">
-//       <h1 className="text-3xl font-extrabold text-primary-900 dark:text-primary-100 mb-8">
-//         Syllabus Tracking & Progress
-//       </h1>
-
-//       {/* Filters */}
-//       <div className="flex flex-wrap gap-4 mb-8 items-center justify-start max-w-full">
-//         <input
-//           type="text"
-//           placeholder="Filter by Course Name"
-//           name="course"
-//           value={filters.course}
-//           onChange={handleFilterChange}
-//           className="px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-primary-900 dark:text-primary-100 focus:ring-2 focus:ring-primary-400 flex-grow md:flex-grow-0 md:w-72"
-//           aria-label="Filter by course name"
-//         />
-//         <select
-//           name="faculty"
-//           value={filters.faculty}
-//           onChange={handleFilterChange}
-//           className="px-3 py-2 border rounded-lg bg-white dark:bg-gray-800 text-primary-900 dark:text-primary-100 focus:ring-2 focus:ring-primary-400 w-72"
-//           aria-label="Filter by faculty"
-//         >
-//           <option value="">All Faculties</option>
-//           {facultyNames.map(f => (
-//             <option key={f} value={f}>{f}</option>
-//           ))}
-//         </select>
-//       </div>
-
-//       {/* Courses list */}
-//       <div className="flex flex-col gap-6">
-//         {filteredCourses.length === 0 ? (
-//           <div className="text-center text-primary-700 dark:text-primary-300 py-12">
-//             No courses match your filters.
-//           </div>
-//         ) : (
-//           filteredCourses.map(course => {
-//             const totalTopics = course.lessonPlan.length;
-//             const completedTopics = course.lessonPlan.filter(l => l.completed).length;
-//             const percentComplete = Math.round((completedTopics / totalTopics) * 100);
-//             const remainingTopics = totalTopics - completedTopics;
-
-//             // Calculate estimated days left to complete
-//             // Assume even distribution; more sophisticated logic possible.
-//             const daysPassed = daysBetween(
-//               course.lessonPlan[0].plannedDate,
-//               today
-//             );
-//             const daysLeft = Math.max(course.durationDays - daysPassed, 0);
-
-//             return (
-//               <div
-//                 key={course.id}
-//                 className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6"
-//               >
-//                 {/* Header with summary */}
-//                 <div
-//                   className="flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer"
-//                   onClick={() => toggleExpand(course.id)}
-//                   aria-expanded={expandedCourse === course.id}
-//                   aria-controls={`course-${course.id}-details`}
-//                   role="button"
-//                   tabIndex={0}
-//                   onKeyDown={(e) => {
-//                     if (e.key === 'Enter' || e.key === ' ') {
-//                       toggleExpand(course.id);
-//                     }
-//                   }}
-//                 >
-//                   <div>
-//                     <h2 className="text-xl font-bold text-primary-900 dark:text-primary-100">
-//                       {course.name} ({course.id})
-//                     </h2>
-//                     <div className="text-primary-700 dark:text-primary-300">
-//                       Faculty: <span className="font-semibold">{course.faculty}</span>
-//                     </div>
-//                   </div>
-
-//                   <div className="mt-3 sm:mt-0 flex flex-col sm:flex-row gap-4 sm:items-center">
-//                     <div className="flex flex-col items-center sm:items-start mr-4">
-//                       <div className="text-sm text-primary-600 dark:text-primary-400">Completion</div>
-//                       <div className="font-semibold text-green-700 dark:text-green-400">{percentComplete}%</div>
-//                       <div className="w-48 h-4 bg-primary-200 rounded-full overflow-hidden mt-1">
-//                         <div
-//                           className="h-4 bg-secondary-600 dark:bg-secondary-400"
-//                           style={{ width: `${percentComplete}%` }}
-//                         />
-//                       </div>
-//                     </div>
-//                     <div className="flex flex-col items-center sm:items-start mr-4">
-//                       <div className="text-sm text-primary-600 dark:text-primary-400">Remaining Topics</div>
-//                       <div className="font-semibold text-primary-900 dark:text-primary-100">
-//                         {remainingTopics}
-//                       </div>
-//                     </div>
-//                     <div className="flex flex-col items-center sm:items-start">
-//                       <div className="text-sm text-primary-600 dark:text-primary-400">Estimated Days Left</div>
-//                       <div className="font-semibold text-primary-900 dark:text-primary-100">{daysLeft}</div>
-//                     </div>
-//                     <div className="text-primary-600 dark:text-primary-400 text-sm italic">
-//                       (Click to toggle details)
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Details when expanded */}
-//                 {expandedCourse === course.id && (
-//                   <div
-//                     id={`course-${course.id}-details`}
-//                     className="mt-6 border-t border-primary-200 dark:border-primary-700 pt-4 overflow-x-auto"
-//                   >
-//                     <table className="min-w-full text-left border-collapse table-auto whitespace-nowrap">
-//                       <thead className="bg-primary-100 dark:bg-primary-800 font-semibold text-primary-900 dark:text-primary-100 rounded-md">
-//                         <tr>
-//                           <th className="px-4 py-2 border border-primary-300 dark:border-primary-700 rounded-tl-md">Topic</th>
-//                           <th className="px-4 py-2 border border-primary-300 dark:border-primary-700">Planned Date</th>
-//                           <th className="px-4 py-2 border border-primary-300 dark:border-primary-700">Completion Status</th>
-//                         </tr>
-//                       </thead>
-//                       <tbody>
-//                         {course.lessonPlan.map((lesson, idx) => (
-//                           <tr
-//                             key={idx}
-//                             className={`border border-primary-200 dark:border-primary-700 ${
-//                               idx % 2 === 0 ? 'bg-primary-50 dark:bg-primary-900' : 'bg-white dark:bg-gray-800'
-//                             }`}
-//                           >
-//                             <td className="px-4 py-2">{lesson.topic}</td>
-//                             <td className="px-4 py-2">{new Date(lesson.plannedDate).toLocaleDateString()}</td>
-//                             <td className="px-4 py-2">
-//                               {lesson.completed ? (
-//                                 <span className="text-green-600 font-semibold">Completed</span>
-//                               ) : (
-//                                 <span className="text-red-600 font-semibold">Pending</span>
-//                               )}
-//                             </td>
-//                           </tr>
-//                         ))}
-//                       </tbody>
-//                     </table>
-//                   </div>
-//                 )}
-//               </div>
-//             );
-//           })
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-import React from 'react'
-
-const SyllabusTracker = () => {
-  return (
-    <div>SyllabusTracker</div>
-  )
+interface Topic {
+id: number;
+name: string;
+completed: boolean;
 }
 
-export default SyllabusTracker
+interface Subject {
+id: number;
+code: string;
+name: string;
+faculty: string;
+topics: Topic[];
+}
+
+const SyllabusTracker: React.FC = () => {
+const [subjects, setSubjects] = useState<Subject[]>([
+{
+id: 1,
+code: "CSE101",
+name: "Introduction to Programming",
+faculty: "Dr. Ramesh Kumar",
+topics: [
+{ id: 1, name: "Basics of C Programming", completed: true },
+{ id: 2, name: "Variables, Loops & Functions", completed: true },
+{ id: 3, name: "Arrays & Strings", completed: false },
+{ id: 4, name: "Pointers & Memory Management", completed: false },
+{ id: 5, name: "File Handling", completed: false },
+],
+},
+{
+id: 2,
+code: "CSE202",
+name: "Data Structures",
+faculty: "Prof. Anitha Sharma",
+topics: [
+{ id: 1, name: "Stacks & Queues", completed: true },
+{ id: 2, name: "Linked Lists", completed: true },
+{ id: 3, name: "Trees & Binary Search Trees", completed: false },
+{ id: 4, name: "Graphs & Traversal", completed: false },
+{ id: 5, name: "Hashing Techniques", completed: false },
+],
+},
+{
+id: 3,
+code: "CSE303",
+name: "Operating Systems",
+faculty: "Dr. Neha Verma",
+topics: [
+{ id: 1, name: "Process Management", completed: true },
+{ id: 2, name: "Scheduling Algorithms", completed: false },
+{ id: 3, name: "Deadlocks", completed: false },
+{ id: 4, name: "Memory Management", completed: false },
+{ id: 5, name: "File System", completed: false },
+],
+},
+]);
+
+const toggleTopicCompletion = (subjectId: number, topicId: number) => {
+setSubjects((prev) =>
+prev.map((subj) =>
+subj.id === subjectId
+? {
+...subj,
+topics: subj.topics.map((topic) =>
+topic.id === topicId
+? { ...topic, completed: !topic.completed }
+: topic
+),
+}
+: subj
+)
+);
+};
+
+const markAllCompleted = (subjectId: number) => {
+setSubjects((prev) =>
+prev.map((subj) =>
+subj.id === subjectId
+? {
+...subj,
+topics: subj.topics.map((topic) => ({
+...topic,
+completed: true,
+})),
+}
+: subj
+)
+);
+};
+
+const calculateProgress = (topics: Topic[]) => {
+const completed = topics.filter((t) => t.completed).length;
+return Math.round((completed / topics.length) * 100);
+};
+
+return ( <div className="p-8 min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-gray-100 transition"> <h2 className="text-3xl font-bold mb-8 text-center text-indigo-600 dark:text-indigo-400"> Syllabus Tracker </h2>
+
+
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {subjects.map((subject) => {
+      const progress = calculateProgress(subject.topics);
+      return (
+        <div
+          key={subject.id}
+          className="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition"
+        >
+          {/* Subject Header */}
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                {subject.code} - {subject.name}
+              </h3>
+              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <User size={14} className="mr-1" />
+                {subject.faculty}
+              </div>
+            </div>
+            <span
+              className={`text-sm font-bold px-3 py-1 rounded-full ${
+                progress === 100
+                  ? "bg-green-100 text-green-600 dark:bg-green-700 dark:text-green-200"
+                  : "bg-yellow-100 text-yellow-600 dark:bg-yellow-700 dark:text-yellow-200"
+              }`}
+            >
+              {progress}%
+            </span>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-4">
+            <div
+              className="bg-indigo-500 h-3 rounded-full transition-all"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
+          {/* Mark All Completed Button */}
+          <button
+            onClick={() => markAllCompleted(subject.id)}
+            className="mb-4 w-full bg-green-500 hover:bg-green-600 text-white text-sm font-medium py-1.5 rounded-lg transition"
+          >
+            ✅ Mark All Topics Completed
+          </button>
+
+          {/* Topics List */}
+          <ul className="space-y-2">
+            {subject.topics.map((topic) => (
+              <li
+                key={topic.id}
+                className="flex justify-between items-center p-2 border rounded-lg dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              >
+                <div className="flex items-center gap-2">
+                  {topic.completed ? (
+                    <CheckCircle className="text-green-500" size={20} />
+                  ) : (
+                    <Circle className="text-gray-400" size={20} />
+                  )}
+                  <span
+                    className={`${
+                      topic.completed
+                        ? "text-green-600 dark:text-green-400 font-semibold"
+                        : "text-gray-700 dark:text-gray-300 font-medium"
+                    }`}
+                  >
+                    {topic.name}
+                  </span>
+                </div>
+
+                {/* Toggle Button */}
+                <button
+                  onClick={() =>
+                    toggleTopicCompletion(subject.id, topic.id)
+                  }
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition ${
+                    topic.completed
+                      ? "bg-red-100 text-red-600 hover:bg-red-200"
+                      : "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                  }`}
+                >
+                  {topic.completed ? "Undo" : "Mark Done"}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+
+);
+};
+
+export default SyllabusTracker;

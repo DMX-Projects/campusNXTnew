@@ -94,7 +94,7 @@ const StudentProfile = ({ student }) => {
 const TimeTableContent = () => {
   // Student Information
   const studentData = {
-    name: "Alex Johnson",
+    name: "Arjun kumar",
     studentId: "CSE2023A045",
     department: "Computer Science Engineering",
     semester: "3rd Semester",
@@ -265,7 +265,7 @@ const TimeTableContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+    <div className="min-h-screen  from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
       
       
       <div className="max-w-7xl mx-auto p-6">

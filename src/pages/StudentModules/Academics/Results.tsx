@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Download, Filter, Search, GraduationCap, Calendar, BookOpen, Award, AlertCircle, ChevronDown, ChevronRight, Eye } from 'lucide-react';
+import { Download, Filter, Search, GraduationCap, Calendar, BookOpen, Award, AlertCircle, ChevronDown, ChevronRight, Eye, X } from 'lucide-react';
 
 const Results = () => {
   // Sample data with midterms and semesters
@@ -62,10 +62,10 @@ const Results = () => {
       credits: 3,
       date: '2023-11-20'
     },
-    // Year 1 - Semester 1 Final
+    // Year 1 - Semester 1 
     {
       id: 5,
-      examType: 'Semester 1',
+      examType: 'Final Exam',
       semester: 'Semester 1',
       year: 'Year 1',
       course: 'Computer Science',
@@ -79,7 +79,7 @@ const Results = () => {
     },
     {
       id: 6,
-      examType: 'Semester 1',
+      examType: 'Final Exam',
       semester: 'Semester 1',
       year: 'Year 1',
       course: 'Computer Science',
@@ -93,7 +93,7 @@ const Results = () => {
     },
     {
       id: 7,
-      examType: 'Semester 1',
+      examType: 'Final Exam',
       semester: 'Semester 1',
       year: 'Year 1',
       course: 'Computer Science',
@@ -194,7 +194,7 @@ const Results = () => {
     // Year 1 - Semester 2 Final
     {
       id: 14,
-      examType: 'Semester 2',
+      examType: 'Final Exam',
       semester: 'Semester 2',
       year: 'Year 1',
       course: 'Computer Science',
@@ -208,7 +208,7 @@ const Results = () => {
     },
     {
       id: 15,
-      examType: 'Semester 2',
+      examType: 'Final Exam',
       semester: 'Semester 2',
       year: 'Year 1',
       course: 'Computer Science',
@@ -222,7 +222,7 @@ const Results = () => {
     },
     {
       id: 16,
-      examType: 'Semester 2',
+      examType: 'Final Exam',
       semester: 'Semester 2',
       year: 'Year 1',
       course: 'Computer Science',
@@ -323,7 +323,7 @@ const Results = () => {
     // Year 2 - Semester 1 Final
     {
       id: 23,
-      examType: 'Semester 1',
+      examType: 'Final Exam',
       semester: 'Semester 1',
       year: 'Year 2',
       course: 'Computer Science',
@@ -337,7 +337,7 @@ const Results = () => {
     },
     {
       id: 24,
-      examType: 'Semester 1',
+      examType: 'Final Exam',
       semester: 'Semester 1',
       year: 'Year 2',
       course: 'Computer Science',
@@ -351,7 +351,7 @@ const Results = () => {
     },
     {
       id: 25,
-      examType: 'Semester 1',
+      examType: 'Final Exam',
       semester: 'Semester 1',
       year: 'Year 2',
       course: 'Computer Science',
@@ -362,6 +362,35 @@ const Results = () => {
       status: 'Passed',
       credits: 4,
       date: '2024-12-10'
+    },
+    // Year 2 - Semester 2 data
+    {
+      id: 26,
+      examType: 'Midterm 1',
+      semester: 'Semester 2',
+      year: 'Year 2',
+      course: 'Computer Science',
+      subject: 'Operating Systems',
+      marks: 46,
+      totalMarks: 50,
+      grade: 'A+',
+      status: 'Passed',
+      credits: 4,
+      date: '2025-03-05'
+    },
+    {
+      id: 27,
+      examType: 'Midterm 2',
+      semester: 'Semester 2',
+      year: 'Year 2',
+      course: 'Computer Science',
+      subject: 'Operating Systems',
+      marks: 48,
+      totalMarks: 50,
+      grade: 'A+',
+      status: 'Passed',
+      credits: 4,
+      date: '2025-04-10'
     }
   ]);
 
@@ -378,9 +407,9 @@ const Results = () => {
   // Get unique values for filter options
   const filterOptions = useMemo(() => {
     return {
-      examTypes: [...new Set(resultsData.map(item => item.examType))],
-      semesters: [...new Set(resultsData.map(item => item.semester))],
-      years: [...new Set(resultsData.map(item => item.year))],
+      examTypes: [...new Set(resultsData.map(item => item.examType))].sort(),
+      semesters: [...new Set(resultsData.map(item => item.semester))].sort(),
+      years: [...new Set(resultsData.map(item => item.year))].sort(),
       courses: [...new Set(resultsData.map(item => item.course))]
     };
   }, [resultsData]);
@@ -450,6 +479,13 @@ const Results = () => {
       course: '',
       searchTerm: ''
     });
+  };
+
+  const clearSpecificFilter = (filterType) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: ''
+    }));
   };
 
   const toggleExpanded = (key) => {
@@ -551,17 +587,18 @@ const Results = () => {
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
       case 'Midterm 2':
         return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300';
-      case 'Semester 1':
+      case 'Final Exam':
         return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
-      case 'Semester 2':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300';
     }
   };
 
+  // Check if any filters are active
+  const hasActiveFilters = Object.values(filters).some(filter => filter !== '');
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+    <div className="min-h-screen  from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -570,20 +607,6 @@ const Results = () => {
             <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">
               Academic Results
             </h1>
-          </div>
-        </div>
-
-        {/* Important Notice */}
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-            <div>
-              <h3 className="font-medium text-amber-800 dark:text-amber-200 mb-1">Official Results Notice</h3>
-              <p className="text-sm text-amber-700 dark:text-amber-300">
-                This is a summary view of your results. For official transcripts and detailed grade reports, 
-                please visit the main university website or contact the academic office.
-              </p>
-            </div>
           </div>
         </div>
 
@@ -620,85 +643,220 @@ const Results = () => {
           </div>
         </div>
 
-        {/* Filters and Search */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Filter className="w-5 h-5 text-slate-500" />
-            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Filters</h2>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
-            {/* Search */}
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search subjects..."
-                value={filters.searchTerm}
-                onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+        {/* Enhanced Filters Section */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6">
+          {/* Filter Header */}
+          <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3">
+              <Filter className="w-5 h-5 text-slate-500" />
+              <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Filter Results</h2>
             </div>
-            
-            {/* Exam Type Filter */}
-            <select
-              value={filters.examType}
-              onChange={(e) => handleFilterChange('examType', e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">All Exam Types</option>
-              {filterOptions.examTypes.map(examType => (
-                <option key={examType} value={examType}>{examType}</option>
-              ))}
-            </select>
-            
-            {/* Semester Filter */}
-            <select
-              value={filters.semester}
-              onChange={(e) => handleFilterChange('semester', e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">All Semesters</option>
-              {filterOptions.semesters.map(semester => (
-                <option key={semester} value={semester}>{semester}</option>
-              ))}
-            </select>
-            
-            {/* Year Filter */}
-            <select
-              value={filters.year}
-              onChange={(e) => handleFilterChange('year', e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">All Years</option>
-              {filterOptions.years.map(year => (
-                <option key={year} value={year}>{year}</option>
-              ))}
-            </select>
-            
-            {/* Course Filter */}
-            <select
-              value={filters.course}
-              onChange={(e) => handleFilterChange('course', e.target.value)}
-              className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">All Courses</option>
-              {filterOptions.courses.map(course => (
-                <option key={course} value={course}>{course}</option>
-              ))}
-            </select>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              >
+                <X className="w-4 h-4" />
+                Clear All
+              </button>
+            )}
           </div>
-          
-          <div className="flex gap-2">
-            <button
-              onClick={clearFilters}
-              className="px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-            >
-              Clear Filters
-            </button>
+
+          {/* Primary Filters - Year, Semester, Exam Type */}
+          <div className="p-6 border-b border-slate-200 dark:border-slate-700">
+            <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-4 uppercase tracking-wide">
+              Primary Filters
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Year Filter */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Academic Year
+                </label>
+                <div className="relative">
+                  <select
+                    value={filters.year}
+                    onChange={(e) => handleFilterChange('year', e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                  >
+                    <option value="">All Years</option>
+                    {filterOptions.years.map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                  {filters.year && (
+                    <button
+                      onClick={() => clearSpecificFilter('year')}
+                      className="absolute right-10 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              {/* Semester Filter */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Semester
+                </label>
+                <div className="relative">
+                  <select
+                    value={filters.semester}
+                    onChange={(e) => handleFilterChange('semester', e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                  >
+                    <option value="">All Semesters</option>
+                    {filterOptions.semesters.map(semester => (
+                      <option key={semester} value={semester}>{semester}</option>
+                    ))}
+                  </select>
+                  {filters.semester && (
+                    <button
+                      onClick={() => clearSpecificFilter('semester')}
+                      className="absolute right-10 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              {/* Exam Type Filter */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Exam Type
+                </label>
+                <div className="relative">
+                  <select
+                    value={filters.examType}
+                    onChange={(e) => handleFilterChange('examType', e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                  >
+                    <option value="">All Exam Types</option>
+                    {filterOptions.examTypes.map(examType => (
+                      <option key={examType} value={examType}>{examType}</option>
+                    ))}
+                  </select>
+                  {filters.examType && (
+                    <button
+                      onClick={() => clearSpecificFilter('examType')}
+                      className="absolute right-10 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Secondary Filters */}
+          <div className="p-6">
+            <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-4 uppercase tracking-wide">
+              Additional Filters
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Search */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Search Subjects
+                </label>
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by subject name or grade..."
+                    value={filters.searchTerm}
+                    onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
+                    className="w-full pl-10 pr-10 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  {filters.searchTerm && (
+                    <button
+                      onClick={() => clearSpecificFilter('searchTerm')}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              {/* Course Filter */}
+              
+                
+            </div>
+          </div>
+
+          {/* Active Filters Display */}
+          {hasActiveFilters && (
+            <div className="px-6 py-4 bg-slate-50 dark:bg-slate-700/50 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Active Filters:</span>
+                {filters.year && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded-full text-sm">
+                    Year: {filters.year}
+                    <button
+                      onClick={() => clearSpecificFilter('year')}
+                      className="ml-1 hover:text-blue-600 dark:hover:text-blue-200"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+                {filters.semester && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 rounded-full text-sm">
+                    Semester: {filters.semester}
+                    <button
+                      onClick={() => clearSpecificFilter('semester')}
+                      className="ml-1 hover:text-green-600 dark:hover:text-green-200"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+                {filters.examType && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 rounded-full text-sm">
+                    Exam: {filters.examType}
+                    <button
+                      onClick={() => clearSpecificFilter('examType')}
+                      className="ml-1 hover:text-purple-600 dark:hover:text-purple-200"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+                {filters.course && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 rounded-full text-sm">
+                    Course: {filters.course}
+                    <button
+                      onClick={() => clearSpecificFilter('course')}
+                      className="ml-1 hover:text-orange-600 dark:hover:text-orange-200"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+                {filters.searchTerm && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 rounded-full text-sm">
+                    Search: "{filters.searchTerm}"
+                    <button
+                      onClick={() => clearSpecificFilter('searchTerm')}
+                      className="ml-1 hover:text-yellow-600 dark:hover:text-yellow-200"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Download Button */}
+          <div className="px-6 py-4 bg-slate-50 dark:bg-slate-700/50 border-t border-slate-200 dark:border-slate-700">
             <button
               onClick={downloadResults}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors ml-auto"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
             >
               <Download className="w-4 h-4" />
               Download Results
