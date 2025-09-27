@@ -49,6 +49,7 @@ const StudentCodingAssessments: React.FC = () => {
     return savedTheme ? savedTheme === 'dark' : false;
   });
 
+  const [activeTab, setActiveTab] = useState<'assigned' | 'completed'>('assigned');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [subjectFilter, setSubjectFilter] = useState<string>('');
@@ -166,6 +167,27 @@ const StudentCodingAssessments: React.FC = () => {
       problemTypes: ['Process Management', 'Memory Allocation', 'File Systems'],
       attempts: 1,
       maxAttempts: 1
+    },
+    {
+      id: '7',
+      title: 'Frontend Development Challenge',
+      description: 'Build responsive web interfaces using modern frameworks',
+      subject: 'Web Technologies',
+      faculty: 'Ms. Kavya Singh',
+      scheduledDate: '2025-09-20T14:00:00',
+      duration: 240,
+      totalProblems: 4,
+      totalMarks: 130,
+      status: 'completed',
+      attemptDate: '2025-09-20T14:00:00',
+      obtainedMarks: 118,
+      solvedProblems: 4,
+      timeSpent: 220,
+      difficulty: 'medium',
+      language: ['JavaScript', 'React', 'CSS'],
+      problemTypes: ['Component Design', 'State Management', 'API Integration'],
+      attempts: 1,
+      maxAttempts: 1
     }
   ]);
 
@@ -178,17 +200,25 @@ const StudentCodingAssessments: React.FC = () => {
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
-  const filteredAssessments = assessments.filter(assessment => {
-    const matchesSearch = searchTerm === '' || 
-      assessment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      assessment.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      assessment.faculty.toLowerCase().includes(searchTerm.toLowerCase());
+  // Separate assessments based on status for different tabs
+  const assignedAssessments = assessments.filter(a => a.status === 'upcoming' || a.status === 'live' || a.status === 'missed');
+  const completedAssessments = assessments.filter(a => a.status === 'completed');
+
+  const getFilteredAssessments = () => {
+    const baseAssessments = activeTab === 'assigned' ? assignedAssessments : completedAssessments;
     
-    const matchesStatus = statusFilter === '' || assessment.status === statusFilter;
-    const matchesSubject = subjectFilter === '' || assessment.subject === subjectFilter;
-    
-    return matchesSearch && matchesStatus && matchesSubject;
-  });
+    return baseAssessments.filter(assessment => {
+      const matchesSearch = searchTerm === '' || 
+        assessment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        assessment.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        assessment.faculty.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesStatus = statusFilter === '' || assessment.status === statusFilter;
+      const matchesSubject = subjectFilter === '' || assessment.subject === subjectFilter;
+      
+      return matchesSearch && matchesStatus && matchesSubject;
+    });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -236,14 +266,39 @@ const StudentCodingAssessments: React.FC = () => {
     setShowDetailModal(true);
   };
 
-  const summaryStats = {
-    total: assessments.length,
-    upcoming: assessments.filter(a => a.status === 'upcoming').length,
-    live: assessments.filter(a => a.status === 'live').length,
-    completed: assessments.filter(a => a.status === 'completed').length,
-    missed: assessments.filter(a => a.status === 'missed').length,
-    avgScore: assessments.filter(a => a.obtainedMarks && a.totalMarks).reduce((acc, a) => acc + (a.obtainedMarks! / a.totalMarks * 100), 0) / assessments.filter(a => a.obtainedMarks).length || 0
+  const handleStartAssessment = (assessmentId: string) => {
+    console.log('Starting coding assessment:', assessmentId);
+    // Add your logic to start the assessment
   };
+
+  // Summary stats based on active tab
+  const getSummaryStats = () => {
+    const currentAssessments = activeTab === 'assigned' ? assignedAssessments : completedAssessments;
+    
+    if (activeTab === 'assigned') {
+      return {
+        total: currentAssessments.length,
+        upcoming: currentAssessments.filter(a => a.status === 'upcoming').length,
+        live: currentAssessments.filter(a => a.status === 'live').length,
+        missed: currentAssessments.filter(a => a.status === 'missed').length,
+        easy: currentAssessments.filter(a => a.difficulty === 'easy').length,
+        medium: currentAssessments.filter(a => a.difficulty === 'medium').length,
+        hard: currentAssessments.filter(a => a.difficulty === 'hard').length
+      };
+    } else {
+      return {
+        total: currentAssessments.length,
+        completed: currentAssessments.length,
+        avgScore: currentAssessments.filter(a => a.obtainedMarks && a.totalMarks).reduce((acc, a) => acc + (a.obtainedMarks! / a.totalMarks * 100), 0) / currentAssessments.filter(a => a.obtainedMarks).length || 0,
+        maxScore: Math.max(...currentAssessments.filter(a => a.obtainedMarks).map(a => (a.obtainedMarks! / a.totalMarks * 100))),
+        minScore: Math.min(...currentAssessments.filter(a => a.obtainedMarks).map(a => (a.obtainedMarks! / a.totalMarks * 100))),
+        totalProblems: currentAssessments.reduce((acc, a) => acc + (a.solvedProblems || 0), 0),
+        totalMarks: currentAssessments.reduce((acc, a) => acc + (a.obtainedMarks || 0), 0)
+      };
+    }
+  };
+
+  const summaryStats = getSummaryStats();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
@@ -258,77 +313,171 @@ const StudentCodingAssessments: React.FC = () => {
             Practice and showcase your programming skills through coding challenges
           </p>
         </div>
+       
+      </div>
+
+      {/* Tabs */}
+      <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-8">
         <button
-          className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          aria-label="Toggle theme"
+          onClick={() => setActiveTab('assigned')}
+          className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2 ${
+            activeTab === 'assigned'
+              ? 'bg-blue-500 text-white shadow-md'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
         >
-          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          <Code className="w-5 h-5" />
+          <span>Assigned ({assignedAssessments.length})</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('completed')}
+          className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2 ${
+            activeTab === 'completed'
+              ? 'bg-green-500 text-white shadow-md'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
+        >
+          <Award className="w-5 h-5" />
+          <span>Completed ({completedAssessments.length})</span>
         </button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total</p>
-              <p className="text-2xl font-bold">{summaryStats.total}</p>
+      {activeTab === 'assigned' ? (
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium">Total</p>
+                <p className="text-2xl font-bold">{summaryStats.total}</p>
+              </div>
+              <Code className="w-6 h-6 opacity-80" />
             </div>
-            <Code className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-indigo-100 text-sm font-medium">Upcoming</p>
-              <p className="text-2xl font-bold">{summaryStats.upcoming}</p>
+          <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-indigo-100 text-sm font-medium">Upcoming</p>
+                <p className="text-2xl font-bold">{summaryStats.upcoming}</p>
+              </div>
+              <Clock className="w-6 h-6 opacity-80" />
             </div>
-            <Clock className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Live</p>
-              <p className="text-2xl font-bold">{summaryStats.live}</p>
+          <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Live</p>
+                <p className="text-2xl font-bold">{summaryStats.live}</p>
+              </div>
+              <Zap className="w-6 h-6 opacity-80" />
             </div>
-            <Zap className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">Completed</p>
-              <p className="text-2xl font-bold">{summaryStats.completed}</p>
+          <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-100 text-sm font-medium">Missed</p>
+                <p className="text-2xl font-bold">{summaryStats.missed}</p>
+              </div>
+              <XCircle className="w-6 h-6 opacity-80" />
             </div>
-            <CheckCircle className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-100 text-sm font-medium">Missed</p>
-              <p className="text-2xl font-bold">{summaryStats.missed}</p>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Easy</p>
+                <p className="text-2xl font-bold">{summaryStats.easy}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 opacity-80" />
             </div>
-            <XCircle className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-yellow-100 text-sm font-medium">Avg Score</p>
-              <p className="text-2xl font-bold">{summaryStats.avgScore.toFixed(0)}%</p>
+          <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-100 text-sm font-medium">Medium</p>
+                <p className="text-2xl font-bold">{summaryStats.medium}</p>
+              </div>
+              <Timer className="w-6 h-6 opacity-80" />
             </div>
-            <Star className="w-6 h-6 opacity-80" />
+          </div>
+
+          <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-100 text-sm font-medium">Hard</p>
+                <p className="text-2xl font-bold">{summaryStats.hard}</p>
+              </div>
+              <Cpu className="w-6 h-6 opacity-80" />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-100 text-sm font-medium">Total</p>
+                <p className="text-2xl font-bold">{summaryStats.total}</p>
+              </div>
+              <Code className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Completed</p>
+                <p className="text-2xl font-bold">{summaryStats.completed}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium">Avg Score</p>
+                <p className="text-2xl font-bold">{summaryStats.avgScore ? summaryStats.avgScore.toFixed(0) : 0}%</p>
+              </div>
+              <Star className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-emerald-100 text-sm font-medium">Best Score</p>
+                <p className="text-2xl font-bold">{summaryStats.maxScore && isFinite(summaryStats.maxScore) ? summaryStats.maxScore.toFixed(0) : 0}%</p>
+              </div>
+              <Award className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-orange-100 text-sm font-medium">Lowest Score</p>
+                <p className="text-2xl font-bold">{summaryStats.minScore && isFinite(summaryStats.minScore) ? summaryStats.minScore.toFixed(0) : 0}%</p>
+              </div>
+              <XCircle className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-indigo-100 text-sm font-medium">Problems Solved</p>
+                <p className="text-2xl font-bold">{summaryStats.totalProblems || 0}</p>
+              </div>
+              <Terminal className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
@@ -350,10 +499,15 @@ const StudentCodingAssessments: React.FC = () => {
             className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Status</option>
-            <option value="upcoming">Upcoming</option>
-            <option value="live">Live</option>
-            <option value="completed">Completed</option>
-            <option value="missed">Missed</option>
+            {activeTab === 'assigned' ? (
+              <>
+                <option value="upcoming">Upcoming</option>
+                <option value="live">Live</option>
+                <option value="missed">Missed</option>
+              </>
+            ) : (
+              <option value="completed">Completed</option>
+            )}
           </select>
 
           <select
@@ -385,7 +539,7 @@ const StudentCodingAssessments: React.FC = () => {
 
       {/* Assessments Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredAssessments.map((assessment) => (
+        {getFilteredAssessments().map((assessment) => (
           <div
             key={assessment.id}
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
@@ -438,7 +592,7 @@ const StudentCodingAssessments: React.FC = () => {
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     Duration: {assessment.duration} mins
                   </span>
-                  {assessment.status === 'upcoming' && (
+                  {assessment.status === 'upcoming' && activeTab === 'assigned' && (
                     <span className="text-xs bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 px-2 py-1 rounded">
                       {getTimeUntilAssessment(assessment.scheduledDate)}
                     </span>
@@ -465,34 +619,81 @@ const StudentCodingAssessments: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>Problems: <span className="font-medium">{assessment.totalProblems}</span></div>
                   <div>Marks: <span className="font-medium">{assessment.totalMarks}</span></div>
-                  <div>Attempts: <span className="font-medium">{assessment.attempts}/{assessment.maxAttempts}</span></div>
-                  {assessment.obtainedMarks && (
-                    <div className="text-green-600 dark:text-green-400 font-bold">
-                      Score: {assessment.obtainedMarks}/{assessment.totalMarks}
-                    </div>
+                  {activeTab === 'assigned' ? (
+                    <div className="col-span-2">Attempts: <span className="font-medium">{assessment.attempts}/{assessment.maxAttempts}</span></div>
+                  ) : (
+                    <>
+                      <div className="text-green-600 dark:text-green-400 font-bold">
+                        Score: {assessment.obtainedMarks}/{assessment.totalMarks}
+                      </div>
+                      <div className="text-blue-600 dark:text-blue-400 font-bold">
+                        {assessment.obtainedMarks ? ((assessment.obtainedMarks/assessment.totalMarks)*100).toFixed(1) : 0}%
+                      </div>
+                      {assessment.solvedProblems && (
+                        <div className="text-purple-600 dark:text-purple-400 font-medium">
+                          Solved: {assessment.solvedProblems}/{assessment.totalProblems}
+                        </div>
+                      )}
+                      {assessment.attemptDate && (
+                        <div className="text-xs text-gray-500">
+                          Completed: {new Date(assessment.attemptDate).toLocaleDateString('en-IN')}
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="flex space-x-2">
-                <button
-                  onClick={() => handleViewDetails(assessment)}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
-                >
-                  <Eye className="w-4 h-4" />
-                  <span>View Details</span>
-                </button>
-                {assessment.status === 'live' && (
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1">
-                    <Play className="w-4 h-4" />
-                    <span>Start</span>
-                  </button>
-                )}
-                {assessment.status === 'upcoming' && assessment.attempts < assessment.maxAttempts && (
-                  <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
-                    <Clock className="w-4 h-4" />
-                  </button>
+                {activeTab === 'assigned' ? (
+                  <>
+                    {assessment.status === 'live' && (
+                      <button 
+                        onClick={() => handleStartAssessment(assessment.id)}
+                        className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
+                      >
+                        <Play className="w-4 h-4" />
+                        <span>Start Assessment</span>
+                      </button>
+                    )}
+                    {assessment.status === 'upcoming' && (
+                      <button 
+                        disabled
+                        className="flex-1 bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-2 cursor-not-allowed"
+                      >
+                        <Clock className="w-4 h-4" />
+                        <span>Scheduled</span>
+                      </button>
+                    )}
+                    {assessment.status === 'missed' && (
+                      <button 
+                        disabled
+                        className="flex-1 bg-red-400 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-2 cursor-not-allowed"
+                      >
+                        <XCircle className="w-4 h-4" />
+                        <span>Missed</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleViewDetails(assessment)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>View</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleViewDetails(assessment)}
+                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>View Score Details</span>
+                    </button>
+                    
+                  </>
                 )}
               </div>
             </div>
@@ -604,11 +805,11 @@ const StudentCodingAssessments: React.FC = () => {
                     </div>
                   </div>
 
-                  {selectedAssessment.status === 'completed' && selectedAssessment.obtainedMarks && (
+                  {selectedAssessment.status === 'completed' && selectedAssessment.obtainedMarks !== undefined && (
                     <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2 flex items-center">
                         <Award className="w-5 h-5 mr-2" />
-                        Results
+                        Coding Results
                       </h4>
                       <div className="space-y-2">
                         <div className="flex justify-between">
@@ -662,7 +863,10 @@ const StudentCodingAssessments: React.FC = () => {
                       <p className="text-sm text-green-600 dark:text-green-400 mb-3">
                         The coding assessment is currently active. Click the button below to join.
                       </p>
-                      <button className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2">
+                      <button 
+                        onClick={() => handleStartAssessment(selectedAssessment.id)}
+                        className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2"
+                      >
                         <Play className="w-4 h-4" />
                         <span>Join Assessment Now</span>
                       </button>
@@ -680,7 +884,10 @@ const StudentCodingAssessments: React.FC = () => {
                 Close
               </button>
               {selectedAssessment.status === 'live' && (
-                <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium flex items-center space-x-2">
+                <button 
+                  onClick={() => handleStartAssessment(selectedAssessment.id)}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium flex items-center space-x-2"
+                >
                   <Code className="w-4 h-4" />
                   <span>Start Coding</span>
                 </button>

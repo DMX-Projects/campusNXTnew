@@ -46,6 +46,7 @@ const StudentOnlineTests: React.FC = () => {
     return savedTheme ? savedTheme === 'dark' : false;
   });
 
+  const [activeTab, setActiveTab] = useState<'assigned' | 'completed'>('assigned');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [subjectFilter, setSubjectFilter] = useState<string>('');
@@ -157,6 +158,26 @@ const StudentOnlineTests: React.FC = () => {
       type: 'mcq',
       attempts: 1,
       maxAttempts: 2
+    },
+    {
+      id: '7',
+      title: 'Algorithm Analysis Quiz',
+      description: 'Quick quiz on time and space complexity analysis',
+      subject: 'Data Structures',
+      faculty: 'Dr. Rajesh Kumar',
+      scheduledDate: '2025-09-18T15:00:00',
+      duration: 30,
+      totalQuestions: 15,
+      totalMarks: 30,
+      status: 'completed',
+      attemptDate: '2025-09-18T15:00:00',
+      obtainedMarks: 28,
+      correctAnswers: 14,
+      timeSpent: 28,
+      difficulty: 'easy',
+      type: 'mcq',
+      attempts: 1,
+      maxAttempts: 1
     }
   ]);
 
@@ -169,17 +190,25 @@ const StudentOnlineTests: React.FC = () => {
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
-  const filteredTests = tests.filter(test => {
-    const matchesSearch = searchTerm === '' || 
-      test.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      test.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      test.faculty.toLowerCase().includes(searchTerm.toLowerCase());
+  // Separate tests based on status for different tabs
+  const assignedTests = tests.filter(t => t.status === 'upcoming' || t.status === 'live' || t.status === 'missed');
+  const completedTests = tests.filter(t => t.status === 'completed');
+
+  const getFilteredTests = () => {
+    const baseTests = activeTab === 'assigned' ? assignedTests : completedTests;
     
-    const matchesStatus = statusFilter === '' || test.status === statusFilter;
-    const matchesSubject = subjectFilter === '' || test.subject === subjectFilter;
-    
-    return matchesSearch && matchesStatus && matchesSubject;
-  });
+    return baseTests.filter(test => {
+      const matchesSearch = searchTerm === '' || 
+        test.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        test.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        test.faculty.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesStatus = statusFilter === '' || test.status === statusFilter;
+      const matchesSubject = subjectFilter === '' || test.subject === subjectFilter;
+      
+      return matchesSearch && matchesStatus && matchesSubject;
+    });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -227,14 +256,39 @@ const StudentOnlineTests: React.FC = () => {
     setShowDetailModal(true);
   };
 
-  const summaryStats = {
-    total: tests.length,
-    upcoming: tests.filter(t => t.status === 'upcoming').length,
-    live: tests.filter(t => t.status === 'live').length,
-    completed: tests.filter(t => t.status === 'completed').length,
-    missed: tests.filter(t => t.status === 'missed').length,
-    avgScore: tests.filter(t => t.obtainedMarks && t.totalMarks).reduce((acc, t) => acc + (t.obtainedMarks! / t.totalMarks * 100), 0) / tests.filter(t => t.obtainedMarks).length || 0
+  const handleStartTest = (testId: string) => {
+    console.log('Starting test:', testId);
+    // Add your logic to start the test
   };
+
+  // Summary stats based on active tab
+  const getSummaryStats = () => {
+    const currentTests = activeTab === 'assigned' ? assignedTests : completedTests;
+    
+    if (activeTab === 'assigned') {
+      return {
+        total: currentTests.length,
+        upcoming: currentTests.filter(t => t.status === 'upcoming').length,
+        live: currentTests.filter(t => t.status === 'live').length,
+        missed: currentTests.filter(t => t.status === 'missed').length,
+        easy: currentTests.filter(t => t.difficulty === 'easy').length,
+        medium: currentTests.filter(t => t.difficulty === 'medium').length,
+        hard: currentTests.filter(t => t.difficulty === 'hard').length
+      };
+    } else {
+      return {
+        total: currentTests.length,
+        completed: currentTests.length,
+        avgScore: currentTests.filter(t => t.obtainedMarks && t.totalMarks).reduce((acc, t) => acc + (t.obtainedMarks! / t.totalMarks * 100), 0) / currentTests.filter(t => t.obtainedMarks).length || 0,
+        maxScore: Math.max(...currentTests.filter(t => t.obtainedMarks).map(t => (t.obtainedMarks! / t.totalMarks * 100))),
+        minScore: Math.min(...currentTests.filter(t => t.obtainedMarks).map(t => (t.obtainedMarks! / t.totalMarks * 100))),
+        totalMarks: currentTests.reduce((acc, t) => acc + (t.obtainedMarks || 0), 0),
+        maxPossible: currentTests.reduce((acc, t) => acc + t.totalMarks, 0)
+      };
+    }
+  };
+
+  const summaryStats = getSummaryStats();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
@@ -249,77 +303,171 @@ const StudentOnlineTests: React.FC = () => {
             Take online tests and track your performance across all subjects
           </p>
         </div>
+       
+      </div>
+
+      {/* Tabs */}
+      <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-8">
         <button
-          className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          aria-label="Toggle theme"
+          onClick={() => setActiveTab('assigned')}
+          className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2 ${
+            activeTab === 'assigned'
+              ? 'bg-blue-500 text-white shadow-md'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
         >
-          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          <Clock className="w-5 h-5" />
+          <span>Assigned Tests ({assignedTests.length})</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('completed')}
+          className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2 ${
+            activeTab === 'completed'
+              ? 'bg-green-500 text-white shadow-md'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
+        >
+          <Award className="w-5 h-5" />
+          <span>Completed Tests ({completedTests.length})</span>
         </button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total</p>
-              <p className="text-2xl font-bold">{summaryStats.total}</p>
+      {activeTab === 'assigned' ? (
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium">Total</p>
+                <p className="text-2xl font-bold">{summaryStats.total}</p>
+              </div>
+              <Monitor className="w-6 h-6 opacity-80" />
             </div>
-            <Monitor className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-indigo-100 text-sm font-medium">Upcoming</p>
-              <p className="text-2xl font-bold">{summaryStats.upcoming}</p>
+          <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-indigo-100 text-sm font-medium">Upcoming</p>
+                <p className="text-2xl font-bold">{summaryStats.upcoming}</p>
+              </div>
+              <Clock className="w-6 h-6 opacity-80" />
             </div>
-            <Clock className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Live</p>
-              <p className="text-2xl font-bold">{summaryStats.live}</p>
+          <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Live</p>
+                <p className="text-2xl font-bold">{summaryStats.live}</p>
+              </div>
+              <Play className="w-6 h-6 opacity-80" />
             </div>
-            <Play className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">Completed</p>
-              <p className="text-2xl font-bold">{summaryStats.completed}</p>
+          <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-100 text-sm font-medium">Missed</p>
+                <p className="text-2xl font-bold">{summaryStats.missed}</p>
+              </div>
+              <XCircle className="w-6 h-6 opacity-80" />
             </div>
-            <CheckCircle className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-100 text-sm font-medium">Missed</p>
-              <p className="text-2xl font-bold">{summaryStats.missed}</p>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Easy</p>
+                <p className="text-2xl font-bold">{summaryStats.easy}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 opacity-80" />
             </div>
-            <XCircle className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-yellow-100 text-sm font-medium">Avg Score</p>
-              <p className="text-2xl font-bold">{summaryStats.avgScore.toFixed(0)}%</p>
+          <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-100 text-sm font-medium">Medium</p>
+                <p className="text-2xl font-bold">{summaryStats.medium}</p>
+              </div>
+              <Timer className="w-6 h-6 opacity-80" />
             </div>
-            <Star className="w-6 h-6 opacity-80" />
+          </div>
+
+          <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-100 text-sm font-medium">Hard</p>
+                <p className="text-2xl font-bold">{summaryStats.hard}</p>
+              </div>
+              <XCircle className="w-6 h-6 opacity-80" />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-100 text-sm font-medium">Total Tests</p>
+                <p className="text-2xl font-bold">{summaryStats.total}</p>
+              </div>
+              <Monitor className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Completed</p>
+                <p className="text-2xl font-bold">{summaryStats.completed}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium">Avg Score</p>
+                <p className="text-2xl font-bold">{summaryStats.avgScore ? summaryStats.avgScore.toFixed(0) : 0}%</p>
+              </div>
+              <Star className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-emerald-100 text-sm font-medium">Best Score</p>
+                <p className="text-2xl font-bold">{summaryStats.maxScore && isFinite(summaryStats.maxScore) ? summaryStats.maxScore.toFixed(0) : 0}%</p>
+              </div>
+              <Award className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-orange-100 text-sm font-medium">Lowest Score</p>
+                <p className="text-2xl font-bold">{summaryStats.minScore && isFinite(summaryStats.minScore) ? summaryStats.minScore.toFixed(0) : 0}%</p>
+              </div>
+              <XCircle className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-indigo-100 text-sm font-medium">Total Score</p>
+                <p className="text-2xl font-bold">{summaryStats.totalMarks || 0}</p>
+              </div>
+              <Star className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
@@ -341,10 +489,15 @@ const StudentOnlineTests: React.FC = () => {
             className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Status</option>
-            <option value="upcoming">Upcoming</option>
-            <option value="live">Live</option>
-            <option value="completed">Completed</option>
-            <option value="missed">Missed</option>
+            {activeTab === 'assigned' ? (
+              <>
+                <option value="upcoming">Upcoming</option>
+                <option value="live">Live</option>
+                <option value="missed">Missed</option>
+              </>
+            ) : (
+              <option value="completed">Completed</option>
+            )}
           </select>
 
           <select
@@ -376,7 +529,7 @@ const StudentOnlineTests: React.FC = () => {
 
       {/* Tests Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTests.map((test) => (
+        {getFilteredTests().map((test) => (
           <div
             key={test.id}
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
@@ -429,7 +582,7 @@ const StudentOnlineTests: React.FC = () => {
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     Duration: {test.duration} mins
                   </span>
-                  {test.status === 'upcoming' && (
+                  {test.status === 'upcoming' && activeTab === 'assigned' && (
                     <span className="text-xs bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300 px-2 py-1 rounded">
                       {getTimeUntilTest(test.scheduledDate)}
                     </span>
@@ -438,34 +591,76 @@ const StudentOnlineTests: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>Questions: <span className="font-medium">{test.totalQuestions}</span></div>
                   <div>Marks: <span className="font-medium">{test.totalMarks}</span></div>
-                  <div>Attempts: <span className="font-medium">{test.attempts}/{test.maxAttempts}</span></div>
-                  {test.obtainedMarks && (
-                    <div className="text-green-600 dark:text-green-400 font-bold">
-                      Score: {test.obtainedMarks}/{test.totalMarks}
-                    </div>
+                  {activeTab === 'assigned' ? (
+                    <div className="col-span-2">Attempts: <span className="font-medium">{test.attempts}/{test.maxAttempts}</span></div>
+                  ) : (
+                    <>
+                      <div className="text-green-600 dark:text-green-400 font-bold">
+                        Score: {test.obtainedMarks}/{test.totalMarks}
+                      </div>
+                      <div className="text-blue-600 dark:text-blue-400 font-bold">
+                        {test.obtainedMarks ? ((test.obtainedMarks/test.totalMarks)*100).toFixed(1) : 0}%
+                      </div>
+                      {test.attemptDate && (
+                        <div className="col-span-2 text-xs text-gray-500">
+                          Completed: {new Date(test.attemptDate).toLocaleDateString('en-IN')}
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="flex space-x-2">
-                <button
-                  onClick={() => handleViewDetails(test)}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
-                >
-                  <Eye className="w-4 h-4" />
-                  <span>View Details</span>
-                </button>
-                {test.status === 'live' && (
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1">
-                    <Play className="w-4 h-4" />
-                    <span>Start Test</span>
-                  </button>
-                )}
-                {test.status === 'upcoming' && test.attempts < test.maxAttempts && (
-                  <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
-                    <Clock className="w-4 h-4" />
-                  </button>
+                {activeTab === 'assigned' ? (
+                  <>
+                    {test.status === 'live' && (
+                      <button 
+                        onClick={() => handleStartTest(test.id)}
+                        className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
+                      >
+                        <Play className="w-4 h-4" />
+                        <span>Start Test</span>
+                      </button>
+                    )}
+                    {test.status === 'upcoming' && (
+                      <button 
+                        disabled
+                        className="flex-1 bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-2 cursor-not-allowed"
+                      >
+                        <Clock className="w-4 h-4" />
+                        <span>Scheduled</span>
+                      </button>
+                    )}
+                    {test.status === 'missed' && (
+                      <button 
+                        disabled
+                        className="flex-1 bg-red-400 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-2 cursor-not-allowed"
+                      >
+                        <XCircle className="w-4 h-4" />
+                        <span>Missed</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleViewDetails(test)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>View</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleViewDetails(test)}
+                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>View Score Details</span>
+                    </button>
+                    
+                  </>
                 )}
               </div>
             </div>
@@ -554,7 +749,7 @@ const StudentOnlineTests: React.FC = () => {
                     </div>
                   </div>
 
-                  {selectedTest.status === 'completed' && selectedTest.obtainedMarks && (
+                  {selectedTest.status === 'completed' && selectedTest.obtainedMarks !== undefined && (
                     <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2 flex items-center">
                         <Award className="w-5 h-5 mr-2" />
@@ -601,6 +796,15 @@ const StudentOnlineTests: React.FC = () => {
                       </ul>
                     </div>
                   )}
+
+                  {selectedTest.status === 'live' && (
+                    <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
+                      <h4 className="font-semibold mb-2 text-green-700 dark:text-green-300">Test is Live!</h4>
+                      <p className="text-sm text-green-600 dark:text-green-400">
+                        The test is currently available. Click "Start Test" to begin.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -613,7 +817,10 @@ const StudentOnlineTests: React.FC = () => {
                 Close
               </button>
               {selectedTest.status === 'live' && (
-                <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium flex items-center space-x-2">
+                <button 
+                  onClick={() => handleStartTest(selectedTest.id)}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium flex items-center space-x-2"
+                >
                   <Play className="w-4 h-4" />
                   <span>Start Test Now</span>
                 </button>
@@ -627,3 +834,4 @@ const StudentOnlineTests: React.FC = () => {
 };
 
 export default StudentOnlineTests;
+

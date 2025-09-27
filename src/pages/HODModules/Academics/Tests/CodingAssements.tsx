@@ -920,7 +920,7 @@ const Card: React.FC<Props> = ({ title, children }) => {
               <div className="flex items-center">
                 <Code className="w-8 h-8 mr-3" />
                 <div>
-                  <h1 className="text-2xl lg:text-3xl font-bold mb-2">Coding Assessments Hub</h1>
+                  <h1 className="text-2xl lg:text-3xl font-bold mb-2">Coding Assessments</h1>
                   <p className="text-emerald-100">Manage coding challenges and evaluate programming skills</p>
                 </div>
               </div>

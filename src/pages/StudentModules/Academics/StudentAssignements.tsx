@@ -15,7 +15,9 @@ import {
   Eye,
   BookOpen,
   User,
-  Star
+  Star,
+  Play,
+  Award
 } from 'lucide-react';
 
 interface Assignment {
@@ -43,6 +45,7 @@ const StudentAssignments: React.FC = () => {
     return savedTheme ? savedTheme === 'dark' : false;
   });
 
+  const [activeTab, setActiveTab] = useState<'assigned' | 'submitted'>('assigned');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [subjectFilter, setSubjectFilter] = useState<string>('');
@@ -140,6 +143,23 @@ const StudentAssignments: React.FC = () => {
       priority: 'medium',
       type: 'group',
       submissionFile: 'case_study_report.pdf'
+    },
+    {
+      id: '7',
+      title: 'Algorithm Optimization',
+      description: 'Optimize sorting algorithms and analyze their time complexity',
+      subject: 'Data Structures',
+      faculty: 'Dr. Rajesh Kumar',
+      assignedDate: '2025-09-14',
+      dueDate: '2025-09-28',
+      totalMarks: 95,
+      status: 'graded',
+      submittedDate: '2025-09-26',
+      obtainedMarks: 88,
+      feedback: 'Excellent optimization techniques demonstrated. Minor improvements needed in complexity analysis.',
+      priority: 'medium',
+      type: 'individual',
+      submissionFile: 'algorithm_optimization.zip'
     }
   ]);
 
@@ -152,17 +172,25 @@ const StudentAssignments: React.FC = () => {
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
-  const filteredAssignments = assignments.filter(assignment => {
-    const matchesSearch = searchTerm === '' || 
-      assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      assignment.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      assignment.faculty.toLowerCase().includes(searchTerm.toLowerCase());
+  // Separate assignments based on status for different tabs
+  const assignedAssignments = assignments.filter(a => a.status === 'pending' || a.status === 'overdue');
+  const submittedAssignments = assignments.filter(a => a.status === 'submitted' || a.status === 'graded');
+
+  const getFilteredAssignments = () => {
+    const baseAssignments = activeTab === 'assigned' ? assignedAssignments : submittedAssignments;
     
-    const matchesStatus = statusFilter === '' || assignment.status === statusFilter;
-    const matchesSubject = subjectFilter === '' || assignment.subject === subjectFilter;
-    
-    return matchesSearch && matchesStatus && matchesSubject;
-  });
+    return baseAssignments.filter(assignment => {
+      const matchesSearch = searchTerm === '' || 
+        assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        assignment.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        assignment.faculty.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesStatus = statusFilter === '' || assignment.status === statusFilter;
+      const matchesSubject = subjectFilter === '' || assignment.subject === subjectFilter;
+      
+      return matchesSearch && matchesStatus && matchesSubject;
+    });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -206,14 +234,37 @@ const StudentAssignments: React.FC = () => {
     setShowDetailModal(true);
   };
 
-  const summaryStats = {
-    total: assignments.length,
-    pending: assignments.filter(a => a.status === 'pending').length,
-    submitted: assignments.filter(a => a.status === 'submitted').length,
-    graded: assignments.filter(a => a.status === 'graded').length,
-    overdue: assignments.filter(a => a.status === 'overdue').length,
-    avgGrade: assignments.filter(a => a.obtainedMarks && a.totalMarks).reduce((acc, a) => acc + (a.obtainedMarks! / a.totalMarks * 100), 0) / assignments.filter(a => a.obtainedMarks).length || 0
+  const handleStartAssignment = (assignmentId: string) => {
+    console.log('Starting assignment:', assignmentId);
+    // Add your logic to start the assignment
   };
+
+  // Summary stats based on active tab
+  const getSummaryStats = () => {
+    const currentAssignments = activeTab === 'assigned' ? assignedAssignments : submittedAssignments;
+    
+    if (activeTab === 'assigned') {
+      return {
+        total: currentAssignments.length,
+        pending: currentAssignments.filter(a => a.status === 'pending').length,
+        overdue: currentAssignments.filter(a => a.status === 'overdue').length,
+        high: currentAssignments.filter(a => a.priority === 'high').length,
+        medium: currentAssignments.filter(a => a.priority === 'medium').length,
+        low: currentAssignments.filter(a => a.priority === 'low').length
+      };
+    } else {
+      return {
+        total: currentAssignments.length,
+        submitted: currentAssignments.filter(a => a.status === 'submitted').length,
+        graded: currentAssignments.filter(a => a.status === 'graded').length,
+        avgGrade: currentAssignments.filter(a => a.obtainedMarks && a.totalMarks).reduce((acc, a) => acc + (a.obtainedMarks! / a.totalMarks * 100), 0) / currentAssignments.filter(a => a.obtainedMarks).length || 0,
+        maxGrade: Math.max(...currentAssignments.filter(a => a.obtainedMarks).map(a => (a.obtainedMarks! / a.totalMarks * 100))),
+        minGrade: Math.min(...currentAssignments.filter(a => a.obtainedMarks).map(a => (a.obtainedMarks! / a.totalMarks * 100)))
+      };
+    }
+  };
+
+  const summaryStats = getSummaryStats();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
@@ -228,77 +279,161 @@ const StudentAssignments: React.FC = () => {
             Track and manage all your course assignments and submissions
           </p>
         </div>
+    
+      </div>
+
+      {/* Tabs */}
+      <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-8">
         <button
-          className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          aria-label="Toggle theme"
+          onClick={() => setActiveTab('assigned')}
+          className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2 ${
+            activeTab === 'assigned'
+              ? 'bg-blue-500 text-white shadow-md'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
         >
-          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          <Clock className="w-5 h-5" />
+          <span>Assigned ({assignedAssignments.length})</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('submitted')}
+          className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2 ${
+            activeTab === 'submitted'
+              ? 'bg-green-500 text-white shadow-md'
+              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+          }`}
+        >
+          <Award className="w-5 h-5" />
+          <span>Submitted ({submittedAssignments.length})</span>
         </button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total</p>
-              <p className="text-2xl font-bold">{summaryStats.total}</p>
+      {activeTab === 'assigned' ? (
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium">Total</p>
+                <p className="text-2xl font-bold">{summaryStats.total}</p>
+              </div>
+              <FileText className="w-6 h-6 opacity-80" />
             </div>
-            <FileText className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-yellow-100 text-sm font-medium">Pending</p>
-              <p className="text-2xl font-bold">{summaryStats.pending}</p>
+          <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-100 text-sm font-medium">Pending</p>
+                <p className="text-2xl font-bold">{summaryStats.pending}</p>
+              </div>
+              <Clock className="w-6 h-6 opacity-80" />
             </div>
-            <Clock className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Submitted</p>
-              <p className="text-2xl font-bold">{summaryStats.submitted}</p>
+          <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-100 text-sm font-medium">Overdue</p>
+                <p className="text-2xl font-bold">{summaryStats.overdue}</p>
+              </div>
+              <XCircle className="w-6 h-6 opacity-80" />
             </div>
-            <CheckCircle className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Graded</p>
-              <p className="text-2xl font-bold">{summaryStats.graded}</p>
+          <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-red-100 text-sm font-medium">High Priority</p>
+                <p className="text-2xl font-bold">{summaryStats.high}</p>
+              </div>
+              <AlertTriangle className="w-6 h-6 opacity-80" />
             </div>
-            <Star className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-100 text-sm font-medium">Overdue</p>
-              <p className="text-2xl font-bold">{summaryStats.overdue}</p>
+          <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-100 text-sm font-medium">Medium Priority</p>
+                <p className="text-2xl font-bold">{summaryStats.medium}</p>
+              </div>
+              <Clock className="w-6 h-6 opacity-80" />
             </div>
-            <XCircle className="w-6 h-6 opacity-80" />
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">Avg Grade</p>
-              <p className="text-2xl font-bold">{summaryStats.avgGrade.toFixed(0)}%</p>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Low Priority</p>
+                <p className="text-2xl font-bold">{summaryStats.low}</p>
+              </div>
+              <CheckCircle className="w-6 h-6 opacity-80" />
             </div>
-            <Star className="w-6 h-6 opacity-80" />
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium">Total</p>
+                <p className="text-2xl font-bold">{summaryStats.total}</p>
+              </div>
+              <FileText className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-sm font-medium">Submitted</p>
+                <p className="text-2xl font-bold">{summaryStats.submitted}</p>
+              </div>
+              <Upload className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Graded</p>
+                <p className="text-2xl font-bold">{summaryStats.graded}</p>
+              </div>
+              <Star className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-100 text-sm font-medium">Avg Grade</p>
+                <p className="text-2xl font-bold">{summaryStats.avgGrade ? summaryStats.avgGrade.toFixed(0) : 0}%</p>
+              </div>
+              <Award className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Best Score</p>
+                <p className="text-2xl font-bold">{summaryStats.maxGrade && isFinite(summaryStats.maxGrade) ? summaryStats.maxGrade.toFixed(0) : 0}%</p>
+              </div>
+              <Star className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-orange-100 text-sm font-medium">Min Score</p>
+                <p className="text-2xl font-bold">{summaryStats.minGrade && isFinite(summaryStats.minGrade) ? summaryStats.minGrade.toFixed(0) : 0}%</p>
+              </div>
+              <AlertTriangle className="w-6 h-6 opacity-80" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
@@ -320,10 +455,17 @@ const StudentAssignments: React.FC = () => {
             className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="submitted">Submitted</option>
-            <option value="graded">Graded</option>
-            <option value="overdue">Overdue</option>
+            {activeTab === 'assigned' ? (
+              <>
+                <option value="pending">Pending</option>
+                <option value="overdue">Overdue</option>
+              </>
+            ) : (
+              <>
+                <option value="submitted">Submitted</option>
+                <option value="graded">Graded</option>
+              </>
+            )}
           </select>
 
           <select
@@ -355,7 +497,7 @@ const StudentAssignments: React.FC = () => {
 
       {/* Assignments Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredAssignments.map((assignment) => (
+        {getFilteredAssignments().map((assignment) => (
           <div
             key={assignment.id}
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
@@ -402,46 +544,68 @@ const StudentAssignments: React.FC = () => {
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     Due: {new Date(assignment.dueDate).toLocaleDateString('en-IN')}
                   </span>
-                  <span className={`text-xs font-medium px-2 py-1 rounded ${
-                    getDaysRemaining(assignment.dueDate) < 0 ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' :
-                    getDaysRemaining(assignment.dueDate) <= 3 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' :
-                    'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                  }`}>
-                    {getDaysRemaining(assignment.dueDate) < 0 
-                      ? `${Math.abs(getDaysRemaining(assignment.dueDate))} days overdue`
-                      : `${getDaysRemaining(assignment.dueDate)} days left`}
-                  </span>
+                  {activeTab === 'assigned' && (
+                    <span className={`text-xs font-medium px-2 py-1 rounded ${
+                      getDaysRemaining(assignment.dueDate) < 0 ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300' :
+                      getDaysRemaining(assignment.dueDate) <= 3 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300' :
+                      'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+                    }`}>
+                      {getDaysRemaining(assignment.dueDate) < 0 
+                        ? `${Math.abs(getDaysRemaining(assignment.dueDate))} days overdue`
+                        : `${getDaysRemaining(assignment.dueDate)} days left`}
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Total Marks: {assignment.totalMarks}</span>
-                  {assignment.obtainedMarks && (
+                  {assignment.obtainedMarks && activeTab === 'submitted' && (
                     <span className="text-sm font-bold text-green-600 dark:text-green-400">
                       Score: {assignment.obtainedMarks}/{assignment.totalMarks} ({((assignment.obtainedMarks/assignment.totalMarks)*100).toFixed(0)}%)
                     </span>
                   )}
                 </div>
+                {activeTab === 'submitted' && assignment.submittedDate && (
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      Submitted: {new Date(assignment.submittedDate).toLocaleDateString('en-IN')}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons */}
               <div className="flex space-x-2">
-                <button
-                  onClick={() => handleViewDetails(assignment)}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
-                >
-                  <Eye className="w-4 h-4" />
-                  <span>View Details</span>
-                </button>
-                {assignment.status === 'pending' && (
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1">
-                    <Upload className="w-4 h-4" />
-                    <span>Submit</span>
-                  </button>
+                {activeTab === 'assigned' ? (
+                  <>
+                    <button
+                      onClick={() => handleStartAssignment(assignment.id)}
+                      className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <Play className="w-4 h-4" />
+                      <span>Start</span>
+                    </button>
+                    <button
+                      onClick={() => handleViewDetails(assignment)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>View</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleViewDetails(assignment)}
+                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>View Details</span>
+                    </button>
+                    {assignment.status === 'graded' && null}
+                  </>
                 )}
-                {assignment.attachments && assignment.attachments.length > 0 && (
-                  <button className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
-                    <Download className="w-4 h-4" />
-                  </button>
-                )}
+                {assignment.attachments && assignment.attachments.length > 0 && null}
               </div>
             </div>
           </div>
@@ -576,8 +740,12 @@ const StudentAssignments: React.FC = () => {
                 Close
               </button>
               {selectedAssignment.status === 'pending' && (
-                <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium">
-                  Submit Assignment
+                <button 
+                  onClick={() => handleStartAssignment(selectedAssignment.id)}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium flex items-center space-x-2"
+                >
+                  <Play className="w-4 h-4" />
+                  <span>Start Assignment</span>
                 </button>
               )}
             </div>

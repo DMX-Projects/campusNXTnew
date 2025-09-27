@@ -645,7 +645,7 @@ const Assignment = () => {
         {/* Header */}
         <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-t-lg p-6 text-white flex flex-col md:flex-row md:justify-between md:items-center">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">HOD Assignment Manager</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">Assignment Manager</h1>
             <p className="mt-1 text-blue-100">Manage assignments and student submissions</p>
           </div>
           <div className="hidden md:flex gap-4 items-center">
