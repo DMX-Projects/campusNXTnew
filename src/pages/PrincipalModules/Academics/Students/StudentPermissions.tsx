@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React, { useState, useEffect } from 'react';
 
 interface LeaveRequest {
@@ -1230,14 +1230,3 @@ const StudentPermissions: React.FC = () => {
 };
 
 export default StudentPermissions;
-=======
-import React from 'react'
-
-const StudentPermissions = () => {
-  return (
-    <div>StudentPermissions</div>
-  )
-}
-
-export default StudentPermissions
->>>>>>> Stashed changes

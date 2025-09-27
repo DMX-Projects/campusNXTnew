@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React, { useState, useEffect } from 'react';
 import { 
   Building2, 
@@ -316,14 +316,3 @@ const InfrastructureManagement: React.FC = () => {
 };
 
 export default InfrastructureManagement;
-=======
-import React from 'react'
-
-const InfrastructureManagement = () => {
-  return (
-    <div>InfrastructureManagement</div>
-  )
-}
-
-export default InfrastructureManagement
->>>>>>> Stashed changes

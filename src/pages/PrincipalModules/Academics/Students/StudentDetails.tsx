@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React, { useState, useEffect } from 'react';
 
 interface StudentData {
@@ -1168,14 +1168,3 @@ const StudentDetails: React.FC = () => {
 };
 
 export default StudentDetails;
-=======
-import React from 'react'
-
-const StudentDetails = () => {
-  return (
-    <div>StudentDetails</div>
-  )
-}
-
-export default StudentDetails
->>>>>>> Stashed changes

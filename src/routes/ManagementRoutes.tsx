@@ -80,11 +80,6 @@ import FeePayment from "../pages/TempStudentModule/FeePayment";
 import DocumentUpload from "../pages/TempStudentModule/DocumentUpload";
 import OnboardingForm from "../pages/TempStudentModule/OnboardingForm";
 import TempNotifications from "../pages/TempStudentModule/Notifications";
-import EmployeeAttendance from "../pages/PrincipalModules/Administration/Employee/EmployeeAttendance";
-import StudentDetails from "../pages/PrincipalModules/Administration/StudentDetails";
-import FacultyDetails from "../pages/PrincipalModules/Administration/FacultyDetails";
-import StudentTransfers from "../pages/PrincipalModules/Administration/StudentTransfers";
-import InfrastructureManagement from "../pages/PrincipalModules/Administration/InfrastructureManagement";
 
 import BlockManagement from "../pages/RegistorModule/Infrastructure/BlockManagement";
 import EmployeeAttendance from "../pages/PrincipalModules/Administration/Employee/EmployeeAttendance";

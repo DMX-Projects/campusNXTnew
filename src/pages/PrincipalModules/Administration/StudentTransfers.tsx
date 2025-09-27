@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React, { useState, useEffect } from 'react';
 import { 
   ArrowRightLeft, 
@@ -1413,14 +1413,4 @@ const StudentTransfers: React.FC = () => {
 };
 
 export default StudentTransfers;
-=======
-import React from 'react'
 
-const StudentTransfers = () => {
-  return (
-    <div>StudentTransfers</div>
-  )
-}
-
-export default StudentTransfers
->>>>>>> Stashed changes

@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React, { useState, useEffect } from 'react';
 import { Eye } from 'lucide-react';
 
@@ -624,14 +624,3 @@ const FacultyFeedbackPrincipal: React.FC = () => {
 };
 
 export default FacultyFeedbackPrincipal;
-=======
-import React from 'react'
-
-const FacultyFeedbackPrincipal = () => {
-  return (
-    <div>FacultyFeedbackPrincipal</div>
-  )
-}
-
-export default FacultyFeedbackPrincipal
->>>>>>> Stashed changes

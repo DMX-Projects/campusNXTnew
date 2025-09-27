@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 import React, { useState, useEffect } from 'react';
 import { 
   Users, 
@@ -1131,14 +1131,3 @@ const EmployeeAttendance: React.FC = () => {
 };
 
 export default EmployeeAttendance;
-=======
-import React from 'react'
-
-const EmployeeAttendance = () => {
-  return (
-    <div>EmployeeAttendance</div>
-  )
-}
-
-export default EmployeeAttendance
->>>>>>> Stashed changes
