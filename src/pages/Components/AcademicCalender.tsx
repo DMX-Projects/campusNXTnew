@@ -1,9 +1,11 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, ElementType } from 'react';
 import { 
     Calendar, Download, FileText, Search, RefreshCw, GraduationCap, 
-    Building, PartyPopper, FileCheck, CalendarX 
+    PartyPopper, FileCheck, CalendarX, Plus, Upload, Edit, Trash2, X 
 } from 'lucide-react';
+import { useAuth } from '../../../src/contexts/AuthContext';
 
+// --- TYPES ---
 interface AcademicEvent {
   id: string;
   academicYear: string;
@@ -25,146 +27,87 @@ interface AcademicCalendarPDF {
   academicYear: string;
 }
 
-const categoryStyles = {
-    Academic: { 
-        icon: GraduationCap, 
-        borderColor: 'border-indigo-500', 
-        textColor: 'text-indigo-600 dark:text-indigo-400'
-    },
-    Examination: { 
-        icon: FileCheck, 
-        borderColor: 'border-amber-500', 
-        textColor: 'text-amber-600 dark:text-amber-400'
-    },
-    Holiday: { 
-        icon: PartyPopper,
-        borderColor: 'border-teal-500', 
-        textColor: 'text-teal-600 dark:text-teal-400'
-    },
-    Event: { 
-        icon: PartyPopper, 
-        borderColor: 'border-pink-500', 
-        textColor: 'text-pink-600 dark:text-pink-400'
-    },
+// --- STYLING & ICONS ---
+const categoryStyles: { [key in AcademicEvent['category']]: { icon: ElementType; textColor: string; } } = {
+    Academic: { icon: GraduationCap, textColor: 'text-indigo-600 dark:text-indigo-400' },
+    Examination: { icon: FileCheck, textColor: 'text-amber-600 dark:text-amber-400' },
+    Holiday: { icon: PartyPopper, textColor: 'text-teal-600 dark:text-teal-400' },
+    Event: { icon: PartyPopper, textColor: 'text-pink-600 dark:text-pink-400' },
 };
 
-const styles = {
-  page: "w-full min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-200 font-sans",
-  container: "w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8",
-  
-  header: "mb-8 pb-4 border-b border-gray-200 dark:border-gray-700",
-  headerTitle: "text-4xl lg:text-5xl font-bold text-black dark:text-white",
-
-  headerSubtitle: "text-lg text-gray-600 dark:text-gray-400 mt-2",
-  
-  section: "mb-12",
-  sectionTitle: "text-2xl font-semibold mb-6 flex items-center gap-3",
-  sectionTitleIcon: "w-7 h-7",
-
-  // --- DARK MODE FIX: Re-added dark mode backgrounds for visibility ---
-  filtersSection: "bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 mb-8 shadow-sm", 
-  filterTitle: "text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4",
-  filtersGrid: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4",
-  filterGroup: "space-y-2",
-  filterLabel: "text-sm font-medium text-gray-700 dark:text-gray-300",
-  filterInput: "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all",
-  filterSelect: "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all appearance-none",
-  filterActions: "mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 items-center",
-  filterButtonContainer: "flex justify-start md:justify-end md:self-end h-full",
-
-  button: "inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2",
-  buttonIcon: "w-4 h-4",
-  buttonSecondary: "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 focus:ring-gray-500",
-  buttonPrimary: "bg-indigo-600 hover:bg-indigo-700 text-white focus:ring-indigo-500 transform hover:scale-105",
-
-  // --- DARK MODE FIX: Re-added dark mode backgrounds for visibility ---
-  tableContainer: "overflow-x-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl",
-  table: "w-full min-w-[800px]",
-  tableHeader: "p-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700",
-  tableRow: "group hover:bg-gray-50 dark:hover:bg-gray-800/50",
-  tableCell: "p-4 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-100 dark:border-gray-800 align-top",
-  eventCell: "font-semibold text-gray-800 dark:text-gray-100",
-  eventCellIcon: "w-5 h-5 shrink-0",
-  eventApplicability: "text-xs text-gray-500 dark:text-gray-400 font-normal mt-1",
-  dateCell: "text-gray-600 dark:text-gray-400",
-
-  // --- DARK MODE FIX: Re-added dark mode backgrounds for visibility ---
-  pdfList: "space-y-4",
-  pdfItem: "flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-700 transition-all",
-  pdfInfo: "flex items-center gap-4",
-  pdfIconContainer: "w-10 h-10 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg flex items-center justify-center shrink-0",
-  pdfIcon: "w-5 h-5",
-  pdfTitle: "font-semibold text-gray-900 dark:text-gray-100",
-  pdfMeta: "text-xs text-gray-500 dark:text-gray-400",
-  
-  // --- DARK MODE FIX: Re-added dark mode backgrounds for visibility ---
-  empty: "text-center py-16 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900",
-  emptyIcon: "w-16 h-16 text-gray-400 dark:text-gray-600 mx-auto mb-4",
-  emptyTitle: "text-xl font-semibold text-gray-600 dark:text-gray-400",
-  emptySubtitle: "text-sm text-gray-500",
-};
-
+// --- MOCK DATA ---
 const SAMPLE_ACADEMIC_EVENTS: AcademicEvent[] = [
-  { id: "univ-1", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "New Student Registration & Orientation Week", startDate: "2024-08-26", endDate: "2024-08-30", category: "Academic" },
-  { id: "univ-2", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "First Day of Classes (Odd Semester)", startDate: "2024-09-02", category: "Academic" },
-  { id: "univ-3", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Dussehra Holiday", startDate: "2024-10-12", category: "Holiday" },
-  { id: "univ-6", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Semester End Examinations (Odd Semester)", startDate: "2025-01-15", endDate: "2025-02-15", category: "Examination" },
-  { id: "univ-7", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Annual Sports Meet 'Triumph 2025'", startDate: "2025-04-10", endDate: "2025-04-12", category: "Event" },
-  { id: "dept-1", academicYear: "2024-25", department: "Engineering", program: "All", semester: 0, description: "Annual Technical Fest - 'TechnoVision'", startDate: "2024-11-15", endDate: "2024-11-17", category: "Event" },
-  { id: "dept-3", academicYear: "2024-25", department: "Engineering", program: "B.Tech CSE", semester: 3, description: "First Mid-Term Examinations", startDate: "2024-10-15", endDate: "2024-10-25", category: "Examination" },
-  { id: "dept-5", academicYear: "2024-25", department: "Engineering", program: "B.Tech Mechanical", semester: 5, description: "Workshop on 3D Printing", startDate: "2024-09-25", category: "Event" },
-  { id: "as-2", academicYear: "2024-25", department: "Arts & Science", program: "B.Sc. Physics", semester: 5, description: "Lab Project Submissions Deadline", startDate: "2024-11-22", category: "Academic" },
-  { id: "biz-5", academicYear: "2024-25", department: "Business Administration", program: "MBA", semester: 3, description: "Industry Interaction Summit", startDate: "2024-11-20", category: "Event" },
-  { id: "biz-6", academicYear: "2024-25", department: "Business Administration", program: "MBA", semester: 3, description: "Final Internship Presentations", startDate: "2025-04-25", category: "Examination" },
+  // 2024-25 Academic Year
+  { id: "univ-1-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "New Student Registration & Orientation", startDate: "2024-08-26", endDate: "2024-08-30", category: "Academic" },
+  { id: "univ-2-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Commencement of Classes (Odd Semesters)", startDate: "2024-09-02", category: "Academic" },
+  { id: "univ-3-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Dussehra Holiday", startDate: "2024-10-12", category: "Holiday" },
+  { id: "univ-4-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Diwali Holidays", startDate: "2024-11-01", endDate: "2024-11-03", category: "Holiday" },
+  { id: "univ-5-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Last Day of Classes (Odd Semesters)", startDate: "2024-12-20", category: "Academic" },
+  { id: "univ-6-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Christmas Vacation", startDate: "2024-12-21", endDate: "2025-01-01", category: "Holiday" },
+  { id: "univ-7-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Semester End Theory Examinations", startDate: "2025-01-15", endDate: "2025-02-15", category: "Examination" },
+  { id: "univ-8-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Republic Day", startDate: "2025-01-26", category: "Holiday" },
+  { id: "univ-9-24", academicYear: "2024-25", department: "University-Wide", program: "All", semester: 0, description: "Commencement of Classes (Even Semesters)", startDate: "2025-02-20", category: "Academic" },
+  
+  { id: "dept-1-24", academicYear: "2024-25", department: "Engineering", program: "All", semester: 0, description: "Annual Technical Fest - 'TechnoVision 2024'", startDate: "2024-11-15", endDate: "2024-11-17", category: "Event" },
+  { id: "dept-2-24", academicYear: "2024-25", department: "Engineering", program: "B.Tech CSE", semester: 3, description: "Internal Assessment I", startDate: "2024-10-15", endDate: "2024-10-25", category: "Examination" },
+  { id: "dept-3-24", academicYear: "2024-25", department: "Engineering", program: "B.Tech Mechanical", semester: 5, description: "Industrial Visit to BHEL", startDate: "2024-10-05", category: "Event" },
+  
+  { id: "biz-1-24", academicYear: "2024-25", department: "Business Administration", program: "MBA", semester: 3, description: "Final Internship Presentations", startDate: "2025-04-25", category: "Examination" },
+
+  // 2023-24 Academic Year
+  { id: "univ-1-23", academicYear: "2023-24", department: "University-Wide", program: "All", semester: 0, description: "Convocation Ceremony 2024", startDate: "2024-05-18", category: "Event" },
+  { id: "univ-2-23", academicYear: "2023-24", department: "University-Wide", program: "All", semester: 0, description: "Semester End Examinations (Even Semester)", startDate: "2024-05-25", endDate: "2024-06-25", category: "Examination" },
+  { id: "dept-1-23", academicYear: "2023-24", department: "Arts & Science", program: "B.Sc. Physics", semester: 6, description: "Final Year Project Submission Deadline", startDate: "2024-04-30", category: "Academic" },
 ];
 
 const SAMPLE_CALENDAR_PDFS: AcademicCalendarPDF[] = [
-    { id: "pdf-1", title: "Official Academic Calendar 2024-25", fileName: "Academic_Calendar_2024-25.pdf", filePath: "/Academic_Calendar_2024-25.pdf", uploadDate: "2024-08-01", academicYear: "2024-25" },
-    { id: "pdf-2", title: "Engineering Examination Schedule (2024-25)", fileName: "Eng_Exam_Schedule_2024-25.pdf", filePath: "/Eng_Exam_Schedule_2024-25.pdf", uploadDate: "2024-09-05", academicYear: "2024-25" },
-    { id: "pdf-3", title: "Student Handbook & Code of Conduct", fileName: "Student_Handbook_2024-25.pdf", filePath: "/Student_Handbook_2024-25.pdf", uploadDate: "2024-08-15", academicYear: "2024-25" },
+    { id: "pdf-1-24", title: "Official Academic Calendar 2024-25", fileName: "Academic_Calendar_2024-25.pdf", filePath: "/Academic_Calendar_2024-25.pdf", uploadDate: "2024-08-01", academicYear: "2024-25" },
+    { id: "pdf-2-24", title: "Engineering Examination Schedule (Odd Sem, 2024-25)", fileName: "Eng_Exam_Schedule_Odd_2024-25.pdf", filePath: "/Eng_Exam_Schedule_Odd_2024-25.pdf", uploadDate: "2024-12-10", academicYear: "2024-25" },
+    { id: "pdf-3-24", title: "University Holiday List 2024-25", fileName: "Holiday_List_2024-25.pdf", filePath: "/Holiday_List_2024-25.pdf", uploadDate: "2024-08-15", academicYear: "2024-25" },
+    { id: "pdf-1-23", title: "Official Academic Calendar 2023-24", fileName: "Academic_Calendar_2023-24.pdf", filePath: "/Academic_Calendar_2023-24.pdf", uploadDate: "2023-08-01", academicYear: "2023-24" },
 ];
 
-const AcademicCalendar: React.FC = () => {
+const AcademicCalendar: React.FC = () => { // <-- 2. Removed userRole prop
+  const { user } = useAuth(); // <-- 3. Get user from Auth Context
+  const [events, setEvents] = useState<AcademicEvent[]>(SAMPLE_ACADEMIC_EVENTS);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedYear, setSelectedYear] = useState('2024-25');
   const [selectedDept, setSelectedDept] = useState('All');
   const [selectedProg, setSelectedProg] = useState('All');
   const [selectedSem, setSelectedSem] = useState('All');
+  const [selectedYear, setSelectedYear] = useState('2024-25');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<AcademicEvent | null>(null);
 
-  const { departments, programs } = useMemo(() => {
-    const uniqueDepts = [...new Set(SAMPLE_ACADEMIC_EVENTS.map(e => e.department))];
+  const { departments, programs, academicYears } = useMemo(() => {
+    const allEvents = SAMPLE_ACADEMIC_EVENTS;
+    const uniqueDepts = [...new Set(allEvents.map(e => e.department))];
     const departments = ['All', ...uniqueDepts.filter(d => d !== 'University-Wide')];
     
     const relevantEvents = selectedDept === 'All' 
-        ? SAMPLE_ACADEMIC_EVENTS 
-        : SAMPLE_ACADEMIC_EVENTS.filter(e => e.department === selectedDept);
+        ? allEvents 
+        : allEvents.filter(e => e.department === selectedDept || e.department === 'University-Wide');
     
     const uniquePrograms = [...new Set(relevantEvents.map(e => e.program))];
     const programs = ['All', ...uniquePrograms.filter(p => p !== 'All')];
     
-    return { departments, programs };
+    const academicYears = [...new Set(allEvents.map(e => e.academicYear))].sort((a, b) => b.localeCompare(a));
+
+    return { departments, programs, academicYears };
   }, [selectedDept]);
   
   const filteredEvents = useMemo(() => {
-    let events = SAMPLE_ACADEMIC_EVENTS;
-
-    events = events.filter(event => 
-      event.academicYear === selectedYear &&
+    let filtered = events.filter(event => 
       (selectedDept === 'All' || event.department === selectedDept || event.department === 'University-Wide') &&
       (selectedProg === 'All' || event.program === selectedProg || event.program === 'All') &&
-      (selectedSem === 'All' || event.semester.toString() === selectedSem || event.semester === 0)
+      (selectedSem === 'All' || event.semester.toString() === selectedSem || event.semester === 0) &&
+      event.academicYear === selectedYear
     );
-
     if (searchTerm) {
       const lowercasedTerm = searchTerm.toLowerCase();
-      events = events.filter(event =>
-        event.description.toLowerCase().includes(lowercasedTerm) ||
-        event.category.toLowerCase().includes(lowercasedTerm)
-      );
+      filtered = filtered.filter(event => event.description.toLowerCase().includes(lowercasedTerm));
     }
-    
-    return events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-  }, [searchTerm, selectedYear, selectedDept, selectedProg, selectedSem]);
+    return filtered.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+  }, [searchTerm, selectedYear, selectedDept, selectedProg, selectedSem, events]);
 
   const filteredPDFs = useMemo(() => {
     return SAMPLE_CALENDAR_PDFS.filter(pdf => pdf.academicYear === selectedYear);
@@ -172,23 +115,55 @@ const AcademicCalendar: React.FC = () => {
 
   const clearFilters = useCallback(() => {
     setSearchTerm('');
-    setSelectedYear('2024-25');
     setSelectedDept('All');
     setSelectedProg('All');
     setSelectedSem('All');
-  }, []);
+    setSelectedYear(academicYears[0] || '2024-25');
+  }, [academicYears]);
 
   const downloadPDF = useCallback((pdf: AcademicCalendarPDF) => {
+    const dummyContent = `This is a dummy file for the document: ${pdf.title}\n\nFile Name: ${pdf.fileName}\nAcademic Year: ${pdf.academicYear}`;
+    const blob = new Blob([dummyContent], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = pdf.filePath;
-    link.download = pdf.fileName;
+    link.href = url;
+    link.download = pdf.fileName.replace(/\.[^/.]+$/, ".txt");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }, []);
+  
+  const handleCreateNew = () => {
+    setEditingEvent(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (event: AcademicEvent) => {
+    setEditingEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (eventId: string) => {
+    if (window.confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+        setEvents(prev => prev.filter(e => e.id !== eventId));
+    }
+  };
+
+  const handleSave = (eventData: AcademicEvent) => {
+    if (editingEvent) {
+        setEvents(prev => prev.map(e => e.id === editingEvent.id ? {...e, ...eventData} : e));
+    } else {
+        setEvents(prev => [...prev, { ...eventData, id: `evt-${Date.now()}` }]);
+    }
+    setIsModalOpen(false);
+  };
 
   const groupedEvents = useMemo(() => {
-    const groups: { [key: string]: AcademicEvent[] } = { Academic: [], Examination: [], Holiday: [], Event: [] };
+    const groups: { [key: string]: AcademicEvent[] } = {};
+    for (const category of Object.keys(categoryStyles)) {
+        groups[category] = [];
+    }
     filteredEvents.forEach(event => {
       if (groups[event.category]) {
         groups[event.category].push(event);
@@ -198,9 +173,9 @@ const AcademicCalendar: React.FC = () => {
   }, [filteredEvents]);
 
   const formatDisplayDate = (dateStr?: string) => {
-      if (!dateStr) return '—';
-      const date = new Date(dateStr + 'T00:00:00'); 
-      return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: '2-digit' });
+    if (!dateStr) return '—';
+    const date = new Date(dateStr + 'T00:00:00'); 
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: '2-digit' });
   };
   
   const getApplicabilityInfo = (event: AcademicEvent) => {
@@ -208,127 +183,136 @@ const AcademicCalendar: React.FC = () => {
     if (event.department !== 'University-Wide') parts.push(event.department);
     if (event.program !== 'All') parts.push(event.program);
     if (event.semester !== 0) parts.push(`Sem ${event.semester}`);
-    return parts.join(' • ');
+    return parts.length > 0 ? parts.join(' • ') : 'University-Wide';
   };
   
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h2 className={styles.headerTitle}>Academic Calendar</h2>
-          <p className={styles.headerSubtitle}>Key dates and events for the {selectedYear} academic year.</p>
-        </div>
-
-        <div className={styles.filtersSection}>
-           <h3 className={styles.filterTitle}>Refine Your View</h3>
-          <div className={styles.filtersGrid}>
-            <div className={styles.filterGroup}>
-                <label htmlFor="year-filter" className={styles.filterLabel}>Academic Year</label>
-                <select id="year-filter" className={styles.filterSelect} value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}><option value="2024-25">2024-25</option><option value="2023-24">2023-24</option></select>
-            </div>
-            <div className={styles.filterGroup}>
-                <label htmlFor="dept-filter" className={styles.filterLabel}>Program</label>
-                <select id="dept-filter" className={styles.filterSelect} value={selectedDept} onChange={(e) => { setSelectedDept(e.target.value); setSelectedProg('All'); }}>{departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}</select>
-            </div>
-            <div className={styles.filterGroup}>
-                <label htmlFor="prog-filter" className={styles.filterLabel}>Course</label>
-                <select id="prog-filter" className={styles.filterSelect} value={selectedProg} onChange={(e) => setSelectedProg(e.target.value)}>{programs.map(prog => <option key={prog} value={prog}>{prog}</option>)}</select>
-            </div>
-            <div className={styles.filterGroup}>
-                <label htmlFor="sem-filter" className={styles.filterLabel}>Semester</label>
-                <select id="sem-filter" className={styles.filterSelect} value={selectedSem} onChange={(e) => setSelectedSem(e.target.value)}><option value="All">All Semesters</option>{[...Array(8)].map((_, i) => <option key={i+1} value={i+1}>{i+1}</option>)}</select>
-            </div>
+    <div className="w-full min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans">
+      <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        <header className="mb-8 pb-4 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Academic Calendar</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">Key dates for the {selectedYear} academic year.</p>
           </div>
-          <div className={styles.filterActions}>
-            <div className={styles.filterGroup}>
-                <label htmlFor="search-input" className={styles.filterLabel}>Search by keyword</label>
-                <input id="search-input" className={styles.filterInput} placeholder="e.g., Examination, Fest, Holiday..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          {/* --- 4. Conditional Rendering based on user role --- */}
+          {user?.role === 'Principal' && (
+            <div className="flex items-center gap-3 self-end sm:self-center">
+                <button onClick={() => alert('Import events modal would open.')} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><Upload size={16}/> Import</button>
+                <button onClick={handleCreateNew} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"><Plus size={16}/> Create Event</button>
             </div>
-            <div className={styles.filterButtonContainer}>
-                <button onClick={clearFilters} className={`${styles.button} ${styles.buttonSecondary}`}><RefreshCw className={styles.buttonIcon} /> Clear Filters</button>
-            </div>
-          </div>
-        </div>
+          )}
+        </header>
 
-        {filteredEvents.length > 0 ? (
-          Object.entries(groupedEvents).map(([category, events]) => {
-            if (events.length === 0) return null;
-            const CategoryIcon = categoryStyles[category as keyof typeof categoryStyles].icon;
-            const categoryColor = categoryStyles[category as keyof typeof categoryStyles].textColor;
-            
-            return (
-              <div key={category} className={styles.section}>
-                <h2 className={`${styles.sectionTitle} ${categoryColor}`}>
-                  <CategoryIcon className={styles.sectionTitleIcon} /> {category} Dates
-                </h2>
-                <div className={styles.tableContainer}>
-                  <table className={styles.table}>
-                    <thead>
-                      <tr>
-                        <th className={`${styles.tableHeader} w-3/5`}>Event</th>
-                        <th className={`${styles.tableHeader} w-1/5`}>Start Date</th>
-                        <th className={`${styles.tableHeader} w-1/5`}>End Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {events.map(event => {
-                        const style = categoryStyles[event.category];
-                        const applicabilityInfo = getApplicabilityInfo(event);
-                        return (
-                          <tr key={event.id} className={styles.tableRow}>
-                            <td className={`${styles.tableCell} ${styles.eventCell} border-l-4 ${style.borderColor}`}>
-                                <div className="flex items-center gap-3">
-                                    <CategoryIcon className={`${styles.eventCellIcon} ${style.textColor}`} />
-                                    <div>
-                                        <span>{event.description}</span>
-                                        {applicabilityInfo && <p className={styles.eventApplicability}>{applicabilityInfo}</p>}
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={`${styles.tableCell} ${styles.dateCell}`}>{formatDisplayDate(event.startDate)}</td>
-                            <td className={`${styles.tableCell} ${styles.dateCell}`}>{formatDisplayDate(event.endDate)}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 mb-8 shadow-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                <div className="lg:col-span-1"><label className="text-sm font-medium">Department</label><select value={selectedDept} onChange={(e) => { setSelectedDept(e.target.value); setSelectedProg('All'); }} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"><option value="All">All Departments</option>{departments.filter(d => d !== 'All').map(d => <option key={d} value={d}>{d}</option>)}</select></div>
+                <div className="lg:col-span-1"><label className="text-sm font-medium">Program</label><select value={selectedProg} onChange={e => setSelectedProg(e.target.value)} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"><option value="All">All Programs</option>{programs.filter(p => p !== 'All').map(p => <option key={p} value={p}>{p}</option>)}</select></div>
+                <div className="lg:col-span-1"><label className="text-sm font-medium">Semester</label><select value={selectedSem} onChange={e => setSelectedSem(e.target.value)} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"><option value="All">All Semesters</option>{[...Array(8)].map((_,i) => <option key={i+1} value={i+1}>{i+1}</option>)}</select></div>
+                <div className="lg:col-span-1"><label className="text-sm font-medium">Academic Year</label><select value={selectedYear} onChange={e => setSelectedYear(e.target.value)} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">{academicYears.map(y => <option key={y} value={y}>{y}</option>)}</select></div>
+                <div className="lg:col-span-1 grid grid-cols-1 gap-4 pt-4">
+                    <div className="flex items-end"> <button onClick={clearFilters} className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"><RefreshCw size={16}/> Clear</button> </div>
                 </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className={styles.empty}>
-            <CalendarX className={styles.emptyIcon} />
-            <h3 className={styles.emptyTitle}>No Matching Events Found</h3>
-            <p className={styles.emptySubtitle}>Please try adjusting your search or filter criteria.</p>
-          </div>
-        )}
+            </div>
+        </div>
 
-        <div className={styles.section}>
-            <h2 className={`${styles.sectionTitle} text-red-600 dark:text-red-400`}><Download className={styles.sectionTitleIcon} /> Downloadable Documents</h2>
-            {filteredPDFs.length > 0 ? (
-                <div className={styles.pdfList}>
-                    {filteredPDFs.map(pdf => (
-                    <div key={pdf.id} className={styles.pdfItem}>
-                        <div className={styles.pdfInfo}>
-                            <div className={styles.pdfIconContainer}><FileText className={styles.pdfIcon} /></div>
-                            <div>
-                                <h3 className={styles.pdfTitle}>{pdf.title}</h3>
-                                <p className={styles.pdfMeta}>Uploaded: {new Date(pdf.uploadDate).toLocaleDateString()}</p>
-                            </div>
-                        </div>
-                        <button onClick={() => downloadPDF(pdf)} className={`${styles.button} ${styles.buttonPrimary}`}>
-                            <Download className={styles.buttonIcon} /> Download
-                        </button>
-                    </div>))}
+        <div className="space-y-12">
+            {filteredEvents.length > 0 ? (
+                <div className="overflow-x-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
+                    <table className="w-full min-w-[800px]">
+                        <thead className="bg-gray-50 dark:bg-gray-700/50">
+                            <tr>
+                                <th className="p-4 w-2/5 text-left text-xs font-semibold uppercase text-gray-500 tracking-wider">Event</th>
+                                <th className="p-4 w-1/5 text-left text-xs font-semibold uppercase text-gray-500 tracking-wider">Dates</th>
+                                <th className="p-4 w-1/5 text-left text-xs font-semibold uppercase text-gray-500 tracking-wider">Applicability</th>
+                                {user?.role === 'Principal' && <th className="p-4 w-1/5 text-center text-xs font-semibold uppercase text-gray-500 tracking-wider">Actions</th>}
+                            </tr>
+                        </thead>
+                        {Object.entries(groupedEvents).map(([category, events]) => {
+                            if (events.length === 0) return null;
+                            const style = categoryStyles[category as keyof typeof categoryStyles];
+                            return (
+                                <tbody key={category}>
+                                    <tr><td colSpan={user?.role === 'Principal' ? 4 : 3} className="p-2 bg-gray-100 dark:bg-gray-900/50"><div className={`flex items-center gap-2 font-bold text-sm ${style.textColor}`}><style.icon size={18}/> {category}</div></td></tr>
+                                    {events.map(event => (
+                                        <tr key={event.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700">
+                                            <td className="p-4"><p className="font-semibold text-gray-800 dark:text-gray-100">{event.description}</p></td>
+                                            <td className="p-4 text-gray-600 dark:text-gray-400 font-medium">{formatDisplayDate(event.startDate)}{event.endDate && ` - ${formatDisplayDate(event.endDate)}`}</td>
+                                            <td className="p-4 text-gray-600 dark:text-gray-400">{getApplicabilityInfo(event)}</td>
+                                            {user?.role === 'Principal' && (
+                                                <td className="p-4">
+                                                    <div className="flex justify-center items-center gap-2">
+                                                        <button onClick={() => handleEdit(event)} className="p-2 text-gray-500 hover:text-indigo-600"><Edit size={16}/></button>
+                                                        <button onClick={() => handleDelete(event.id)} className="p-2 text-gray-500 hover:text-red-600"><Trash2 size={16}/></button>
+                                                    </div>
+                                                </td>
+                                            )}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            );
+                        })}
+                    </table>
                 </div>
             ) : (
-                <p className={styles.emptySubtitle}>No downloadable documents for this academic year.</p>
+                <div className="text-center py-16 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800"><CalendarX className="w-16 h-16 text-gray-400 mx-auto mb-4" /><h3 className="text-xl font-semibold">No Matching Events Found</h3><p>Please adjust your filter criteria.</p></div>
             )}
         </div>
+        {isModalOpen && <EventModal event={editingEvent} onSave={handleSave} onClose={() => setIsModalOpen(false)} />}
       </div>
     </div>
   );
 };
+
+// Event Modal Component
+const EventModal = ({ event, onSave, onClose }: { event: AcademicEvent | null; onSave: (data: AcademicEvent) => void; onClose: () => void; }) => {
+    const [formData, setFormData] = useState<AcademicEvent>(event || {
+        id: '', academicYear: '2024-25', department: 'University-Wide', program: 'All', semester: 0,
+        description: '', startDate: '', endDate: '', category: 'Academic'
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: name === 'semester' ? parseInt(value) : value }));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSave(formData);
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-lg">
+                <form onSubmit={handleSubmit}>
+                    <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center">
+                        <h2 className="text-2xl font-bold">{event ? 'Edit Event' : 'Create New Event'}</h2>
+                        <button type="button" onClick={onClose} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"><X/></button>
+                    </div>
+                    <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                        <div><label className="text-sm font-medium">Description</label><textarea name="description" value={formData.description} onChange={handleChange} required rows={3} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"/></div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div><label className="text-sm font-medium">Start Date</label><input type="date" name="startDate" value={formData.startDate} onChange={handleChange} required className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"/></div>
+                            <div><label className="text-sm font-medium">End Date (Optional)</label><input type="date" name="endDate" value={formData.endDate || ''} onChange={handleChange} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"/></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div><label className="text-sm font-medium">Category</label><select name="category" value={formData.category} onChange={handleChange} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">{Object.keys(categoryStyles).map(cat => <option key={cat}>{cat}</option>)}</select></div>
+                            <div><label className="text-sm font-medium">Academic Year</label><select name="academicYear" value={formData.academicYear} onChange={handleChange} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"><option>2024-25</option><option>2023-24</option></select></div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div><label className="text-sm font-medium">Department</label><select name="department" value={formData.department} onChange={handleChange} className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"><option>University-Wide</option><option>Engineering</option><option>Arts & Science</option><option>Business Administration</option></select></div>
+                            <div><label className="text-sm font-medium">Program</label><input name="program" value={formData.program} onChange={handleChange} placeholder="e.g., All or B.Tech CSE" className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"/></div>
+                        </div>
+                        <div><label className="text-sm font-medium">Semester (0 for All)</label><input type="number" name="semester" value={formData.semester} onChange={handleChange} min="0" max="8" className="w-full mt-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"/></div>
+                    </div>
+                    <div className="p-4 bg-gray-50 dark:bg-gray-800/50 flex justify-end gap-3 rounded-b-2xl">
+                        <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">Cancel</button>
+                        <button type="submit" className="px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Save Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
 
 export default AcademicCalendar;

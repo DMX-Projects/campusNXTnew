@@ -372,7 +372,7 @@ const SIDEBAR_ITEMS = {
   },
   { 
     name: 'Raise Ticket', 
-    path: '/management/raise-ticket', 
+    path: '/academics/raise-ticket', 
     icon: 'LifeBuoy' 
   }
 ],
@@ -415,7 +415,7 @@ const SIDEBAR_ITEMS = {
 
   { 
     name: 'Raise Ticket', 
-    path: '/management/raise-ticket', 
+    path: '/academics/raise-ticket', 
     icon: 'LifeBuoy' 
   }
 ],
@@ -471,14 +471,18 @@ const SIDEBAR_ITEMS = {
           { name: 'Fees Confirmation', path: '/management/verification/allotment-order', icon: 'FileText' }
         ]
       },
-
+      { 
+        name: 'Final list & Logins', 
+        path: '/management/list&logins', 
+        icon: 'FileBarChart',
+      },
       { 
         name: 'Reports & Logs', 
-        path: '/management/reports', 
+        path: '/management/reports&logs', 
         icon: 'FileBarChart',
       },
 
-      { name: 'Raise Ticket', path: '/management/raise-ticket', icon: 'LifeBuoy' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'LifeBuoy' }
     ]
   },
   Admission: {
@@ -599,7 +603,7 @@ const SIDEBAR_ITEMS = {
     },
     { 
       name: 'Raise Ticket', 
-      path: '/management/student-fees/raiseticket', 
+      path: '/academics/raise-ticket', 
       icon: 'LifeBuoy' 
     }
   ]
@@ -621,7 +625,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Marks List', path: '/examination/marks-list', icon: 'List' },
       { name: 'Assessment Tests', path: '/examination/assessment-tests', icon: 'FileQuestion' },
       { name: 'Reports', path: '/examination/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/examination/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Controller of Examination': [
       { name: 'Dashboard', path: '/examination/dashboard', icon: 'BarChart3' },
@@ -641,7 +645,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Academic Promotion', path: '/examination/academic-promotion', icon: 'TrendingUp' },
       { name: 'Assessment Tests', path: '/examination/assessment-tests', icon: 'FileQuestion' },
       { name: 'Reports', path: '/examination/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/examination/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Faculty': [
       { name: 'Dashboard', path: '/examination/dashboard-faculty', icon: 'BarChart3' },
@@ -652,7 +656,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Exam Evaluation', path: '/examination/examevalution-faculty', icon: 'FileText' },
       { name: 'Marks List', path: '/examination/marklist-faculty', icon: 'FileText' },
       { name: 'Exam Results', path: '/examination/examresults-faculty', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/examination/faculty-raiseticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
        { name: 'Dashboard', path: '/examination/student-dashboard', icon: 'Calendar' },
@@ -660,7 +664,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Exam Schedule', path: '/examination/student-examtimetable', icon: 'Calendar' },
       { name: 'Hall Tickets', path: '/examination/student-studenthallticket', icon: 'CreditCard' },
        { name: 'Exam Results', path: '/examination/student-examresult', icon: 'Award' },
-      { name: 'Raise Ticket', path: '/examination/student-raiseticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'default': [
       { name: 'Dashboard', path: '/examination/dashboard', icon: 'BarChart3' },
@@ -669,7 +673,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Hall Tickets', path: '/examination/hall-tickets', icon: 'CreditCard' },
       { name: 'Exam Results', path: '/examination/exam-results', icon: 'Award' },
       { name: 'Reports', path: '/examination/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/examination/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ]
   },
   Placements: {
@@ -689,7 +693,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Placed Student Details', path: '/placements/placed-student-details', icon: 'UserCheck' },
       { name: 'Placement Courses', path: '/placements/placement-courses', icon: 'BookOpen' },
       { name: 'Reports', path: '/placements/placement-reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/placements/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     
     'Student': [
@@ -702,7 +706,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Mock Tests', path: '/placements/student/mock-tests', icon: 'FileText' },
       { name: 'Placement Results', path: '/placements/student/placement-results', icon: 'UserCheck' },
       { name: 'Internships/Offers', path: '/placements/student/internships-offers', icon: 'Briefcase' },
-      { name: 'Raise Ticket', path: '/placements/student/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
 
     'default': [
@@ -711,7 +715,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Placement Calendar', path: '/placements/placement-calendar', icon: 'Calendar' },
       { name: 'Placement Company', path: '/placements/placement-company', icon: 'Building' },
       { name: 'Reports', path: '/placements/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/placements/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ]
   },
   LMS: {
@@ -729,7 +733,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Approval', path: '/lms/approval', icon: 'CheckSquare' },
       { name: 'Campus Calendar', path: '/lms/campus-calendar', icon: 'Calendar' },
       { name: 'Alumni', path: '/lms/alumni', icon: 'Users' },
-      { name: 'Raise Ticket', path: '/lms/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
       { name: 'Mail', path: '/lms/student/mail', icon: 'Mail' },
@@ -755,7 +759,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Attendance', path: '/lms/Faculty/attendance', icon: 'CheckCircle' },
       { name: 'Results', path: '/lms/Faculty/results', icon: 'Award' },
      
-      { name: 'Raise Ticket', path: '/lms/Faculty/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'default': [
       { name: 'Mail', path: '/lms/mail', icon: 'Mail' },
@@ -766,7 +770,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Time Table', path: '/lms/time-table', icon: 'Calendar' },
       { name: 'Attendance', path: '/lms/attendance', icon: 'CheckCircle' },
       { name: 'Results', path: '/lms/results', icon: 'Award' },
-      { name: 'Raise Ticket', path: '/lms/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ]
   },
   Library: {
@@ -779,7 +783,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Book Reservation', path: '/library/book-reservation', icon: 'Bookmark' },
       { name: 'Late Fee', path: '/library/late-fee', icon: 'DollarSign' },
       { name: 'Reports', path: '/library/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/library/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Library Incharge': [
       { name: 'Dashboard', path: '/library/dashboard', icon: 'BarChart3' },
@@ -790,7 +794,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Book Reservation', path: '/library/book-reservation', icon: 'Bookmark' },
       { name: 'Late Fee', path: '/library/late-fee', icon: 'DollarSign' },
       { name: 'Reports', path: '/library/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/library/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
      { name: 'Dashboard', path: '/library/faculty/dashboard', icon: 'BookOpen' },
@@ -817,7 +821,7 @@ const SIDEBAR_ITEMS = {
       { name: 'List of Books', path: '/library/list-of-books', icon: 'BookOpen' },
       { name: 'Book Issue', path: '/library/book-issue', icon: 'ArrowRight' },
       { name: 'Reports', path: '/library/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/library/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ]
   },
   Transport: {
@@ -833,7 +837,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Live Location', path: '/transport/live-location', icon: 'MapPin' },
       { name: 'Vehicle Documents', path: '/transport/vehicle-documents', icon: 'FileText' },
       { name: 'Reports', path: '/transport/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/transport/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Transportation Incharge': [
       { name: 'Dashboard', path: '/transport/dashboard', icon: 'BarChart3' },
@@ -847,13 +851,13 @@ const SIDEBAR_ITEMS = {
       { name: 'Live Location', path: '/transport/live-location', icon: 'MapPin' },
       { name: 'Vehicle Documents', path: '/transport/vehicle-documents', icon: 'FileText' },
       { name: 'Reports', path: '/transport/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/transport/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Student': [
       { name: 'Bus Details', path: '/transport/StuTransport/bus-details', icon: 'Bus' },
       { name: 'Fee Details', path: '/transport/StuTransport/fee-details', icon: 'DollarSign' },
       { name: 'Live Location', path: '/transport/StuTransport/live-location', icon: 'MapPin' },
-      { name: 'Raise Ticket', path: '/transport/StuTransport/tickets', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'default': [
       { name: 'Dashboard', path: '/transport/dashboard', icon: 'BarChart3' },
@@ -863,7 +867,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Fee Details', path: '/transport/fee-details', icon: 'DollarSign' },
       { name: 'Live Location', path: '/transport/live-location', icon: 'MapPin' },
       { name: 'Reports', path: '/transport/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/transport/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ]
   },
   Hostel: {
@@ -877,7 +881,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Geo Fencing', path: '/hostel/geo-fencing', icon: 'MapPin' },
       { name: 'Inventory', path: '/hostel/inventory', icon: 'Package' },
       { name: 'Reports', path: '/hostel/reports', icon: 'FileText' },
-      { name: 'Raise Ticket', path: '/hostel/raise-ticket', icon: 'AlertCircle' }
+      { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
     ],
     'Hostel Incharge': [
     { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
@@ -996,14 +1000,14 @@ const SIDEBAR_ITEMS = {
         { name: 'Visitor Logs', path: '/hostel/visitors/logs', icon: 'ClipboardList' }
       ]
     },
-    { name: 'Ticket', path: 'hostel/complaints/new', icon: 'ClipboardList' },
+    { name: 'Ticket', path: '/academics/raise-ticket', icon: 'ClipboardList' },
     { name: 'Notifications', path: '/hostel/notifications', icon: 'Bell' }
   ],
 
   },
   Parent: {
     'Chairperson': [
-      {name: 'Ticket Raised', path: '/parent/ticket-raised', icon: 'AlertCircle'}
+      {name: 'Ticket Raised', path: '/academics/raise-ticket', icon: 'AlertCircle'}
     ],
     'Parent': [
       { name: 'Inbox', path: '/parent/inbox', icon: 'Mail' },

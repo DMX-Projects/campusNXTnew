@@ -177,8 +177,8 @@ const CommonRoutes: React.FC = () => {
       <Route path="/verification/document" element={<StudentAcademicVerification />} />
       <Route path="/student-onboarding/temp-login" element={<TemporaryStudentLogin />} />
       <Route path="/student-onboarding/communication-hub" element={<CommunicationHub />} />
-      <Route path="/student-onboarding/activate-login" element={<PermanentStudentLoginPage />} />
-      <Route path="/reports/admission" element={<AdmissionReports />} />
+      <Route path="/list&logins" element={<PermanentStudentLoginPage />} />
+      <Route path="/reports&logs" element={<AdmissionReports />} />
       <Route path="/reports/fee-payment" element={<FeePaymentReports />} />
       <Route path="/reports/verification-logs" element={<VerificationLogs />} />
 
