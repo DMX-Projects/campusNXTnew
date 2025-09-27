@@ -55,7 +55,7 @@ import StudentRecordsResults from '../pages/FacultyModules/FacultyAcademic/Stude
 import StudentClassSchedule from '../pages/FacultyModules/FacultyAcademic/StudentClassSchedule';
 import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/StudentCourse';
 import FacultyFeedbackStudent from '../pages/StudentModules/Academics/FacultyFeedbackStudent';
-
+import OnlineClassesFaculty from '../pages/FacultyModules/Academic/OnlineClassesFaculty';
 import StudyMaterial from '../pages/StudentModules/Academics/Subjects/StudyMaterial';
 
 import StudentSubjectList from '../pages/StudentModules/Academics/Subjects/StudentSubjectList';
@@ -199,7 +199,7 @@ const AcademicsRoutes: React.FC = () => {
       <Route path='/faculty-StudyMaterial' element ={<FacultyStudyMaterial/>}/>
       <Route path='/faculty-student-projects' element ={<FacultyStudentProject/>}/>
       <Route path='/faculty-student-permissions' element ={<StudentPermissions/>}/>
-      <Route path='/faculty/online-classes' element ={<OnlineClasses/>}/>
+      <Route path='/faculty/online-classes' element ={<OnlineClassesFaculty/>}/>
       <Route path='/faculty-FacultyOnlineTest' element ={<FacultyOnlineTest/>}/>
       <Route path='/faculty-schedule-onlineclass' element ={<ScheduleOnlinclass/>}/>
       <Route path='/faculty-FacultyReports' element ={<FacultyReports/>}/>
