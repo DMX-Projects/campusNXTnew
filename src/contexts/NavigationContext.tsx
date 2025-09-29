@@ -671,7 +671,17 @@ const SIDEBAR_ITEMS = {
     'Administration Officer': [
       { name: 'Dashboard', path: '/management/hr/dashboard', icon: 'BarChart3' },
       { name: 'Recruitment Management', path: '/management/hr/recruitment', icon: 'UserPlus' },
-      { name: 'Employee Database', path: '/management/hr/employee-database', icon: 'Users' },
+ {
+            name: 'Employee', 
+            path: '/management/hr/employee', 
+            icon: 'Users',
+            children: [
+              { name: 'Employee DataBase', path: '/management/hr/employee-database', icon: 'ClipboardList' },
+              { name: 'Employee Attendance', path: '/management/hr/employee-database/attendance', icon: 'Users' },
+              { name: 'Employee Leaves', path: '/management/hr/employee-database/leaves', icon: 'BookOpen' }
+            ]
+          },
+
       { name: 'Leave & Policy', path: '/management/hr/leave-policy', icon: 'ClipboardList' },
       { name: 'Payroll Management', path: '/management/hr/payroll', icon: 'DollarSign' }
     ]

@@ -411,7 +411,18 @@ const EmployeeAttendance: React.FC = () => {
       default: return 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600';
     }
   };
-
+const handleExport = () => {
+  const textContent = "Your text content here";
+  const blob = new Blob([textContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `export_${Date.now()}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
   const getEmployeeTypeIcon = (type: string) => {
     switch (type) {
       case 'teaching_faculty': return <GraduationCap className="w-4 h-4" />;
@@ -452,7 +463,7 @@ const EmployeeAttendance: React.FC = () => {
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-lg px-3 py-2 border border-gray-200 dark:border-gray-700">
-            <Calendar className="w-4 h-4 text-gray-500" />
+            {/* <Calendar className="w-4 h-4 text-gray-500" /> */}
             <input
               type="date"
               value={selectedDate}
@@ -678,7 +689,8 @@ const EmployeeAttendance: React.FC = () => {
             Sorted by: <span className="font-medium capitalize">{sortField.replace(/([A-Z])/g, ' $1').trim()}</span> 
             ({sortDirection === 'asc' ? 'Ascending' : 'Descending'})
           </div>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1">
+        
+          <button onClick={handleExport} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1">
             <Download className="w-4 h-4" />
             <span>Export</span>
           </button>

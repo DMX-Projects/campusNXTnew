@@ -546,7 +546,18 @@ const EmployeeLeaves: React.FC = () => {
       default: return <Users className="w-4 h-4" />;
     }
   };
-
+const handleExport = () => {
+  const textContent = "Your text content here";
+  const blob = new Blob([textContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `export_${Date.now()}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
       case 'urgent': return '🚨';
@@ -579,7 +590,7 @@ const EmployeeLeaves: React.FC = () => {
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-lg px-3 py-2 border border-gray-200 dark:border-gray-700">
-            <Calendar className="w-4 h-4 text-gray-500" />
+            {/* <Calendar className="w-4 h-4 text-gray-500" /> */}
             <input
               type="date"
               value={selectedDate}
@@ -805,7 +816,7 @@ const EmployeeLeaves: React.FC = () => {
             Sorted by: <span className="font-medium capitalize">{sortField.replace(/([A-Z])/g, ' $1').trim()}</span> 
             ({sortDirection === 'asc' ? 'Ascending' : 'Descending'})
           </div>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1">
+          <button onClick={handleExport} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-1">
             <Download className="w-4 h-4" />
             <span>Export</span>
           </button>
@@ -818,9 +829,6 @@ const EmployeeLeaves: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                  Priority
-                </th>
                 <th 
                   className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
                   onClick={() => handleSort('employeeName')}
@@ -829,6 +837,9 @@ const EmployeeLeaves: React.FC = () => {
                     <span>Employee</span>
                     <SortIcon field="employeeName" />
                   </div>
+                </th>
+                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                  Priority
                 </th>
                 <th 
                   className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
@@ -888,15 +899,7 @@ const EmployeeLeaves: React.FC = () => {
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {paginatedData.map((request, index) => (
-                <tr key={request.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 ${index % 2 === 0 ? 'bg-gray-25 dark:bg-gray-825' : ''}`}>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <div className="flex items-center justify-center space-x-2">
-                      <span className="text-lg">{getPriorityIcon(request.priority)}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(request.priority)}`}>
-                        {request.priority.toUpperCase()}
-                      </span>
-                    </div>
-                  </td>
+                <tr key={request.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 ${index % 2 === 0 ? 'bg-gray-25 dark:bg-gray-825' : ''}`}> 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
@@ -911,6 +914,14 @@ const EmployeeLeaves: React.FC = () => {
                           <span>{request.employeeId} • {request.designation}</span>
                         </div>
                       </div>
+                    </div>
+                  </td>
+                   <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <div className="flex items-center justify-center space-x-2">
+                      {/* <span className="text-lg">{getPriorityIcon(request.priority)}</span> */}
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(request.priority)}`}>
+                        {request.priority.toUpperCase()}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
