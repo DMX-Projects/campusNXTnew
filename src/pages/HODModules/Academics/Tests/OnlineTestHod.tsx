@@ -6,6 +6,7 @@ const OnlineTestHod = () => {
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
+  const [selectedProgram, setSelectedProgram] = useState(''); // Added program filter
   const [showSidebar, setShowSidebar] = useState(false); // Mobile sidebar
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingTest, setEditingTest] = useState(null);
@@ -16,6 +17,10 @@ const OnlineTestHod = () => {
   const subjects = ['Computer Science', 'Mathematics', 'Physics', 'Chemistry', 'English Literature', 'Economics'];
   const years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
   const semesters = ['1st Semester', '2nd Semester'];
+  
+  // Added programs array as requested
+  const programs = ['B.Tech CSE', 'M.Tech CSE', 'B.Tech IT', 'M.Tech IT', 'B.Tech ECE', 'M.Tech ECE'];
+  
   const testTypes = ['Quiz', 'Mid-term', 'Final', 'Assignment Test', 'Practice Test'];
 
   // Helper functions for sorting
@@ -29,7 +34,7 @@ const OnlineTestHod = () => {
     return semesterMap[semester] || 0;
   };
 
-  // Enhanced online tests data with comprehensive coverage
+  // Enhanced online tests data with comprehensive coverage (including program field)
   const [onlineTests, setOnlineTests] = useState([
     // 1st Year Tests
     {
@@ -38,6 +43,7 @@ const OnlineTestHod = () => {
       subject: 'Computer Science',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech CSE', // Added program field
       type: 'Quiz',
       duration: 45,
       totalQuestions: 20,
@@ -60,6 +66,7 @@ const OnlineTestHod = () => {
       subject: 'Mathematics',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech IT', // Added program field
       type: 'Mid-term',
       duration: 90,
       totalQuestions: 15,
@@ -82,6 +89,7 @@ const OnlineTestHod = () => {
       subject: 'Physics',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech ECE', // Added program field
       type: 'Practice Test',
       duration: 60,
       totalQuestions: 25,
@@ -104,6 +112,7 @@ const OnlineTestHod = () => {
       subject: 'Chemistry',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech CSE', // Added program field
       type: 'Quiz',
       duration: 30,
       totalQuestions: 15,
@@ -126,6 +135,7 @@ const OnlineTestHod = () => {
       subject: 'English Literature',
       year: '1st Year',
       semester: '2nd Semester',
+      program: 'B.Tech IT', // Added program field
       type: 'Assignment Test',
       duration: 120,
       totalQuestions: 5,
@@ -148,6 +158,7 @@ const OnlineTestHod = () => {
       subject: 'Economics',
       year: '1st Year',
       semester: '2nd Semester',
+      program: 'B.Tech ECE', // Added program field
       type: 'Mid-term',
       duration: 90,
       totalQuestions: 12,
@@ -172,6 +183,7 @@ const OnlineTestHod = () => {
       subject: 'Computer Science',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'M.Tech CSE', // Added program field
       type: 'Quiz',
       duration: 60,
       totalQuestions: 25,
@@ -194,6 +206,7 @@ const OnlineTestHod = () => {
       subject: 'Mathematics',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'M.Tech IT', // Added program field
       type: 'Final',
       duration: 180,
       totalQuestions: 20,
@@ -216,6 +229,7 @@ const OnlineTestHod = () => {
       subject: 'Physics',
       year: '2nd Year',
       semester: '2nd Semester',
+      program: 'M.Tech ECE', // Added program field
       type: 'Mid-term',
       duration: 120,
       totalQuestions: 18,
@@ -240,6 +254,7 @@ const OnlineTestHod = () => {
       subject: 'Computer Science',
       year: '3rd Year',
       semester: '1st Semester',
+      program: 'M.Tech CSE', // Added program field
       type: 'Final',
       duration: 180,
       totalQuestions: 15,
@@ -262,6 +277,7 @@ const OnlineTestHod = () => {
       subject: 'Mathematics',
       year: '3rd Year',
       semester: '2nd Semester',
+      program: 'M.Tech IT', // Added program field
       type: 'Mid-term',
       duration: 150,
       totalQuestions: 16,
@@ -286,6 +302,7 @@ const OnlineTestHod = () => {
       subject: 'Computer Science',
       year: '4th Year',
       semester: '1st Semester',
+      program: 'M.Tech ECE', // Added program field
       type: 'Assignment Test',
       duration: 240,
       totalQuestions: 10,
@@ -304,7 +321,7 @@ const OnlineTestHod = () => {
     }
   ]);
 
-  // Enhanced test submissions with comprehensive student data
+  // Enhanced test submissions with comprehensive student data (including program field)
   const [testSubmissions, setTestSubmissions] = useState([
     // 1st Year Submissions
     {
@@ -315,6 +332,7 @@ const OnlineTestHod = () => {
       subject: 'Computer Science',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech CSE', // Added program field
       submittedDate: '2024-12-01',
       startTime: '09:15:00',
       endTime: '09:50:00',
@@ -331,7 +349,6 @@ const OnlineTestHod = () => {
       attempts: 1,
       feedback: 'Good understanding of basic programming concepts'
     },
-   
     {
       id: 3,
       testId: 3,
@@ -340,6 +357,7 @@ const OnlineTestHod = () => {
       subject: 'Physics',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech ECE', // Added program field
       submittedDate: '2024-12-08',
       startTime: '14:20:00',
       endTime: '15:15:00',
@@ -356,8 +374,6 @@ const OnlineTestHod = () => {
       attempts: 1,
       feedback: 'Strong grasp of mechanics fundamentals'
     },
-    
-    
 
     // 2nd Year Submissions
     {
@@ -368,6 +384,7 @@ const OnlineTestHod = () => {
       subject: 'Computer Science',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'M.Tech CSE', // Added program field
       submittedDate: '2024-12-01',
       startTime: '10:15:00',
       endTime: '11:05:00',
@@ -392,6 +409,7 @@ const OnlineTestHod = () => {
       subject: 'Computer Science',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'M.Tech CSE', // Added program field
       submittedDate: '2024-12-02',
       startTime: '10:30:00',
       endTime: '11:25:00',
@@ -407,9 +425,7 @@ const OnlineTestHod = () => {
       unanswered: 0,
       attempts: 1,
       feedback: 'Excellent work! Strong grasp of advanced algorithms'
-    },
-   
-  
+    }
   ]);
 
   const [newTest, setNewTest] = useState({
@@ -417,6 +433,7 @@ const OnlineTestHod = () => {
     subject: '',
     year: '',
     semester: '',
+    program: '', // Added program field
     type: 'Quiz',
     duration: '',
     totalQuestions: '',
@@ -441,17 +458,18 @@ const OnlineTestHod = () => {
     marks: 1
   });
 
-  // Enhanced filtering and sorting with hierarchical order: Year -> Semester -> Subject
+  // Enhanced filtering and sorting with hierarchical order: Year -> Semester -> Subject -> Program
   const filteredSubmissions = testSubmissions
     .filter(submission => {
       return (
         (!selectedSubject || submission.subject === selectedSubject) &&
         (!selectedYear || submission.year === selectedYear) &&
-        (!selectedSemester || submission.semester === selectedSemester)
+        (!selectedSemester || submission.semester === selectedSemester) &&
+        (!selectedProgram || submission.program === selectedProgram) // Added program filter
       );
     })
     .sort((a, b) => {
-      // Sort by Year first, then Semester, then Subject
+      // Sort by Year first, then Semester, then Subject, then Program
       const yearA = getYearOrder(a.year);
       const yearB = getYearOrder(b.year);
       if (yearA !== yearB) return yearA - yearB;
@@ -460,7 +478,10 @@ const OnlineTestHod = () => {
       const semesterB = getSemesterOrder(b.semester);
       if (semesterA !== semesterB) return semesterA - semesterB;
       
-      return a.subject.localeCompare(b.subject);
+      const subjectCompare = a.subject.localeCompare(b.subject);
+      if (subjectCompare !== 0) return subjectCompare;
+      
+      return a.program.localeCompare(b.program);
     });
 
   const filteredTests = onlineTests
@@ -468,11 +489,12 @@ const OnlineTestHod = () => {
       return (
         (!selectedSubject || test.subject === selectedSubject) &&
         (!selectedYear || test.year === selectedYear) &&
-        (!selectedSemester || test.semester === selectedSemester)
+        (!selectedSemester || test.semester === selectedSemester) &&
+        (!selectedProgram || test.program === selectedProgram) // Added program filter
       );
     })
     .sort((a, b) => {
-      // Sort by Year first, then Semester, then Subject
+      // Sort by Year first, then Semester, then Subject, then Program
       const yearA = getYearOrder(a.year);
       const yearB = getYearOrder(b.year);
       if (yearA !== yearB) return yearA - yearB;
@@ -481,11 +503,14 @@ const OnlineTestHod = () => {
       const semesterB = getSemesterOrder(b.semester);
       if (semesterA !== semesterB) return semesterA - semesterB;
       
-      return a.subject.localeCompare(b.subject);
+      const subjectCompare = a.subject.localeCompare(b.subject);
+      if (subjectCompare !== 0) return subjectCompare;
+      
+      return a.program.localeCompare(b.program);
     });
 
   const handleAddTest = () => {
-    if (newTest.title && newTest.subject && newTest.year && newTest.semester) {
+    if (newTest.title && newTest.subject && newTest.year && newTest.semester && newTest.program) {
       const test = {
         ...newTest,
         id: onlineTests.length + 1,
@@ -502,6 +527,7 @@ const OnlineTestHod = () => {
         subject: '',
         year: '',
         semester: '',
+        program: '', // Reset program field
         type: 'Quiz',
         duration: '',
         totalQuestions: '',
@@ -669,6 +695,17 @@ const OnlineTestHod = () => {
               </select>
             </label>
             
+            <label className="block text-md text-gray-700 dark:text-gray-300">Program
+              <select 
+                value={selectedProgram} 
+                onChange={e => setSelectedProgram(e.target.value)}
+                className="mt-2 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              >
+                <option value="">All Programs</option>
+                {programs.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </label>
+            
             <label className="block text-md text-gray-700 dark:text-gray-300">Subject
               <select 
                 value={selectedSubject} 
@@ -684,7 +721,8 @@ const OnlineTestHod = () => {
         </div>
       )}
 
-      <div className="p-4 lg:p-6 max-w-8xl mx-auto">
+      
+      <div className="p-4 md:max-w-8xl mx-auto">
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl transition-colors duration-300">
           {/* Header */}
           <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-4 lg:p-6 rounded-t-lg">
@@ -694,13 +732,7 @@ const OnlineTestHod = () => {
                 <p className="text-blue-100">Manage online tests and monitor student performance</p>
               </div>
               <div className="flex items-center mt-4 lg:mt-0 space-x-4">
-                <button
-                  onClick={() => setShowAnalytics(!showAnalytics)}
-                  className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center gap-2"
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Analytics</span>
-                </button>
+                
               </div>
             </div>
           </div>
@@ -733,9 +765,9 @@ const OnlineTestHod = () => {
             </div>
           )}
 
-          {/* Filters - Reordered: Year, Semester, Subject */}
+          {/* Filters - Updated to include Program: Year, Semester, Program, Subject */}
           <div className="hidden md:block p-4 lg:p-6 border-b bg-gray-50 dark:bg-slate-700 dark:border-slate-600 transition-colors duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
                 <select
@@ -759,6 +791,19 @@ const OnlineTestHod = () => {
                   <option value="">All Semesters</option>
                   {semesters.map(semester => (
                     <option key={semester} value={semester}>{semester}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Program</label>
+                <select
+                  value={selectedProgram}
+                  onChange={(e) => setSelectedProgram(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
+                >
+                  <option value="">All Programs</option>
+                  {programs.map(program => (
+                    <option key={program} value={program}>{program}</option>
                   ))}
                 </select>
               </div>
@@ -819,34 +864,35 @@ const OnlineTestHod = () => {
                             </span>
                           </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3">
                             <div><strong>Year:</strong> {submission.year}</div>
                             <div><strong>Semester:</strong> {submission.semester}</div>
+                            <div><strong>Program:</strong> {submission.program}</div>
                             <div><strong>Subject:</strong> {submission.subject}</div>
                             <div><strong>Submitted:</strong> {submission.submittedDate || 'Not yet'}</div>
                           </div>
 
                           {submission.status === 'Completed' && (
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-3">
-                              <div className="bg-blue-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                              <div className="bg-blue-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                 <div className={`text-xl font-bold ${getPerformanceColor(submission.percentage)}`}>
                                   {submission.score}/{submission.maxScore}
                                 </div>
                                 <div className="text-xs text-gray-600 dark:text-gray-400">Score</div>
                               </div>
-                              <div className="bg-green-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                              <div className="bg-green-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                 <div className="text-xl font-bold text-green-600 dark:text-green-400">
                                   {submission.percentage}%
                                 </div>
                                 <div className="text-xs text-gray-600 dark:text-gray-400">Percentage</div>
                               </div>
-                              <div className="bg-purple-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                              <div className="bg-purple-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                 <div className="text-xl font-bold text-purple-600 dark:text-purple-400">
                                   {submission.timeTaken}m
                                 </div>
                                 <div className="text-xs text-gray-600 dark:text-gray-400">Time Taken</div>
                               </div>
-                              <div className="bg-yellow-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                              <div className="bg-yellow-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                 <div className="text-xl font-bold text-yellow-600 dark:text-yellow-400">
                                   {submission.correctAnswers}/{submission.totalQuestions}
                                 </div>
@@ -881,7 +927,7 @@ const OnlineTestHod = () => {
                     className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 transition-colors flex items-center gap-2 w-fit"
                   >
                     <Plus className="w-4 h-4" />
-                    Add New Test
+                    Create New Online Test
                   </button>
                 </div>
 
@@ -898,7 +944,7 @@ const OnlineTestHod = () => {
                             placeholder="Test Title"
                           />
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             <select
                               value={editingTest.year}
                               onChange={(e) => setEditingTest({...editingTest, year: e.target.value})}
@@ -917,6 +963,16 @@ const OnlineTestHod = () => {
                               <option value="">Select Semester</option>
                               {semesters.map(semester => (
                                 <option key={semester} value={semester}>{semester}</option>
+                              ))}
+                            </select>
+                            <select
+                              value={editingTest.program || ''}
+                              onChange={(e) => setEditingTest({...editingTest, program: e.target.value})}
+                              className="px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-md transition-colors duration-300"
+                            >
+                              <option value="">Select Program</option>
+                              {programs.map(program => (
+                                <option key={program} value={program}>{program}</option>
                               ))}
                             </select>
                             <select
@@ -1003,9 +1059,10 @@ const OnlineTestHod = () => {
                                 </span>
                               </div>
                               
-                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-4">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-4">
                                 <div><strong>Year:</strong> {test.year}</div>
                                 <div><strong>Semester:</strong> {test.semester}</div>
+                                <div><strong>Program:</strong> {test.program}</div>
                                 <div><strong>Subject:</strong> {test.subject}</div>
                                 <div><strong>Created:</strong> {test.createdDate}</div>
                               </div>
@@ -1013,42 +1070,42 @@ const OnlineTestHod = () => {
                               <p className="text-gray-700 dark:text-gray-300 mb-4">{test.description}</p>
 
                               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 mb-4">
-                                <div className="bg-blue-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                                <div className="bg-blue-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                   <div className="flex items-center justify-center mb-1">
                                     <Timer className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                                   </div>
                                   <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{test.duration}m</div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Duration</div>
                                 </div>
-                                <div className="bg-green-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                                <div className="bg-green-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                   <div className="flex items-center justify-center mb-1">
                                     <FileText className="w-4 h-4 text-green-600 dark:text-green-400" />
                                   </div>
                                   <div className="text-lg font-bold text-green-600 dark:text-green-400">{test.totalQuestions}</div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Questions</div>
                                 </div>
-                                <div className="bg-purple-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                                <div className="bg-purple-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                   <div className="flex items-center justify-center mb-1">
                                     <Award className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                                   </div>
                                   <div className="text-lg font-bold text-purple-600 dark:text-purple-400">{test.totalMarks}</div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Marks</div>
                                 </div>
-                                <div className="bg-yellow-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                                <div className="bg-yellow-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                   <div className="flex items-center justify-center mb-1">
                                     <Users className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                                   </div>
                                   <div className="text-lg font-bold text-yellow-600 dark:text-yellow-400">{test.attempts}</div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Attempts</div>
                                 </div>
-                                <div className="bg-indigo-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                                <div className="bg-indigo-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                   <div className="flex items-center justify-center mb-1">
                                     <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                                   </div>
                                   <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{test.startDate}</div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Start Date</div>
                                 </div>
-                                <div className="bg-red-50 dark:bg-slate-600 rounded-lg p-3 text-center">
+                                <div className="bg-red-50 dark:bg-slate-900 rounded-lg p-3 text-center">
                                   <div className="flex items-center justify-center mb-1">
                                     <Clock className="w-4 h-4 text-red-600 dark:text-red-400" />
                                   </div>
@@ -1095,7 +1152,6 @@ const OnlineTestHod = () => {
                                 <Edit className="w-4 h-4" />
                                 <span className="hidden sm:inline">Edit Test</span>
                               </button>
-                              
                             </div>
                           </div>
                         </div>
@@ -1137,7 +1193,7 @@ const OnlineTestHod = () => {
                     className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-md transition-colors duration-300"
                     placeholder="Test Title"
                   />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <select
                       value={newTest.year}
                       onChange={(e) => setNewTest({...newTest, year: e.target.value})}
@@ -1156,6 +1212,16 @@ const OnlineTestHod = () => {
                       <option value="">Select Semester</option>
                       {semesters.map(semester => (
                         <option key={semester} value={semester}>{semester}</option>
+                      ))}
+                    </select>
+                    <select
+                      value={newTest.program}
+                      onChange={(e) => setNewTest({...newTest, program: e.target.value})}
+                      className="px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-md transition-colors duration-300"
+                    >
+                      <option value="">Select Program</option>
+                      {programs.map(program => (
+                        <option key={program} value={program}>{program}</option>
                       ))}
                     </select>
                     <select
@@ -1552,6 +1618,7 @@ const OnlineTestHod = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div><strong className="text-gray-700 dark:text-gray-300">Name:</strong> <span className="text-gray-900 dark:text-gray-100">{viewingSubmission.studentName}</span></div>
                   <div><strong className="text-gray-700 dark:text-gray-300">Student ID:</strong> <span className="text-gray-900 dark:text-gray-100">{viewingSubmission.studentId}</span></div>
+                  <div><strong className="text-gray-700 dark:text-gray-300">Program:</strong> <span className="text-gray-900 dark:text-gray-100">{viewingSubmission.program}</span></div>
                   <div><strong className="text-gray-700 dark:text-gray-300">Subject:</strong> <span className="text-gray-900 dark:text-gray-100">{viewingSubmission.subject}</span></div>
                   <div><strong className="text-gray-700 dark:text-gray-300">Academic Year:</strong> <span className="text-gray-900 dark:text-gray-100">{viewingSubmission.year} - {viewingSubmission.semester}</span></div>
                 </div>
@@ -1660,4 +1727,3 @@ const OnlineTestHod = () => {
 };
 
 export default OnlineTestHod;
-

@@ -17,7 +17,8 @@ import {
   User,
   Star,
   Play,
-  Award
+  Award,
+  Bell
 } from 'lucide-react';
 
 interface Assignment {
@@ -51,8 +52,9 @@ const StudentAssignments: React.FC = () => {
   const [subjectFilter, setSubjectFilter] = useState<string>('');
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
 
-  // Sample assignments data
+  // Sample assignments data (same as before)
   const [assignments] = useState<Assignment[]>([
     {
       id: '1',
@@ -80,7 +82,7 @@ const StudentAssignments: React.FC = () => {
       status: 'submitted',
       submittedDate: '2025-09-25',
       priority: 'medium',
-      type: 'group',
+      type: 'individual',
       attachments: ['project_requirements.pdf'],
       submissionFile: 'library_db_design.zip'
     },
@@ -141,7 +143,7 @@ const StudentAssignments: React.FC = () => {
       status: 'submitted',
       submittedDate: '2025-09-26',
       priority: 'medium',
-      type: 'group',
+      type: 'individual',
       submissionFile: 'case_study_report.pdf'
     },
     {
@@ -171,6 +173,95 @@ const StudentAssignments: React.FC = () => {
     }
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
+
+  // Check notification permission on component mount
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotificationPermission(Notification.permission);
+    }
+  }, []);
+
+  // Request notification permission
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      alert('This browser does not support desktop notification');
+      return false;
+    }
+
+    if (Notification.permission === 'granted') {
+      return true;
+    }
+
+    if (Notification.permission !== 'denied') {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+      return permission === 'granted';
+    }
+
+    return false;
+  };
+
+  // Show notification function
+  const showNotification = (assignment: Assignment) => {
+    const options = {
+      body: `Subject: ${assignment.subject}\nFaculty: ${assignment.faculty}\nDue: ${new Date(assignment.dueDate).toLocaleDateString('en-IN')}`,
+      icon: '/favicon.ico', // You can add a custom icon path here
+      badge: '/favicon.ico', // Badge icon for mobile devices
+      tag: `assignment-${assignment.id}`, // Unique tag to prevent duplicate notifications
+      requireInteraction: false, // Set to true if you want notification to stay until user interacts
+      silent: false,
+      data: {
+        assignmentId: assignment.id,
+        url: window.location.href
+      },
+      actions: [
+        {
+          action: 'view',
+          title: 'View Assignment',
+          icon: '/view-icon.png' // Optional: add custom action icon
+        },
+        {
+          action: 'dismiss',
+          title: 'Dismiss',
+          icon: '/dismiss-icon.png' // Optional: add custom action icon
+        }
+      ]
+    };
+
+    const notification = new Notification(`Assignment Started: ${assignment.title}`, options);
+
+    // Handle notification click
+    notification.onclick = function(event) {
+      event.preventDefault();
+      window.focus(); // Focus the window when notification is clicked
+      notification.close();
+    };
+
+    // Handle notification actions (if supported)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('notificationclick', function(event) {
+        if (event.notification.tag === `assignment-${assignment.id}`) {
+          event.notification.close();
+          
+          if (event.action === 'view') {
+            // Handle view action
+            window.focus();
+          } else if (event.action === 'dismiss') {
+            // Handle dismiss action
+            event.notification.close();
+          } else {
+            // Handle default click
+            window.focus();
+          }
+        }
+      });
+    }
+
+    // Auto close notification after 5 seconds
+    setTimeout(() => {
+      notification.close();
+    }, 5000);
+  };
 
   // Separate assignments based on status for different tabs
   const assignedAssignments = assignments.filter(a => a.status === 'pending' || a.status === 'overdue');
@@ -234,9 +325,25 @@ const StudentAssignments: React.FC = () => {
     setShowDetailModal(true);
   };
 
-  const handleStartAssignment = (assignmentId: string) => {
+  // Modified handleStartAssignment function with notification
+  const handleStartAssignment = async (assignmentId: string) => {
+    const assignment = assignments.find(a => a.id === assignmentId);
+    if (!assignment) return;
+
     console.log('Starting assignment:', assignmentId);
-    // Add your logic to start the assignment
+    
+    // Request permission and show notification
+    const hasPermission = await requestNotificationPermission();
+    
+    if (hasPermission) {
+      showNotification(assignment);
+    } else {
+      // Fallback: show an alert if notifications are not allowed
+      alert(`Assignment started: ${assignment.title}`);
+    }
+
+    // Add your logic to start the assignment here
+    // For example: navigate to assignment page, update status, etc.
   };
 
   // Summary stats based on active tab
@@ -269,19 +376,29 @@ const StudentAssignments: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-4 lg:p-6 rounded-t-lg">
         <div className="flex-1 mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center">
-            <FileText className="w-8 h-8 mr-3 text-blue-500" />
+          <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
+            <FileText className="w-8 h-8 mr-3 text-white" />
             My Assignments
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-100">
             Track and manage all your course assignments and submissions
           </p>
         </div>
-    
+        
+        <div className="flex items-center space-x-4">
+          {notificationPermission === 'granted' && (
+            <div className="flex items-center space-x-2 px-3 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-lg">
+              <CheckCircle className="w-4 h-4" />
+              <span className="text-sm">Notifications Enabled</span>
+            </div>
+          )}
+         
+        </div>
       </div>
 
+      {/* Rest of your existing JSX code remains exactly the same... */}
       {/* Tabs */}
       <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-8">
         <button
@@ -612,7 +729,7 @@ const StudentAssignments: React.FC = () => {
         ))}
       </div>
 
-      {/* Detail Modal */}
+      {/* Detail Modal - Rest of your existing modal code remains the same */}
       {showDetailModal && selectedAssignment && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4" onClick={() => setShowDetailModal(false)}>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>

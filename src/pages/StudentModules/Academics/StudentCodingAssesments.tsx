@@ -18,7 +18,8 @@ import {
   Award,
   Terminal,
   Cpu,
-  Zap
+  Zap,
+  Bell
 } from 'lucide-react';
 
 interface CodingAssessment {
@@ -55,23 +56,24 @@ const StudentCodingAssessments: React.FC = () => {
   const [subjectFilter, setSubjectFilter] = useState<string>('');
   const [selectedAssessment, setSelectedAssessment] = useState<CodingAssessment | null>(null);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
 
   // Sample coding assessments data
   const [assessments] = useState<CodingAssessment[]>([
-    {
+  {
       id: '1',
-      title: 'Data Structures Coding Challenge',
-      description: 'Implement various data structures and solve algorithmic problems',
-      subject: 'Data Structures & Algorithms',
-      faculty: 'Dr. Rajesh Kumar',
-      scheduledDate: '2025-10-08T15:00:00',
-      duration: 180,
-      totalProblems: 5,
-      totalMarks: 150,
-      status: 'upcoming',
-      difficulty: 'medium',
-      language: ['C++', 'Java', 'Python'],
-      problemTypes: ['Arrays', 'Linked Lists', 'Trees', 'Graphs'],
+      title: 'Java Basics Challenge',
+      description: 'Solve complex algorithmic problems with optimal time complexity',
+      subject: 'Advanced Algorithms',
+      faculty: 'Prof. karan Mehta',
+      scheduledDate: '2025-09-30T14:00:00',
+      duration: 240,
+      totalProblems: 6,
+      totalMarks: 200,
+      status: 'live',
+      difficulty: 'hard',
+      language: ['C++', 'Java', 'Python', 'C'],
+      problemTypes: ['Dynamic Programming', 'Greedy', 'Graph Algorithms'],
       attempts: 0,
       maxAttempts: 1
     },
@@ -81,7 +83,24 @@ const StudentCodingAssessments: React.FC = () => {
       description: 'Solve complex algorithmic problems with optimal time complexity',
       subject: 'Advanced Algorithms',
       faculty: 'Prof. Priya Sharma',
-      scheduledDate: '2025-09-30T14:00:00',
+      scheduledDate: '2025-09-22T14:00:00',
+      duration: 240,
+      totalProblems: 6,
+      totalMarks: 200,
+      status: 'live',
+      difficulty: 'hard',
+      language: ['C++', 'Java', 'Python', 'C'],
+      problemTypes: ['Dynamic Programming', 'Greedy', 'Graph Algorithms'],
+      attempts: 0,
+      maxAttempts: 1
+    },
+    {
+      id: '3',
+      title: 'Python Basics Challenge',
+      description: 'Solve complex algorithmic problems with optimal time complexity',
+      subject: 'Advanced Algorithms',
+      faculty: 'Prof. shivam Gupta',
+      scheduledDate: '2025-09-03T14:00:00',
       duration: 240,
       totalProblems: 6,
       totalMarks: 200,
@@ -113,40 +132,8 @@ const StudentCodingAssessments: React.FC = () => {
       attempts: 1,
       maxAttempts: 1
     },
-    {
-      id: '4',
-      title: 'Machine Learning Implementation',
-      description: 'Implement ML algorithms from scratch and analyze datasets',
-      subject: 'Machine Learning',
-      faculty: 'Dr. Arjun Reddy',
-      scheduledDate: '2025-09-18T16:00:00',
-      duration: 210,
-      totalProblems: 4,
-      totalMarks: 160,
-      status: 'missed',
-      difficulty: 'hard',
-      language: ['Python', 'R'],
-      problemTypes: ['Classification', 'Regression', 'Clustering'],
-      attempts: 0,
-      maxAttempts: 1
-    },
-    {
-      id: '5',
-      title: 'Database Programming Challenge',
-      description: 'Design database schemas and write complex SQL queries',
-      subject: 'Database Management',
-      faculty: 'Prof. Deepika Nair',
-      scheduledDate: '2025-10-12T11:00:00',
-      duration: 150,
-      totalProblems: 8,
-      totalMarks: 100,
-      status: 'upcoming',
-      difficulty: 'easy',
-      language: ['SQL', 'MySQL', 'PostgreSQL'],
-      problemTypes: ['Query Optimization', 'Joins', 'Stored Procedures'],
-      attempts: 0,
-      maxAttempts: 2
-    },
+    
+   
     {
       id: '6',
       title: 'System Programming Lab',
@@ -199,6 +186,95 @@ const StudentCodingAssessments: React.FC = () => {
     }
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
+
+  // Check notification permission on component mount
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotificationPermission(Notification.permission);
+    }
+  }, []);
+
+  // Request notification permission
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      alert('This browser does not support desktop notification');
+      return false;
+    }
+
+    if (Notification.permission === 'granted') {
+      return true;
+    }
+
+    if (Notification.permission !== 'denied') {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+      return permission === 'granted';
+    }
+
+    return false;
+  };
+
+  // Show notification function
+  const showNotification = (assessment: CodingAssessment) => {
+    const options = {
+      body: `Subject: ${assessment.subject}\nFaculty: ${assessment.faculty}\nDuration: ${assessment.duration} minutes\nProblems: ${assessment.totalProblems}\nDifficulty: ${assessment.difficulty.toUpperCase()}`,
+      icon: '/favicon.ico', // You can add a custom icon path here
+      badge: '/favicon.ico', // Badge icon for mobile devices
+      tag: `coding-assessment-${assessment.id}`, // Unique tag to prevent duplicate notifications
+      requireInteraction: false, // Set to true if you want notification to stay until user interacts
+      silent: false,
+      data: {
+        assessmentId: assessment.id,
+        url: window.location.href
+      },
+      actions: [
+        {
+          action: 'view',
+          title: 'View Assessment',
+          icon: '/view-icon.png' // Optional: add custom action icon
+        },
+        {
+          action: 'dismiss',
+          title: 'Dismiss',
+          icon: '/dismiss-icon.png' // Optional: add custom action icon
+        }
+      ]
+    };
+
+    const notification = new Notification(`Coding Assessment Started: ${assessment.title}`, options);
+
+    // Handle notification click
+    notification.onclick = function(event) {
+      event.preventDefault();
+      window.focus(); // Focus the window when notification is clicked
+      notification.close();
+    };
+
+    // Handle notification actions (if supported)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('notificationclick', function(event) {
+        if (event.notification.tag === `coding-assessment-${assessment.id}`) {
+          event.notification.close();
+          
+          if (event.action === 'view') {
+            // Handle view action
+            window.focus();
+          } else if (event.action === 'dismiss') {
+            // Handle dismiss action
+            event.notification.close();
+          } else {
+            // Handle default click
+            window.focus();
+          }
+        }
+      });
+    }
+
+    // Auto close notification after 6 seconds (longer for coding assessments)
+    setTimeout(() => {
+      notification.close();
+    }, 6000);
+  };
 
   // Separate assessments based on status for different tabs
   const assignedAssessments = assessments.filter(a => a.status === 'upcoming' || a.status === 'live' || a.status === 'missed');
@@ -266,9 +342,25 @@ const StudentCodingAssessments: React.FC = () => {
     setShowDetailModal(true);
   };
 
-  const handleStartAssessment = (assessmentId: string) => {
+  // Modified handleStartAssessment function with notification
+  const handleStartAssessment = async (assessmentId: string) => {
+    const assessment = assessments.find(a => a.id === assessmentId);
+    if (!assessment) return;
+
     console.log('Starting coding assessment:', assessmentId);
-    // Add your logic to start the assessment
+    
+    // Request permission and show notification
+    const hasPermission = await requestNotificationPermission();
+    
+    if (hasPermission) {
+      showNotification(assessment);
+    } else {
+      // Fallback: show an alert if notifications are not allowed
+      alert(`Coding Assessment Started: ${assessment.title}\nDuration: ${assessment.duration} minutes`);
+    }
+
+    // Add your logic to start the assessment here
+    // For example: navigate to assessment page, update status, etc.
   };
 
   // Summary stats based on active tab
@@ -303,17 +395,28 @@ const StudentCodingAssessments: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex-1 mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center">
-            <Code className="w-8 h-8 mr-3 text-blue-500" />
-            Coding Assessments
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Practice and showcase your programming skills through coding challenges
-          </p>
+<div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-4 lg:p-6 rounded-t-lg">
+  <div className="flex-1 mb-4 md:mb-0">
+    <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
+      <Code className="w-8 h-8 mr-3 text-white" />
+      Coding Assessments
+    </h1>
+    <p className="text-gray-100">
+      Practice and showcase your programming skills through coding challenges
+    </p>
+  </div>
+
+        
+        {/* Notification Permission Button */}
+        <div className="flex items-center space-x-4">
+          {notificationPermission === 'granted' && (
+            <div className="flex items-center space-x-2 px-3 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-lg">
+              <CheckCircle className="w-4 h-4" />
+              <span className="text-sm">Notifications Enabled</span>
+            </div>
+          )}
+         
         </div>
-       
       </div>
 
       {/* Tabs */}
@@ -692,7 +795,6 @@ const StudentCodingAssessments: React.FC = () => {
                       <Eye className="w-4 h-4" />
                       <span>View Score Details</span>
                     </button>
-                    
                   </>
                 )}
               </div>
@@ -701,7 +803,7 @@ const StudentCodingAssessments: React.FC = () => {
         ))}
       </div>
 
-      {/* Detail Modal */}
+      {/* Detail Modal - Rest of your existing modal code with updated start button */}
       {showDetailModal && selectedAssessment && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4" onClick={() => setShowDetailModal(false)}>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
