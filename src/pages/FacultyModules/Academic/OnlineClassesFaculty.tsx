@@ -1,5 +1,5 @@
 
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   Sun,
   Moon,
@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../../contexts/ThemeContext';
 
-// Sample data for engineering college
 const departments = [
   'Computer Science',
   'Electronics & Communication',
@@ -44,6 +43,7 @@ const initialSampleClasses = [
     time: '10:00 AM - 11:30 AM',
     date: '2024-09-27',
     status: 'ongoing',
+    joinLink: 'https://example.com/join/dsa',
   },
   {
     id: 2,
@@ -58,6 +58,7 @@ const initialSampleClasses = [
     time: '2:00 PM - 3:30 PM',
     date: '2024-09-27',
     status: 'scheduled',
+    joinLink: 'https://example.com/join/dsp',
   },
   {
     id: 3,
@@ -72,6 +73,7 @@ const initialSampleClasses = [
     time: '11:45 AM - 1:15 PM',
     date: '2024-09-27',
     status: 'completed',
+    recordingLink: 'https://example.com/recording/thermo',
   },
   {
     id: 4,
@@ -86,6 +88,7 @@ const initialSampleClasses = [
     time: '9:00 AM - 10:30 AM',
     date: '2024-09-27',
     status: 'ongoing',
+    joinLink: 'https://example.com/join/dbms',
   },
   {
     id: 5,
@@ -100,6 +103,7 @@ const initialSampleClasses = [
     time: '3:45 PM - 5:15 PM',
     date: '2024-09-27',
     status: 'scheduled',
+    joinLink: 'https://example.com/join/ps',
   },
 ];
 
@@ -123,6 +127,22 @@ const ClassCard = ({ classData }) => {
         return 'text-gray-600 bg-gray-100 dark:bg-gray-700 dark:text-gray-300';
       default:
         return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const handleJoin = () => {
+    if (classData.joinLink) {
+      window.open(classData.joinLink, '_blank');
+    } else {
+      alert('Join link not available');
+    }
+  };
+
+  const handleWatchRecording = () => {
+    if (classData.recordingLink) {
+      window.open(classData.recordingLink, '_blank');
+    } else {
+      alert('Recording link not available');
     }
   };
 
@@ -192,6 +212,24 @@ const ClassCard = ({ classData }) => {
           {copied ? <Check size={16} /> : <Copy size={16} />}
         </button>
       </div>
+
+      {(classData.status === 'scheduled' || classData.status === 'ongoing') && (
+        <button
+          onClick={handleJoin}
+          className="mt-3 w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition"
+        >
+          Join Class
+        </button>
+      )}
+
+      {classData.status === 'completed' && classData.recordingLink && (
+        <button
+          onClick={handleWatchRecording}
+          className="mt-3 w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition"
+        >
+          Watch Recording
+        </button>
+      )}
     </div>
   );
 };
@@ -224,17 +262,16 @@ const FilterDropdown = ({ label, value, options, onChange, icon: Icon }) => {
 };
 
 const ClassManagement = () => {
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark } = useTheme();
 
   const [sampleClasses, setSampleClasses] = useState(initialSampleClasses);
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
 
+  // Modal state for scheduling class
   const [showModal, setShowModal] = useState(false);
-  const [notification, setNotification] = useState('');
   const [newClassData, setNewClassData] = useState({
     subject: '',
     code: '',
@@ -247,9 +284,10 @@ const ClassManagement = () => {
     time: '',
     date: '',
     status: 'scheduled',
+    joinLink: '',
   });
+  const [notification, setNotification] = useState('');
 
-  // Filter classes based on search and dropdown selections
   const filteredClasses = sampleClasses.filter((cls) => {
     const matchesSearch =
       cls.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -258,16 +296,18 @@ const ClassManagement = () => {
     const matchesDepartment = !selectedDepartment || cls.department === selectedDepartment;
     const matchesYear = !selectedYear || cls.year === selectedYear;
     const matchesSection = !selectedSection || cls.section === selectedSection;
-
     return matchesSearch && matchesDepartment && matchesYear && matchesSection;
   });
 
-  // Calculate statistics
+  const upcomingClasses = filteredClasses.filter(c => c.status === 'scheduled');
+  const ongoingClassesList = filteredClasses.filter(c => c.status === 'ongoing');
+  const completedClasses = filteredClasses.filter(c => c.status === 'completed');
+
   const totalClasses = filteredClasses.length;
   const totalStudents = filteredClasses.reduce((sum, cls) => sum + cls.studentCount, 0);
-  const ongoingClasses = filteredClasses.filter((cls) => cls.status === 'ongoing').length;
+  const ongoingClasses = ongoingClassesList.length;
 
-  // Handle input change in new class form
+  // Handle input in scheduling form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewClassData((prev) => ({
@@ -276,30 +316,10 @@ const ClassManagement = () => {
     }));
   };
 
-  // Validate mandatory fields before adding
+  // Form validation
   const isFormValid = () => {
-    const {
-      subject,
-      code,
-      onlineCode,
-      department,
-      year,
-      section,
-      faculty,
-      time,
-      date,
-    } = newClassData;
-    return (
-      subject &&
-      code &&
-      onlineCode &&
-      department &&
-      year &&
-      section &&
-      faculty &&
-      time &&
-      date
-    );
+    const { subject, code, onlineCode, department, year, section, faculty, time, date } = newClassData;
+    return subject && code && onlineCode && department && year && section && faculty && time && date;
   };
 
   // Schedule new class
@@ -317,7 +337,6 @@ const ClassManagement = () => {
     setSampleClasses([...sampleClasses, newClass]);
     setShowModal(false);
     setNotification(`Class "${newClassData.subject}" scheduled successfully!`);
-    // Reset form data
     setNewClassData({
       subject: '',
       code: '',
@@ -330,6 +349,7 @@ const ClassManagement = () => {
       time: '',
       date: '',
       status: 'scheduled',
+      joinLink: '',
     });
     setTimeout(() => setNotification(''), 3000);
   };
@@ -351,23 +371,12 @@ const ClassManagement = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center gap-1 px-3 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+                className="flex items-center gap-1 px-3 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition "
                 title="Schedule New Class"
               >
                 <PlusCircle size={18} />
                 Schedule Class
               </button>
-              {/* <button
-                onClick={toggleTheme}
-                className={`p-2 rounded-md transition-colors ${
-                  isDark
-                    ? 'text-gray-400 hover:text-white hover:bg-gray-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
-                title="Toggle Theme"
-              >
-                {isDark ? <Sun size={20} /> : <Moon size={20} />}
-              </button> */}
             </div>
           </div>
         </div>
@@ -385,13 +394,9 @@ const ClassManagement = () => {
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Statistics Cards */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div
-            className={`p-4 rounded-lg ${
-              isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-            }`}
-          >
+          <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
             <div className="flex items-center">
               <BookOpen className={`h-8 w-8 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
               <div className="ml-3">
@@ -400,35 +405,21 @@ const ClassManagement = () => {
               </div>
             </div>
           </div>
-
-          <div
-            className={`p-4 rounded-lg ${
-              isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-            }`}
-          >
+          <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
             <div className="flex items-center">
               <Users className={`h-8 w-8 ${isDark ? 'text-green-400' : 'text-green-500'}`} />
               <div className="ml-3">
                 <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Students</p>
-                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {totalStudents}
-                </p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{totalStudents}</p>
               </div>
             </div>
           </div>
-
-          <div
-            className={`p-4 rounded-lg ${
-              isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-            }`}
-          >
+          <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
             <div className="flex items-center">
               <Video className={`h-8 w-8 ${isDark ? 'text-red-400' : 'text-red-500'}`} />
               <div className="ml-3">
                 <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Ongoing Classes</p>
-                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {ongoingClasses}
-                </p>
+                <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{ongoingClasses}</p>
               </div>
             </div>
           </div>
@@ -437,7 +428,6 @@ const ClassManagement = () => {
         {/* Filters */}
         <div className={`p-4 rounded-lg mb-6 ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
           <div className="flex flex-col gap-4">
-            {/* Search */}
             <div className="relative">
               <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} size={16} />
               <input
@@ -450,55 +440,48 @@ const ClassManagement = () => {
                 }`}
               />
             </div>
-
-            {/* Dropdowns */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <FilterDropdown
-                label="Department"
-                value={selectedDepartment}
-                options={departments}
-                onChange={setSelectedDepartment}
-                icon={BookOpen}
-              />
-              <FilterDropdown
-                label="Year"
-                value={selectedYear}
-                options={years}
-                onChange={setSelectedYear}
-                icon={Calendar}
-              />
-              <FilterDropdown
-                label="Section"
-                value={selectedSection}
-                options={sections}
-                onChange={setSelectedSection}
-                icon={Filter}
-              />
+              <FilterDropdown label="Department" value={selectedDepartment} options={departments} onChange={setSelectedDepartment} icon={BookOpen} />
+              <FilterDropdown label="Year" value={selectedYear} options={years} onChange={setSelectedYear} icon={Calendar} />
+              <FilterDropdown label="Section" value={selectedSection} options={sections} onChange={setSelectedSection} icon={Filter} />
             </div>
           </div>
         </div>
 
-        {/* Classes Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredClasses.map((classData) => (
-            <ClassCard key={classData.id} classData={classData} />
-          ))}
-        </div>
+        {/* Categorized Classes */}
+        <div>
+          <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Upcoming Classes</h2>
+          {upcomingClasses.length ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {upcomingClasses.map((c) => <ClassCard key={c.id} classData={c} />)}
+            </div>
+          ) : <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>No upcoming classes found.</p>}
 
-        {filteredClasses.length === 0 && (
-          <div className={`text-center py-12 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-            <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium">No classes found</p>
-            <p className="text-sm">Try adjusting your search or filter criteria</p>
-          </div>
-        )}
+          <h2 className={`text-xl font-semibold mt-8 mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Ongoing Classes</h2>
+          {ongoingClassesList.length ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {ongoingClassesList.map((c) => <ClassCard key={c.id} classData={c} />)}
+            </div>
+          ) : <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>No ongoing classes found.</p>}
+
+          <h2 className={`text-xl font-semibold mt-8 mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Completed Classes</h2>
+          {completedClasses.length ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {completedClasses.map((c) => <ClassCard key={c.id} classData={c} />)}
+            </div>
+          ) : <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>No completed classes found.</p>}
+        </div>
       </div>
 
       {/* Schedule Class Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
-          <div className={`bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 shadow-lg relative`}>
-            <button
+        // <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50 ">
+        //   <div className={`bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 shadow-lg relative scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700 max-h-[90vh] overflow-y-auto`}>
+           <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
+  <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 shadow-lg relative max-h-[90vh] overflow-y-auto thin-scrollbar">
+    {/* content */}
+  
+        <button
               onClick={() => setShowModal(false)}
               className={`absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300`}
               aria-label="Close"
@@ -569,6 +552,7 @@ const ClassManagement = () => {
                   </option>
                 ))}
               </select>
+              
               <input
                 name="studentCount"
                 type="number"
@@ -596,6 +580,13 @@ const ClassManagement = () => {
                 name="date"
                 type="date"
                 value={newClassData.date}
+                onChange={handleInputChange}
+                className="w-full p-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              />
+              <input
+                name="joinLink"
+                placeholder="Join Link URL"
+                value={newClassData.joinLink}
                 onChange={handleInputChange}
                 className="w-full p-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
