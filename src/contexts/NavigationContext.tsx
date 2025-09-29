@@ -84,10 +84,10 @@ const SIDEBAR_ITEMS = {
     ],
     'Master Admin': [
       { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
-      { name: 'My Calendar', path: 'master/home/my-calendar', icon: 'Calendar' },
-      { name: 'Inbox', path: 'master/home/inbox', icon: 'Mail' },
-      { name: 'Notifications', path: 'master/home/notifications', icon: 'Bell' },
-      { name: 'Events', path: 'master/home/events', icon: 'Calendar' }
+      { name: 'My Calendar', path: '/master/home/my-calendar', icon: 'Calendar' },
+      { name: 'Inbox', path: '/master/home/inbox', icon: 'Mail' },
+      { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
+      { name: 'Events', path: '/master/home/events', icon: 'Calendar' }
     ],
     'College Secretary': [
       { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
