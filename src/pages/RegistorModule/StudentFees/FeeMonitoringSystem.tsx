@@ -15,6 +15,7 @@ interface Student {
   status: 'paid' | 'partial' | 'Over Due' ;
   email: string;
   phone: string;
+  Category: string;
 }
 
 interface Transaction {
@@ -24,6 +25,7 @@ interface Transaction {
   amount: number;
   type: 'online' | 'offline';
   method: string;
+  Category: string;
   date: string;
   status: 'completed' | 'pending' | 'failed';
   reference: string;
@@ -43,6 +45,8 @@ const FeeMonitoringSystem: React.FC = () => {
   const [transactionTypeFilter, setTransactionTypeFilter] = useState('all');
   const [transactionStatusFilter, setTransactionStatusFilter] = useState('all');
   const [semesterFilter, setSemesterFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
 
   // Sample data
   const students: Student[] = [
@@ -54,6 +58,7 @@ const FeeMonitoringSystem: React.FC = () => {
       semester: 'Semester-I',
       totalPayable: 50000,
       amountPaid: 50000,
+      Category: 'General',
       balance: 0,
       lastPaymentDate: '2024-08-15',
       status: 'paid',
@@ -68,6 +73,7 @@ const FeeMonitoringSystem: React.FC = () => {
       semester: 'Semester-I',
       totalPayable: 60000,
       amountPaid: 35000,
+      Category: 'Sc',
       balance: 25000,
       lastPaymentDate: '2024-07-20',
       status: 'partial',
@@ -82,6 +88,7 @@ const FeeMonitoringSystem: React.FC = () => {
       semester: 'Semester-II',
       totalPayable: 45000,
       amountPaid: 15000,
+      Category: 'OBC',
       balance: 30000,
       lastPaymentDate: '2024-06-10',
       status: 'Over Due',
@@ -96,6 +103,7 @@ const FeeMonitoringSystem: React.FC = () => {
       semester: 'Semester-III',
       totalPayable: 55000,
       amountPaid: 55000,
+      Category: 'Bc',
       balance: 0,
       lastPaymentDate: '2024-08-25',
       status: 'paid',
@@ -111,6 +119,7 @@ const FeeMonitoringSystem: React.FC = () => {
       totalPayable: 58000,
       amountPaid: 20000,
       balance: 38000,
+      Category: 'Sc',
       lastPaymentDate: '2024-05-15',
       status: 'Over Due',
       email: 'david.brown@email.com',
@@ -126,6 +135,7 @@ const FeeMonitoringSystem: React.FC = () => {
       amount: 25000,
       type: 'online',
       method: 'Credit Card',
+      Category: 'BC',
       date: '2024-08-15',
       status: 'completed',
       reference: 'PAY001',
@@ -138,6 +148,7 @@ const FeeMonitoringSystem: React.FC = () => {
       amount: 15000,
       type: 'offline',
       method: 'Cash',
+      Category: 'SC',
       date: '2024-07-20',
       status: 'completed',
       reference: 'PAY002',
@@ -150,6 +161,7 @@ const FeeMonitoringSystem: React.FC = () => {
       amount: 10000,
       type: 'online',
       method: 'Bank Transfer',
+      Category: 'OBC',
       date: '2024-06-10',
       status: 'failed',
       reference: 'PAY003',
@@ -163,6 +175,7 @@ const FeeMonitoringSystem: React.FC = () => {
       type: 'online',
       method: 'UPI',
       date: '2024-08-25',
+      Category: 'BC',
       status: 'completed',
       reference: 'PAY004',
       feeType: 'Tuition'
@@ -174,6 +187,7 @@ const FeeMonitoringSystem: React.FC = () => {
       amount: 20000,
       type: 'offline',
       method: 'Cheque',
+      Category: 'SC',
       date: '2024-05-15',
       status: 'pending',
       reference: 'PAY005',
@@ -541,6 +555,9 @@ const toCSV = (arr: object[], columns: string[]) => {
                        <th className={`px-6 py-4 text-left text-xs font-medium uppercase tracking-wider ${currentTheme.textSecondary}`}>
                           Semester
                         </th>
+                              <th className={`px-6 py-4 text-left text-xs font-medium uppercase tracking-wider ${currentTheme.textSecondary}`}>
+                          Category
+                        </th>
                           <th className={`px-6 py-4 text-left text-xs font-medium uppercase tracking-wider ${currentTheme.textSecondary}`}>
                         Total Payable
                       </th>
@@ -573,6 +590,10 @@ const toCSV = (arr: object[], columns: string[]) => {
                         </td>
                          <td className="px-6 py-4 whitespace-nowrap">
                           <div className={`text-sm ${currentTheme.text}`}>{student.semester}</div>
+                         
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className={`text-sm ${currentTheme.text}`}>{student.Category}</div>
                          
                         </td>
                        
