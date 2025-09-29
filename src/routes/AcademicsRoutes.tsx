@@ -84,7 +84,7 @@ import CourseFaculties from '../pages/HODModules/Academics/Courses/CourseFaculti
 import SyllabusLessonPlan from '../pages/HODModules/Academics/Courses/LessonPlan';
 import SyllabusTracking from '../pages/HODModules/Academics/Courses/SyllabusTracker';
 import HODLeaveRequest from '../pages/HODModules/Academics/LeaveRequest';
-import DepartmentTimetable from '../pages/HODModules/Academics/Timetable/CreateTimetable';
+
 import HodPersonalTimetable from '../pages/HODModules/Academics/Timetable/ViewTimetable';
 import HodDashboard from '../pages/HODModules/Academics/HodDashboard.';
 import SubjectList from '../pages/HODModules/Academics/Courses/SubjectList';
@@ -171,7 +171,7 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/tests/coding-assessment" element={<CodingAssements />} />
       <Route path="/hod/tests/online-tests" element={<OnlineTestHod />} />
        <Route path="leave-request" element={<HODLeaveRequest />} />
-       <Route path="/hod/timetable" element={<DepartmentTimetable />} />
+       
       <Route path="/hod/view-timetable" element={< HodPersonalTimetable/>} />
       <Route path="hod-dashboard" element={< HodDashboard/>} />
       <Route path="/faculty-dashboard" element={<FacultyAcademicDashboard />} />

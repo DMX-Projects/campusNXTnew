@@ -1,374 +1,312 @@
-import React, { useState, useMemo, useEffect, createContext, useContext } from 'react';
-import { Filter, Clock, User, BookOpen, MapPin, Sun, Moon, GraduationCap, Building2, Hash, Coffee } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Coffee, Clock, User, Calendar, Filter } from 'lucide-react';
 
-// Theme Context
-const ThemeContext = createContext({
-  isDarkMode: false,
-  toggleTheme: () => {}
-});
-
-// Theme Provider Component
-const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) {
-        return savedTheme === 'dark';
-      }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isDarkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
-
-  const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
-
-  return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
-
-
-
-// Student Profile Component
-const StudentProfile = ({ student }) => {
-  return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-800 dark:to-blue-900 rounded-xl p-6 text-white mb-6 shadow-lg">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-            <GraduationCap className="w-8 h-8 text-white" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold">{student.name}</h2>
-            <p className="text-blue-100">Student ID: {student.studentId}</p>
-          </div>
-        </div>
-        <div className="text-right">
-          <div className="text-sm text-blue-100">Academic Year</div>
-          <div className="text-lg font-semibold">{student.academicYear}</div>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t border-white/20">
-        <div className="flex items-center gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-          <Building2 className="w-5 h-5 text-blue-200" />
-          <div>
-            <div className="text-xs text-blue-200">Department</div>
-            <div className="font-semibold">{student.department}</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-          <Clock className="w-5 h-5 text-blue-200" />
-          <div>
-            <div className="text-xs text-blue-200">Semester</div>
-            <div className="font-semibold">{student.semester}</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-          <Hash className="w-5 h-5 text-blue-200" />
-          <div>
-            <div className="text-xs text-blue-200">Section</div>
-            <div className="font-semibold">{student.section}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const TimeTableContent = () => {
-  // Student Information
-  const studentData = {
-    name: "Arjun kumar",
-    studentId: "CSE2023A045",
-    department: "Computer Science Engineering",
-    semester: "3rd Semester",
-    section: "Section A",
-    academicYear: "2023-2024"
-  };
-
-  // Sample timetable data with lunch break
-  const timetableData = {
-    'CSE-3-A': {
-      department: 'Computer Science Engineering',
-      semester: '3rd Semester',
-      section: 'Section A',
-      schedule: {
-        Monday: {
-          '09:00-10:00': { subject: 'Data Structures', faculty: 'Dr. Smith', room: 'CS101' },
-          '10:00-11:00': { subject: 'Database Management', faculty: 'Prof. Johnson', room: 'CS102' },
-          '11:15-12:15': { subject: 'Computer Networks', faculty: 'Dr. Brown', room: 'CS103' },
-          '12:15-01:15': { subject: 'Software Engineering', faculty: 'Prof. Davis', room: 'CS104' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Web Technologies Lab', faculty: 'Dr. Wilson', room: 'Lab1' },
-          '03:15-04:15': { subject: 'Web Technologies Lab', faculty: 'Dr. Wilson', room: 'Lab1' }
-        },
-        Tuesday: {
-          '09:00-10:00': { subject: 'Operating Systems', faculty: 'Dr. Miller', room: 'CS105' },
-          '10:00-11:00': { subject: 'Data Structures', faculty: 'Dr. Smith', room: 'CS101' },
-          '11:15-12:15': { subject: 'Mathematics III', faculty: 'Prof. Taylor', room: 'M201' },
-          '12:15-01:15': { subject: 'Computer Networks', faculty: 'Dr. Brown', room: 'CS103' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Database Lab', faculty: 'Prof. Johnson', room: 'Lab2' },
-          '03:15-04:15': { subject: 'Database Lab', faculty: 'Prof. Johnson', room: 'Lab2' }
-        },
-        Wednesday: {
-          '09:00-10:00': { subject: 'Software Engineering', faculty: 'Prof. Davis', room: 'CS104' },
-          '10:00-11:00': { subject: 'Operating Systems', faculty: 'Dr. Miller', room: 'CS105' },
-          '11:15-12:15': { subject: 'Data Structures', faculty: 'Dr. Smith', room: 'CS101' },
-          '12:15-01:15': { subject: 'Technical Communication', faculty: 'Prof. Anderson', room: 'H101' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Programming Lab', faculty: 'Dr. Wilson', room: 'Lab3' },
-          '03:15-04:15': { subject: 'Programming Lab', faculty: 'Dr. Wilson', room: 'Lab3' }
-        },
-        Thursday: {
-          '09:00-10:00': { subject: 'Database Management', faculty: 'Prof. Johnson', room: 'CS102' },
-          '10:00-11:00': { subject: 'Computer Networks', faculty: 'Dr. Brown', room: 'CS103' },
-          '11:15-12:15': { subject: 'Operating Systems', faculty: 'Dr. Miller', room: 'CS105' },
-          '12:15-01:15': { subject: 'Mathematics III', faculty: 'Prof. Taylor', room: 'M201' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Seminar', faculty: 'Various Faculty', room: 'Seminar Hall' },
-          '03:15-04:15': { subject: 'Library', faculty: '', room: 'Library' }
-        },
-        Friday: {
-          '09:00-10:00': { subject: 'Technical Communication', faculty: 'Prof. Anderson', room: 'H101' },
-          '10:00-11:00': { subject: 'Software Engineering', faculty: 'Prof. Davis', room: 'CS104' },
-          '11:15-12:15': { subject: 'Database Management', faculty: 'Prof. Johnson', room: 'CS102' },
-          '12:15-01:15': { subject: 'Data Structures', faculty: 'Dr. Smith', room: 'CS101' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Project Work', faculty: 'All Faculty', room: 'Various' },
-          '03:15-04:15': { subject: 'Project Work', faculty: 'All Faculty', room: 'Various' }
+// --- MOCK DATA (Simulate fetching from a database/localStorage) ---
+const MOCK_TIMETABLE_DATA = {
+    allSubjects: [
+        { id: 'SUB001', name: 'Quantum Physics', code: 'PHY-401', lab: false },
+        { id: 'SUB002', name: 'Advanced Algorithms', code: 'CS-402', lab: false },
+        { id: 'SUB003', name: 'Machine Learning', code: 'AI-403', lab: false },
+        { id: 'SUB004', name: 'ML Lab', code: 'AI-403L', lab: true },
+        { id: 'SUB005', name: 'Compiler Design', code: 'CS-404', lab: false },
+        { id: 'SUB006', name: 'Networks Lab', code: 'CS-405L', lab: true },
+    ],
+    allFaculties: [
+        { id: 'FAC01', name: 'Dr. Evelyn Reed', expertise: ['SUB001'] },
+        { id: 'FAC02', name: 'Prof. Samuel Tan', expertise: ['SUB002', 'SUB005'] },
+        { id: 'FAC03', name: 'Dr. Ananya Sharma', expertise: ['SUB003', 'SUB004'] },
+        { id: 'FAC04', name: 'Prof. Ben Carter', expertise: ['SUB006'] },
+    ],
+    allClassrooms: [
+        { id: 'CR01', name: 'Room 101', capacity: 60, isLab: false },
+        { id: 'CR02', name: 'Room 102', capacity: 60, isLab: false },
+        { id: 'LAB01', name: 'AI & ML Lab', capacity: 40, isLab: true },
+        { id: 'LAB02', name: 'Networks Lab', capacity: 40, isLab: true },
+    ],
+    programs: [
+        {
+            id: 'PROG01',
+            name: 'Bachelor of Technology (B.Tech)',
+            courses: [
+                {
+                    id: 'COURSE01', name: 'Computer Science & Engineering',
+                    years: [{
+                        id: 'YEAR01', name: '4th Year',
+                        sections: [
+                            { id: 'CSE-A-4', name: 'Section A' },
+                            { id: 'CSE-B-4', name: 'Section B' }
+                        ]
+                    }]
+                },
+                {
+                    id: 'COURSE02', name: 'Physics',
+                    years: [{
+                        id: 'YEAR02', name: '4th Year',
+                        sections: [{ id: 'PHY-A-4', name: 'Section A' }]
+                    }]
+                }
+            ]
         }
-      }
+    ],
+    config: {
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        timeSlots: [
+            "09:00 - 09:52", "09:52 - 10:45",
+            "11:00 - 11:52", "11:52 - 12:45",
+            "13:45 - 14:37", "14:37 - 15:30", "15:30 - 16:22"
+        ],
+        lunchTime: { name: 'Lunch Break', startTime: '12:45', endTime: '13:45' },
+        breakTimes: [{ id: 1, name: 'Morning Break', startTime: '10:45', endTime: '11:00' }],
     },
-    'ECE-2-B': {
-      department: 'Electronics & Communication Engineering',
-      semester: '2nd Semester',
-      section: 'Section B',
-      schedule: {
-        Monday: {
-          '09:00-10:00': { subject: 'Circuit Theory', faculty: 'Dr. Kumar', room: 'ECE101' },
-          '10:00-11:00': { subject: 'Digital Electronics', faculty: 'Prof. Patel', room: 'ECE102' },
-          '11:15-12:15': { subject: 'Signals & Systems', faculty: 'Dr. Sharma', room: 'ECE103' },
-          '12:15-01:15': { subject: 'Mathematics II', faculty: 'Prof. Gupta', room: 'M101' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Electronics Lab', faculty: 'Dr. Kumar', room: 'ELab1' },
-          '03:15-04:15': { subject: 'Electronics Lab', faculty: 'Dr. Kumar', room: 'ELab1' }
+    timetables: {
+        'CSE-A-4': {
+            'Monday-09:00 - 09:52': { subjectId: 'SUB002', facultyId: 'FAC02', classroomId: 'CR01' },
+            'Monday-09:52 - 10:45': { subjectId: 'SUB003', facultyId: 'FAC03', classroomId: 'CR01' },
+            'Tuesday-11:00 - 11:52': { subjectId: 'SUB004', facultyId: 'FAC03', classroomId: 'LAB01' },
+            'Wednesday-13:45 - 14:37': { subjectId: 'SUB002', facultyId: 'FAC02', classroomId: 'CR02' },
         },
-        Tuesday: {
-          '09:00-10:00': { subject: 'Digital Electronics', faculty: 'Prof. Patel', room: 'ECE102' },
-          '10:00-11:00': { subject: 'Circuit Theory', faculty: 'Dr. Kumar', room: 'ECE101' },
-          '11:15-12:15': { subject: 'Engineering Physics', faculty: 'Dr. Reddy', room: 'P201' },
-          '12:15-01:15': { subject: 'Signals & Systems', faculty: 'Dr. Sharma', room: 'ECE103' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Circuit Lab', faculty: 'Prof. Patel', room: 'ELab2' },
-          '03:15-04:15': { subject: 'Circuit Lab', faculty: 'Prof. Patel', room: 'ELab2' }
+        'CSE-B-4': {
+            'Monday-09:00 - 09:52': { subjectId: 'SUB005', facultyId: 'FAC02', classroomId: 'CR02' },
+            'Tuesday-13:45 - 14:37': { subjectId: 'SUB006', facultyId: 'FAC04', classroomId: 'LAB02' },
         },
-        Wednesday: {
-          '09:00-10:00': { subject: 'Mathematics II', faculty: 'Prof. Gupta', room: 'M101' },
-          '10:00-11:00': { subject: 'Signals & Systems', faculty: 'Dr. Sharma', room: 'ECE103' },
-          '11:15-12:15': { subject: 'Digital Electronics', faculty: 'Prof. Patel', room: 'ECE102' },
-          '12:15-01:15': { subject: 'Engineering Graphics', faculty: 'Prof. Singh', room: 'Drawing Hall' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Physics Lab', faculty: 'Dr. Reddy', room: 'Physics Lab' },
-          '03:15-04:15': { subject: 'Physics Lab', faculty: 'Dr. Reddy', room: 'Physics Lab' }
+        'PHY-A-4': {
+            'Friday-09:00 - 09:52': { subjectId: 'SUB001', facultyId: 'FAC01', classroomId: 'CR01' },
         },
-        Thursday: {
-          '09:00-10:00': { subject: 'Engineering Physics', faculty: 'Dr. Reddy', room: 'P201' },
-          '10:00-11:00': { subject: 'Circuit Theory', faculty: 'Dr. Kumar', room: 'ECE101' },
-          '11:15-12:15': { subject: 'Mathematics II', faculty: 'Prof. Gupta', room: 'M101' },
-          '12:15-01:15': { subject: 'English Communication', faculty: 'Prof. Williams', room: 'H201' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Workshop', faculty: 'Tech Staff', room: 'Workshop' },
-          '03:15-04:15': { subject: 'Workshop', faculty: 'Tech Staff', room: 'Workshop' }
-        },
-        Friday: {
-          '09:00-10:00': { subject: 'Engineering Graphics', faculty: 'Prof. Singh', room: 'Drawing Hall' },
-          '10:00-11:00': { subject: 'English Communication', faculty: 'Prof. Williams', room: 'H201' },
-          '11:15-12:15': { subject: 'Circuit Theory', faculty: 'Dr. Kumar', room: 'ECE101' },
-          '12:15-01:15': { subject: 'Digital Electronics', faculty: 'Prof. Patel', room: 'ECE102' },
-          '01:15-02:15': { subject: 'LUNCH BREAK', faculty: '', room: '', isBreak: true },
-          '02:15-03:15': { subject: 'Sports/Extra Curricular', faculty: 'Sports Staff', room: 'Ground/Auditorium' },
-          '03:15-04:15': { subject: 'Sports/Extra Curricular', faculty: 'Sports Staff', room: 'Ground/Auditorium' }
-        }
-      }
     }
-  };
+};
 
-  const departments = [
-    { id: 'CSE', name: 'Computer Science Engineering' },
-    { id: 'ECE', name: 'Electronics & Communication Engineering' },
-    { id: 'ME', name: 'Mechanical Engineering' },
-    { id: 'CE', name: 'Civil Engineering' }
-  ];
+// --- Helper Functions & Derived Data ---
+const flattenAcademicData = (programs) => {
+    const sections = [];
+    programs.forEach(prog => {
+        prog.courses.forEach(course => {
+            course.years.forEach(year => {
+                year.sections.forEach(sec => {
+                    sections.push({
+                        ...sec,
+                        yearName: year.name,
+                        courseName: course.name,
+                        fullDisplayName: `${course.name} - ${year.name} - ${sec.name}`
+                    });
+                });
+            });
+        });
+    });
+    return { sections };
+};
 
-  const semesters = ['1st Semester', '2nd Semester', '3rd Semester', '4th Semester', '5th Semester', '6th Semester', '7th Semester', '8th Semester'];
-  const sections = ['Section A', 'Section B', 'Section C'];
+// --- UI Components ---
+const TimetableCell = ({ slot, color }) => (
+    <td className="border border-gray-200 dark:border-gray-700 h-24 p-1 align-top">
+        {slot ? (
+            <div className={`p-2 rounded-md h-full flex flex-col justify-between text-xs ${color}`}>
+                <div>
+                    <p className="font-bold text-gray-800 dark:text-gray-900">{slot.subject.name}</p>
+                    <p className="text-gray-600 dark:text-gray-700">{slot.faculty.name}</p>
+                </div>
+                <p className="text-gray-500 dark:text-gray-600 font-medium">{slot.classroom.name}</p>
+            </div>
+        ) : (
+            <div className="w-full h-full rounded-md bg-gray-50 dark:bg-gray-800/50"></div>
+        )}
+    </td>
+);
 
-  // Use student data to set initial selections
-  const [selectedDept, setSelectedDept] = useState('CSE');
-  const [selectedSemester, setSemester] = useState('3rd Semester');
-  const [selectedSection, setSelectedSection] = useState('Section A');
+const TimetableGrid = ({ config, timetable, subjectColorMap, data, selectedDay = '' }) => {
+    const allDaySlots = useMemo(() => {
+        const teaching = config.timeSlots.map(ts => ({ type: 'class', time: ts }));
+        const lunch = { type: 'lunch', time: `${config.lunchTime.startTime} - ${config.lunchTime.endTime}`, name: config.lunchTime.name };
+        const breaks = config.breakTimes.map(bt => ({ type: 'break', time: `${bt.startTime} - ${bt.endTime}`, name: bt.name }));
+        const combined = [...teaching, lunch, ...breaks];
+        return combined.sort((a, b) => a.time.split(' - ')[0].localeCompare(b.time.split(' - ')[0]));
+    }, [config]);
 
-  const timeSlots = [
-    '09:00-10:00',
-    '10:00-11:00',
-    '11:15-12:15',
-    '12:15-01:15',
-    '01:15-02:15', // Lunch break slot
-    '02:15-03:15',
-    '03:15-04:15'
-  ];
+    const daysToDisplay = selectedDay ? [selectedDay] : config.days;
 
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
-  const currentTimetable = useMemo(() => {
-    const key = `${selectedDept}-${selectedSemester.charAt(0)}-${selectedSection.slice(-1)}`;
-    return timetableData[key] || null;
-  }, [selectedDept, selectedSemester, selectedSection]);
-
-  const getSubjectColor = (subject, isBreak = false) => {
-    if (isBreak) {
-      return 'bg-orange-100 border-orange-300 text-orange-800 dark:bg-orange-900/30 dark:border-orange-700 dark:text-orange-300';
-    }
-    
-    const colors = {
-      'Data Structures': 'bg-blue-100 border-blue-300 text-blue-800 dark:bg-blue-900 dark:border-blue-700 dark:text-blue-200',
-      'Database Management': 'bg-green-100 border-green-300 text-green-800 dark:bg-green-900 dark:border-green-700 dark:text-green-200',
-      'Computer Networks': 'bg-purple-100 border-purple-300 text-purple-800 dark:bg-purple-900 dark:border-purple-700 dark:text-purple-200',
-      'Software Engineering': 'bg-indigo-100 border-indigo-300 text-indigo-800 dark:bg-indigo-900 dark:border-indigo-700 dark:text-indigo-200',
-      'Operating Systems': 'bg-red-100 border-red-300 text-red-800 dark:bg-red-900 dark:border-red-700 dark:text-red-200',
-      'Mathematics III': 'bg-yellow-100 border-yellow-300 text-yellow-800 dark:bg-yellow-900 dark:border-yellow-700 dark:text-yellow-200',
-      'Web Technologies Lab': 'bg-teal-100 border-teal-300 text-teal-800 dark:bg-teal-900 dark:border-teal-700 dark:text-teal-200',
-      'Database Lab': 'bg-emerald-100 border-emerald-300 text-emerald-800 dark:bg-emerald-900 dark:border-emerald-700 dark:text-emerald-200',
-      'Programming Lab': 'bg-pink-100 border-pink-300 text-pink-800 dark:bg-pink-900 dark:border-pink-700 dark:text-pink-200',
-      'Circuit Theory': 'bg-cyan-100 border-cyan-300 text-cyan-800 dark:bg-cyan-900 dark:border-cyan-700 dark:text-cyan-200',
-      'Digital Electronics': 'bg-lime-100 border-lime-300 text-lime-800 dark:bg-lime-900 dark:border-lime-700 dark:text-lime-200',
-      'Signals & Systems': 'bg-violet-100 border-violet-300 text-violet-800 dark:bg-violet-900 dark:border-violet-700 dark:text-violet-200'
+    const getFullSlotData = (slot) => {
+        if (!slot) return null;
+        return {
+            subject: data.allSubjects.find(s => s.id === slot.subjectId),
+            faculty: data.allFaculties.find(f => f.id === slot.facultyId),
+            classroom: data.allClassrooms.find(c => c.id === slot.classroomId),
+        };
     };
-    return colors[subject] || 'bg-gray-100 border-gray-300 text-gray-800 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200';
-  };
 
-  return (
-    <div className="min-h-screen  from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
-      
-      
-      <div className="max-w-7xl mx-auto p-6">
-        {/* Student Profile Section */}
-        <StudentProfile student={studentData} />
-
-        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 transition-colors duration-300">
-          {/* Header */}
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">My Class Timetable</h1>
-            <p className="text-gray-600 dark:text-gray-400">Your personalized weekly schedule</p>
-          </div>
-
-     
-          {/* Timetable Grid */}
-          {currentTimetable ? (
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow transition-colors duration-300">
+    return (
+        <div className="overflow-x-auto">
+            <table className="w-full table-fixed border-collapse">
                 <thead>
-                  <tr className="bg-gray-800 dark:bg-gray-700 text-white">
-                    <th className="border border-gray-600 dark:border-gray-500 p-3 text-left font-semibold min-w-24">
-                      Day / Time
-                    </th>
-                    {timeSlots.map(slot => (
-                      <th key={slot} className="border border-gray-600 dark:border-gray-500 p-3 text-center font-semibold min-w-40">
-                        {slot}
-                      </th>
-                    ))}
-                  </tr>
+                    <tr className="bg-gray-100 dark:bg-gray-700">
+                        <th className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 w-32 border border-gray-200 dark:border-gray-600">Time</th>
+                        {daysToDisplay.map(day => (
+                            <th key={day} className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{day}</th>
+                        ))}
+                    </tr>
                 </thead>
                 <tbody>
-                  {days.map(day => (
-                    <tr key={day} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
-                      <td className="border border-gray-300 dark:border-gray-600 p-3 font-semibold bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
-                        {day}
-                      </td>
-                      {timeSlots.map(slot => {
-                        const classInfo = currentTimetable.schedule[day]?.[slot];
-                        const isLunchBreak = classInfo?.isBreak;
-                        
+                    {allDaySlots.map(slotInfo => {
+                        if (slotInfo.type !== 'class') {
+                            return (
+                                <tr key={slotInfo.time}>
+                                    <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{slotInfo.time}</td>
+                                    <td colSpan={daysToDisplay.length} className={`p-3 font-bold text-center border ${slotInfo.type === 'lunch' ? 'bg-amber-100 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200' : 'bg-sky-100 dark:bg-sky-800/50 text-sky-800 dark:text-sky-200'}`}>
+                                        <div className="flex items-center justify-center">
+                                            {slotInfo.type === 'lunch' ? <Coffee size={16} className="mr-2" /> : <Clock size={16} className="mr-2" />}
+                                            {slotInfo.name.toUpperCase()}
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        }
                         return (
-                          <td key={`${day}-${slot}`} className="border border-gray-300 dark:border-gray-600 p-1">
-                            {classInfo ? (
-                              <div className={`rounded-md p-3 h-full min-h-20 border-2 transition-all duration-300 ${getSubjectColor(classInfo.subject, isLunchBreak)}`}>
-                                {isLunchBreak ? (
-                                  <div className="flex flex-col items-center justify-center h-full">
-                                    <Coffee className="w-6 h-6 mb-2" />
-                                    <div className="font-semibold text-sm text-center">{classInfo.subject}</div>
-                                  </div>
-                                ) : (
-                                  <>
-                                    <div className="font-semibold text-sm mb-1">{classInfo.subject}</div>
-                                    {classInfo.faculty && (
-                                      <div className="text-xs opacity-80 flex items-center gap-1 mb-1">
-                                        <User className="w-3 h-3" />
-                                        {classInfo.faculty}
-                                      </div>
-                                    )}
-                                    {classInfo.room && (
-                                      <div className="text-xs opacity-80 flex items-center gap-1">
-                                        <MapPin className="w-3 h-3" />
-                                        {classInfo.room}
-                                      </div>
-                                    )}
-                                  </>
-                                )}
-                              </div>
-                            ) : (
-                              <div className="h-20 flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm">
-                                Free
-                              </div>
-                            )}
-                          </td>
+                            <tr key={slotInfo.time}>
+                                <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{slotInfo.time}</td>
+                                {daysToDisplay.map(day => {
+                                    const key = `${day}-${slotInfo.time}`;
+                                    const slotData = getFullSlotData(timetable[key]);
+                                    const color = slotData ? subjectColorMap[slotData.subject.id]?.cellBg : 'bg-gray-200';
+                                    return <TimetableCell key={key} slot={slotData} color={color} />;
+                                })}
+                            </tr>
                         );
-                      })}
-                    </tr>
-                  ))}
+                    })}
                 </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-8 text-center transition-colors duration-300">
-              <BookOpen className="w-16 h-16 text-yellow-600 dark:text-yellow-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-300 mb-2">No Timetable Available</h3>
-              <p className="text-yellow-700 dark:text-yellow-400">
-                No timetable found for your current academic details. 
-                Please contact the academic office for assistance.
-              </p>
-            </div>
-          )}
-
+            </table>
         </div>
-      </div>
-    </div>
-  );
-}
-// Main TimeTable component with ThemeProvider
-const TimeTable = () => {
-  return (
-    <ThemeProvider>
-      <TimeTableContent />
-    </ThemeProvider>
-  );
+    );
 };
 
-export default TimeTable;
+// --- Student-Specific Component ---
+const StudentView = ({ user, data }) => {
+    const [filters, setFilters] = useState({ day: '', faculty: '' });
+    const sectionId = user?.details?.sectionId;
+
+    const studentTimetable = useMemo(() => {
+        return data.timetables[sectionId] || {};
+    }, [sectionId, data.timetables]);
+
+    const mySection = useMemo(() => {
+        const { sections } = flattenAcademicData(data.programs);
+        return sections.find(s => s.id === sectionId);
+    }, [sectionId, data.programs]);
+
+    const sectionFaculties = useMemo(() => {
+        const facultyIds = new Set(Object.values(studentTimetable).map(slot => slot.facultyId));
+        return data.allFaculties.filter(faculty => facultyIds.has(faculty.id));
+    }, [studentTimetable, data.allFaculties]);
+
+    const filteredTimetable = useMemo(() => {
+        if (!filters.faculty) {
+            return studentTimetable;
+        }
+        return Object.entries(studentTimetable).reduce((acc, [key, slot]) => {
+            if (slot.facultyId === filters.faculty) {
+                acc[key] = slot;
+            }
+            return acc;
+        }, {});
+    }, [studentTimetable, filters.faculty]);
+
+    const subjectColorMap = useMemo(() => {
+        const colors = ['bg-sky-200', 'bg-amber-200', 'bg-emerald-200', 'bg-rose-200', 'bg-violet-200'];
+        const map = {};
+        Object.values(studentTimetable).forEach(({ subjectId }) => {
+            if (!map[subjectId]) {
+                map[subjectId] = { cellBg: colors[Object.keys(map).length % colors.length] };
+            }
+        });
+        return map;
+    }, [studentTimetable]);
+
+    return (
+        <div>
+            <div className="p-4 bg-gray-100 dark:bg-gray-900/50 rounded-lg mb-6">
+                 <div className="flex items-center mb-4">
+                    <Filter className="mr-2 text-indigo-600" />
+                    <h3 className="text-lg font-semibold">View Options for: <span className="text-indigo-700 dark:text-indigo-400">{mySection?.fullDisplayName || 'Your Class'}</span></h3>
+                </div>
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+                     <div className="flex items-center gap-2 w-full sm:w-1/2">
+                        <label htmlFor="faculty-filter-student" className="font-medium text-sm shrink-0">Filter by Faculty:</label>
+                        <select 
+                            id="faculty-filter-student" 
+                            value={filters.faculty} 
+                            onChange={e => setFilters(f => ({...f, faculty: e.target.value}))} 
+                            className="p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 w-full"
+                        >
+                            <option value="">All Faculty</option>
+                            {sectionFaculties.map(faculty => (
+                                <option key={faculty.id} value={faculty.id}>{faculty.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                     <div className="flex items-center gap-2 w-full sm:w-1/2">
+                        <label htmlFor="day-filter-student" className="font-medium text-sm shrink-0">Filter by Day:</label>
+                        <select 
+                            id="day-filter-student" 
+                            value={filters.day} 
+                            onChange={e => setFilters(f => ({...f, day: e.target.value}))} 
+                            className="p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600 w-full"
+                        >
+                            <option value="">All Week</option>
+                            {data.config.days.map(day => <option key={day} value={day}>{day}</option>)}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <TimetableGrid
+                config={data.config}
+                timetable={filteredTimetable}
+                subjectColorMap={subjectColorMap}
+                data={data}
+                selectedDay={filters.day}
+            />
+        </div>
+    );
+};
+
+
+// --- Main Component ---
+export default function StudentTimetableView() {
+    const [timetableData, setTimetableData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const mockUser = {
+        role: 'Student',
+        details: {
+            studentId: 'STU-24-CSE-067',
+            sectionId: 'CSE-A-4', // Student is in section CSE-A-4
+            name: 'Aarav Gupta'
+        }
+    };
+
+    useEffect(() => {
+        const id = setTimeout(() => {
+            setTimetableData(MOCK_TIMETABLE_DATA);
+            setLoading(false);
+        }, 500);
+        return () => clearTimeout(id);
+    }, []);
+
+    const renderContent = () => {
+        if (loading || !timetableData) {
+            return <div className="text-center p-10">Loading Timetable...</div>;
+        }
+        return <StudentView user={mockUser} data={timetableData} />;
+    };
+
+    return (
+        <div className="bg-gray-50 dark:bg-gray-900 min-h-screen font-sans text-gray-900 dark:text-gray-100 p-4 sm:p-6 lg:p-8">
+            <header className="mb-8">
+                <h1 className="text-2xl md:text-3xl font-bold leading-tight text-gray-900 dark:text-gray-100 flex items-center">
+                    <Calendar className="mr-3 text-indigo-500" /> My Timetable
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400">Welcome, {mockUser.details.name}. Here is your weekly class schedule.</p>
+            </header>
+            <main className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6">
+                {renderContent()}
+            </main>
+        </div>
+    );
+}
