@@ -58,7 +58,7 @@ const FeeStructureManagement: React.FC = () => {
   const [feeStructures, setFeeStructures] = useState<FeeStructure[]>([
     {
       id: '1',
-      name: 'Computer Science - Standard',
+      name: 'Computer Science - CSE',
       Department: 'Computer Science',
       Program: 'Engineering',
       academicYear: '2024-25',
@@ -78,7 +78,7 @@ const FeeStructureManagement: React.FC = () => {
     },
     {
       id: '2',
-      name: 'Business Administration - Premium',
+      name: 'Business Administration - BBA',
       Department: 'Business Administration',
       Program: 'Management',
       academicYear: '2024-25',

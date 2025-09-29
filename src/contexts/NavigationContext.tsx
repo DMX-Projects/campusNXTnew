@@ -701,6 +701,12 @@ const SIDEBAR_ITEMS = {
       path: '/management/student-fees/bulk-actions', 
       icon: 'MessageSquare' 
     },
+     { 
+      name: 'Admission Fee Collection', 
+      path: '/management/student-fees/admission-fee-collection', 
+      icon: 'UserPlus' 
+    },
+
 
     { 
       name: 'Financial Reports', 
