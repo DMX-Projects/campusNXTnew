@@ -427,6 +427,22 @@ const OnlineClasses: React.FC = () => {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return `${diffDays} days`;
   };
+  // Download material handler
+const handleDownloadMaterial = (material: Material) => {
+  // Example download logic (adjust URL logic to match actual implementation)
+  const link = document.createElement("a");
+  link.href = material.url;
+  link.download = material.name;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+// View material handler
+const handleViewMaterial = (material: Material) => {
+  // Example view logic (opens link in a new tab)
+  window.open(material.url, "_blank");
+};
 
   const summaryStats = {
     totalClasses: onlineClasses.length,
@@ -436,6 +452,17 @@ const OnlineClasses: React.FC = () => {
     recordedSessions: onlineClasses.filter(c => c.recordings && c.recordings.length > 0).length,
     avgAttendance: Math.round(onlineClasses.filter(c => c.attendance).reduce((acc, c) => acc + (c.attendance!.duration / c.duration * 100), 0) / onlineClasses.filter(c => c.attendance).length) || 0
   };
+
+  // function handlePlayRecording(classItem: OnlineClass): void {
+  //   throw new Error('Function not implemented.');
+  // }
+  function handlePlayRecording(classItem: OnlineClass) {
+  if (classItem.recordings && classItem.recordings.length > 0) {
+    const recording = classItem.recordings[0]; // Play the first recording for simplicity
+    window.open(recording.url, '_blank');
+  }
+}
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
@@ -450,13 +477,7 @@ const OnlineClasses: React.FC = () => {
             Join live classes, access recordings, and participate in interactive learning sessions
           </p>
         </div>
-        <button
-          className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          aria-label="Toggle theme"
-        >
-          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
+      
       </div>
 
       {/* Summary Cards */}
@@ -599,6 +620,7 @@ const OnlineClasses: React.FC = () => {
             <option value="cancelled">Cancelled</option>
             <option value="rescheduled">Rescheduled</option>
           </select>
+          
 
           <button
             onClick={() => {
@@ -787,9 +809,16 @@ const OnlineClasses: React.FC = () => {
                   </button>
                 )}
                 {classItem.recordings && classItem.recordings.length > 0 && (
-                  <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
-                    <Play className="w-4 h-4" />
-                  </button>
+                  // <button onClick={() => handlePlayRecording(classItem)} className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
+                  //   <Play className="w-4 h-4" />
+                  // </button>
+                  <button
+  onClick={() => handlePlayRecording(classItem)}
+  className="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded-lg"
+>
+  <Play className="w-4 h-4" />
+</button>
+
                 )}
               </div>
             </div>
@@ -891,11 +920,11 @@ const OnlineClasses: React.FC = () => {
                           </div>
                           <div className="flex items-center space-x-2">
                             {material.downloadable && (
-                              <button className="text-blue-500 hover:text-blue-600 p-1">
+                              <button onClick={() => handleDownloadMaterial(material)} className="text-blue-500 hover:text-blue-600 p-1">
                                 <Download className="w-4 h-4" />
                               </button>
                             )}
-                            <button className="text-green-500 hover:text-green-600 p-1">
+                            <button onClick={() => handleViewMaterial(material)} className="text-green-500 hover:text-green-600 p-1">
                               <Eye className="w-4 h-4" />
                             </button>
                           </div>

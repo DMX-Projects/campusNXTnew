@@ -519,10 +519,10 @@ Generated on ${currentDate}
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8  space-y-8">
          
         {/* Employee Header */}
-        <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6 mb-8`}>
+        <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6 mb-8 `}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               <div className={`w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-2xl ${isDark ? 'bg-blue-600' : 'bg-blue-500'}`}>
@@ -532,7 +532,7 @@ Generated on ${currentDate}
               <div>
                 <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{employeeData.name}</h2>
                 <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-2`}>{employeeData.designation}</p>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 ease-in-out ">
                   <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(employeeData.status)}`}>
                     {employeeData.status}
                   </span>
@@ -884,7 +884,7 @@ const EmployeeDatabase: React.FC = () => {
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b sticky top-0 z-40`}>
+     <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b px-4   justify-between`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div>

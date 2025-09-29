@@ -597,8 +597,8 @@ const LeavePolicyManagement: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"}`}>
-      <header className={` ${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} border-b px-4 py-3 sticky top-0 z-40`}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900 "}`}>
+      <header className={` ${isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} border-b px-4 py-3`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold">Leave Policy Management</h1>
