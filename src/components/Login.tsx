@@ -140,6 +140,7 @@ const Login: React.FC = () => {
           <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Demo Credentials:</h3>
             <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1 max-h-32 overflow-y-auto">
+              <p><strong>Master Admin:</strong> master / 1234</p>
               <p><strong>Secretary:</strong> secretary / 1234</p>
               <p><strong>Chairperson:</strong> chairperson / 1234</p>
               <p><strong>Principal:</strong> principal / 1234</p>

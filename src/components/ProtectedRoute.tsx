@@ -28,6 +28,8 @@ const getRedirectPath = (role: string): string => {
     case "chairperson":
     case "college secretary":
       return "/home";
+    case "master admin":
+      return "/master/home/dashboard";
     default:
       return "/dashboard";
   }
