@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useTheme } from '../../../contexts/ThemeContext';
-import jsPDF from 'jspdf';
+// import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 import { 
   BarChart3, 

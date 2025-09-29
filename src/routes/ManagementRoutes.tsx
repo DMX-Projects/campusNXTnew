@@ -88,6 +88,8 @@ import StudentDetails from "../pages/PrincipalModules/Administration/StudentDeta
 import FacultyDetails from "../pages/PrincipalModules/Administration/FacultyDetails";
 import StudentTransfers from "../pages/PrincipalModules/Administration/StudentTransfers";
 import InfrastructureManagement from "../pages/PrincipalModules/Administration/InfrastructureManagement";
+import RegistorEmployeeAttendance from "../pages/RegistorModule/HR_Management/RegistorEmployeeAttendance";
+import RegistorEmployeeLeaves from "../pages/RegistorModule/HR_Management/RegistorEmployeeLeaves";  
 
 
 
@@ -99,6 +101,8 @@ const CommonRoutes: React.FC = () => {
 
       <Route path="/hr/dashboard" element={<HRDashboard />} />
       <Route path="/hr/employee-database" element={<Employeedatabase />} />
+      <Route path="/hr/employee-database/attendance" element={<RegistorEmployeeAttendance />} />
+      <Route path="/hr/employee-database/leaves" element={<RegistorEmployeeLeaves />} />
       <Route path="/hr/leave-policy" element={<LeavePolicy />} />
       <Route path="/hr/payroll" element={<PayrollManagement />} />
       <Route path="/hr/recruitment" element={<Requirementmanagement />} />
