@@ -14,451 +14,388 @@ import {
   File
 } from 'lucide-react';
 
-const subjects = ['Computer Science', 'Mathematics', 'Physics', 'Chemistry', 'English', 'Economics'];
+const subjects = [
+  'Computer Programming', 'Data Structures and Algorithms', 'Machine Learning',
+  'Artificial Intelligence', 'Database Management Systems', 'Operating Systems',
+  'Computer Networks', 'Web Technologies', 'Digital Electronics',
+  'Communication Systems', 'VLSI Design', 'Embedded Systems',
+  'Information Security', 'Cloud Computing', 'Research Methodology'
+];
+
 const years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 const semesters = ['1st Semester', '2nd Semester'];
 
-// Enhanced assignments data with more entries
+const programs = ['B.Tech CSE', 'M.Tech CSE', 'B.Tech IT', 'M.Tech IT', 'B.Tech ECE', 'M.Tech ECE'];
+
+// Updated assignments with subject, title, description mapped properly
 const assignmentsDemo = [
-  // 1st Year Assignments
   {
     id: 1,
-    title: 'Introduction to Programming',
-    subject: 'Computer Science',
+    title: 'Basics of C Programming',
+    subject: 'Computer Programming',
+    program: 'B.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
     dueDate: '2024-12-10',
     totalMarks: 50,
-    description: 'Basic programming concepts in Python.',
+    description: 'Introduction to variables, loops, and control structures in C.',
     createdDate: '2024-10-15',
-    questionPaper: 'intro_programming_questions.pdf',
-    questions: '1. Write a Python program to find factorial of a number.\n2. Create a function to check if a number is prime.\n3. Implement bubble sort algorithm.'
+    questionPaper: 'c_programming_basics.pdf',
+    questions: '1. Write a program to calculate factorial.\n2. Implement Fibonacci series.\n3. Demonstrate use of switch-case.'
   },
   {
     id: 2,
-    title: 'Algebra Fundamentals',
-    subject: 'Mathematics',
+    title: 'Advanced Trees and Graphs',
+    subject: 'Data Structures and Algorithms',
+    program: 'M.Tech CSE',
+    year: '1st Year',
+    semester: '1st Semester',
+    dueDate: '2024-12-12',
+    totalMarks: 100,
+    description: 'Implementation and analysis of advanced trees and graph algorithms.',
+    createdDate: '2024-10-18',
+    questionPaper: 'ds_algorithms.pdf',
+    questions: '1. Implement AVL Tree.\n2. Perform BFS and DFS on a graph.\n3. Solve shortest path using Dijkstra\'s algorithm.'
+  },
+  {
+    id: 3,
+    title: 'Supervised Learning Models',
+    subject: 'Machine Learning',
+    program: 'B.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
     dueDate: '2024-12-12',
     totalMarks: 40,
-    description: 'Linear equations and basic algebraic operations.',
+    description: 'Introduction to regression and classification models.',
     createdDate: '2024-10-18',
-    questionPaper: 'algebra_questions.pdf',
-    questions: '1. Solve the system of linear equations: 2x + 3y = 7, x - y = 1\n2. Factor the expression: x² - 5x + 6\n3. Graph the function f(x) = 2x + 3'
-  },
-  {
-    id: 3,
-    title: 'Mechanics Basics',
-    subject: 'Physics',
-    year: '1st Year',
-    semester: '1st Semester',
-    dueDate: '2024-12-14',
-    totalMarks: 60,
-    description: 'Newton\'s laws and motion problems.',
-    createdDate: '2024-10-20',
-    questionPaper: 'mechanics_questions.pdf',
-    questions: '1. A car accelerates from rest at 2 m/s². Find velocity after 5 seconds.\n2. Calculate force needed to accelerate 10kg mass at 3 m/s².\n3. Explain Newton\'s third law with examples.'
+    questionPaper: 'ml_supervised.pdf',
+    questions: '1. Implement linear regression.\n2. Build a decision tree classifier.\n3. Evaluate accuracy using confusion matrix.'
   },
   {
     id: 4,
-    title: 'Periodic Table Quiz',
-    subject: 'Chemistry',
+    title: 'AI Problem Solving',
+    subject: 'Artificial Intelligence',
+    program: 'M.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
     dueDate: '2024-12-25',
     totalMarks: 60,
-    description: 'Identify trends and complete quiz online.',
+    description: 'Solve search-based and reasoning problems using AI techniques.',
     createdDate: '2024-11-12',
-    questionPaper: 'periodic_table_quiz.pdf',
-    questions: '1. Name the noble gases in order of atomic number.\n2. Explain the trend in atomic radius across a period.\n3. Which element has the highest electronegativity?'
+    questionPaper: 'ai_problems.pdf',
+    questions: '1. Implement A* search.\n2. Solve 8-puzzle using BFS.\n3. Write knowledge representation using Prolog.'
   },
   {
     id: 5,
-    title: 'Essay Writing Workshop',
-    subject: 'English',
-    year: '1st Year',
-    semester: '2nd Semester',
-    dueDate: '2025-01-15',
-    totalMarks: 30,
-    description: 'Write a 500-word essay on modern technology.',
-    createdDate: '2024-11-25',
-    questionPaper: 'essay_guidelines.pdf',
-    questions: '1. Write a 500-word essay on "The Impact of Social Media on Society".\n2. Include introduction, body paragraphs, and conclusion.\n3. Use proper citations and references.'
-  },
-  {
-    id: 6,
-    title: 'Microeconomics Basics',
-    subject: 'Economics',
+    title: 'Relational Databases',
+    subject: 'Database Management Systems',
+    program: 'M.Tech CSE',
     year: '1st Year',
     semester: '2nd Semester',
     dueDate: '2025-01-20',
     totalMarks: 70,
-    description: 'Supply and demand analysis problems.',
+    description: 'Normalization, indexing, and query optimization problems.',
     createdDate: '2024-11-28',
-    questionPaper: 'microeconomics_questions.pdf',
-    questions: '1. Draw supply and demand curves for coffee market.\n2. Calculate equilibrium price and quantity.\n3. Analyze effect of price ceiling on market.'
-  },
-  
-  // 2nd Year Assignments
-  {
-    id: 7,
-    title: 'Data Structures Implementation',
-    subject: 'Computer Science',
-    year: '2nd Year',
-    semester: '1st Semester',
-    dueDate: '2024-12-18',
-    totalMarks: 80,
-    description: 'Implement stacks, queues, and linked lists.',
-    createdDate: '2024-10-25',
-    questionPaper: 'data_structures_questions.pdf',
-    questions: '1. Implement a stack using arrays in C++.\n2. Write a function to reverse a linked list.\n3. Create a queue using two stacks.'
+    questionPaper: 'dbms_assignment.pdf',
+    questions: '1. Normalize to 3NF.\n2. Write SQL joins.\n3. Explain transaction isolation levels.'
   },
   {
-    id: 8,
-    title: 'Linear Algebra Matrix Problems',
-    subject: 'Mathematics',
+    id: 6,
+    title: 'Process Scheduling',
+    subject: 'Operating Systems',
+    program: 'M.Tech CSE',
     year: '2nd Year',
     semester: '2nd Semester',
     dueDate: '2024-12-20',
     totalMarks: 90,
-    description: 'Solve LU decomposition and eigenvalues.',
+    description: 'Design and analyze CPU scheduling algorithms.',
     createdDate: '2024-11-08',
-    questionPaper: 'matrix_problems.pdf',
-    questions: '1. Find eigenvalues and eigenvectors of given matrix.\n2. Perform LU decomposition of 3x3 matrix.\n3. Solve system using matrix inversion.'
+    questionPaper: 'os_scheduling.pdf',
+    questions: '1. Implement FCFS and SJF.\n2. Compare with Round Robin.\n3. Calculate average waiting times.'
   },
   {
-    id: 9,
-    title: 'Thermodynamics Lab Report',
-    subject: 'Physics',
+    id: 7,
+    title: 'Network Layer Protocols',
+    subject: 'Computer Networks',
+    program: 'B.Tech ECE',
     year: '2nd Year',
     semester: '1st Semester',
     dueDate: '2024-12-22',
     totalMarks: 75,
-    description: 'Analyze heat engine efficiency experiments.',
+    description: 'Study of TCP/IP, routing, and switching protocols.',
     createdDate: '2024-11-10',
-    questionPaper: 'thermodynamics_lab.pdf',
-    questions: '1. Calculate efficiency of Carnot engine.\n2. Analyze P-V diagram for ideal gas cycle.\n3. Explain second law of thermodynamics.'
+    questionPaper: 'networks_assignment.pdf',
+    questions: '1. Explain TCP vs UDP.\n2. Implement distance vector routing.\n3. Analyze IP packet fragmentation.'
   },
   {
-    id: 10,
-    title: 'Organic Chemistry Reactions',
-    subject: 'Chemistry',
+    id: 8,
+    title: 'Responsive Web Development',
+    subject: 'Web Technologies',
+    program: 'M.Tech CSE',
     year: '2nd Year',
     semester: '2nd Semester',
     dueDate: '2025-01-25',
     totalMarks: 85,
-    description: 'Mechanism and stereochemistry problems.',
+    description: 'Front-end and back-end development with modern frameworks.',
     createdDate: '2024-12-01',
-    questionPaper: 'organic_reactions.pdf',
-    questions: '1. Draw mechanism for SN2 reaction.\n2. Explain stereochemistry of elimination reactions.\n3. Identify products of aldol condensation.'
+    questionPaper: 'web_tech.pdf',
+    questions: '1. Build responsive HTML/CSS layout.\n2. Create API with Node.js.\n3. Implement CRUD in React.'
   },
-
-  // 3rd Year Assignments
   {
-    id: 11,
-    title: 'OS Scheduling Algorithms',
-    subject: 'Computer Science',
+    id: 9,
+    title: 'Boolean Algebra and Logic',
+    subject: 'Digital Electronics',
+    program: 'B.Tech CSE',
     year: '3rd Year',
     semester: '1st Semester',
     dueDate: '2024-12-15',
     totalMarks: 100,
-    description: 'Implement FCFS and Round Robin in Python.',
+    description: 'Simplify Boolean expressions and design combinational circuits.',
     createdDate: '2024-11-01',
-    questionPaper: 'os_scheduling.pdf',
-    questions: '1. Implement FCFS scheduling algorithm.\n2. Compare FCFS with Round Robin scheduling.\n3. Calculate average waiting time for given process set.'
+    questionPaper: 'digital_logic.pdf',
+    questions: '1. Minimize Boolean expressions.\n2. Design half adder and full adder.\n3. Implement 4:1 multiplexer.'
   },
   {
-    id: 12,
-    title: 'Advanced Calculus',
-    subject: 'Mathematics',
-    year: '3rd Year',
-    semester: '2nd Semester',
-    dueDate: '2025-02-10',
-    totalMarks: 95,
-    description: 'Multiple integrals and vector calculus.',
-    createdDate: '2024-12-05',
-    questionPaper: 'advanced_calculus.pdf',
-    questions: '1. Evaluate double integral over given region.\n2. Calculate divergence and curl of vector field.\n3. Apply Green\'s theorem to solve line integral.'
-  },
-  {
-    id: 13,
-    title: 'Quantum Mechanics Problems',
-    subject: 'Physics',
+    id: 10,
+    title: 'Wireless Communication Systems',
+    subject: 'Communication Systems',
+    program: 'M.Tech ECE',
     year: '3rd Year',
     semester: '1st Semester',
     dueDate: '2024-12-28',
     totalMarks: 120,
-    description: 'Schrödinger equation applications.',
+    description: 'Study of modulation, multiplexing, and wireless protocols.',
     createdDate: '2024-11-15',
-    questionPaper: 'quantum_mechanics.pdf',
-    questions: '1. Solve Schrödinger equation for particle in a box.\n2. Calculate probability of finding electron in given region.\n3. Explain wave-particle duality with examples.'
+    questionPaper: 'communication_systems.pdf',
+    questions: '1. Explain frequency modulation.\n2. Discuss TDMA vs FDMA.\n3. Analyze LTE architecture.'
   },
-
-  // 4th Year Assignments
   {
-    id: 14,
-    title: 'Machine Learning Project',
-    subject: 'Computer Science',
+    id: 11,
+    title: 'Cloud Security Models',
+    subject: 'Cloud Computing',
+    program: 'M.Tech CSE',
     year: '4th Year',
     semester: '1st Semester',
     dueDate: '2025-01-30',
     totalMarks: 150,
-    description: 'Build a classification model using TensorFlow.',
+    description: 'Secure cloud infrastructure and services.',
     createdDate: '2024-11-20',
-    questionPaper: 'ml_project_requirements.pdf',
-    questions: '1. Build a neural network for image classification.\n2. Compare different optimization algorithms.\n3. Evaluate model performance using cross-validation.'
+    questionPaper: 'cloud_security.pdf',
+    questions: '1. Explain SaaS, PaaS, IaaS.\n2. Implement identity management.\n3. Discuss data privacy in cloud.'
   },
   {
-    id: 15,
-    title: 'Research Methodology',
-    subject: 'English',
+    id: 12,
+    title: 'Thesis Writing & Research Ethics',
+    subject: 'Research Methodology',
+    program: 'B.Tech CSE',
     year: '4th Year',
     semester: '2nd Semester',
     dueDate: '2025-03-15',
     totalMarks: 100,
-    description: 'Literature review and thesis proposal.',
+    description: 'Focus on academic research writing, ethics, and proposal creation.',
     createdDate: '2024-12-10',
     questionPaper: 'research_methodology.pdf',
-    questions: '1. Conduct literature review on chosen topic.\n2. Write research proposal with methodology.\n3. Present findings in academic format.'
+    questions: '1. Write a literature review.\n2. Explain plagiarism and ethics.\n3. Draft a research proposal.'
   }
 ];
 
-// Enhanced submissions data with more entries
+// Submissions also updated with corrected subjects
 const submissionsDemo = [
-  // 1st Year Submissions
   {
     id: 1,
     assignmentId: 1,
     studentName: 'Ravi Kumar',
     studentId: 'CS101',
-    subject: 'Computer Science',
+    subject: 'Computer Programming',
+    program: 'B.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
     submittedDate: '2024-12-08',
     status: 'Graded',
     score: 45,
     maxScore: 50,
-    feedback: 'Good understanding of basic concepts.',
-    fileName: 'intro_programming.py'
+    feedback: 'Good coding practices and logic.',
+    fileName: 'c_programming.c'
   },
   {
     id: 2,
     assignmentId: 2,
     studentName: 'Priya Sharma',
-    studentId: 'MT101',
-    subject: 'Mathematics',
+    studentId: 'MCS101',
+    subject: 'Data Structures and Algorithms',
+    program: 'M.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
     submittedDate: '2024-12-10',
-    status: 'Submitted',
-    score: null,
-    maxScore: 40,
-    feedback: '',
-    fileName: 'algebra_solutions.pdf'
+    status: 'Graded',
+    score: 92,
+    maxScore: 100,
+    feedback: 'Efficient graph algorithms.',
+    fileName: 'ds_algorithms.cpp'
   },
   {
     id: 3,
     assignmentId: 3,
     studentName: 'Amit Singh',
-    studentId: 'PH101',
-    subject: 'Physics',
+    studentId: 'CS102',
+    subject: 'Machine Learning',
+    program: 'B.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
     submittedDate: '2024-12-12',
     status: 'Graded',
-    score: 52,
-    maxScore: 60,
-    feedback: 'Clear problem-solving approach.',
-    fileName: 'mechanics_problems.pdf'
+    score: 35,
+    maxScore: 40,
+    feedback: 'Well-structured ML models.',
+    fileName: 'ml_supervised.ipynb'
   },
   {
     id: 4,
     assignmentId: 4,
-    studentName: 'Rahul Sen',
-    studentId: 'CH045',
-    subject: 'Chemistry',
+    studentName: 'Neha Gupta',
+    studentId: 'SC101',
+    subject: 'Artificial Intelligence',
+    program: 'M.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
-    submittedDate: '2024-12-24',
-    status: 'Pending Review',
-    score: null,
+    submittedDate: '2024-12-23',
+    status: 'Graded',
+    score: 55,
     maxScore: 60,
-    feedback: '',
-    fileName: 'periodic_quiz.docx'
+    feedback: 'Good use of search algorithms.',
+    fileName: 'ai_problems.pl'
   },
   {
     id: 5,
     assignmentId: 5,
-    studentName: 'Sneha Patel',
-    studentId: 'EN101',
-    subject: 'English',
-    year: '1st Year',
-    semester: '2nd Semester',
-    submittedDate: '2025-01-12',
-    status: 'Submitted',
-    score: null,
-    maxScore: 30,
-    feedback: '',
-    fileName: 'technology_essay.docx'
-  },
-  {
-    id: 6,
-    assignmentId: 6,
     studentName: 'Karan Mehta',
-    studentId: 'EC101',
-    subject: 'Economics',
+    studentId: 'BCA101',
+    subject: 'Database Management Systems',
+    program: 'M.Tech CSE',
     year: '1st Year',
     semester: '2nd Semester',
     submittedDate: '2025-01-18',
     status: 'Graded',
     score: 62,
     maxScore: 70,
-    feedback: 'Good grasp of supply-demand concepts.',
-    fileName: 'microeconomics.pdf'
+    feedback: 'Correct normalization and queries.',
+    fileName: 'dbms_assignment.sql'
   },
-
-  // 2nd Year Submissions
+  {
+    id: 6,
+    assignmentId: 6,
+    studentName: 'Rajesh Kumar',
+    studentId: 'MCS201',
+    subject: 'Operating Systems',
+    program: 'M.Tech CSE',
+    year: '2nd Year',
+    semester: '2nd Semester',
+    submittedDate: '2024-12-18',
+    status: 'Graded',
+    score: 85,
+    maxScore: 90,
+    feedback: 'Accurate scheduling algorithm implementation.',
+    fileName: 'os_scheduling.py'
+  },
   {
     id: 7,
     assignmentId: 7,
     studentName: 'Vikash Yadav',
-    studentId: 'CS201',
-    subject: 'Computer Science',
-    year: '2nd Year',
-    semester: '1st Semester',
-    submittedDate: '2024-12-16',
-    status: 'Graded',
-    score: 72,
-    maxScore: 80,
-    feedback: 'Well-implemented data structures.',
-    fileName: 'data_structures.cpp'
-  },
-  {
-    id: 8,
-    assignmentId: 8,
-    studentName: 'Maya Rao',
-    studentId: 'MT122',
-    subject: 'Mathematics',
-    year: '2nd Year',
-    semester: '2nd Semester',
-    submittedDate: '2024-12-19',
-    status: 'Submitted',
-    score: null,
-    maxScore: 90,
-    feedback: '',
-    fileName: 'matrix_report.pdf'
-  },
-  {
-    id: 9,
-    assignmentId: 9,
-    studentName: 'Rohit Gupta',
-    studentId: 'PH201',
-    subject: 'Physics',
+    studentId: 'ECE201',
+    subject: 'Computer Networks',
+    program: 'B.Tech ECE',
     year: '2nd Year',
     semester: '1st Semester',
     submittedDate: '2024-12-20',
     status: 'Graded',
     score: 68,
     maxScore: 75,
-    feedback: 'Accurate calculations and good analysis.',
-    fileName: 'thermo_lab.pdf'
+    feedback: 'Good explanation of routing protocols.',
+    fileName: 'network_layer.docx'
   },
   {
-    id: 10,
-    assignmentId: 10,
-    studentName: 'Anita Joshi',
-    studentId: 'CH201',
-    subject: 'Chemistry',
+    id: 8,
+    assignmentId: 8,
+    studentName: 'Anita Verma',
+    studentId: 'MSC201',
+    subject: 'Web Technologies',
+    program: 'M.Tech CSE',
     year: '2nd Year',
     semester: '2nd Semester',
-    submittedDate: '2025-01-22',
-    status: 'Submitted',
-    score: null,
+    submittedDate: '2025-01-23',
+    status: 'Graded',
+    score: 78,
     maxScore: 85,
-    feedback: '',
-    fileName: 'organic_mechanisms.pdf'
+    feedback: 'Responsive and functional web app.',
+    fileName: 'web_project.zip'
   },
-
-  // 3rd Year Submissions
   {
-    id: 11,
-    assignmentId: 11,
+    id: 9,
+    assignmentId: 9,
     studentName: 'Arjun Patel',
-    studentId: 'CS203',
-    subject: 'Computer Science',
+    studentId: 'CS301',
+    subject: 'Digital Electronics',
+    program: 'B.Tech CSE',
     year: '3rd Year',
     semester: '1st Semester',
     submittedDate: '2024-12-12',
     status: 'Graded',
     score: 93,
     maxScore: 100,
-    feedback: 'Correct implementation, well-commented.',
-    fileName: 'scheduling.py'
+    feedback: 'Perfect circuit design and simplification.',
+    fileName: 'digital_logic.vhd'
   },
   {
-    id: 12,
-    assignmentId: 12,
-    studentName: 'Deepika Verma',
-    studentId: 'MT301',
-    subject: 'Mathematics',
-    year: '3rd Year',
-    semester: '2nd Semester',
-    submittedDate: '2025-02-08',
-    status: 'Submitted',
-    score: null,
-    maxScore: 95,
-    feedback: '',
-    fileName: 'advanced_calculus.pdf'
-  },
-  {
-    id: 13,
-    assignmentId: 13,
+    id: 10,
+    assignmentId: 10,
     studentName: 'Suresh Kumar',
-    studentId: 'PH301',
-    subject: 'Physics',
+    studentId: 'MECE301',
+    subject: 'Communication Systems',
+    program: 'M.Tech ECE',
     year: '3rd Year',
     semester: '1st Semester',
     submittedDate: '2024-12-26',
     status: 'Graded',
     score: 108,
     maxScore: 120,
-    feedback: 'Excellent understanding of quantum concepts.',
-    fileName: 'quantum_mechanics.pdf'
+    feedback: 'Excellent explanation of modulation.',
+    fileName: 'communication_systems.pdf'
   },
-
-  // 4th Year Submissions
   {
-    id: 14,
-    assignmentId: 14,
-    studentName: 'Neha Agarwal',
-    studentId: 'CS401',
-    subject: 'Computer Science',
+    id: 11,
+    assignmentId: 11,
+    studentName: 'Deepak Joshi',
+    studentId: 'MCS401',
+    subject: 'Cloud Computing',
+    program: 'M.Tech CSE',
     year: '4th Year',
     semester: '1st Semester',
     submittedDate: '2025-01-28',
     status: 'Submitted',
     score: null,
     maxScore: 150,
-    feedback: '',
-    fileName: 'ml_project.zip'
+    feedback: null,
+    fileName: 'cloud_security.docx'
   },
   {
-    id: 15,
-    assignmentId: 15,
-    studentName: 'Rajesh Tiwari',
-    studentId: 'EN401',
-    subject: 'English',
+    id: 12,
+    assignmentId: 12,
+    studentName: 'Sonia Singh',
+    studentId: 'MCA401',
+    subject: 'Research Methodology',
+    program: 'B.Tech CSE',
     year: '4th Year',
     semester: '2nd Semester',
-    submittedDate: '2025-03-12',
-    status: 'Submitted',
+    submittedDate: '2025-03-10',
+    status: 'Pending Review',
     score: null,
     maxScore: 100,
-    feedback: '',
-    fileName: 'research_proposal.docx'
+    feedback: null,
+    fileName: 'research_proposal.pdf'
   }
 ];
+
+const tabs = ['submissions', 'assignments'];
 
 function getStatusColor(status) {
   if (status === 'Submitted') return 'bg-blue-100 text-blue-800';
@@ -467,13 +404,11 @@ function getStatusColor(status) {
   return 'bg-gray-100 text-gray-800';
 }
 
-// Helper function to get year order for sorting
 function getYearOrder(year) {
   const yearMap = { '1st Year': 1, '2nd Year': 2, '3rd Year': 3, '4th Year': 4 };
   return yearMap[year] || 0;
 }
 
-// Helper function to get semester order for sorting
 function getSemesterOrder(semester) {
   const semesterMap = { '1st Semester': 1, '2nd Semester': 2 };
   return semesterMap[semester] || 0;
@@ -484,6 +419,7 @@ const Assignment = () => {
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
+  const [selectedProgram, setSelectedProgram] = useState('');
   const [showSidebar, setShowSidebar] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingAssignment, setEditingAssignment] = useState(null);
@@ -495,6 +431,7 @@ const Assignment = () => {
   const [newAssignment, setNewAssignment] = useState({
     title: '',
     subject: '',
+    program: '',
     year: '',
     semester: '',
     dueDate: '',
@@ -504,15 +441,15 @@ const Assignment = () => {
     questions: ''
   });
 
-  // Enhanced filtering and sorting logic
+  // Enhanced filtering with program filter
   const filteredSubmissions = submissions
     .filter(submission =>
       (!selectedSubject || submission.subject === selectedSubject) &&
       (!selectedYear || submission.year === selectedYear) &&
-      (!selectedSemester || submission.semester === selectedSemester)
+      (!selectedSemester || submission.semester === selectedSemester) &&
+      (!selectedProgram || submission.program === selectedProgram)
     )
     .sort((a, b) => {
-      // Sort by Year first, then Semester, then Subject
       const yearA = getYearOrder(a.year);
       const yearB = getYearOrder(b.year);
       if (yearA !== yearB) return yearA - yearB;
@@ -528,10 +465,10 @@ const Assignment = () => {
     .filter(assignment =>
       (!selectedSubject || assignment.subject === selectedSubject) &&
       (!selectedYear || assignment.year === selectedYear) &&
-      (!selectedSemester || assignment.semester === selectedSemester)
+      (!selectedSemester || assignment.semester === selectedSemester) &&
+      (!selectedProgram || assignment.program === selectedProgram)
     )
     .sort((a, b) => {
-      // Sort by Year first, then Semester, then Subject
       const yearA = getYearOrder(a.year);
       const yearB = getYearOrder(b.year);
       if (yearA !== yearB) return yearA - yearB;
@@ -544,7 +481,7 @@ const Assignment = () => {
     });
 
   function handleAddAssignment() {
-    if (newAssignment.title && newAssignment.subject && newAssignment.year && newAssignment.semester) {
+    if (newAssignment.title && newAssignment.subject && newAssignment.program && newAssignment.year && newAssignment.semester) {
       const assignment = {
         ...newAssignment,
         id: assignments.length + 1,
@@ -556,6 +493,7 @@ const Assignment = () => {
       setNewAssignment({
         title: '',
         subject: '',
+        program: '',
         year: '',
         semester: '',
         dueDate: '',
@@ -588,11 +526,11 @@ const Assignment = () => {
   }
 
   return (
-    <div className="min-h-screen bg--to-br from-blue-50 to-violet-100 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
       {/* Top mobile bar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-blue-600 text-white">
         <h1 className="text-lg font-bold flex items-center gap-2">
-          <Menu className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} /> Assignment Dashboard
+          <Menu className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} /> Online Test Management
         </h1>
       </div>
 
@@ -606,6 +544,7 @@ const Assignment = () => {
             >
               <X className="w-7 h-7" />
             </button>
+            
             <label className="block text-md text-gray-700 dark:text-gray-300">Year
               <select 
                 value={selectedYear} 
@@ -626,6 +565,16 @@ const Assignment = () => {
                 {semesters.map(se => <option key={se} value={se}>{se}</option>)}
               </select>
             </label>
+            <label className="block text-md text-gray-700 dark:text-gray-300">Program
+              <select 
+                value={selectedProgram} 
+                onChange={e => setSelectedProgram(e.target.value)}
+                className="mt-2 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              >
+                <option value="">All Programs</option>
+                {programs.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </label>
             <label className="block text-md text-gray-700 dark:text-gray-300">Subject
               <select 
                 value={selectedSubject} 
@@ -642,73 +591,91 @@ const Assignment = () => {
       )}
 
       <div className="p-4 md:max-w-8xl mx-auto">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-t-lg p-6 text-white flex flex-col md:flex-row md:justify-between md:items-center">
+        {/* Header - Updated to match the image */}
+        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-lg p-8 text-white mb-6">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">Assignment Manager</h1>
-            <p className="mt-1 text-blue-100">Manage assignments and student submissions</p>
-          </div>
-          <div className="hidden md:flex gap-4 items-center">
-            <label>
-              <select 
-                value={selectedYear} 
-                onChange={e => setSelectedYear(e.target.value)}
-                className="px-2 py-1 rounded text-black font-medium"
-              >
-                <option value="">All Years</option>
-                {years.map(y => <option key={y} value={y}>{y}</option>)}
-              </select>
-            </label>
-            <label>
-              <select 
-                value={selectedSemester} 
-                onChange={e => setSelectedSemester(e.target.value)}
-                className="px-2 py-1 rounded text-black font-medium"
-              >
-                <option value="">All Semesters</option>
-                {semesters.map(se => <option key={se} value={se}>{se}</option>)}
-              </select>
-            </label>
-            <label>
-              <select 
-                value={selectedSubject} 
-                onChange={e => setSelectedSubject(e.target.value)}
-                className="px-2 py-1 rounded text-black font-medium"
-              >
-                <option value="">All Subjects</option>
-                {subjects.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </label>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">Assignment Management</h1>
+            <p className="text-lg text-indigo-100">Manage assignments and monitor student performance</p>
           </div>
         </div>
 
+     {/* Filter Dropdowns Section - Updated for proper light/dark mode */}
+<div className="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-4 rounded-lg mb-6 shadow-sm">
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Year</label>
+      <select 
+        value={selectedYear} 
+        onChange={e => setSelectedYear(e.target.value)}
+        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+      >
+        <option value="">All Years</option>
+        {years.map(y => <option key={y} value={y}>{y}</option>)}
+      </select>
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester</label>
+      <select 
+        value={selectedSemester} 
+        onChange={e => setSelectedSemester(e.target.value)}
+        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+      >
+        <option value="">All Semesters</option>
+        {semesters.map(se => <option key={se} value={se}>{se}</option>)}
+      </select>
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Program</label>
+      <select 
+        value={selectedProgram} 
+        onChange={e => setSelectedProgram(e.target.value)}
+        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+      >
+        <option value="">All Programs</option>
+        {programs.map(p => <option key={p} value={p}>{p}</option>)}
+      </select>
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+      <select 
+        value={selectedSubject} 
+        onChange={e => setSelectedSubject(e.target.value)}
+        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+      >
+        <option value="">All Subjects</option>
+        {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+      </select>
+    </div>
+  </div>
+</div>
+
         {/* Tabs */}
-        <div className="flex mt-4 overflow-x-auto">
+        <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
           <button
             onClick={() => setActiveTab('submissions')}
-            className={`px-4 py-2 font-medium rounded-t-lg mr-2 transition-colors ${
+            className={`px-6 py-3 font-medium text-md border-b-2 transition-colors ${
               activeTab === 'submissions'
-                ? 'bg-white text-blue-700 border-b-2 border-blue-700'
-                : 'bg-blue-50 text-blue-400 hover:bg-white'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
-            Student Submissions ({filteredSubmissions.length})
+            Test Submissions ({filteredSubmissions.length})
           </button>
           <button
             onClick={() => setActiveTab('assignments')}
-            className={`px-4 py-2 font-medium rounded-t-lg mr-2 transition-colors ${
+            className={`px-6 py-3 font-medium text-md border-b-2 transition-colors ${
               activeTab === 'assignments'
-                ? 'bg-white text-blue-700 border-b-2 border-blue-700'
-                : 'bg-blue-50 text-blue-400 hover:bg-white'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
-            Manage Assignments ({filteredAssignments.length})
+            Manage Tests ({filteredAssignments.length})
           </button>
         </div>
 
         {/* Content */}
-        <div className="pt-4">
-          {/* Submissions */}
+        <div>
+          {/* Submissions with Program display */}
           {activeTab === 'submissions' && (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredSubmissions.map(submission => (
@@ -720,6 +687,7 @@ const Assignment = () => {
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">ID: {submission.studentId}</div>
                     <div className="grid grid-cols-1 gap-1 text-xs text-gray-600 dark:text-gray-300">
+                      <div><strong>Program:</strong> {submission.program}</div>
                       <div><strong>Subject:</strong> {submission.subject}</div>
                       <div><strong>Year:</strong> {submission.year}</div>
                       <div><strong>Semester:</strong> {submission.semester}</div>
@@ -748,16 +716,16 @@ const Assignment = () => {
             </div>
           )}
 
-          {/* Assignments */}
+          {/* Assignments with Program display and Edit functionality */}
           {activeTab === 'assignments' && (
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Assignment Management</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Test Management</h2>
                 <button
                   onClick={() => setShowAddForm(true)}
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-2"
                 >
-                  <Plus className="w-4 h-4" /> Add Assignment
+                  <Plus className="w-4 h-4" /> Add Test
                 </button>
               </div>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -772,6 +740,16 @@ const Assignment = () => {
                           onChange={e => setEditingAssignment({...editingAssignment, title: e.target.value})}
                           placeholder="Title" 
                         />
+                        
+                        <select 
+                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                          value={editingAssignment.program || ''}
+                          onChange={e => setEditingAssignment({...editingAssignment, program: e.target.value})}
+                        >
+                          <option value="">Program</option>
+                          {programs.map(p => <option key={p} value={p}>{p}</option>)}
+                        </select>
+                        
                         <select 
                           className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
                           value={editingAssignment.subject}
@@ -858,6 +836,7 @@ const Assignment = () => {
                           </div>
                         </div>
                         <div className="grid grid-cols-1 gap-1 text-xs text-gray-700 dark:text-gray-300 mb-2">
+                          <div><strong>Program:</strong> {assignment.program}</div>
                           <div><strong>Subject:</strong> {assignment.subject}</div>
                           <div><strong>Year:</strong> {assignment.year}</div>
                           <div><strong>Semester:</strong> {assignment.semester}</div>
@@ -885,19 +864,29 @@ const Assignment = () => {
         </div>
       </div>
 
-      {/* Add Assignment Modal */}
+      {/* Add Assignment Modal - Updated with Program field */}
       {showAddForm && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-md mx-auto max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Add New Assignment</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Add New Test</h2>
             <div className="space-y-3">
               <input 
                 type="text" 
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 value={newAssignment.title}
                 onChange={e => setNewAssignment({...newAssignment, title: e.target.value})}
-                placeholder="Assignment Title" 
+                placeholder="Test Title" 
               />
+              
+              <select 
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                value={newAssignment.program}
+                onChange={e => setNewAssignment({...newAssignment, program: e.target.value})}
+              >
+                <option value="">Select Program</option>
+                {programs.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+              
               <select 
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 value={newAssignment.subject}
@@ -942,7 +931,7 @@ const Assignment = () => {
                 rows={3}
                 value={newAssignment.description}
                 onChange={e => setNewAssignment({...newAssignment, description: e.target.value})}
-                placeholder="Assignment Description"
+                placeholder="Test Description"
               />
               
               {/* Question Paper Upload */}
@@ -969,7 +958,7 @@ const Assignment = () => {
               <div>
                 <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300 flex items-center gap-2">
                   <FileText className="w-4 h-4" />
-                  Assignment Questions (Optional)
+                  Test Questions (Optional)
                 </label>
                 <textarea 
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
@@ -991,23 +980,23 @@ const Assignment = () => {
               <button 
                 onClick={handleAddAssignment}
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2"
-                disabled={!newAssignment.title || !newAssignment.subject || !newAssignment.year || !newAssignment.semester}
+                disabled={!newAssignment.title || !newAssignment.subject || !newAssignment.program || !newAssignment.year || !newAssignment.semester}
               >
-                <Plus className="w-4 h-4" /> Add Assignment
+                <Plus className="w-4 h-4" /> Add Test
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Assignment Details Modal */}
+      {/* Assignment Details Modal - Updated to show Program */}
       {viewingAssignment && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-2xl mx-auto max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
-                Assignment Details
+                Test Details
               </h2>
               <button 
                 onClick={() => setViewingAssignment(null)} 
@@ -1021,6 +1010,7 @@ const Assignment = () => {
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">{viewingAssignment.title}</h3>
                 <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div><strong>Program:</strong> {viewingAssignment.program}</div>
                   <div><strong>Subject:</strong> {viewingAssignment.subject}</div>
                   <div><strong>Year:</strong> {viewingAssignment.year}</div>
                   <div><strong>Semester:</strong> {viewingAssignment.semester}</div>
@@ -1095,6 +1085,7 @@ const Assignment = () => {
               <div className="grid grid-cols-2 gap-2 text-sm mb-2 text-gray-700 dark:text-gray-300">
                 <div><strong>Student:</strong> {viewingSubmission.studentName}</div>
                 <div><strong>ID:</strong> {viewingSubmission.studentId}</div>
+                <div><strong>Program:</strong> {viewingSubmission.program}</div>
                 <div><strong>Subject:</strong> {viewingSubmission.subject}</div>
                 <div><strong>File:</strong> {viewingSubmission.fileName}</div>
               </div>

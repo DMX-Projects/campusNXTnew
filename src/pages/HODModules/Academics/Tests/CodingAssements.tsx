@@ -10,6 +10,7 @@ const CodingAssessments = () => {
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
+  const [selectedProgram, setSelectedProgram] = useState(''); // Added program filter
   const [showSidebar, setShowSidebar] = useState(false); // Mobile sidebar
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingAssessment, setEditingAssessment] = useState(null);
@@ -24,6 +25,10 @@ const CodingAssessments = () => {
   ];
   const years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
   const semesters = ['1st Semester', '2nd Semester'];
+  
+  // Added programs array as requested
+  const programs = ['B.Tech CSE', 'M.Tech CSE', 'B.Tech IT', 'M.Tech IT', 'B.Tech ECE', 'M.Tech ECE'];
+  
   const programmingLanguages = ['Python', 'Java', 'JavaScript', 'C++', 'C#', 'Go', 'Rust', 'TypeScript'];
   const difficultyLevels = ['Easy', 'Medium', 'Hard', 'Expert'];
   const assessmentTypes = ['Algorithm Challenge', 'System Design', 'Debug Challenge', 'Full Stack Project', 'Data Analysis'];
@@ -39,7 +44,7 @@ const CodingAssessments = () => {
     return semesterMap[semester] || 0;
   };
 
-  // Enhanced coding assessments data with comprehensive coverage
+  // Enhanced coding assessments data with comprehensive coverage (including program field)
   const [codingAssessments, setCodingAssessments] = useState([
     // 1st Year Assessments
     {
@@ -48,6 +53,7 @@ const CodingAssessments = () => {
       subject: 'Data Structures & Algorithms',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech CSE', // Added program field
       type: 'Algorithm Challenge',
       language: ['Python', 'Java'],
       difficulty: 'Easy',
@@ -74,6 +80,7 @@ const CodingAssessments = () => {
       subject: 'Web Development',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech IT', // Added program field
       type: 'Full Stack Project',
       language: ['JavaScript'],
       difficulty: 'Easy',
@@ -100,6 +107,7 @@ const CodingAssessments = () => {
       subject: 'Database Management',
       year: '1st Year',
       semester: '2nd Semester',
+      program: 'B.Tech CSE', // Added program field
       type: 'Data Analysis',
       language: ['Python'],
       difficulty: 'Easy',
@@ -126,6 +134,7 @@ const CodingAssessments = () => {
       subject: 'Mobile App Development',
       year: '1st Year',
       semester: '2nd Semester',
+      program: 'B.Tech IT', // Added program field
       type: 'Full Stack Project',
       language: ['JavaScript'],
       difficulty: 'Medium',
@@ -154,6 +163,7 @@ const CodingAssessments = () => {
       subject: 'Data Structures & Algorithms',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'B.Tech CSE', // Added program field
       type: 'Algorithm Challenge',
       language: ['Python', 'Java', 'C++'],
       difficulty: 'Medium',
@@ -180,6 +190,7 @@ const CodingAssessments = () => {
       subject: 'Web Development',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'B.Tech IT', // Added program field
       type: 'Full Stack Project',
       language: ['JavaScript', 'TypeScript'],
       difficulty: 'Medium',
@@ -206,6 +217,7 @@ const CodingAssessments = () => {
       subject: 'Database Management',
       year: '2nd Year',
       semester: '2nd Semester',
+      program: 'B.Tech CSE', // Added program field
       type: 'Data Analysis',
       language: ['Python'],
       difficulty: 'Medium',
@@ -232,6 +244,7 @@ const CodingAssessments = () => {
       subject: 'Mobile App Development',
       year: '2nd Year',
       semester: '2nd Semester',
+      program: 'B.Tech IT', // Added program field
       type: 'Full Stack Project',
       language: ['JavaScript', 'TypeScript'],
       difficulty: 'Hard',
@@ -260,6 +273,7 @@ const CodingAssessments = () => {
       subject: 'Data Structures & Algorithms',
       year: '3rd Year',
       semester: '1st Semester',
+      program: 'M.Tech CSE', // Added program field
       type: 'Algorithm Challenge',
       language: ['Python', 'C++', 'Java'],
       difficulty: 'Hard',
@@ -286,6 +300,7 @@ const CodingAssessments = () => {
       subject: 'Web Development',
       year: '3rd Year',
       semester: '1st Semester',
+      program: 'M.Tech IT', // Added program field
       type: 'Full Stack Project',
       language: ['JavaScript', 'TypeScript'],
       difficulty: 'Hard',
@@ -312,6 +327,7 @@ const CodingAssessments = () => {
       subject: 'Machine Learning',
       year: '3rd Year',
       semester: '2nd Semester',
+      program: 'M.Tech CSE', // Added program field
       type: 'Data Analysis',
       language: ['Python'],
       difficulty: 'Hard',
@@ -338,6 +354,7 @@ const CodingAssessments = () => {
       subject: 'Computer Networks',
       year: '3rd Year',
       semester: '2nd Semester',
+      program: 'B.Tech ECE', // Added program field
       type: 'System Design',
       language: ['C++', 'Java'],
       difficulty: 'Expert',
@@ -366,6 +383,7 @@ const CodingAssessments = () => {
       subject: 'Software Engineering',
       year: '4th Year',
       semester: '1st Semester',
+      program: 'M.Tech CSE', // Added program field
       type: 'System Design',
       language: ['Java', 'Python', 'Go'],
       difficulty: 'Expert',
@@ -392,6 +410,7 @@ const CodingAssessments = () => {
       subject: 'Artificial Intelligence',
       year: '4th Year',
       semester: '1st Semester',
+      program: 'M.Tech CSE', // Added program field
       type: 'Data Analysis',
       language: ['Python'],
       difficulty: 'Expert',
@@ -418,6 +437,7 @@ const CodingAssessments = () => {
       subject: 'Operating Systems',
       year: '4th Year',
       semester: '2nd Semester',
+      program: 'M.Tech ECE', // Added program field
       type: 'System Design',
       language: ['C++', 'C'],
       difficulty: 'Expert',
@@ -440,7 +460,7 @@ const CodingAssessments = () => {
     }
   ]);
 
-  // Enhanced coding submissions with comprehensive student data
+  // Enhanced coding submissions with comprehensive student data (including program field)
   const [codingSubmissions, setCodingSubmissions] = useState([
     // 1st Year Submissions
     {
@@ -451,6 +471,7 @@ const CodingAssessments = () => {
       subject: 'Data Structures & Algorithms',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech CSE', // Added program field
       submittedDate: '2024-12-01',
       startTime: '10:15:00',
       endTime: '11:05:00',
@@ -488,6 +509,7 @@ print(fibonacci(10))`
       subject: 'Web Development',
       year: '1st Year',
       semester: '1st Semester',
+      program: 'B.Tech IT', // Added program field
       submittedDate: '2024-12-05',
       startTime: '14:30:00',
       endTime: '15:45:00',
@@ -531,6 +553,7 @@ print(fibonacci(10))`
       subject: 'Data Structures & Algorithms',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'B.Tech CSE', // Added program field
       submittedDate: '2024-12-01',
       startTime: '10:15:00',
       endTime: '12:05:00',
@@ -570,6 +593,7 @@ print(fibonacci(10))`
       subject: 'Web Development',
       year: '2nd Year',
       semester: '1st Semester',
+      program: 'B.Tech IT', // Added program field
       submittedDate: '2024-12-08',
       startTime: '11:30:00',
       endTime: '14:15:00',
@@ -605,11 +629,7 @@ const Card: React.FC<Props> = ({ title, children }) => {
     </div>
   );
 };`
-    },
-   
-    // 3rd Year Submissions
-   
-   
+    }
   ]);
 
   const [newAssessment, setNewAssessment] = useState({
@@ -617,6 +637,7 @@ const Card: React.FC<Props> = ({ title, children }) => {
     subject: '',
     year: '',
     semester: '',
+    program: '', // Added program field
     type: 'Algorithm Challenge',
     language: [],
     difficulty: 'Medium',
@@ -651,17 +672,18 @@ const Card: React.FC<Props> = ({ title, children }) => {
     testCases: []
   });
 
-  // Enhanced filtering and sorting with hierarchical order: Year -> Semester -> Subject
+  // Enhanced filtering and sorting with hierarchical order: Year -> Semester -> Subject -> Program
   const filteredSubmissions = codingSubmissions
     .filter(submission => {
       return (
         (!selectedSubject || submission.subject === selectedSubject) &&
         (!selectedYear || submission.year === selectedYear) &&
-        (!selectedSemester || submission.semester === selectedSemester)
+        (!selectedSemester || submission.semester === selectedSemester) &&
+        (!selectedProgram || submission.program === selectedProgram) // Added program filter
       );
     })
     .sort((a, b) => {
-      // Sort by Year first, then Semester, then Subject
+      // Sort by Year first, then Semester, then Subject, then Program
       const yearA = getYearOrder(a.year);
       const yearB = getYearOrder(b.year);
       if (yearA !== yearB) return yearA - yearB;
@@ -670,7 +692,10 @@ const Card: React.FC<Props> = ({ title, children }) => {
       const semesterB = getSemesterOrder(b.semester);
       if (semesterA !== semesterB) return semesterA - semesterB;
       
-      return a.subject.localeCompare(b.subject);
+      const subjectCompare = a.subject.localeCompare(b.subject);
+      if (subjectCompare !== 0) return subjectCompare;
+      
+      return a.program.localeCompare(b.program);
     });
 
   const filteredAssessments = codingAssessments
@@ -678,11 +703,12 @@ const Card: React.FC<Props> = ({ title, children }) => {
       return (
         (!selectedSubject || assessment.subject === selectedSubject) &&
         (!selectedYear || assessment.year === selectedYear) &&
-        (!selectedSemester || assessment.semester === selectedSemester)
+        (!selectedSemester || assessment.semester === selectedSemester) &&
+        (!selectedProgram || assessment.program === selectedProgram) // Added program filter
       );
     })
     .sort((a, b) => {
-      // Sort by Year first, then Semester, then Subject
+      // Sort by Year first, then Semester, then Subject, then Program
       const yearA = getYearOrder(a.year);
       const yearB = getYearOrder(b.year);
       if (yearA !== yearB) return yearA - yearB;
@@ -691,11 +717,14 @@ const Card: React.FC<Props> = ({ title, children }) => {
       const semesterB = getSemesterOrder(b.semester);
       if (semesterA !== semesterB) return semesterA - semesterB;
       
-      return a.subject.localeCompare(b.subject);
+      const subjectCompare = a.subject.localeCompare(b.subject);
+      if (subjectCompare !== 0) return subjectCompare;
+      
+      return a.program.localeCompare(b.program);
     });
 
   const handleAddAssessment = () => {
-    if (newAssessment.title && newAssessment.subject && newAssessment.year && newAssessment.semester) {
+    if (newAssessment.title && newAssessment.subject && newAssessment.year && newAssessment.semester && newAssessment.program) {
       const assessment = {
         ...newAssessment,
         id: codingAssessments.length + 1,
@@ -712,6 +741,7 @@ const Card: React.FC<Props> = ({ title, children }) => {
         subject: '',
         year: '',
         semester: '',
+        program: '', // Reset program field
         type: 'Algorithm Challenge',
         language: [],
         difficulty: 'Medium',
@@ -855,7 +885,7 @@ const Card: React.FC<Props> = ({ title, children }) => {
   const analytics = getAnalyticsData();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+    <div className="min-h-screen bg-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-emerald-600 text-white">
         <h1 className="text-lg font-bold flex items-center gap-2">
@@ -897,6 +927,17 @@ const Card: React.FC<Props> = ({ title, children }) => {
               </select>
             </label>
             
+            <label className="block text-md text-gray-700 dark:text-gray-300">Program
+              <select 
+                value={selectedProgram} 
+                onChange={e => setSelectedProgram(e.target.value)}
+                className="mt-2 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              >
+                <option value="">All Programs</option>
+                {programs.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </label>
+            
             <label className="block text-md text-gray-700 dark:text-gray-300">Subject
               <select 
                 value={selectedSubject} 
@@ -912,10 +953,11 @@ const Card: React.FC<Props> = ({ title, children }) => {
         </div>
       )}
 
-      <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+      
+      <div className="p-4 md:max-w-8xl mx-auto">
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl transition-colors duration-300">
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-4 lg:p-6 rounded-t-lg">
+          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-6 lg:p-6 rounded-t-lg">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center">
                 <Code className="w-8 h-8 mr-3" />
@@ -925,13 +967,7 @@ const Card: React.FC<Props> = ({ title, children }) => {
                 </div>
               </div>
               <div className="flex items-center mt-4 lg:mt-0 space-x-4">
-                <button
-                  onClick={() => setShowAnalytics(!showAnalytics)}
-                  className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors flex items-center gap-2"
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Analytics</span>
-                </button>
+                
               </div>
             </div>
           </div>
@@ -968,9 +1004,9 @@ const Card: React.FC<Props> = ({ title, children }) => {
             </div>
           )}
 
-          {/* Filters - Hierarchical Order: Year, Semester, Subject */}
+          {/* Filters - Hierarchical Order: Year, Semester, Program, Subject */}
           <div className="hidden md:block p-4 lg:p-6 border-b bg-gray-50 dark:bg-slate-700 dark:border-slate-600 transition-colors duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
                 <select
@@ -994,6 +1030,19 @@ const Card: React.FC<Props> = ({ title, children }) => {
                   <option value="">All Semesters</option>
                   {semesters.map(semester => (
                     <option key={semester} value={semester}>{semester}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Program</label>
+                <select
+                  value={selectedProgram}
+                  onChange={(e) => setSelectedProgram(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors duration-300"
+                >
+                  <option value="">All Programs</option>
+                  {programs.map(program => (
+                    <option key={program} value={program}>{program}</option>
                   ))}
                 </select>
               </div>
@@ -1060,9 +1109,10 @@ const Card: React.FC<Props> = ({ title, children }) => {
                             )}
                           </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3">
                             <div><strong>Year:</strong> {submission.year}</div>
                             <div><strong>Semester:</strong> {submission.semester}</div>
+                            <div><strong>Program:</strong> {submission.program}</div>
                             <div><strong>Subject:</strong> {submission.subject}</div>
                             <div><strong>Submitted:</strong> {submission.submittedDate || 'Not yet'}</div>
                           </div>
@@ -1070,37 +1120,37 @@ const Card: React.FC<Props> = ({ title, children }) => {
                           {submission.status === 'Completed' && (
                             <>
                               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 lg:gap-4 mb-3">
-                                <div className="bg-green-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                                <div className="bg-green-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                                   <div className={`text-lg lg:text-xl font-bold ${getPerformanceColor(submission.percentage)}`}>
                                     {submission.score}/{submission.maxScore}
                                   </div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Score</div>
                                 </div>
-                                <div className="bg-blue-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                                <div className="bg-blue-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                                   <div className="text-lg lg:text-xl font-bold text-blue-600 dark:text-blue-400">
                                     {submission.testCasesPassed}/{submission.totalTestCases}
                                   </div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Test Cases</div>
                                 </div>
-                                <div className="bg-purple-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                                <div className="bg-purple-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                                   <div className="text-lg lg:text-xl font-bold text-purple-600 dark:text-purple-400">
                                     {submission.executionTime}
                                   </div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Runtime</div>
                                 </div>
-                                <div className="bg-yellow-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
-                                  <div className="text-lg lg:text-xl font-bold text-yellow-600 dark:text-yellow-400">
+                                <div className="bg-orange-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
+                                  <div className="text-lg lg:text-xl font-bold text-orange-600 dark:text-orange-400">
                                     {submission.memoryUsed}
                                   </div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Memory</div>
                                 </div>
-                                <div className="bg-pink-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                                <div className="bg-pink-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                                   <div className="text-lg lg:text-xl font-bold text-pink-600 dark:text-pink-400">
                                     {submission.linesOfCode}
                                   </div>
                                   <div className="text-xs text-gray-600 dark:text-gray-400">Lines</div>
                                 </div>
-                                <div className="bg-indigo-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                                <div className="bg-indigo-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                                   <div className={`text-lg lg:text-xl font-bold ${getCodeQualityColor(submission.codeQuality)}`}>
                                     {submission.codeQuality || 'N/A'}
                                   </div>
@@ -1160,6 +1210,7 @@ const Card: React.FC<Props> = ({ title, children }) => {
                       </button>
                       <h2 className="text-xl font-bold mb-4">Submission Details</h2>
                       <div className="mb-2"><strong>Student:</strong> {viewingSubmission.studentName} ({viewingSubmission.studentId})</div>
+                      <div className="mb-2"><strong>Program:</strong> {viewingSubmission.program}</div>
                       <div className="mb-2"><strong>Subject:</strong> {viewingSubmission.subject}</div>
                       <div className="mb-2"><strong>Status:</strong> {viewingSubmission.status}</div>
                       <div className="mb-2"><strong>Score:</strong> {viewingSubmission.score}/{viewingSubmission.maxScore}</div>
@@ -1215,45 +1266,46 @@ const Card: React.FC<Props> = ({ title, children }) => {
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4 text-sm text-gray-600 dark:text-gray-300 mb-3">
                             <div><strong>Year:</strong> {assessment.year}</div>
                             <div><strong>Semester:</strong> {assessment.semester}</div>
+                            <div><strong>Program:</strong> {assessment.program}</div>
                             <div><strong>Subject:</strong> {assessment.subject}</div>
                             <div><strong>Languages:</strong> {assessment.language.join(', ')}</div>
                           </div>
 
                           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 lg:gap-4 mb-3">
-                            <div className="bg-green-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                            <div className="bg-green-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                               <div className="text-lg lg:text-xl font-bold text-green-600 dark:text-green-400">
                                 {assessment.totalMarks}
                               </div>
                               <div className="text-xs text-gray-600 dark:text-gray-400">Total Marks</div>
                             </div>
-                            <div className="bg-blue-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                            <div className="bg-blue-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                               <div className="text-lg lg:text-xl font-bold text-blue-600 dark:text-blue-400">
                                 {assessment.totalProblems}
                               </div>
                               <div className="text-xs text-gray-600 dark:text-gray-400">Problems</div>
                             </div>
-                            <div className="bg-purple-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                            <div className="bg-purple-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                               <div className="text-lg lg:text-xl font-bold text-purple-600 dark:text-purple-400">
                                 {assessment.timeLimit}m
                               </div>
                               <div className="text-xs text-gray-600 dark:text-gray-400">Time Limit</div>
                             </div>
-                            <div className="bg-yellow-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                            <div className="bg-yellow-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                               <div className="text-lg lg:text-xl font-bold text-yellow-600 dark:text-yellow-400">
                                 {assessment.testCases}
                               </div>
                               <div className="text-xs text-gray-600 dark:text-gray-400">Test Cases</div>
                             </div>
-                            <div className="bg-pink-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                            <div className="bg-pink-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                               <div className="text-lg lg:text-xl font-bold text-pink-600 dark:text-pink-400">
                                 {assessment.memoryLimit}
                               </div>
                               <div className="text-xs text-gray-600 dark:text-gray-400">Memory Limit</div>
                             </div>
-                            <div className="bg-indigo-50 dark:bg-slate-600 rounded-lg p-2 lg:p-3 text-center">
+                            <div className="bg-indigo-50 dark:bg-slate-900 rounded-lg p-2 lg:p-3 text-center">
                               <div className="text-lg lg:text-xl font-bold text-indigo-600 dark:text-indigo-400">
                                 {assessment.executionLimit}
                               </div>
@@ -1304,10 +1356,9 @@ const Card: React.FC<Props> = ({ title, children }) => {
                         </div>
 
                         <div className="flex flex-col gap-2 min-w-[120px]">
-                         
                           <button
                             onClick={() => handleEditAssessment(assessment)}
-                            className="flex items-center gap-2 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors"
+                            className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
                           >
                             <Edit className="w-4 h-4" />
                             Edit
@@ -1396,6 +1447,22 @@ const Card: React.FC<Props> = ({ title, children }) => {
                                 <option value="">Select Semester</option>
                                 {semesters.map(semester => (
                                   <option key={semester} value={semester}>{semester}</option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Program *
+                              </label>
+                              <select
+                                value={newAssessment.program}
+                                onChange={(e) => setNewAssessment({...newAssessment, program: e.target.value})}
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors duration-300"
+                              >
+                                <option value="">Select Program</option>
+                                {programs.map(program => (
+                                  <option key={program} value={program}>{program}</option>
                                 ))}
                               </select>
                             </div>
@@ -1926,6 +1993,21 @@ const Card: React.FC<Props> = ({ title, children }) => {
                             >
                               {subjects.map(subject => (
                                 <option key={subject} value={subject}>{subject}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                              Program *
+                            </label>
+                            <select
+                              value={editingAssessment.program}
+                              onChange={(e) => setEditingAssessment({...editingAssessment, program: e.target.value})}
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors duration-300"
+                            >
+                              {programs.map(program => (
+                                <option key={program} value={program}>{program}</option>
                               ))}
                             </select>
                           </div>
