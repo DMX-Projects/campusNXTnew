@@ -132,6 +132,7 @@ import SubjectsList from '../pages/FacultyModules/FacultyAcademic/SubjectsList';
 import SemExamPrepararation from '../pages/FacultyModules/FacultyAcademic/SemExamPrepararation';
 
 import { i } from 'framer-motion/client';
+import FacultyLessonPlan from '../pages/FacultyModules/Academic/FacultyLessonplan';
 
 
 
@@ -175,6 +176,7 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/hod/view-timetable" element={< HodPersonalTimetable/>} />
       <Route path="hod-dashboard" element={< HodDashboard/>} />
       <Route path="/faculty-dashboard" element={<FacultyAcademicDashboard />} />
+      <Route path="/faculty-lessonplan" element={<FacultyLessonPlan/>} />
       
       
 

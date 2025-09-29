@@ -1,12 +1,12 @@
-import React, { useState, useMemo } from 'react';
-import { Plus, Edit3, Trash2, BookOpen, User, Calendar, Clock, X, Save, GraduationCap, FileText, Eye, Download, Search, Filter, Users, Book } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, CreditCard as Edit, Trash2, BookOpen, User, Calendar, Clock, X, Save, GraduationCap, FileText, Eye, Download, Sun, Moon } from 'lucide-react';
 
 // Types
 interface LessonPlanTopic {
   id: string;
   slNo: number;
   topic: string;
-  unit: number;
+  module: number;
   hoursRequired: number;
   modeOfTeaching: string;
 }
@@ -40,71 +40,67 @@ interface LessonPlanFormData {
   topics: Omit<LessonPlanTopic, 'id'>[];
 }
 
-interface LessonPlanManagerProps {
-  isDarkMode?: boolean;
-}
-
-// Enhanced mock data with CSE subjects
+// Mock data
 const initialLessonPlans: LessonPlan[] = [
   {
     id: '1',
-    facultyName: 'Dr. Priya Sharma',
-    courseName: 'DATA STRUCTURES AND ALGORITHMS',
-    courseCode: 'CSE301',
-    programName: 'B.TECH in Computer Science Engineering',
-    courseYear: 'SECOND',
-    semester: '3rd',
-    academicPeriod: '2024-25',
+    facultyName: 'ASUTOSH MOHARANA',
+    courseName: 'BASIC MANUFACTURING PROCESS',
+    courseCode: 'RME5C001',
+    programName: 'B.TECH in Mechanical Engineering',
+    courseYear: 'THIRD',
+    semester: '5th',
+    academicPeriod: '2022-23',
     classesPerWeek: 4,
-    totalPlannedClasses: 48,
+    totalPlannedClasses: 40,
     topics: [
       {
         id: '1',
         slNo: 1,
-        topic: 'Introduction to Data Structures: Arrays, Linked Lists, and their Operations',
-        unit: 1,
-        hoursRequired: 3,
+        topic: 'Foundry: Types of Patterns, Pattern Materials and Pattern Allowances',
+        module: 1,
+        hoursRequired: 2,
         modeOfTeaching: 'Lecture'
       },
       {
         id: '2',
         slNo: 2,
-        topic: 'Stack Operations: Push, Pop, and Applications',
-        unit: 1,
-        hoursRequired: 2,
-        modeOfTeaching: 'Lab'
-      },
-      {
-        id: '3',
-        slNo: 3,
-        topic: 'Queue Implementation and Circular Queue',
-        unit: 1,
+        topic: 'Moulding Materials- Sand Moulding, Metal Moulding',
+        module: 1,
         hoursRequired: 2,
         modeOfTeaching: 'Lecture'
       },
       {
+        id: '3',
+        slNo: 3,
+        topic: 'Invest Moulding and Shell Moulding',
+        module: 1,
+        hoursRequired: 2,
+        modeOfTeaching: 'Lab'
+      },
+      {
         id: '4',
         slNo: 4,
-        topic: 'Binary Trees and Tree Traversals',
-        unit: 2,
-        hoursRequired: 3,
+        topic: 'Composition of Moulding Sand, Silica and Zircon Sand Binder',
+        module: 1,
+        hoursRequired: 1,
         modeOfTeaching: 'Lecture'
       },
       {
         id: '5',
         slNo: 5,
-        topic: 'Binary Search Trees and AVL Trees',
-        unit: 2,
-        hoursRequired: 3,
-        modeOfTeaching: 'Lab'
+        topic: 'Melting Furnance- Cupola Furnance, Resistance Furnance',
+        module: 1,
+        hoursRequired: 2,
+        modeOfTeaching: 'Lecture'
       },
       {
         id: '6',
         slNo: 6,
-        topic: 'Graph Representation and BFS/DFS Algorithms',
-        unit: 3,
-        hoursRequired: 4,
-        modeOfTeaching: 'Lecture'
+        topic: 'Induction and Arc Furnance, Solidification of Castings',
+        module: 1,
+        hoursRequired: 1,
+        modeOfTeaching: 'Lab'
       }
     ],
     createdAt: new Date('2024-01-15'),
@@ -112,203 +108,35 @@ const initialLessonPlans: LessonPlan[] = [
   },
   {
     id: '2',
-    facultyName: 'Prof. Rajesh Kumar',
-    courseName: 'DATABASE MANAGEMENT SYSTEMS',
-    courseCode: 'CSE302',
-    programName: 'B.TECH in Computer Science Engineering',
-    courseYear: 'SECOND',
-    semester: '4th',
-    academicPeriod: '2024-25',
+    facultyName: 'DR. RAJESH KUMAR',
+    courseName: 'MACHINE DESIGN',
+    courseCode: 'RME6C002',
+    programName: 'B.TECH in Mechanical Engineering',
+    courseYear: 'FOURTH',
+    semester: '7th',
+    academicPeriod: '2023-24',
     classesPerWeek: 3,
-    totalPlannedClasses: 36,
+    totalPlannedClasses: 30,
     topics: [
       {
-        id: '7',
+        id: '4',
         slNo: 1,
-        topic: 'Introduction to Database Systems and ER Model',
-        unit: 1,
+        topic: 'Design Philosophy and Process',
+        module: 1,
         hoursRequired: 3,
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '8',
+        id: '5',
         slNo: 2,
-        topic: 'Relational Model and Normalization Techniques',
-        unit: 1,
-        hoursRequired: 4,
-        modeOfTeaching: 'Lab'
-      },
-      {
-        id: '9',
-        slNo: 3,
-        topic: 'SQL Queries and Database Design',
-        unit: 2,
-        hoursRequired: 3,
+        topic: 'Material Selection and Properties',
+        module: 1,
+        hoursRequired: 2,
         modeOfTeaching: 'Lab'
       }
     ],
     createdAt: new Date('2024-02-10'),
     updatedAt: new Date('2024-02-10')
-  },
-  {
-    id: '3',
-    facultyName: 'Dr. Anita Singh',
-    courseName: 'COMPUTER NETWORKS',
-    courseCode: 'CSE401',
-    programName: 'B.TECH in Computer Science Engineering',
-    courseYear: 'THIRD',
-    semester: '5th',
-    academicPeriod: '2024-25',
-    classesPerWeek: 3,
-    totalPlannedClasses: 36,
-    topics: [
-      {
-        id: '10',
-        slNo: 1,
-        topic: 'Network Models: OSI and TCP/IP Reference Models',
-        unit: 1,
-        hoursRequired: 2,
-        modeOfTeaching: 'Lecture'
-      },
-      {
-        id: '11',
-        slNo: 2,
-        topic: 'Data Link Layer Protocols and Error Detection',
-        unit: 1,
-        hoursRequired: 3,
-        modeOfTeaching: 'Lecture'
-      },
-      {
-        id: '12',
-        slNo: 3,
-        topic: 'Network Layer: Routing Algorithms and IP Protocol',
-        unit: 2,
-        hoursRequired: 4,
-        modeOfTeaching: 'Lab'
-      }
-    ],
-    createdAt: new Date('2024-03-05'),
-    updatedAt: new Date('2024-03-05')
-  },
-  {
-    id: '4',
-    facultyName: 'Prof. Amit Patel',
-    courseName: 'OPERATING SYSTEMS',
-    courseCode: 'CSE303',
-    programName: 'B.TECH in Computer Science Engineering',
-    courseYear: 'SECOND',
-    semester: '4th',
-    academicPeriod: '2024-25',
-    classesPerWeek: 4,
-    totalPlannedClasses: 48,
-    topics: [
-      {
-        id: '13',
-        slNo: 1,
-        topic: 'Introduction to Operating Systems and System Calls',
-        unit: 1,
-        hoursRequired: 2,
-        modeOfTeaching: 'Lecture'
-      },
-      {
-        id: '14',
-        slNo: 2,
-        topic: 'Process Management and CPU Scheduling',
-        unit: 1,
-        hoursRequired: 3,
-        modeOfTeaching: 'Lab'
-      },
-      {
-        id: '15',
-        slNo: 3,
-        topic: 'Memory Management and Virtual Memory',
-        unit: 2,
-        hoursRequired: 4,
-        modeOfTeaching: 'Lecture'
-      }
-    ],
-    createdAt: new Date('2024-01-20'),
-    updatedAt: new Date('2024-01-20')
-  },
-  {
-    id: '5',
-    facultyName: 'Dr. Priya Sharma',
-    courseName: 'MACHINE LEARNING',
-    courseCode: 'CSE501',
-    programName: 'B.TECH in Computer Science Engineering',
-    courseYear: 'THIRD',
-    semester: '6th',
-    academicPeriod: '2024-25',
-    classesPerWeek: 3,
-    totalPlannedClasses: 36,
-    topics: [
-      {
-        id: '16',
-        slNo: 1,
-        topic: 'Introduction to Machine Learning and Types of Learning',
-        unit: 1,
-        hoursRequired: 2,
-        modeOfTeaching: 'Lecture'
-      },
-      {
-        id: '17',
-        slNo: 2,
-        topic: 'Supervised Learning: Linear and Logistic Regression',
-        unit: 1,
-        hoursRequired: 3,
-        modeOfTeaching: 'Lab'
-      },
-      {
-        id: '18',
-        slNo: 3,
-        topic: 'Decision Trees and Random Forest Algorithms',
-        unit: 2,
-        hoursRequired: 3,
-        modeOfTeaching: 'Lab'
-      }
-    ],
-    createdAt: new Date('2024-02-15'),
-    updatedAt: new Date('2024-02-15')
-  },
-  {
-    id: '6',
-    facultyName: 'Prof. Vikash Gupta',
-    courseName: 'SOFTWARE ENGINEERING',
-    courseCode: 'CSE402',
-    programName: 'B.TECH in Computer Science Engineering',
-    courseYear: 'THIRD',
-    semester: '5th',
-    academicPeriod: '2024-25',
-    classesPerWeek: 3,
-    totalPlannedClasses: 36,
-    topics: [
-      {
-        id: '19',
-        slNo: 1,
-        topic: 'Software Development Life Cycle Models',
-        unit: 1,
-        hoursRequired: 2,
-        modeOfTeaching: 'Lecture'
-      },
-      {
-        id: '20',
-        slNo: 2,
-        topic: 'Requirements Engineering and Analysis',
-        unit: 1,
-        hoursRequired: 3,
-        modeOfTeaching: 'Lab'
-      },
-      {
-        id: '21',
-        slNo: 3,
-        topic: 'Software Design Patterns and Architecture',
-        unit: 2,
-        hoursRequired: 3,
-        modeOfTeaching: 'Lecture'
-      }
-    ],
-    createdAt: new Date('2024-03-01'),
-    updatedAt: new Date('2024-03-01')
   }
 ];
 
@@ -316,10 +144,10 @@ const emptyForm: LessonPlanFormData = {
   facultyName: '',
   courseName: '',
   courseCode: '',
-  programName: 'B.TECH in Computer Science Engineering',
+  programName: '',
   courseYear: '',
   semester: '',
-  academicPeriod: '2024-25',
+  academicPeriod: '',
   classesPerWeek: 0,
   totalPlannedClasses: 0,
   topics: []
@@ -328,12 +156,12 @@ const emptyForm: LessonPlanFormData = {
 const emptyTopic = {
   slNo: 1,
   topic: '',
-  unit: 1,
+  module: 1,
   hoursRequired: 1,
   modeOfTeaching: 'Lecture'
 };
 
-const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = false }) => {
+const LessonPlanManager: React.FC = () => {
   const [lessonPlans, setLessonPlans] = useState<LessonPlan[]>(initialLessonPlans);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -341,66 +169,7 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
   const [currentPlanId, setCurrentPlanId] = useState<string | null>(null);
   const [viewingPlan, setViewingPlan] = useState<LessonPlan | null>(null);
   const [formData, setFormData] = useState<LessonPlanFormData>(emptyForm);
-
-  // Filter states
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFaculty, setSelectedFaculty] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-
-  // Get unique values for filter dropdowns
-  const uniqueFaculties = useMemo(() => {
-    return Array.from(new Set(lessonPlans.map(plan => plan.facultyName))).sort();
-  }, [lessonPlans]);
-
-  const uniqueSubjects = useMemo(() => {
-    return Array.from(new Set(lessonPlans.map(plan => plan.courseName))).sort();
-  }, [lessonPlans]);
-
-  const uniqueYears = useMemo(() => {
-    return Array.from(new Set(lessonPlans.map(plan => plan.courseYear))).sort();
-  }, [lessonPlans]);
-
-  // Filtered lesson plans
-  const filteredLessonPlans = useMemo(() => {
-    return lessonPlans.filter(plan => {
-      const matchesSearch = searchTerm === '' || 
-        plan.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        plan.courseCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        plan.facultyName.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesFaculty = selectedFaculty === '' || plan.facultyName === selectedFaculty;
-      const matchesSubject = selectedSubject === '' || plan.courseName === selectedSubject;
-      const matchesYear = selectedYear === '' || plan.courseYear === selectedYear;
-
-      return matchesSearch && matchesFaculty && matchesSubject && matchesYear;
-    });
-  }, [lessonPlans, searchTerm, selectedFaculty, selectedSubject, selectedYear]);
-
-  // Clear all filters
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedFaculty('');
-    setSelectedSubject('');
-    setSelectedYear('');
-  };
-
-  const themeClasses = isDarkMode 
-    ? 'bg-gray-900 text-white' 
-    : 'bg-gray-50 text-gray-900';
-
-  const cardClasses = isDarkMode 
-    ? 'bg-gray-800 border-gray-700' 
-    : 'bg-white border-gray-200';
-
-  const modalClasses = isDarkMode 
-    ? 'bg-gray-800 text-white' 
-    : 'bg-white text-gray-900';
-
-  const inputClasses = isDarkMode 
-    ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400' 
-    : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500';
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Handle form changes
   const handleFormChange = (field: keyof Omit<LessonPlanFormData, 'topics'>, value: string | number) => {
@@ -527,7 +296,7 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
   const downloadLessonPlan = (plan: LessonPlan) => {
     const content = `
 GANDHI INSTITUTE FOR EDUCATION AND TECHNOLOGY
-CSE Department - Lesson Plan
+Lesson Plan
 
 Faculty Name: ${plan.facultyName}
 Course Name: ${plan.courseName}
@@ -541,13 +310,10 @@ Total Planned Classes: ${plan.totalPlannedClasses}
 
 Topics to be Covered:
 ${plan.topics.map(topic => 
-  `${topic.slNo}. ${topic.topic} | Unit: ${topic.unit} | Hours: ${topic.hoursRequired} | Mode: ${topic.modeOfTeaching}`
+  `${topic.slNo}. ${topic.topic} | Module: ${topic.module} | Hours: ${topic.hoursRequired} | Mode: ${topic.modeOfTeaching}`
 ).join('\n')}
 
-Total Hours: ${plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0)}
-
 Generated on: ${new Date().toLocaleDateString()}
-HOD Approval: ________________
     `;
 
     const blob = new Blob([content], { type: 'text/plain' });
@@ -561,217 +327,52 @@ HOD Approval: ________________
     URL.revokeObjectURL(url);
   };
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const themeClasses = isDarkMode 
+    ? 'bg-gray-900 text-white' 
+    : 'bg-gray-50 text-gray-900';
+
+  const cardClasses = isDarkMode 
+    ? 'bg-gray-800 border-gray-700' 
+    : 'bg-white border-gray-200';
+
+  const modalClasses = isDarkMode 
+    ? 'bg-gray-800 text-white' 
+    : 'bg-white text-gray-900';
+
+  const inputClasses = isDarkMode 
+    ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400' 
+    : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500';
+
   return (
     <div className={`p-4 md:p-6 min-h-screen transition-colors duration-200 ${themeClasses}`}>
       {/* Header */}
       <div className="mb-6 md:mb-8">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2"> Lesson Plan Management</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">Lesson Plan Management</h1>
+            
           </div>
-          <button
-            onClick={openAddModal}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-md"
-          >
-            <Plus size={20} />
-            <span className="hidden sm:inline">Add New Lesson Plan</span>
-            <span className="sm:hidden">Add Plan</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Search and Filter Section */}
-      <div className={`mb-6 p-4 rounded-lg shadow-md ${cardClasses}`}>
-        <div className="flex flex-col lg:flex-row gap-4">
-          {/* Search */}
-          <div className="flex-1">
-            <div className="relative">
-              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} size={20} />
-              <input
-                type="text"
-                placeholder="Search by course name, code, or faculty..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className={`pl-10 pr-4 py-2 w-full border rounded-lg transition-colors duration-200 ${inputClasses}`}
-              />
-            </div>
-          </div>
-          
-          {/* Filter Toggle */}
           <div className="flex gap-2">
+            
             <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`px-4 py-2 border rounded-lg flex items-center gap-2 transition-colors duration-200 ${
-                isDarkMode 
-                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
+              onClick={openAddModal}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-md"
             >
-              <Filter size={16} />
-              Filters
+              <Plus size={20} />
+              <span className="hidden sm:inline">Add New Lesson Plan</span>
+              <span className="sm:hidden">Add Plan</span>
             </button>
-            {(selectedFaculty || selectedSubject || selectedYear) && (
-              <button
-                onClick={clearFilters}
-                className="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Filter Dropdowns */}
-        {showFilters && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                <Users size={16} className="inline mr-1" />
-                Program
-              </label>
-              <select
-                value={selectedFaculty}
-                onChange={(e) => setSelectedFaculty(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-              >
-                <option value="">All Programs</option>
-                {uniqueFaculties.map(faculty => (
-                  <option key={faculty} value={faculty}>{faculty}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                <Users size={16} className="inline mr-1" />
-                Faculty
-              </label>
-              <select
-                value={selectedFaculty}
-                onChange={(e) => setSelectedFaculty(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-              >
-                <option value="">All Faculty</option>
-                {uniqueFaculties.map(faculty => (
-                  <option key={faculty} value={faculty}>{faculty}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                <Book size={16} className="inline mr-1" />
-                Course
-              </label>
-              <select
-                value={selectedSubject}
-                onChange={(e) => setSelectedSubject(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-              >
-                <option value="">All Courses</option>
-                {uniqueSubjects.map(subject => (
-                  <option key={subject} value={subject}>{subject}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                <GraduationCap size={16} className="inline mr-1" />
-                Year
-              </label>
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-              >
-                <option value="">All Years</option>
-                {uniqueYears.map(year => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                <GraduationCap size={16} className="inline mr-1" />
-                Semster
-              </label>
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-              >
-                <option value="">All Semsters</option>
-                {uniqueYears.map(year => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-        )}
-
-        {/* Results Summary */}
-        
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
-        <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
-          <div className="flex items-center">
-            <FileText className="h-6 md:h-8 w-6 md:w-8 text-blue-600" />
-            <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                Total Plans
-              </p>
-              <p className="text-xl md:text-2xl font-bold">{filteredLessonPlans.length}</p>
-            </div>
-          </div>
-        </div>
-        <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
-          <div className="flex items-center">
-            <BookOpen className="h-6 md:h-8 w-6 md:w-8 text-green-600" />
-            <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                CSE Courses
-              </p>
-              <p className="text-xl md:text-2xl font-bold">
-                {new Set(filteredLessonPlans.map(p => p.courseCode)).size}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
-          <div className="flex items-center">
-            <User className="h-6 md:h-8 w-6 md:w-8 text-purple-600" />
-            <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                Faculty
-              </p>
-              <p className="text-xl md:text-2xl font-bold">
-                {new Set(filteredLessonPlans.map(p => p.facultyName)).size}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
-          <div className="flex items-center">
-            <Clock className="h-6 md:h-8 w-6 md:w-8 text-orange-600" />
-            <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                Total Hours
-              </p>
-              <p className="text-xl md:text-2xl font-bold">
-                {filteredLessonPlans.reduce((sum, plan) => 
-                  sum + plan.topics.reduce((topicSum, topic) => topicSum + topic.hoursRequired, 0), 0
-                )}
-              </p>
-            </div>
           </div>
         </div>
       </div>
 
       {/* Lesson Plans Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-        {filteredLessonPlans.map(plan => {
+        {lessonPlans.map(plan => {
           const totalHours = plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0);
           return (
             <div key={plan.id} className={`rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ${cardClasses}`}>
@@ -800,7 +401,7 @@ HOD Approval: ________________
                       className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors duration-200"
                       title="Edit"
                     >
-                      <Edit3 size={16} />
+                      <Edit size={16} />
                     </button>
                     <button
                       onClick={() => deleteLessonPlan(plan.id)}
@@ -834,7 +435,7 @@ HOD Approval: ________________
                   <div className="flex flex-wrap gap-1">
                     {plan.topics.slice(0, 3).map(topic => (
                       <span key={topic.id} className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs rounded">
-                        Unit {topic.unit}
+                        Module {topic.module}
                       </span>
                     ))}
                     {plan.topics.length > 3 && (
@@ -851,19 +452,6 @@ HOD Approval: ________________
           );
         })}
       </div>
-
-      {/* No Results Message */}
-      {filteredLessonPlans.length === 0 && (
-        <div className={`text-center py-12 ${cardClasses} rounded-lg`}>
-          <BookOpen className={`mx-auto h-12 w-12 mb-4 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
-          <h3 className={`text-lg font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            No lesson plans found
-          </h3>
-          <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Try adjusting your search criteria or add a new lesson plan.
-          </p>
-        </div>
-      )}
 
       {/* Add/Edit Modal */}
       {isModalOpen && (
@@ -892,19 +480,6 @@ HOD Approval: ________________
                   <label className={`block text-sm font-medium mb-2 ${
                     isDarkMode ? 'text-gray-200' : 'text-gray-700'
                   }`}>
-                    Program Name
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.programName}
-                    onChange={(e) => handleFormChange('programName', e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-                  />
-                </div>
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                  }`}>
                     Faculty Name
                   </label>
                   <input
@@ -924,7 +499,6 @@ HOD Approval: ________________
                     type="text"
                     value={formData.courseName}
                     onChange={(e) => handleFormChange('courseName', e.target.value)}
-                    placeholder="e.g., DATA STRUCTURES AND ALGORITHMS"
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                   />
                 </div>
@@ -938,11 +512,22 @@ HOD Approval: ________________
                     type="text"
                     value={formData.courseCode}
                     onChange={(e) => handleFormChange('courseCode', e.target.value)}
-                    placeholder="e.g., CSE301"
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                   />
                 </div>
-                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
+                    Program Name
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.programName}
+                    onChange={(e) => handleFormChange('programName', e.target.value)}
+                    className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                  />
+                </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
                     isDarkMode ? 'text-gray-200' : 'text-gray-700'
@@ -993,7 +578,7 @@ HOD Approval: ________________
                     type="text"
                     value={formData.academicPeriod}
                     onChange={(e) => handleFormChange('academicPeriod', e.target.value)}
-                    placeholder="e.g., 2024-25"
+                    placeholder="e.g., 2023-24"
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                   />
                 </div>
@@ -1069,7 +654,6 @@ HOD Approval: ________________
                             value={topic.topic}
                             onChange={(e) => handleTopicChange(index, 'topic', e.target.value)}
                             rows={2}
-                            placeholder="Enter topic description..."
                             className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                           />
                         </div>
@@ -1077,12 +661,12 @@ HOD Approval: ________________
                           <label className={`block text-sm font-medium mb-1 ${
                             isDarkMode ? 'text-gray-200' : 'text-gray-700'
                           }`}>
-                            Unit
+                            Module
                           </label>
                           <input
                             type="number"
-                            value={topic.unit}
-                            onChange={(e) => handleTopicChange(index, 'unit', parseInt(e.target.value))}
+                            value={topic.module}
+                            onChange={(e) => handleTopicChange(index, 'module', parseInt(e.target.value))}
                             min="1"
                             className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                           />
@@ -1191,8 +775,7 @@ HOD Approval: ________________
                 <h1 className="text-xl md:text-2xl font-bold mb-2">
                    AICAS INSTITUTE FOR EDUCATION AND TECHNOLOGY
                 </h1>
-                <h2 className="text-lg md:text-xl font-semibold mb-1">Computer Science Engineering Department</h2>
-                <h3 className="text-base font-medium">Lesson Plan</h3>
+                <h2 className="text-lg md:text-xl font-semibold">Lesson Plan</h2>
               </div>
 
               {/* Course Information Table */}
@@ -1277,7 +860,7 @@ HOD Approval: ________________
                     Topics to be covered
                   </div>
                   <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    Unit
+                    Module
                   </div>
                   <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
                     No. of hours Required
@@ -1295,7 +878,7 @@ HOD Approval: ________________
                       {topic.topic}
                     </div>
                     <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      {topic.unit}
+                      {topic.module}
                     </div>
                     <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
                       {topic.hoursRequired.toString().padStart(2, '0')}
@@ -1305,30 +888,13 @@ HOD Approval: ________________
                 ))}
               </div>
 
-              {/* Summary and Approval */}
-              <div className="mt-6 space-y-4">
-                <div className="text-center">
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Total Topics: {viewingPlan.topics.length} | 
-                    Total Hours: {viewingPlan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0)} | 
-                    Generated on: {new Date().toLocaleDateString()}
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                  <div>
-                    <p className="font-medium mb-2">Faculty Signature:</p>
-                    <div className={`border-b-2 pb-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      &nbsp;
-                    </div>
-                  </div>
-                  <div>
-                    <p className="font-medium mb-2">HOD Approval:</p>
-                    <div className={`border-b-2 pb-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      &nbsp;
-                    </div>
-                  </div>
-                </div>
+              {/* Summary */}
+              <div className="mt-6 text-center">
+                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Total Topics: {viewingPlan.topics.length} | 
+                  Total Hours: {viewingPlan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0)} | 
+                  Generated on: {new Date().toLocaleDateString()}
+                </p>
               </div>
             </div>
           </div>
