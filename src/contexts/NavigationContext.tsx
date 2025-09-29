@@ -29,6 +29,7 @@ const MODULE_ACCESS = {
   'HoD': ['Academics', 'Administration','Examination', 'Placements', 'LMS', 'Library', 'Communications'],
   'TPO': [ 'Placements', 'Academics', 'Communications'],
   'Controller of Examination': [ 'Examination', 'Academics'],
+  'Master Admin': ['Home'],
 
   'Faculty': ['Academics','Examination' ,'LMS', 'Library','Parent'],
   'Lab Assistant': ['Academics', 'LMS'],
@@ -80,6 +81,13 @@ const SIDEBAR_ITEMS = {
       { name: 'Inbox', path: '/home/inbox', icon: 'Mail' },
       { name: 'Notifications', path: '/home/notifications', icon: 'Bell' },
       { name: 'Events', path: '/home/events', icon: 'Calendar' }
+    ],
+    'Master Admin': [
+      { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
+      { name: 'My Calendar', path: 'master/home/my-calendar', icon: 'Calendar' },
+      { name: 'Inbox', path: 'master/home/inbox', icon: 'Mail' },
+      { name: 'Notifications', path: 'master/home/notifications', icon: 'Bell' },
+      { name: 'Events', path: 'master/home/events', icon: 'Calendar' }
     ],
     'College Secretary': [
       { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },

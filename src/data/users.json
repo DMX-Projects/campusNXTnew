@@ -13,6 +13,7 @@
     {"id": "S001", "username": "student", "password": "1234", "role": "Student", "name": "Arjun Kumar", "studentId": "CS2023001", "departmentId": "CSE", "year": 2, "section": "A"},
     {"id": "PA001", "username": "parent", "password": "1234", "role": "Parent", "name": "Robert Wilson", "childId": "CS2023001", "childStudentId": "CS2023001"},
     {"id": "AO001", "username": "registor", "password": "1234", "role": "Administration Officer", "name": "Mr. David Lee", "campusId": "MAIN"},
+    {"id": "MA001", "username": "master", "password": "1234", "role": "Master Admin", "name": "Joseph Vijay", "campusId": "MAIN"},
     {"id": "TI001", "username": "transport", "password": "1234", "role": "Transportation Incharge", "name": "Mr. Carlos Rodriguez", "routeIds": ["R001", "R002"]},
     {"id": "HI001", "username": "warden", "password": "1234", "role": "Hostel Incharge", "name": "Moazzam Parwez", "hostelIds": ["H001", "H002"]},
     {"id": "LI001", "username": "librarian", "password": "1234", "role": "Library Incharge", "name": "Ms. Jennifer Taylor", "libraryId": "LIB001"},
