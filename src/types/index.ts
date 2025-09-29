@@ -1,4 +1,5 @@
 export interface User {
+  details: unknown;
   username: string;
   password: string;
   role: string;
