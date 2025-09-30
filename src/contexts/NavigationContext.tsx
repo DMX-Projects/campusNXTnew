@@ -88,9 +88,11 @@ const SIDEBAR_ITEMS = {
       { name: 'Course Management',path:'/master/home/data-management', icon:'Database'   },
       { name: 'Create Timetable', path: '/master/create/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
-      { name: 'Faculty leave Configure', path: '/master/faculty/leave-configure', icon: 'Calendar' },
+      { name: 'Faculty leave Configure', path: '/master/faculty/leave-configure ', icon: 'Calendar' },
       { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Calendar' },
-      
+      {name:'Fee Structure', path:'/master/scholarship-registration', icon:'IndianRupee'},
+      { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
+      { name: 'Events', path: '/master/home/events', icon: 'Calendar' }
     ],
     'College Secretary': [
       { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
