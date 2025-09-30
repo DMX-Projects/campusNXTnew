@@ -280,7 +280,7 @@ const SIDEBAR_ITEMS = {
     icon: 'BookOpen',
     children: [
       { name: 'Course Faculties', path: '/academics/course-faculties', icon: 'BookOpen' },
-      {name:'subject List', path:'/academics/subject-list', icon:'List'},
+     
       { name: 'Lesson Plan', path: '/academics/lesson-plan', icon: 'Target' },
 
       { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
@@ -330,7 +330,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Syllabus Update', path: '/academics/faculty-syllabus-update', icon: 'Edit3' },
       { name: 'Study Material', path: '/academics/faculty-study-material', icon: 'FolderOpen' },
       { name: 'Exam Preparation', path: '/academics/sem-exam-preparation', icon: 'FileText' },
-      {name:'Subject List', path:'/academics/subject-list', icon:'List'},
+     
     ]
   },
     {
