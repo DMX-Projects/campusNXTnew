@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState ,useEffect} from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { path } from 'framer-motion/client';
 interface NavigationContextType {
   activeModule: string;
   setActiveModule: (module: string) => void;
@@ -91,7 +92,8 @@ const SIDEBAR_ITEMS = {
       
       { name: 'Inbox', path: '/master/home/inbox', icon: 'Mail' },
       { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
-      { name: 'Events', path: '/master/home/events', icon: 'Calendar' }
+      { name: 'Events', path: '/master/home/events', icon: 'Calendar' },
+      { name: 'Course Management',path:'/master/home/data-management', icon:'Database'   }
     ],
     'College Secretary': [
       { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
@@ -324,6 +326,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Student Leave Requests', path: '/academics/faculty-student-permissions', icon: 'BookOpen' },
     ]
   },
+  { name : 'Courses Assigned', path:'/academics/course-management', icon:'Settings'},
 
   {
     name: 'Subjects',
@@ -441,6 +444,7 @@ const SIDEBAR_ITEMS = {
     path: '/management/principal/student-transfers', 
     icon: 'User' 
   },
+  { name: 'Course Management', path: '/management/principal/course-management', icon: 'BookOpen' },
 
 
   { 
@@ -478,6 +482,7 @@ const SIDEBAR_ITEMS = {
     path: '/management/hod/dashboard', 
     icon: 'BarChart3' 
   },
+  { name: 'Program Management', path: '/management/hod/data-management', icon: 'Database' },
 
   { 
     name: 'Departmental Budgeting', 
