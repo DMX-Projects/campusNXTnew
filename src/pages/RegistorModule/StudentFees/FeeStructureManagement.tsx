@@ -58,7 +58,7 @@ const FeeStructureManagement: React.FC = () => {
   const [feeStructures, setFeeStructures] = useState<FeeStructure[]>([
     {
       id: '1',
-      name: 'Computer Science - Standard',
+      name: 'Computer Science - CSE',
       Department: 'Computer Science',
       Program: 'Engineering',
       academicYear: '2024-25',
@@ -78,7 +78,7 @@ const FeeStructureManagement: React.FC = () => {
     },
     {
       id: '2',
-      name: 'Business Administration - Premium',
+      name: 'Business Administration - BBA',
       Department: 'Business Administration',
       Program: 'Management',
       academicYear: '2024-25',
@@ -297,21 +297,7 @@ const FeeStructureManagement: React.FC = () => {
           </h3>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-              <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Fee Type</label>
-                <select
-                  value={formData.FeeStatus}
-                  onChange={(e) => setFormData(prev => ({ ...prev, FeeStatus: e.target.value }))}
-                  className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
-                  required
-                >
-                  <option value="">Select Fees</option>
-                  <option value="Tuition">Tuition</option>
-                  <option value="Exam Fees">Exam Fees</option>
-                  <option value="Library Fees">Library Fees</option>
-                  <option value="Lab Fees">Lab Fees</option>
-                </select>
-              </div>
+             
               <div>
                 <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Department</label>
                 <select
@@ -342,40 +328,9 @@ const FeeStructureManagement: React.FC = () => {
                   <option value="Science">Science</option>
                 </select>
               </div>
-              <div>
-                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Year</label>
-                <select
-                  value={formData.Year}
-                  onChange={(e) => setFormData(prev => ({ ...prev, Year: e.target.value }))}
-                  className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
-                  required
-                >
-                  <option value="">Select Year</option>
-                  <option value="Year-1">Year-1</option>
-                  <option value="Year-2">Year-2</option>
-                  <option value="Year-3">Year-3</option>
-                  <option value="Year-4">Year-4</option>
-                </select>
-              </div>
+             
                            
-                           <div>
-                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Semester</label>
-                <select
-                  value={formData.Semester}
-                  onChange={(e) => setFormData(prev => ({ ...prev, Semester: e.target.value }))}
-                  className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
-                  required
-                >
-                  <option value="I-Semester">I-Semester</option>
-                  <option value="II-Semester">II-Semester</option>
-                  <option value="III-Semester">III-Semester</option>
-                  <option value="IV-Semester">IV-Semester</option>
-                  <option value="V-Semester">V-Semester</option>
-                  <option value="VI-Semester">VI-Semester</option>
-                  <option value="VII-Semester">VII-Semester</option>
-                  <option value="VIII-Semester">VIII-Semester</option>
-                </select>
-              </div>
+                           
                <div>
                 <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Category</label>
                 <select

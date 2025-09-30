@@ -413,7 +413,7 @@ const CollegeRecruitmentManagement = () => {
     };
 
     return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 ">
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-2xl max-h-[95vh] overflow-hidden">
           <div className="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-3">
@@ -773,7 +773,7 @@ const CollegeRecruitmentManagement = () => {
   return (
     <div className={`min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300 ${isDark ? 'dark bg-slate-900' : 'bg-slate-50'}`}>
       {/* Header */}
-      <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 sticky top-0 z-40 backdrop-blur-sm bg-white/95 dark:bg-slate-800/95">
+      <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 py-4 backdrop-blur-sm bg-white/95 dark:bg-slate-800/95">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center gap-3">

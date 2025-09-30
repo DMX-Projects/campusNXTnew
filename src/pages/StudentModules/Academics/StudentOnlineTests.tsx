@@ -16,7 +16,8 @@ import {
   User,
   Star,
   Timer,
-  Award
+  Award,
+  Bell
 } from 'lucide-react';
 
 interface OnlineTest {
@@ -52,32 +53,18 @@ const StudentOnlineTests: React.FC = () => {
   const [subjectFilter, setSubjectFilter] = useState<string>('');
   const [selectedTest, setSelectedTest] = useState<OnlineTest | null>(null);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
 
   // Sample tests data
   const [tests] = useState<OnlineTest[]>([
+  
     {
       id: '1',
-      title: 'Data Structures Mid-term Test',
-      description: 'Comprehensive test on arrays, linked lists, stacks, and queues',
-      subject: 'Data Structures',
-      faculty: 'Dr. Rajesh Kumar',
-      scheduledDate: '2025-10-05T14:00:00',
-      duration: 120,
-      totalQuestions: 50,
-      totalMarks: 100,
-      status: 'upcoming',
-      difficulty: 'medium',
-      type: 'mcq',
-      attempts: 0,
-      maxAttempts: 1
-    },
-    {
-      id: '2',
       title: 'Database Concepts Quiz',
       description: 'Quick assessment on database normalization and ER diagrams',
       subject: 'Database Management',
       faculty: 'Prof. Priya Sharma',
-      scheduledDate: '2025-09-30T10:00:00',
+      scheduledDate: '2025-09-24T10:00:00',
       duration: 45,
       totalQuestions: 20,
       totalMarks: 40,
@@ -88,7 +75,56 @@ const StudentOnlineTests: React.FC = () => {
       maxAttempts: 2
     },
     {
+      id: '2',
+      title: 'Machine Learning Algorithms Test',
+      description: 'Quick assessment on machine learning algorithms',
+      subject: 'Machine Learning',
+      faculty: 'Dr. Arjun Reddy',
+      scheduledDate: '2025-09-28T10:00:00',
+      duration: 45,
+      totalQuestions: 20,
+      totalMarks: 40,
+      status: 'live',
+      difficulty: 'easy',
+      type: 'mcq',
+      attempts: 0,
+      maxAttempts: 2
+    },
+    
+    {
       id: '3',
+      title: 'c++ Basics Quiz',
+      description: 'Quick assessment on C++ basics and syntax',
+      subject: 'Programming Languages',
+      faculty: 'Prof. Anjali Verma',
+      scheduledDate: '2025-09-03T10:00:00',
+      duration: 45,
+      totalQuestions: 20,
+      totalMarks: 40,
+      status: 'live',
+      difficulty: 'easy',
+      type: 'mcq',
+      attempts: 0,
+      maxAttempts: 2
+    },
+    {
+      id: '4',
+      title: 'Python Algorithms Test',
+      description: 'Quick assessment on Python algorithms',
+      subject: 'Machine Learning',
+      faculty: 'Dr. Arjun Reddy',
+      scheduledDate: '2025-09-09T10:00:00',
+      duration: 45,
+      totalQuestions: 20,
+      totalMarks: 40,
+      status: 'live',
+      difficulty: 'easy',
+      type: 'mcq',
+      attempts: 0,
+      maxAttempts: 2
+    },
+    {
+      id: '5',
       title: 'Machine Learning Algorithms Test',
       description: 'Test covering supervised and unsupervised learning algorithms',
       subject: 'Machine Learning',
@@ -107,38 +143,8 @@ const StudentOnlineTests: React.FC = () => {
       attempts: 1,
       maxAttempts: 1
     },
-    {
-      id: '4',
-      title: 'Web Technologies Unit Test',
-      description: 'Assessment on HTML5, CSS3, and JavaScript fundamentals',
-      subject: 'Web Technologies',
-      faculty: 'Ms. Kavya Singh',
-      scheduledDate: '2025-09-20T11:00:00',
-      duration: 60,
-      totalQuestions: 25,
-      totalMarks: 50,
-      status: 'missed',
-      difficulty: 'easy',
-      type: 'mcq',
-      attempts: 0,
-      maxAttempts: 1
-    },
-    {
-      id: '5',
-      title: 'Network Security Final Test',
-      description: 'Comprehensive test on cryptography, firewalls, and security protocols',
-      subject: 'Network Security',
-      faculty: 'Prof. Deepika Nair',
-      scheduledDate: '2025-10-15T14:30:00',
-      duration: 180,
-      totalQuestions: 40,
-      totalMarks: 120,
-      status: 'upcoming',
-      difficulty: 'hard',
-      type: 'mixed',
-      attempts: 0,
-      maxAttempts: 1
-    },
+   
+   
     {
       id: '6',
       title: 'Software Engineering Practice Test',
@@ -189,6 +195,93 @@ const StudentOnlineTests: React.FC = () => {
     }
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
+
+  // Check notification permission on component mount
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotificationPermission(Notification.permission);
+    }
+  }, []);
+
+  // Request notification permission
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      alert('This browser does not support desktop notification');
+      return false;
+    }
+
+    if (Notification.permission === 'granted') {
+      return true;
+    }
+
+    if (Notification.permission !== 'denied') {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
+      return permission === 'granted';
+    }
+
+    return false;
+  };
+
+  // Show notification function
+  const showNotification = (test: OnlineTest) => {
+    const options = {
+      body: `Subject: ${test.subject}\nFaculty: ${test.faculty}\nDuration: ${test.duration} minutes\nQuestions: ${test.totalQuestions}\nTotal Marks: ${test.totalMarks}\nDifficulty: ${test.difficulty.toUpperCase()}`,
+      icon: '/favicon.ico', // You can add a custom icon path here
+      badge: '/favicon.ico', // Badge icon for mobile devices
+      tag: `online-test-${test.id}`, // Unique tag to prevent duplicate notifications
+      requireInteraction: true, // Keep notification until user interacts (important for tests)
+      silent: false,
+      data: {
+        testId: test.id,
+        url: window.location.href
+      },
+      actions: [
+        {
+          action: 'view',
+          title: 'View Test',
+          icon: '/view-icon.png' // Optional: add custom action icon
+        },
+        {
+          action: 'dismiss',
+          title: 'Dismiss',
+          icon: '/dismiss-icon.png' // Optional: add custom action icon
+        }
+      ]
+    };
+
+    const notification = new Notification(`Online Test Started: ${test.title}`, options);
+
+    // Handle notification click
+    notification.onclick = function(event) {
+      event.preventDefault();
+      window.focus(); // Focus the window when notification is clicked
+      notification.close();
+    };
+
+    // Handle notification actions (if supported)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('notificationclick', function(event) {
+        if (event.notification.tag === `online-test-${test.id}`) {
+          event.notification.close();
+          
+          if (event.action === 'view') {
+            // Handle view action
+            window.focus();
+          } else if (event.action === 'dismiss') {
+            // Handle dismiss action
+            event.notification.close();
+          } else {
+            // Handle default click
+            window.focus();
+          }
+        }
+      });
+    }
+
+    // Don't auto-close for tests (requireInteraction: true handles this)
+    // User needs to manually dismiss or interact with the notification
+  };
 
   // Separate tests based on status for different tabs
   const assignedTests = tests.filter(t => t.status === 'upcoming' || t.status === 'live' || t.status === 'missed');
@@ -256,9 +349,25 @@ const StudentOnlineTests: React.FC = () => {
     setShowDetailModal(true);
   };
 
-  const handleStartTest = (testId: string) => {
-    console.log('Starting test:', testId);
-    // Add your logic to start the test
+  // Modified handleStartTest function with notification
+  const handleStartTest = async (testId: string) => {
+    const test = tests.find(t => t.id === testId);
+    if (!test) return;
+
+    console.log('Starting online test:', testId);
+    
+    // Request permission and show notification
+    const hasPermission = await requestNotificationPermission();
+    
+    if (hasPermission) {
+      showNotification(test);
+    } else {
+      // Fallback: show an alert if notifications are not allowed
+      alert(`Online Test Started: ${test.title}\nDuration: ${test.duration} minutes\nQuestions: ${test.totalQuestions}`);
+    }
+
+    // Add your logic to start the test here
+    // For example: navigate to test page, update status, etc.
   };
 
   // Summary stats based on active tab
@@ -293,17 +402,26 @@ const StudentOnlineTests: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
+     <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white p-4 lg:p-6 rounded-t-lg">
         <div className="flex-1 mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center">
-            <Monitor className="w-8 h-8 mr-3 text-blue-500" />
+          <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
+            <Monitor className="w-8 h-8 mr-3 text-white" />
             Online Tests
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-100">
             Take online tests and track your performance across all subjects
           </p>
         </div>
+        
+        <div className="flex items-center space-x-4">
+          {notificationPermission === 'granted' && (
+            <div className="flex items-center space-x-2 px-3 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-lg">
+              <CheckCircle className="w-4 h-4" />
+              <span className="text-sm">Notifications Enabled</span>
+            </div>
+          )}
        
+        </div>
       </div>
 
       {/* Tabs */}
@@ -659,7 +777,6 @@ const StudentOnlineTests: React.FC = () => {
                       <Eye className="w-4 h-4" />
                       <span>View Score Details</span>
                     </button>
-                    
                   </>
                 )}
               </div>
@@ -668,7 +785,7 @@ const StudentOnlineTests: React.FC = () => {
         ))}
       </div>
 
-      {/* Detail Modal */}
+      {/* Detail Modal - Updated with Start Test button notification */}
       {showDetailModal && selectedTest && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4" onClick={() => setShowDetailModal(false)}>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -798,11 +915,21 @@ const StudentOnlineTests: React.FC = () => {
                   )}
 
                   {selectedTest.status === 'live' && (
-                    <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
-                      <h4 className="font-semibold mb-2 text-green-700 dark:text-green-300">Test is Live!</h4>
-                      <p className="text-sm text-green-600 dark:text-green-400">
+                    <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg border border-green-200 dark:border-green-700">
+                      <div className="flex items-center space-x-2 mb-3">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                        <h4 className="font-semibold text-green-700 dark:text-green-300">Test is Live!</h4>
+                      </div>
+                      <p className="text-sm text-green-600 dark:text-green-400 mb-3">
                         The test is currently available. Click "Start Test" to begin.
                       </p>
+                      <button 
+                        onClick={() => handleStartTest(selectedTest.id)}
+                        className="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2"
+                      >
+                        <Play className="w-4 h-4" />
+                        <span>Start Test Now</span>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -834,4 +961,3 @@ const StudentOnlineTests: React.FC = () => {
 };
 
 export default StudentOnlineTests;
-

@@ -85,7 +85,8 @@ const SIDEBAR_ITEMS = {
     ],
     'Master Admin': [
       { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
-      { name: 'My Calendar', path: '/master/home/my-calendar', icon: 'Calendar' },
+      { name: 'Create Timetable', path: '/master/create/timetable', icon: 'Calendar' },
+      { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
       { name: 'Inbox', path: '/master/home/inbox', icon: 'Mail' },
       { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
       { name: 'Events', path: '/master/home/events', icon: 'Calendar' },
@@ -174,7 +175,7 @@ const SIDEBAR_ITEMS = {
     ],
     'Student': [
   { name: 'Dashboard', path: '/academics/studentdashboard', icon: 'BarChart3' },
-  { name: 'Academic Calender', path: '/common/academics/academic-calendar', icon: 'Calendar' },
+  { name: 'Academic Calender', path: '/master/academic/calendar', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
   { name: 'My Attendance', path: '/academics/attendance', icon: 'CheckCircle' },
   {
@@ -214,7 +215,7 @@ const SIDEBAR_ITEMS = {
 ],
     'Principal': [
   { name: 'Dashboard', path: '/academics/principal-dashboard', icon: 'BarChart3' },
-  { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
+  { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
 
   {
     name: 'Faculty',
@@ -250,7 +251,7 @@ const SIDEBAR_ITEMS = {
 ],
     'HoD': [
   { name: 'Dashboard', path: '/academics/hod/academic-dashboard', icon: 'BarChart3' },
-  { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
+  { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
 
   {
     name: 'Faculty',
@@ -273,16 +274,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Student Projects', path: '/academics/hod/student-projects', icon: 'Briefcase' },
     ]
   },
-
-  {
-    name: 'Time Table',
-    path: '/academics/Timetable',
-    icon: 'BookOpen',
-    children: [
-      { name: 'Create Timetable', path: '/academics/hod/timetable', icon: 'Calendar' },
       { name: 'View Timetable', path: '/academics/hod/view-timetable', icon: 'Calendar' },
-    ]
-  },
 
   {
     name: 'Subjects',
@@ -318,7 +310,7 @@ const SIDEBAR_ITEMS = {
 
     'Faculty': [
   { name: 'Dashboard', path: '/academics/faculty-dashboard', icon: 'BarChart3' },
-  { name: 'Academic Calendar', path: '/common/academics/academic-calendar', icon: 'Calendar' },
+  { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/faculty-timetable', icon: 'Clock' },
   {
     name: 'Students',
@@ -676,7 +668,17 @@ const SIDEBAR_ITEMS = {
     'Administration Officer': [
       { name: 'Dashboard', path: '/management/hr/dashboard', icon: 'BarChart3' },
       { name: 'Recruitment Management', path: '/management/hr/recruitment', icon: 'UserPlus' },
-      { name: 'Employee Database', path: '/management/hr/employee-database', icon: 'Users' },
+ {
+            name: 'Employee', 
+            path: '/management/hr/employee', 
+            icon: 'Users',
+            children: [
+              { name: 'Employee DataBase', path: '/management/hr/employee-database', icon: 'ClipboardList' },
+              { name: 'Employee Attendance', path: '/management/hr/employee-database/attendance', icon: 'Users' },
+              { name: 'Employee Leaves', path: '/management/hr/employee-database/leaves', icon: 'BookOpen' }
+            ]
+          },
+
       { name: 'Leave & Policy', path: '/management/hr/leave-policy', icon: 'ClipboardList' },
       { name: 'Payroll Management', path: '/management/hr/payroll', icon: 'DollarSign' }
     ]
@@ -706,6 +708,12 @@ const SIDEBAR_ITEMS = {
       path: '/management/student-fees/bulk-actions', 
       icon: 'MessageSquare' 
     },
+     { 
+      name: 'Admission Fee Collection', 
+      path: '/management/student-fees/admission-fee-collection', 
+      icon: 'UserPlus' 
+    },
+
 
     { 
       name: 'Financial Reports', 
@@ -1172,7 +1180,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       
       // Determine initial module based on role
       let initialModule = 'Academics'; // default
-      if (user.role === 'Chairperson' || user.role === 'College Secretary') {
+      if (user.role === 'Chairperson' || user.role === 'College Secretary' || user.role === 'Master Admin') {
         initialModule = 'Home';
       } else if (user.role === 'Student') {
         initialModule = 'Academics';
