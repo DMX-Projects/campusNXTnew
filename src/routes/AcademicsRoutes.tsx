@@ -31,6 +31,7 @@ import Announcement from '../pages/FacultyModules/FacultyAcademic/Announcement';
 import FacultyStudentAttendance from '../pages/FacultyModules/FacultyAcademic/StudentAttendence';
 import TimeTableFaculty from '../pages/FacultyModules/FacultyAcademic/TimeTableFaculty';
 import FacultyCalender from '../pages/FacultyModules/FacultyAcademic/calenderFaculty';
+import FacultyCourseManagement from '../pages/FacultyModules/FacultyAcademic/FacultyCourseManagement';
 import FacultySubjectsSyllabus from '../pages/FacultyModules/FacultyAcademic/FacultySubjectsSyllabus';
 import FacultyStudyMaterial from '../pages/FacultyModules/FacultyAcademic/FacultyStudyMaterial';
 import FacultyStudentProject from '../pages/FacultyModules/FacultyAcademic/StudentProject';
@@ -195,6 +196,7 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/faculty-student-attendance" element={<FacultyStudentAttendance />} />
       <Route path='/faculty-timetable' element ={<TimeTableFaculty />} />
       <Route path='/faculty-calendar' element ={<FacultyCalender />} />
+      <Route path='/course-management' element ={<FacultyCourseManagement />} />
       <Route path='/faculty-subjects-syllabus' element ={<FacultySubjectsSyllabus />} />
       <Route path='/faculty-StudyMaterial' element ={<FacultyStudyMaterial/>}/>
       <Route path='/faculty-student-projects' element ={<FacultyStudentProject/>}/>

@@ -55,6 +55,7 @@ import ManagementAdmissionProcess from "../pages/RegistorModule/Admission/Admins
 import SpotAdmissionMerit from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionMerit";
 import SpotAdmissionFCFS from "../pages/RegistorModule/Admission/AdminssionProcess/SpotAdmission/SpotAdmissionFCFS";
 import FinancialApprovals from "../pages/PrincipalModules/Administration/FinancialApprovals";
+import CourseManagement  from "../pages/PrincipalModules/Administration/CourseManagement";
 // import FacultyAndStaffOversight from "../pages/PrincipalModules/Administration/FacultyAndStaffOversight";
 import CircularsAndEventManagement from "../pages/PrincipalModules/Administration/CircularsAndEventManagement";
 import InfrastructureReports from "../pages/PrincipalModules/Administration/InfrastructureReports";
@@ -67,6 +68,7 @@ import Notifications from "../pages/StudentModules/Adminstration/Notification";
 
 
 import { HODDashboard } from "../pages/HODModules/Administration/HODDashboard";
+import HODDataManagement from "../pages/HODModules/Administration/HODDataManagement";
 import { CircularMemos } from "../pages/HODModules/Administration/CircularMemos";
 import { DepartmentalBudgeting } from "../pages/HODModules/Administration/DepartmentalBudgeting";
 import { DepartmentalReports } from "../pages/HODModules/Administration/DepartmentalReports";
@@ -159,6 +161,7 @@ const CommonRoutes: React.FC = () => {
        <Route path="/principal/student-details" element={<StudentDetails/>}/>
       <Route path="/principal/faculty-details" element={<FacultyDetails/>}/>
        <Route path="/principal/student-transfers" element={<StudentTransfers/>}/>
+       <Route path="/principal/course-management" element={<CourseManagement/>}/>
       <Route path="/principal/infrastructure-management" element={<InfrastructureManagement/>}/>
 
 
@@ -176,7 +179,8 @@ const CommonRoutes: React.FC = () => {
        
      
       <Route path="/hod/dashboard" element={<HODDashboard />} />
-      <Route path="/hod/circulars-memos" element={<CircularMemos />} />
+      <Route path="/hod/data-management" element={<HODDataManagement />} />
+          <Route path="/hod/circulars-memos" element={<CircularMemos />} />
       <Route path="/hod/departmental-budgeting" element={<DepartmentalBudgeting />} />
       <Route path="/hod/departmental-reports" element={<DepartmentalReports />} />
       <Route path="/hod/student-transfers" element={<StudentTransfers />} />
