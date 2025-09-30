@@ -85,15 +85,12 @@ const SIDEBAR_ITEMS = {
     ],
     'Master Admin': [
       { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
+      { name: 'Course Management',path:'/master/home/data-management', icon:'Database'   },
       { name: 'Create Timetable', path: '/master/create/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
       { name: 'Faculty leave Configure', path: '/master/faculty/leave-configure', icon: 'Calendar' },
       { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Calendar' },
       
-      { name: 'Inbox', path: '/master/home/inbox', icon: 'Mail' },
-      { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
-      { name: 'Events', path: '/master/home/events', icon: 'Calendar' },
-      { name: 'Course Management',path:'/master/home/data-management', icon:'Database'   }
     ],
     'College Secretary': [
       { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
