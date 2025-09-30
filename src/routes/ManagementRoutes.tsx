@@ -92,6 +92,7 @@ import StudentTransfers from "../pages/PrincipalModules/Administration/StudentTr
 import InfrastructureManagement from "../pages/PrincipalModules/Administration/InfrastructureManagement";
 import RegistorEmployeeAttendance from "../pages/RegistorModule/HR_Management/RegistorEmployeeAttendance";
 import RegistorEmployeeLeaves from "../pages/RegistorModule/HR_Management/RegistorEmployeeLeaves";  
+import Schlolership from "../pages/RegistorModule/StudentFees/schlolershipregistor";
 
 
 
@@ -217,6 +218,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/student-fees/bulk-actions" element={<BulkOperationsInterface />} />
       <Route path="/student-fees/reports" element={<StudentFeesReportingHub />} />
       <Route path="/student-fees/admission-fee-collection" element={<AdmissionQuota />} />
+      <Route path="/student-fees/scholarship-registration" element={<Schlolership />} />
     </Routes>
   );
 };

@@ -714,7 +714,9 @@ const SIDEBAR_ITEMS = {
       path: '/management/student-fees/admission-fee-collection', 
       icon: 'UserPlus' 
     },
-
+      { name: 'Scholarship Registration',
+         path: '/management/student-fees/scholarship-registration',
+         icon: 'UserPlus' },
 
     { 
       name: 'Financial Reports', 
