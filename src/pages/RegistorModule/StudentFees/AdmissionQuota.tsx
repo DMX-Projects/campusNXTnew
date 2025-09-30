@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Search, Download, CreditCard as Edit, Plus, Eye } from 'lucide-react';
+import { Search, Download,  Edit, Plus, Eye } from 'lucide-react';
 import { useTheme } from '../../../contexts/ThemeContext';
 
 interface QuotaFeeDetail {
