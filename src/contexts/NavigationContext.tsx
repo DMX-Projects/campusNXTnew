@@ -86,6 +86,9 @@ const SIDEBAR_ITEMS = {
       { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
       { name: 'Create Timetable', path: '/master/create/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
+      { name: 'Faculty leave Configure', path: '/master/faculty/leave-configure', icon: 'Calendar' },
+      { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Calendar' },
+      
       { name: 'Inbox', path: '/master/home/inbox', icon: 'Mail' },
       { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
       { name: 'Events', path: '/master/home/events', icon: 'Calendar' }
@@ -208,7 +211,7 @@ const SIDEBAR_ITEMS = {
   { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
   { name: 'My Projects', path: '/academics/student-myprojects', icon: 'FolderOpen' },
   { name: 'CAT', path: '/academics/cat', icon: 'BookOpen' },
-  { name: 'Leave Request', path: '/academics/leaveRequest', icon: 'Send' },
+  { name: 'Leave Portal', path: '/academics/leaveRequest', icon: 'Send' },
   { name: 'Raise Tickets', path: '/academics/raise-ticket', icon: 'MessageSquare' }
 ],
     'Principal': [
@@ -258,7 +261,7 @@ const SIDEBAR_ITEMS = {
     children: [
       { name: 'Faculty Details', path: '/academics/faculty/faculty-details', icon: 'GraduationCap' },
       { name: 'Faculty Attendance', path: '/academics/faculty/faculty-attendance', icon: 'MessageSquare' },
-      { name: 'Faculty Leave Requests', path: '/academics/faculty/faculty-leave-requests', icon: 'MessageSquare' },
+      { name: 'Faculty Leave Requests', path: '/academics/leave-requests', icon: 'MessageSquare' },
     ]
   },
 
@@ -268,7 +271,7 @@ const SIDEBAR_ITEMS = {
     icon: 'Users',
     children: [
       { name: 'Student Attendance', path: '/academics/hod/student-attendance', icon: 'CheckCircle' },
-      { name: 'Student Leaves', path: '/academics/hod/student-leaves', icon: 'UserMinus' },
+      { name: 'Student Leaves', path: '/academics/faculty-student-permissions', icon: 'UserMinus' },
       { name: 'Student Projects', path: '/academics/hod/student-projects', icon: 'Briefcase' },
     ]
   },
@@ -300,7 +303,8 @@ const SIDEBAR_ITEMS = {
   },
 
   { name: 'CAT', path: '/academics/hod/cat', icon: 'Code' },
-  { name: 'Leave Requests', path: '/academics/leave-request', icon: 'FileText' },
+  { name: 'Leave Portal', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
+  { name: 'Faculty Leave Requests', path: '/academics/leave-request', icon: 'FileText' },
   { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
@@ -317,7 +321,7 @@ const SIDEBAR_ITEMS = {
     children: [
       { name: 'Attendance', path: '/academics/faculty-student-attendance', icon: 'CheckCircle' },
       { name: 'Student Projects', path: '/academics/faculty-student-projects', icon: 'Briefcase' },
-      { name: 'Student Permissions', path: '/academics/faculty-student-permissions', icon: 'BookOpen' },
+      { name: 'Student Leave Requests', path: '/academics/faculty-student-permissions', icon: 'BookOpen' },
     ]
   },
 
@@ -346,7 +350,7 @@ const SIDEBAR_ITEMS = {
 
   { name: 'CAT', path: '/academics/faculty/student-cat', icon: 'FileText' },
   { name: 'Online Classes', path: '/academics/faculty/online-classes', icon: 'Video' },
-  { name: 'Leave Request', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
+  { name: 'Leave Portal', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
   { name: 'Reports', path: '/academics/faculty-reports', icon: 'BarChart' },
   { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }
