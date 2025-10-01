@@ -445,7 +445,7 @@ const AddNewHostel: React.FC = () => {
                   >
                     <option>Boys</option>
                     <option>Girls</option>
-                    <option>Co-ed</option>
+                    {/* <option></option> */}
                   </select>
                 </div>
                 <div>

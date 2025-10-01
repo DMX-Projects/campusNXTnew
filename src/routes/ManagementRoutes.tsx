@@ -44,6 +44,7 @@ import PermanentStudentLoginPage from "../pages/RegistorModule/Admission/Student
 import AdmissionReports from "../pages/RegistorModule/Admission/ReportsAndLogs/AdmissionReports";
 import FeePaymentReports from "../pages/RegistorModule/Admission/ReportsAndLogs/FeePaymentReports";
 import VerificationLogs from "../pages/RegistorModule/Admission/ReportsAndLogs/VerificationLogs";
+import StudentFeesConfirmation from "../pages/RegistorModule/Admission/Verification/StudentFeesConfirmation"; 
 
 import FinancialsAndFees from "../pages/RegistorModule/Hostel/FinancialsAndFees";
 import ConfigurationAndRules from "../pages/RegistorModule/Hostel/ConfigurationAndRules";
@@ -109,6 +110,7 @@ const CommonRoutes: React.FC = () => {
       <Route path="/hr/leave-policy" element={<LeavePolicy />} />
       <Route path="/hr/payroll" element={<PayrollManagement />} />
       <Route path="/hr/recruitment" element={<Requirementmanagement />} />
+      <Route path="/verification/allotment-order" element={<StudentFeesConfirmation/>} />
 
       <Route path="/infrastructure-management/inventory/stock-control" element={<StockControl />} />
       <Route path="/infrastructure-management/inventory/stock-management" element={<StockManagement />} />
