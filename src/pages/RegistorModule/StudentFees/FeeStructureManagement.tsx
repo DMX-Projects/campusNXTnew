@@ -592,14 +592,11 @@ const FeeStructureManagement: React.FC = () => {
           <h1 className={`text-2xl font-bold ${currentTheme.text}`}>Fee Structure Management</h1>
           <p className={`text-sm ${currentTheme.textSecondary} mt-1`}>Manage fee types and structures with category-based discounts</p>
         </div>
-                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                                
-                                Fee Structure
-                            </h1>
-                            <p className="text-gray-600 dark:text-gray-400 mt-2">Manage fee reduction scholarships.</p>
+                            
+                            
                         </div>
 
-      </div>
+      
 
       <div className={`flex gap-4 mb-6 border-b ${currentTheme.border}`}>
         <button
@@ -728,7 +725,7 @@ const FeeStructureManagement: React.FC = () => {
                       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex flex-wrap items-center gap-3 mb-3">
-                            <h3 className={`text-lg font-semibold ${currentTheme.text}`}>{structure.name}</h3>
+                            <h3 className={`text-lg font-semibold ${currentTheme.text}`}>{structure.Department}</h3>
                             <span className={`px-3 py-1 text-xs rounded-full font-medium ${
                               structure.isActive ? currentTheme.statusActive : currentTheme.statusInactive
                             }`}>
