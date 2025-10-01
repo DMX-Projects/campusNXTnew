@@ -4,7 +4,7 @@ import RegistrarScholarship from '../../RegistorModule/StudentFees/schlolershipr
 const Scholarships = () => {
   return (
     <div>
-      <h1>Scholarships</h1>
+    
       <RegistrarScholarship />
     </div>
   )
