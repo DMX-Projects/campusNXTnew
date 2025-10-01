@@ -284,7 +284,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Lesson Plan', path: '/academics/lesson-plan', icon: 'Target' },
 
       { name: 'Study Material', path: '/academics/study-material', icon: 'FolderOpen' },
-      { name: 'Sem Exam Preparation', path: '/academics/sem-exam-preparation', icon: 'Monitor' },
+      //{ name: 'Sem Exam Preparation', path: '/academics/sem-exam-preparation', icon: 'Monitor' },
       { name: 'Syllabus Tracking', path: '/academics/hod/syllabus-tracking', icon: 'Code' }
     ]
   },
@@ -331,6 +331,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Study Material', path: '/academics/faculty-study-material', icon: 'FolderOpen' },
       { name: 'Exam Preparation', path: '/academics/sem-exam-preparation', icon: 'FileText' },
      
+      
     ]
   },
     {
@@ -623,7 +624,7 @@ const SIDEBAR_ITEMS = {
             icon: 'Package',
             children: [
               { name: 'Fixed Assets', path: '/management/infrastructure-management/asset/fixed-assets', icon: 'Database' },
-              { name: 'New Purchase', path: '/management/infrastructure-management/asset/new-purchase', icon: 'ShoppingCart' }
+             
             ]
           },
 
@@ -634,8 +635,8 @@ const SIDEBAR_ITEMS = {
             path: '/management/infrastructure-management/maintenance-costs', 
             icon: 'Wrench',
             children: [
-              { name: 'Income / Expenditure', path: '/management/infrastructure-management/maintenance-costs/income-expenditure', icon: 'DollarSign' },
-              { name: 'Vendor Management', path: '/management/infrastructure-management/maintenance-costs/vendor-management', icon: 'Users' },
+             // { name: 'Income / Expenditure', path: '/management/infrastructure-management/maintenance-costs/income-expenditure', icon: 'DollarSign' },
+             
               { name: 'Management History', path: '/management/infrastructure-management/maintenance-costs/history', icon: 'BookOpen' }
             ]
           }
