@@ -481,7 +481,7 @@ const handleViewMaterial = (material: Material) => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
         <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div>
@@ -570,7 +570,7 @@ const handleViewMaterial = (material: Material) => {
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="relative">
             <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
@@ -596,7 +596,7 @@ const handleViewMaterial = (material: Material) => {
             <option value="Network Security">Network Security</option>
           </select>
 
-          <select
+          {/* <select
             value={platformFilter}
             onChange={(e) => setPlatformFilter(e.target.value)}
             className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -606,7 +606,7 @@ const handleViewMaterial = (material: Material) => {
             <option value="teams">Microsoft Teams</option>
             <option value="meet">Google Meet</option>
             <option value="webex">Webex</option>
-          </select>
+          </select> */}
 
           <select
             value={statusFilter}
@@ -637,7 +637,7 @@ const handleViewMaterial = (material: Material) => {
       </div>
 
       {/* Classes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {filteredClasses.map((classItem) => (
           <div
             key={classItem.id}

@@ -95,9 +95,7 @@ const SIDEBAR_ITEMS = {
       {name:'Fee Management', path:'/master/fee-management', icon:'DollarSign'},
       { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
       { name: 'Events', path: '/master/home/events', icon: 'Calendar' },
-      { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Link' },
-      {name:'Scholerships', path:'/master/scholarship-registration', icon:'IndianRupee'},
-
+   
     ],
     'College Secretary': [
       { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
