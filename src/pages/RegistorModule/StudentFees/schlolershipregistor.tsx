@@ -113,12 +113,12 @@ const RegistrarScholarship = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              
-              Scholarship Management
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Manage fee reduction scholarships</p>
-          </div>
+                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                                
+                                Scholarship Management
+                            </h1>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2">Manage fee reduction scholarships.</p>
+                        </div>
           <div className="flex gap-3">
             
             <button

@@ -561,9 +561,12 @@ const FeeStructureManagement: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className={`text-2xl font-bold ${currentTheme.text}`}>Fee Structure Management</h1>
-         
-        </div>
+                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                                
+                                Fee Structure
+                            </h1>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2">Manage fee reduction scholarships.</p>
+                        </div>
       </div>
 
       {/* Tabs */}
