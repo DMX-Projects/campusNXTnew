@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Plus, Edit, Eye, Trash2, Search, Filter, GraduationCap, Calendar, Sun, Moon, IndianRupee, UserRound ,} from 'lucide-react';
-import { useTheme } from '../../../contexts/ThemeContext';
-import { CategoryScale } from 'chart.js';
 
-// Types
+
+import React, { useState } from 'react';
+import { Plus,  Edit, Eye, Trash2, Search, Filter, GraduationCap, Calendar, IndianRupee, UserRound, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../../../contexts/ThemeContext';
+
 interface FeeHead {
   id: string;
   name: string;
@@ -24,9 +24,9 @@ interface FeeStructure {
   Department: string;
   Program: string;
   academicYear: string;
-    Semester: string;
-    Year: string;
-    Category: string;
+  Semester: string;
+  Year: string;
+  Category: string;
   items: FeeStructureItem[];
   totalAmount: number;
   isActive: boolean;
@@ -38,7 +38,7 @@ type ActiveTab = 'fee-heads' | 'fee-structures';
 type ModalType = 'fee-head' | 'fee-structure' | 'view-structure' | null;
 
 const FeeStructureManagement: React.FC = () => {
-  const { isDark} = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const theme = isDark ? 'dark' : 'light';
 
   const [activeTab, setActiveTab] = useState<ActiveTab>('fee-heads');
@@ -47,7 +47,14 @@ const FeeStructureManagement: React.FC = () => {
   const [filterProgram, setFilterProgram] = useState('all');
   const [editingItem, setEditingItem] = useState<any>(null);
 
-  // Sample data
+  const categoryDiscounts = {
+    General: 0,
+    SC: 50,
+    ST: 50,
+    OBC: 25,
+    EWS: 40
+  };
+
   const [feeHeads, setFeeHeads] = useState<FeeHead[]>([
     { id: '1', name: 'Tuition Fee', description: 'Main academic fee for Department instruction', isActive: true, createdAt: '2024-01-15' },
     { id: '2', name: 'Exam Fee', description: 'Fee for examinations and assessments', isActive: true, createdAt: '2024-01-15' },
@@ -75,29 +82,9 @@ const FeeStructureManagement: React.FC = () => {
       isActive: true,
       createdAt: '2024-01-20',
       updatedAt: '2024-01-20'
-    },
-    {
-      id: '2',
-      name: 'Business Administration - BBA',
-      Department: 'Business Administration',
-      Program: 'Management',
-      academicYear: '2024-25',
-      Semester: 'II-Semester',
-      Category: 'sc',
-      Year: 'Year-2',
-      items: [
-        { feeHeadId: '1', amount: 40000, isOptional: false },
-        { feeHeadId: '2', amount: 4000, isOptional: false },
-        { feeHeadId: '3', amount: 2500, isOptional: false }
-      ],
-      totalAmount: 46500,
-      isActive: true,
-      createdAt: '2024-01-22',
-      updatedAt: '2024-01-22'
     }
   ]);
 
-  // Theme classes
   const themeClasses = {
     light: {
       bg: 'bg-white',
@@ -149,7 +136,6 @@ const FeeStructureManagement: React.FC = () => {
 
   const currentTheme = themeClasses[theme];
 
-  // -------------------- MODALS --------------------
   const FeeHeadModal: React.FC = () => {
     const [formData, setFormData] = useState({
       name: editingItem?.name || '',
@@ -160,8 +146,8 @@ const FeeStructureManagement: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       if (editingItem) {
-        setFeeHeads(prev => prev.map(item => 
-          item.id === editingItem.id 
+        setFeeHeads(prev => prev.map(item =>
+          item.id === editingItem.id
             ? { ...item, ...formData, updatedAt: new Date().toISOString().split('T')[0] }
             : item
         ));
@@ -181,11 +167,11 @@ const FeeStructureManagement: React.FC = () => {
       <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${currentTheme.overlay}`}>
         <div className={`w-full max-w-md rounded-xl ${currentTheme.modal} p-6 ${currentTheme.shadowLarge} border ${currentTheme.border}`}>
           <h3 className={`text-lg font-semibold ${currentTheme.text} mb-6`}>
-            {editingItem ? 'Fees Type ' : 'Create New Fees '}
+            {editingItem ? 'Edit Fee Type' : 'Create New Fee Type'}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Fees Type</label>
+              <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Fee Type Name</label>
               <input
                 type="text"
                 value={formData.name}
@@ -230,13 +216,27 @@ const FeeStructureManagement: React.FC = () => {
       Department: editingItem?.Department || '',
       Program: editingItem?.Program || '',
       academicYear: editingItem?.academicYear || '2024-25',
-      items: editingItem?.items || [],
-      isActive: editingItem?.isActive ?? true,
-      FeeStatus: editingItem?.FeeStatus || '',
       Semester: editingItem?.Semester || '',
       Year: editingItem?.Year || '',
-      Category: editingItem?.Category || '',
+      Category: editingItem?.Category || 'General',
+      items: editingItem?.items || [],
+      isActive: editingItem?.isActive ?? true
     });
+
+    const calculateDiscountedAmount = (baseAmount: number, category: string) => {
+      const discount = categoryDiscounts[category as keyof typeof categoryDiscounts] || 0;
+      return baseAmount - (baseAmount * discount / 100);
+    };
+
+    const calculateTotal = () => {
+      const baseTotal = formData.items.reduce((sum, item) => sum + item.amount, 0);
+      return calculateDiscountedAmount(baseTotal, formData.Category);
+    };
+
+    const totalAmount = calculateTotal();
+    const baseTotal = formData.items.reduce((sum, item) => sum + item.amount, 0);
+    const discount = categoryDiscounts[formData.Category as keyof typeof categoryDiscounts] || 0;
+    const discountAmount = baseTotal - totalAmount;
 
     const addFeeItem = () => {
       setFormData(prev => ({
@@ -255,13 +255,11 @@ const FeeStructureManagement: React.FC = () => {
     const updateFeeItem = (index: number, field: keyof FeeStructureItem, value: any) => {
       setFormData(prev => ({
         ...prev,
-        items: prev.items.map((item, i) => 
+        items: prev.items.map((item, i) =>
           i === index ? { ...item, [field]: value } : item
         )
       }));
     };
-
-    const totalAmount = formData.items.reduce((sum, item) => sum + item.amount, 0);
 
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -271,8 +269,8 @@ const FeeStructureManagement: React.FC = () => {
       };
 
       if (editingItem) {
-        setFeeStructures(prev => prev.map(item => 
-          item.id === editingItem.id 
+        setFeeStructures(prev => prev.map(item =>
+          item.id === editingItem.id
             ? { ...item, ...structureData, updatedAt: new Date().toISOString().split('T')[0] }
             : item
         ));
@@ -291,13 +289,13 @@ const FeeStructureManagement: React.FC = () => {
 
     return (
       <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${currentTheme.overlay}`}>
-        <div className={`w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl ${currentTheme.modal} p-6 ${currentTheme.shadowLarge} border ${currentTheme.border}`}>
+        <div className={`w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl ${currentTheme.modal} p-6 ${currentTheme.shadowLarge} border ${currentTheme.border}`}>
           <h3 className={`text-lg font-semibold ${currentTheme.text} mb-6`}>
-            {editingItem ? 'Edit Fee ' : 'Create Fee'}
+            {editingItem ? 'Edit Fee Structure' : 'Create Fee Structure'}
           </h3>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             
+              
               <div>
                 <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Department</label>
                 <select
@@ -328,25 +326,6 @@ const FeeStructureManagement: React.FC = () => {
                   <option value="Science">Science</option>
                 </select>
               </div>
-             
-                           
-                           
-               <div>
-                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Category</label>
-                <select
-                  value={formData.Category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, Category: e.target.value }))}
-                  className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
-                  required
-                >
-                  <option value="General">General</option>
-                  <option value="SC">SC</option>
-                  <option value="ST">ST</option>
-                  <option value="OBC">OBC</option>
-                  <option value="EWS">EWS</option>
-                </select>
-              </div>
-              
               <div>
                 <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>Academic Year</label>
                 <select
@@ -360,69 +339,97 @@ const FeeStructureManagement: React.FC = () => {
                   <option value="2026-27">2026-27</option>
                 </select>
               </div>
+             
+             
+              <div className="md:col-span-2">
+                <label className={`block text-sm font-medium ${currentTheme.text} mb-2`}>
+                  Student Category <span className="text-blue-600 font-semibold">(Discount: {discount}%)</span>
+                </label>
+                <select
+                  value={formData.Category}
+                  onChange={(e) => setFormData(prev => ({ ...prev, Category: e.target.value }))}
+                  className={`w-full px-3 py-2 rounded-lg border ${currentTheme.input} transition-colors`}
+                  required
+                >
+                  <option value="General">General (0% discount)</option>
+                  <option value="SC">SC (50% discount)</option>
+                  <option value="ST">ST (50% discount)</option>
+                  <option value="OBC">OBC (25% discount)</option>
+                  <option value="EWS">EWS (40% discount)</option>
+                </select>
+              </div>
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h4 className={`text-md font-medium ${currentTheme.text}`}>Add Fees</h4>
+                <h4 className={`text-md font-medium ${currentTheme.text}`}>Fee Items</h4>
                 <button
                   type="button"
                   onClick={addFeeItem}
-                 className={`px-4 py-2.5 rounded-lg ${currentTheme.button} flex items-center gap-2 whitespace-nowrap transition-colors font-medium`}
+                  className={`px-4 py-2 rounded-lg ${currentTheme.button} flex items-center gap-2 transition-colors font-medium`}
                 >
-                 <Plus className="w-4 h-4 mr-2" /> Add Fees
+                  <Plus className="w-4 h-4" /> Add Fee Item
                 </button>
-                
               </div>
               <div className="space-y-3">
                 {formData.items.map((item, index) => (
                   <div key={index} className={`p-4 rounded-lg border ${currentTheme.border} ${currentTheme.highlight}`}>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <select
                         value={item.feeHeadId}
                         onChange={(e) => updateFeeItem(index, 'feeHeadId', e.target.value)}
                         className={`px-3 py-2 rounded-lg border ${currentTheme.input} text-sm transition-colors`}
                         required
                       >
-                        <option value="">Select Fees</option>
+                        <option value="">Select Fee Type</option>
                         {feeHeads.filter(head => head.isActive).map(head => (
                           <option key={head.id} value={head.id}>{head.name}</option>
                         ))}
                       </select>
                       <input
                         type="number"
-                        placeholder="Amount"
+                        placeholder="Base Amount"
                         value={item.amount}
                         onChange={(e) => updateFeeItem(index, 'amount', parseFloat(e.target.value) || 0)}
                         className={`px-3 py-2 rounded-lg border ${currentTheme.input} text-sm transition-colors`}
                         required
                       />
-                      <label className="flex items-center text-sm">
-                        <input
-                          type="checkbox"
-                          checked={item.isOptional}
-                          onChange={(e) => updateFeeItem(index, 'isOptional', e.target.checked)}
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 mr-2"
-                        />
-                        <span className={currentTheme.text}>Optional</span>
-                      </label>
                       <button
                         type="button"
                         onClick={() => removeFeeItem(index)}
                         className={`px-3 py-2 rounded-lg ${currentTheme.buttonDanger} text-sm transition-colors`}
                       >
+                        <Trash2 size={16} className="inline mr-1" />
                         Remove
                       </button>
                     </div>
                   </div>
                 ))}
+                {formData.items.length === 0 && (
+                  <div className={`text-center py-8 ${currentTheme.textMuted} border-2 border-dashed ${currentTheme.border} rounded-lg`}>
+                    No fee items added. Click "Add Fee Item" to start.
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className={`p-4 rounded-lg border ${currentTheme.border} ${currentTheme.highlight}`}>
+            <div className={`p-4 rounded-lg border ${currentTheme.border} ${currentTheme.highlight} space-y-2`}>
               <div className="flex justify-between items-center">
-                <span className={`font-medium ${currentTheme.text}`}>Total Amount:</span>
-                <span className={`text-xl font-bold ${currentTheme.text}`}>₹{totalAmount.toLocaleString()}</span>
+                <span className={`font-medium ${currentTheme.text}`}>Base Amount:</span>
+                <span className={`text-lg font-semibold ${currentTheme.text}`}>₹{baseTotal.toLocaleString()}</span>
+              </div>
+              {discount > 0 && (
+                <>
+                  <div className="flex justify-between items-center text-green-600">
+                    <span className="font-medium">Discount ({discount}%):</span>
+                    <span className="text-lg font-semibold">- ₹{discountAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="border-t border-slate-300 pt-2"></div>
+                </>
+              )}
+              <div className="flex justify-between items-center">
+                <span className={`text-lg font-bold ${currentTheme.text}`}>Final Amount:</span>
+                <span className={`text-2xl font-bold text-blue-600`}>₹{totalAmount.toLocaleString()}</span>
               </div>
             </div>
 
@@ -444,7 +451,7 @@ const FeeStructureManagement: React.FC = () => {
                 type="submit"
                 className={`flex-1 px-4 py-2.5 rounded-lg ${currentTheme.button} font-medium transition-colors`}
               >
-                {editingItem ? 'Update' : 'Create'}
+                {editingItem ? 'Update Structure' : 'Create Structure'}
               </button>
               <button
                 type="button"
@@ -466,6 +473,10 @@ const FeeStructureManagement: React.FC = () => {
   const ViewStructureModal: React.FC = () => {
     if (!editingItem) return null;
 
+    const baseTotal = editingItem.items.reduce((sum: number, item: FeeStructureItem) => sum + item.amount, 0);
+    const discount = categoryDiscounts[editingItem.Category as keyof typeof categoryDiscounts] || 0;
+    const discountAmount = baseTotal - editingItem.totalAmount;
+
     return (
       <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${currentTheme.overlay}`}>
         <div className={`w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl ${currentTheme.modal} p-6 ${currentTheme.shadowLarge} border ${currentTheme.border}`}>
@@ -475,7 +486,7 @@ const FeeStructureManagement: React.FC = () => {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <span className={`text-sm ${currentTheme.textMuted}`}>Branch Name:</span>
+                <span className={`text-sm ${currentTheme.textMuted}`}>Branch Name</span>
                 <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.name}</p>
               </div>
               <div>
@@ -483,19 +494,24 @@ const FeeStructureManagement: React.FC = () => {
                 <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.Department}</p>
               </div>
               <div>
-                <span className={`text-sm ${currentTheme.textMuted}`}>Program:</span>
-                <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.Program}</p>
-              </div>
-              <div>
                 <span className={`text-sm ${currentTheme.textMuted}`}>Academic Year:</span>
                 <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.academicYear}</p>
               </div>
               
+                <div>
+                <span className={`text-sm ${currentTheme.textMuted}`}>Program:</span>
+                <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.Program}</p>
+              </div>
+             
+          
+              <div>
+                <span className={`text-sm ${currentTheme.textMuted}`}>Category:</span>
+                <p className={`font-medium ${currentTheme.text} mt-1`}>
+                  {editingItem.Category}
+                  <span className="ml-2 text-sm text-blue-600">({discount}% discount)</span>
+                </p>
+              </div>
             </div>
-            <div>
-  <span className={`text-sm ${currentTheme.textMuted}`}>Semester:</span>
-  <p className={`font-medium ${currentTheme.text} mt-1`}>{editingItem.Semester}</p>
-</div>
 
             <div>
               <h4 className={`text-md font-medium ${currentTheme.text} mb-4`}>Fee Breakdown</h4>
@@ -519,10 +535,23 @@ const FeeStructureManagement: React.FC = () => {
               </div>
             </div>
 
-            <div className={`p-4 rounded-lg border ${currentTheme.border} ${currentTheme.highlight}`}>
+            <div className={`p-4 rounded-lg border ${currentTheme.border} ${currentTheme.highlight} space-y-2`}>
               <div className="flex justify-between items-center">
-                <span className={`text-lg font-medium ${currentTheme.text}`}>Total Amount:</span>
-                <span className={`text-xl font-bold ${currentTheme.text}`}>₹{editingItem.totalAmount.toLocaleString()}</span>
+                <span className={`font-medium ${currentTheme.text}`}>Base Amount:</span>
+                <span className={`text-lg font-semibold ${currentTheme.text}`}>₹{baseTotal.toLocaleString()}</span>
+              </div>
+              {discount > 0 && (
+                <>
+                  <div className="flex justify-between items-center text-green-600">
+                    <span className="font-medium">Category Discount ({discount}%):</span>
+                    <span className="text-lg font-semibold">- ₹{discountAmount.toLocaleString()}</span>
+                  </div>
+                  <div className={`border-t ${currentTheme.border} pt-2`}></div>
+                </>
+              )}
+              <div className="flex justify-between items-center">
+                <span className={`text-lg font-bold ${currentTheme.text}`}>Final Amount:</span>
+                <span className={`text-2xl font-bold text-blue-600`}>₹{editingItem.totalAmount.toLocaleString()}</span>
               </div>
             </div>
 
@@ -543,7 +572,6 @@ const FeeStructureManagement: React.FC = () => {
     );
   };
 
-  // Filter functions
   const filteredFeeHeads = feeHeads.filter(head =>
     head.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     head.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -558,25 +586,28 @@ const FeeStructureManagement: React.FC = () => {
 
   return (
     <div className={`${currentTheme.bg} min-h-screen transition-colors duration-300 p-6`}>
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
+
+          <h1 className={`text-2xl font-bold ${currentTheme.text}`}>Fee Structure Management</h1>
+          <p className={`text-sm ${currentTheme.textSecondary} mt-1`}>Manage fee types and structures with category-based discounts</p>
+        </div>
                              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
                                 
                                 Fee Structure
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400 mt-2">Manage fee reduction scholarships.</p>
                         </div>
+
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-4 mb-6 border-b border-slate-300 dark:border-slate-700">
+      <div className={`flex gap-4 mb-6 border-b ${currentTheme.border}`}>
         <button
           onClick={() => setActiveTab('fee-heads')}
           className={`px-4 py-2 border-b-2 font-medium flex items-center gap-2 ${activeTab === 'fee-heads' ? currentTheme.activeTab : currentTheme.inactiveTab}`}
         >
           <IndianRupee size={16} />
-         All Fees ({feeHeads.length})
+          All Fees ({feeHeads.length})
         </button>
         <button
           onClick={() => setActiveTab('fee-structures')}
@@ -587,7 +618,6 @@ const FeeStructureManagement: React.FC = () => {
         </button>
       </div>
 
-      {/* Search and Filter */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1">
           <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${currentTheme.textMuted}`} size={20} />
@@ -607,7 +637,7 @@ const FeeStructureManagement: React.FC = () => {
               onChange={(e) => setFilterProgram(e.target.value)}
               className={`px-3 py-2.5 rounded-lg border ${currentTheme.input} transition-colors`}
             >
-              <option value="all">Program</option>
+              <option value="all">All Programs</option>
               <option value="Engineering">Engineering</option>
               <option value="Management">Management</option>
               <option value="Arts">Arts</option>
@@ -620,13 +650,11 @@ const FeeStructureManagement: React.FC = () => {
           className={`px-4 py-2.5 rounded-lg ${currentTheme.button} flex items-center gap-2 whitespace-nowrap transition-colors font-medium`}
         >
           <Plus size={20} />
-          {activeTab === 'fee-heads' ? 'Add Fees' : 'Create Structure'}
+          {activeTab === 'fee-heads' ? 'Add Fee Type' : 'Create Structure'}
         </button>
       </div>
 
-      {/* Content */}
       <div>
-        {/* Fee Heads Tab */}
         {activeTab === 'fee-heads' && (
           <div>
             {filteredFeeHeads.length > 0 ? (
@@ -672,125 +700,111 @@ const FeeStructureManagement: React.FC = () => {
                   <IndianRupee size={64} />
                 </div>
                 <h3 className={`text-lg font-medium ${currentTheme.text} mb-3`}>
-                  No Fees Found
+                  No Fee Types Found
                 </h3>
                 <p className={`${currentTheme.textSecondary} mb-8 max-w-md mx-auto`}>
-                  Create your first fee  to get started with fee management. Fees are the building blocks of your fee structures.
+                  Create your first fee type to get started with fee management.
                 </p>
                 <button
                   onClick={() => setActiveModal('fee-head')}
                   className={`px-8 py-3 rounded-lg ${currentTheme.button} flex items-center gap-2 mx-auto font-medium transition-colors`}
                 >
                   <Plus size={20} />
-                  Create Fees
+                  Create Fee Type
                 </button>
               </div>
             )}
           </div>
         )}
 
-        {/* Fee Structures Tab */}
         {activeTab === 'fee-structures' && (
           <div>
             {filteredFeeStructures.length > 0 ? (
               <div className="space-y-4">
-                {filteredFeeStructures.map((structure) => (
-                  <div key={structure.id} className={`${currentTheme.cardBg} ${currentTheme.border} border rounded-xl p-6 ${currentTheme.shadow} hover:shadow-md transition-all duration-200`}>
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-center gap-3 mb-3">
-                          <h3 className={`text-lg font-semibold ${currentTheme.text}`}>{structure.name}</h3>
-                          <span className={`px-3 py-1 text-xs rounded-full font-medium ${
-                            structure.isActive ? currentTheme.statusActive : currentTheme.statusInactive
-                          }`}>
-                            {structure.isActive ? 'Active' : 'Inactive'}
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                          <div className="flex items-center gap-2">
-                            <GraduationCap size={16} className={currentTheme.textMuted} />
-                            <span className={`text-sm ${currentTheme.textSecondary}`}>Department:</span>
-                            <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Department}</span>
+                {filteredFeeStructures.map((structure) => {
+                  const discount = categoryDiscounts[structure.Category as keyof typeof categoryDiscounts] || 0;
+                  return (
+                    <div key={structure.id} className={`${currentTheme.cardBg} ${currentTheme.border} border rounded-xl p-6 ${currentTheme.shadow} hover:shadow-md transition-all duration-200`}>
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 className={`text-lg font-semibold ${currentTheme.text}`}>{structure.name}</h3>
+                            <span className={`px-3 py-1 text-xs rounded-full font-medium ${
+                              structure.isActive ? currentTheme.statusActive : currentTheme.statusInactive
+                            }`}>
+                              {structure.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                            {discount > 0 && (
+                              <span className="px-3 py-1 text-xs rounded-full font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                {discount}% Discount Applied
+                              </span>
+                            )}
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Filter size={16} className={currentTheme.textMuted} />
-                            <span className={`text-sm ${currentTheme.textSecondary}`}>Program:</span>
-                            <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Program}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Calendar size={16} className={currentTheme.textMuted} />
-                            <span className={`text-sm ${currentTheme.textSecondary}`}>Academic Year:</span>
-                            <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.academicYear}</span>
-                          </div>
-                          
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
-  {/* ...existing columns... */}
-  <div className="flex items-center gap-2">
-    <Calendar size={16} className={currentTheme.textMuted} />
-    <span className={`text-sm ${currentTheme.textSecondary}`}>Semester:</span>
-    <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Semester}</span>
-</div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
 
-<div className="flex items-center gap-2">
-    <Calendar size={16} className={currentTheme.textMuted} />
-    <span className={`text-sm ${currentTheme.textSecondary}`}>Year:</span>
-    <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Year}</span>
-  </div>
-    <div className="flex items-center gap-2">
-                            <UserRound size={16} className={currentTheme.textMuted} />
-                            <span className={`text-sm ${currentTheme.textSecondary}`}>Category:</span>
-                            <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Category}</span>
+                            <div className="flex items-center gap-2">
+                              <GraduationCap size={16} className={currentTheme.textMuted} />
+                              <span className={`text-sm ${currentTheme.textSecondary}`}>Dept:</span>
+                              <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Department}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Filter size={16} className={currentTheme.textMuted} />
+                              <span className={`text-sm ${currentTheme.textSecondary}`}>Program:</span>
+                              <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Program}</span>
+                            </div>
+                              <div className="flex items-center gap-2">
+                              <Filter size={16} className={currentTheme.textMuted} />
+                              <span className={`text-sm ${currentTheme.textSecondary}`}>Academic Year</span>
+                              <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.academicYear}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <UserRound size={16} className={currentTheme.textMuted} />
+                              <span className={`text-sm ${currentTheme.textSecondary}`}>Category:</span>
+                              <span className={`text-sm font-medium ${currentTheme.text}`}>{structure.Category}</span>
+                            </div>
                           </div>
-  </div>
-  
-
-
-                        <div className="flex flex-wrap items-center gap-6">
-                          <div className="flex items-center gap-2">
-                            <span className={`text-sm ${currentTheme.textSecondary}`}>Fee Items:</span>
-                            <span className={`text-sm font-medium ${currentTheme.text} bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full`}>{structure.items.length}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <IndianRupee size={16} className={currentTheme.textMuted} />
-                            <span className={`text-lg font-bold ${currentTheme.text}`}>{structure.totalAmount.toLocaleString()}</span>
+                          <div className="flex flex-wrap items-center gap-6">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-sm ${currentTheme.textSecondary}`}>Fee Items:</span>
+                              <span className={`text-sm font-medium ${currentTheme.text} bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full`}>{structure.items.length}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <IndianRupee size={16} className={currentTheme.textMuted} />
+                              <span className={`text-lg font-bold ${currentTheme.text}`}>₹{structure.totalAmount.toLocaleString()}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col sm:flex-row gap-2 lg:flex-col">
-                        <button
-                          onClick={() => {
-                            setEditingItem(structure);
-                            setActiveModal('view-structure');
-                          }}
-                          className={`px-4 py-2.5 rounded-lg ${currentTheme.buttonSecondary} text-sm flex items-center justify-center gap-2 transition-colors font-medium`}
-                        >
-                          <Eye size={16} />
-                          View Details
-                        </button>
-                        <button
-                          onClick={() => {
-                            setEditingItem(structure);
-                            setActiveModal('fee-structure');
-                          }}
-                          className={`px-4 py-2.5 rounded-lg ${currentTheme.button} text-sm flex items-center justify-center gap-2 transition-colors font-medium`}
-                        >
-                          <Edit size={16} />
-                          Edit Structure
-                        </button>
+                        <div className="flex flex-col sm:flex-row gap-2 lg:flex-col">
+                          <button
+                            onClick={() => {
+                              setEditingItem(structure);
+                              setActiveModal('view-structure');
+                            }}
+                            className={`px-4 py-2.5 rounded-lg ${currentTheme.buttonSecondary} text-sm flex items-center justify-center gap-2 transition-colors font-medium`}
+                          >
+                            <Eye size={16} />
+                            View Details
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditingItem(structure);
+                              setActiveModal('fee-structure');
+                            }}
+                            className={`px-4 py-2.5 rounded-lg ${currentTheme.button} text-sm flex items-center justify-center gap-2 transition-colors font-medium`}
+                          >
+                            <Edit size={16} />
+                            Edit
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className={`mt-5 pt-4 border-t ${currentTheme.border}`}>
-                      <div className={`text-xs ${currentTheme.textMuted} flex flex-wrap gap-4`}>
-                        <span>Created: {new Date(structure.createdAt).toLocaleDateString()}</span>
-                        <span>Updated: {new Date(structure.updatedAt).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
+              
               <div className={`text-center py-16 ${currentTheme.cardBg} rounded-xl border ${currentTheme.border} ${currentTheme.shadow}`}>
+
                 <div className={`mx-auto w-16 h-16 ${currentTheme.textMuted} mb-6 flex items-center justify-center`}>
                   <GraduationCap size={64} />
                 </div>
@@ -798,7 +812,7 @@ const FeeStructureManagement: React.FC = () => {
                   No Fee Structures Found
                 </h3>
                 <p className={`${currentTheme.textSecondary} mb-8 max-w-md mx-auto`}>
-                  Create your first fee structure to define Department pricing. Fee structures combine multiple fee heads into comprehensive packages.
+                  Create your first fee structure with category-based discounts.
                 </p>
                 <button
                   onClick={() => setActiveModal('fee-structure')}
@@ -813,7 +827,6 @@ const FeeStructureManagement: React.FC = () => {
         )}
       </div>
 
-      {/* Modals */}
       {activeModal === 'fee-head' && <FeeHeadModal />}
       {activeModal === 'fee-structure' && <FeeStructureModal />}
       {activeModal === 'view-structure' && <ViewStructureModal />}
