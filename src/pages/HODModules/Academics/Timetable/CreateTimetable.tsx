@@ -1001,7 +1001,7 @@ export default function CreateTimetable() {
   ))}
 </select>
 
-                                    <button onClick={() => handleAddItem([{ key: 'courses', index: pIdx }], 'course')} className="p-2 text-sm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md whitespace-nowrap">Add Course</button>
+                                    <button onClick={() => handleAddItem([{ key: 'courses', index: pIdx }], 'course')} className="p-2 text-sm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md whitespace-nowrap">Add Department</button>
                                     <button onClick={() => handleDeleteItem([{ index: pIdx }])} className="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md"><Trash2 size={16} /></button>
                                 </div>
                                 <div className="pl-6 space-y-3">
@@ -1089,12 +1089,16 @@ export default function CreateTimetable() {
                                                                         </div>
                                                                         <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                                                                             <div className="flex justify-between items-center mb-2">
-                                                                                <h4 className="font-medium text-sm text-gray-600 dark:text-gray-300">Subjects:</h4>
-                                                                                <button onClick={() => handleAddSubjectAssignment(subjectPath)} className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center"><Plus size={14} className="mr-1" /> Assign Subject</button>
+                                                                <div className="grid grid-cols-3 gap-2 w-full">
+                                                                    <h4 className="font-medium text-sm text-gray-600 dark:text-gray-300 col-span-2">Subjects:</h4>
+                                                                    <h4 className="font-medium text-sm text-gray-600 dark:text-gray-300">Hours/Week:</h4>
+                                                                </div>
+                                                                                <button onClick={() => handleAddSubjectAssignment(subjectPath)} className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center"><Plus size={14} className="mr-1" /> Assign Courses</button>
                                                                             </div>
                                                                             <div className="space-y-1">
                                                                                 {section.subjects.map((sub, j) => (
                                                                                     <div key={j} className="grid grid-cols-3 gap-2 items-center">
+                                                                                        
                                                                                         <select value={sub.subjectId} onChange={(e) => handleSubjectAssignmentChange(subjectPath, j, 'subjectId', e.target.value)} className="p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500 col-span-2 text-xs">
                                                                                             <option value="">Select Subject</option>
                                                                                             {departmentData.allSubjects.map(s => <option key={s.id} value={s.id}>{s.code} - {s.name}</option>)}
