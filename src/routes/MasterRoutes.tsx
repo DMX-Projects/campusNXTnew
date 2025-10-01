@@ -5,7 +5,8 @@ import AcademicCalendar from '../pages/MasterMOdule/AcademicCalendar';
 import ConfigureFacultyLeave from '../pages/MasterMOdule/LeaveConfigure/ConfigureFacultyLeave';
 import ConfigureStudentLeave from '../pages/MasterMOdule/LeaveConfigure/ConfigureStudentLeave';
 import DataManagement from '../pages/PrincipalModules/Administration/DataManagement';
-import FeeStructure from '../pages/MasterMOdule/LeaveConfigure/FeeStructure';
+import FeesStructure from '../pages/MasterMOdule/LeaveConfigure/FeesStructure';
+import Scholarships from '../pages/MasterMOdule/LeaveConfigure/Scholarships';
 const MasterRoutes: React.FC = () => {
   return (
     <Routes>
@@ -14,7 +15,9 @@ const MasterRoutes: React.FC = () => {
         <Route path="/faculty/leave-configure" element={<ConfigureFacultyLeave />} />
         <Route path="/student/leave-configure" element={<ConfigureStudentLeave />} />
       <Route path="/home/data-management" element={<DataManagement />} />
-      <Route path="/scholarship-registration" element={<FeeStructure />} />
+      <Route path="/scholarship-registration" element={<Scholarships />} />
+      <Route path="/fee-management" element={<FeesStructure />} />
+
     </Routes>
   );
 };
