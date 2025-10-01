@@ -341,8 +341,10 @@ export default function AcademicCalendarView() {
           <p className="text-gray-600 dark:text-gray-400 mt-2 text-center sm:text-left">
             {isMasterAdmin
               ? 'Technical University - Master Admin Control'
-              : 'Technical University'}
+              : 'Technical University'
+            }
           </p>
+          
         </header>
 
         <main className="space-y-8">
@@ -364,6 +366,16 @@ export default function AcademicCalendarView() {
           <p>#Full day (till 13th August 2025) and there after along with the classes.</p>
         </footer>
       </div>
+      <div className="flex justify-end mt-2">
+  {isMasterAdmin && (
+    <button
+      className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-md"
+    >
+      Publish
+    </button>
+  )}
+</div>
+
 
       {editingEvent && isMasterAdmin && (
         <EditEventModal event={editingEvent} onSave={handleSaveEvent} onClose={() => setEditingEvent(null)} />

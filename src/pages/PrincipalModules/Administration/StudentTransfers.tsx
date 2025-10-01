@@ -551,22 +551,7 @@ const StudentTransfers: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 rounded-lg px-3 py-2 border border-gray-200 dark:border-gray-700">
-            <Calendar className="w-4 h-4 text-gray-500" />
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-transparent text-sm focus:outline-none"
-            />
-          </div>
-          <button
-            className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            aria-label="Toggle theme"
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
+         
         </div>
       </div>
 
@@ -780,210 +765,189 @@ const StudentTransfers: React.FC = () => {
         </div>
       </div>
 
-      {/* Transfer Requests Table */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm mb-8">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                  Priority
-                </th>
-                <th 
-                  className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                  onClick={() => handleSort('studentName')}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Student</span>
-                    <SortIcon field="studentName" />
+     {/* Transfer Requests Table */}
+<div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm mb-8">
+  <div className="overflow-x-auto">
+    <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+      <thead className="bg-gray-50 dark:bg-gray-700">
+        <tr>
+          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+            Priority
+          </th>
+          <th 
+            className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+            onClick={() => handleSort('studentName')}
+          >
+            <div className="flex items-center space-x-1">
+              <span>Student</span>
+              <SortIcon field="studentName" />
+            </div>
+          </th>
+          <th 
+            className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+            onClick={() => handleSort('transferType')}
+          >
+            <div className="flex items-center space-x-1">
+              <span>Transfer Type</span>
+              <SortIcon field="transferType" />
+            </div>
+          </th>
+          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+            Current → Target
+          </th>
+          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+            Academic Performance
+          </th>
+          <th 
+            className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+            onClick={() => handleSort('appliedDate')}
+          >
+            <div className="flex items-center space-x-1">
+              <span>Applied Date</span>
+              <SortIcon field="appliedDate" />
+            </div>
+          </th>
+          <th 
+            className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+            onClick={() => handleSort('status')}
+          >
+            <div className="flex items-center space-x-1">
+              <span>Status</span>
+              <SortIcon field="status" />
+            </div>
+          </th>
+          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+        {paginatedData.map((transfer, index) => (
+          <tr key={transfer.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 ${index % 2 === 0 ? 'bg-gray-25 dark:bg-gray-825' : ''}`}>
+            <td className="px-6 py-4 whitespace-nowrap text-center">
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-lg">{getPriorityIcon(transfer.priority)}</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(transfer.priority)}`}>
+                  {transfer.priority.toUpperCase()}
+                </span>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  {transfer.studentName.charAt(0)}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                    {transfer.studentName}
                   </div>
-                </th>
-                <th 
-                  className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                  onClick={() => handleSort('transferType')}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Transfer Type</span>
-                    <SortIcon field="transferType" />
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {transfer.studentId} • {transfer.rollNumber}
                   </div>
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                  Current → Target
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                  Academic Performance
-                </th>
-                <th 
-                  className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                  onClick={() => handleSort('transferFee')}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Transfer Fee</span>
-                    <SortIcon field="transferFee" />
+                </div>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">
+              <div className="flex items-center space-x-2">
+                {getTransferTypeIcon(transfer.transferType)}
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getTransferTypeColor(transfer.transferType)}`}>
+                  {transfer.transferType.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                </span>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+              <div className="space-y-1">
+                <div className="flex items-center space-x-2">
+                  <span className="font-medium">{transfer.currentDepartment}</span>
+                  <span className="text-gray-400">({transfer.currentProgram})</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <ArrowRightLeft className="w-3 h-3 text-blue-500" />
+                  <span className="font-medium text-blue-600 dark:text-blue-400">{transfer.targetDepartment}</span>
+                  <span className="text-gray-400">({transfer.targetProgram})</span>
+                </div>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+              <div className="space-y-1">
+                <div className="flex items-center space-x-2">
+                  <span className="font-medium">CGPA:</span>
+                  <span className={`font-bold ${
+                    transfer.currentCGPA >= 8.5 ? 'text-green-600 dark:text-green-400' :
+                    transfer.currentCGPA >= 7.0 ? 'text-blue-600 dark:text-blue-400' :
+                    transfer.currentCGPA >= 6.0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'
+                  }`}>
+                    {transfer.currentCGPA}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="font-medium">Attendance:</span>
+                  <span className="font-medium">{transfer.attendance}%</span>
+                  <div className="w-12 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full ${
+                        transfer.attendance >= 85 ? 'bg-green-500' :
+                        transfer.attendance >= 75 ? 'bg-yellow-500' : 'bg-red-500'
+                      }`}
+                      style={{ width: `${transfer.attendance}%` }}
+                    ></div>
                   </div>
-                </th>
-                <th 
-                  className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                  onClick={() => handleSort('appliedDate')}
+                </div>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+              <div className="flex items-center space-x-1">
+                <Calendar className="w-4 h-4 text-gray-400" />
+                <span>{new Date(transfer.appliedDate).toLocaleDateString('en-IN')}</span>
+              </div>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap">
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(transfer.status)}`}>
+                {transfer.status === 'pending' && <Clock className="w-3 h-3 mr-1" />}
+                {transfer.status === 'approved' && <CheckCircle className="w-3 h-3 mr-1" />}
+                {transfer.status === 'rejected' && <XCircle className="w-3 h-3 mr-1" />}
+                {transfer.status === 'in_review' && <Eye className="w-3 h-3 mr-1" />}
+                {transfer.status === 'completed' && <UserCheck className="w-3 h-3 mr-1" />}
+                {transfer.status.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+              </span>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <div className="flex space-x-2">
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center"
+                  onClick={() => handleViewDetails(transfer)}
+                  title="View Details"
                 >
-                  <div className="flex items-center space-x-1">
-                    <span>Applied Date</span>
-                    <SortIcon field="appliedDate" />
-                  </div>
-                </th>
-                <th 
-                  className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
-                  onClick={() => handleSort('status')}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Status</span>
-                    <SortIcon field="status" />
-                  </div>
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {paginatedData.map((transfer, index) => (
-                <tr key={transfer.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 ${index % 2 === 0 ? 'bg-gray-25 dark:bg-gray-825' : ''}`}>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <div className="flex items-center justify-center space-x-2">
-                      <span className="text-lg">{getPriorityIcon(transfer.priority)}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(transfer.priority)}`}>
-                        {transfer.priority.toUpperCase()}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                        {transfer.studentName.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                          {transfer.studentName}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {transfer.studentId} • {transfer.rollNumber}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center space-x-2">
-                      {getTransferTypeIcon(transfer.transferType)}
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getTransferTypeColor(transfer.transferType)}`}>
-                        {transfer.transferType.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-medium">{transfer.currentDepartment}</span>
-                        <span className="text-gray-400">({transfer.currentProgram})</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <ArrowRightLeft className="w-3 h-3 text-blue-500" />
-                        <span className="font-medium text-blue-600 dark:text-blue-400">{transfer.targetDepartment}</span>
-                        <span className="text-gray-400">({transfer.targetProgram})</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-medium">CGPA:</span>
-                        <span className={`font-bold ${
-                          transfer.currentCGPA >= 8.5 ? 'text-green-600 dark:text-green-400' :
-                          transfer.currentCGPA >= 7.0 ? 'text-blue-600 dark:text-blue-400' :
-                          transfer.currentCGPA >= 6.0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'
-                        }`}>
-                          {transfer.currentCGPA}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="font-medium">Attendance:</span>
-                        <span className="font-medium">{transfer.attendance}%</span>
-                        <div className="w-12 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                          <div 
-                            className={`h-2 rounded-full ${
-                              transfer.attendance >= 85 ? 'bg-green-500' :
-                              transfer.attendance >= 75 ? 'bg-yellow-500' : 'bg-red-500'
-                            }`}
-                            style={{ width: `${transfer.attendance}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    <div className="flex items-center space-x-1">
-                      <span className="font-bold text-green-600 dark:text-green-400">₹{transfer.transferFee.toLocaleString()}</span>
-                      {transfer.eligibilityMet && (
-                        <CheckCircle className="w-4 h-4 text-green-500" title="Eligibility Met" />
-                      )}
-                      {!transfer.eligibilityMet && (
-                        <XCircle className="w-4 h-4 text-red-500" title="Eligibility Not Met" />
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span>{new Date(transfer.appliedDate).toLocaleDateString('en-IN')}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(transfer.status)}`}>
-                      {transfer.status === 'pending' && <Clock className="w-3 h-3 mr-1" />}
-                      {transfer.status === 'approved' && <CheckCircle className="w-3 h-3 mr-1" />}
-                      {transfer.status === 'rejected' && <XCircle className="w-3 h-3 mr-1" />}
-                      {transfer.status === 'in_review' && <Eye className="w-3 h-3 mr-1" />}
-                      {transfer.status === 'completed' && <UserCheck className="w-3 h-3 mr-1" />}
-                      {transfer.status.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center space-x-1"
-                        onClick={() => handleViewDetails(transfer)}
-                        title="View Details"
-                      >
-                        <Eye className="w-3 h-3" />
-                        <span>View</span>
-                      </button>
-                      {transfer.status === 'pending' && (
-                        <>
-                          <button
-                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center space-x-1"
-                            onClick={() => handleStatusUpdate(transfer.id, 'approved')}
-                            title="Approve Transfer"
-                          >
-                            <CheckCircle className="w-3 h-3" />
-                            <span>Approve</span>
-                          </button>
-                          <button
-                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center space-x-1"
-                            onClick={() => handleStatusUpdate(transfer.id, 'rejected')}
-                            title="Reject Transfer"
-                          >
-                            <XCircle className="w-3 h-3" />
-                            <span>Reject</span>
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                  <Eye className="w-3 h-3" />
+                </button>
+                {transfer.status === 'pending' && (
+                  <>
+                    <button
+                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-center"
+                      onClick={() => handleStatusUpdate(transfer.id, 'approved')}
+                      title="Approve Transfer"
+                    >
+                      <CheckCircle className="w-3 h-3" />
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center justify-center"
+                      onClick={() => handleStatusUpdate(transfer.id, 'rejected')}
+                      title="Reject Transfer"
+                    >
+                      <XCircle className="w-3 h-3" />
+                    </button>
+                  </>
+                )}
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+       
 
       {/* Pagination */}
       {totalPages > 1 && (

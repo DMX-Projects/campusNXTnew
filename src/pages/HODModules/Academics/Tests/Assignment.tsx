@@ -11,7 +11,9 @@ import {
   Award,
   Menu,
   Upload,
-  File
+  File,
+  Users,
+  ArrowLeft
 } from 'lucide-react';
 
 const subjects = [
@@ -27,7 +29,6 @@ const semesters = ['1st Semester', '2nd Semester'];
 
 const programs = ['B.Tech CSE', 'M.Tech CSE', 'B.Tech IT', 'M.Tech IT', 'B.Tech ECE', 'M.Tech ECE'];
 
-// Updated assignments with subject, title, description mapped properly
 const assignmentsDemo = [
   {
     id: 1,
@@ -112,94 +113,9 @@ const assignmentsDemo = [
     createdDate: '2024-11-08',
     questionPaper: 'os_scheduling.pdf',
     questions: '1. Implement FCFS and SJF.\n2. Compare with Round Robin.\n3. Calculate average waiting times.'
-  },
-  {
-    id: 7,
-    title: 'Network Layer Protocols',
-    subject: 'Computer Networks',
-    program: 'B.Tech ECE',
-    year: '2nd Year',
-    semester: '1st Semester',
-    dueDate: '2024-12-22',
-    totalMarks: 75,
-    description: 'Study of TCP/IP, routing, and switching protocols.',
-    createdDate: '2024-11-10',
-    questionPaper: 'networks_assignment.pdf',
-    questions: '1. Explain TCP vs UDP.\n2. Implement distance vector routing.\n3. Analyze IP packet fragmentation.'
-  },
-  {
-    id: 8,
-    title: 'Responsive Web Development',
-    subject: 'Web Technologies',
-    program: 'M.Tech CSE',
-    year: '2nd Year',
-    semester: '2nd Semester',
-    dueDate: '2025-01-25',
-    totalMarks: 85,
-    description: 'Front-end and back-end development with modern frameworks.',
-    createdDate: '2024-12-01',
-    questionPaper: 'web_tech.pdf',
-    questions: '1. Build responsive HTML/CSS layout.\n2. Create API with Node.js.\n3. Implement CRUD in React.'
-  },
-  {
-    id: 9,
-    title: 'Boolean Algebra and Logic',
-    subject: 'Digital Electronics',
-    program: 'B.Tech CSE',
-    year: '3rd Year',
-    semester: '1st Semester',
-    dueDate: '2024-12-15',
-    totalMarks: 100,
-    description: 'Simplify Boolean expressions and design combinational circuits.',
-    createdDate: '2024-11-01',
-    questionPaper: 'digital_logic.pdf',
-    questions: '1. Minimize Boolean expressions.\n2. Design half adder and full adder.\n3. Implement 4:1 multiplexer.'
-  },
-  {
-    id: 10,
-    title: 'Wireless Communication Systems',
-    subject: 'Communication Systems',
-    program: 'M.Tech ECE',
-    year: '3rd Year',
-    semester: '1st Semester',
-    dueDate: '2024-12-28',
-    totalMarks: 120,
-    description: 'Study of modulation, multiplexing, and wireless protocols.',
-    createdDate: '2024-11-15',
-    questionPaper: 'communication_systems.pdf',
-    questions: '1. Explain frequency modulation.\n2. Discuss TDMA vs FDMA.\n3. Analyze LTE architecture.'
-  },
-  {
-    id: 11,
-    title: 'Cloud Security Models',
-    subject: 'Cloud Computing',
-    program: 'M.Tech CSE',
-    year: '4th Year',
-    semester: '1st Semester',
-    dueDate: '2025-01-30',
-    totalMarks: 150,
-    description: 'Secure cloud infrastructure and services.',
-    createdDate: '2024-11-20',
-    questionPaper: 'cloud_security.pdf',
-    questions: '1. Explain SaaS, PaaS, IaaS.\n2. Implement identity management.\n3. Discuss data privacy in cloud.'
-  },
-  {
-    id: 12,
-    title: 'Thesis Writing & Research Ethics',
-    subject: 'Research Methodology',
-    program: 'B.Tech CSE',
-    year: '4th Year',
-    semester: '2nd Semester',
-    dueDate: '2025-03-15',
-    totalMarks: 100,
-    description: 'Focus on academic research writing, ethics, and proposal creation.',
-    createdDate: '2024-12-10',
-    questionPaper: 'research_methodology.pdf',
-    questions: '1. Write a literature review.\n2. Explain plagiarism and ethics.\n3. Draft a research proposal.'
   }
 ];
 
-// Submissions also updated with corrected subjects
 const submissionsDemo = [
   {
     id: 1,
@@ -235,167 +151,69 @@ const submissionsDemo = [
   },
   {
     id: 3,
-    assignmentId: 3,
+    assignmentId: 1,
     studentName: 'Amit Singh',
     studentId: 'CS102',
+    subject: 'Computer Programming',
+    program: 'B.Tech CSE',
+    year: '1st Year',
+    semester: '1st Semester',
+    submittedDate: '2024-12-09',
+    status: 'Graded',
+    score: 42,
+    maxScore: 50,
+    feedback: 'Good work, minor improvements needed.',
+    fileName: 'c_programming.c'
+  },
+  {
+    id: 4,
+    assignmentId: 2,
+    studentName: 'Neha Gupta',
+    studentId: 'MCS102',
+    subject: 'Data Structures and Algorithms',
+    program: 'M.Tech CSE',
+    year: '1st Year',
+    semester: '1st Semester',
+    submittedDate: '2024-12-11',
+    status: 'Submitted',
+    score: null,
+    maxScore: 100,
+    feedback: null,
+    fileName: 'ds_algorithms.cpp'
+  },
+  {
+    id: 5,
+    assignmentId: 3,
+    studentName: 'Karan Mehta',
+    studentId: 'CS103',
     subject: 'Machine Learning',
     program: 'B.Tech CSE',
     year: '1st Year',
     semester: '1st Semester',
     submittedDate: '2024-12-12',
     status: 'Graded',
-    score: 35,
+    score: 38,
     maxScore: 40,
-    feedback: 'Well-structured ML models.',
-    fileName: 'ml_supervised.ipynb'
-  },
-  {
-    id: 4,
-    assignmentId: 4,
-    studentName: 'Neha Gupta',
-    studentId: 'SC101',
-    subject: 'Artificial Intelligence',
-    program: 'M.Tech CSE',
-    year: '1st Year',
-    semester: '1st Semester',
-    submittedDate: '2024-12-23',
-    status: 'Graded',
-    score: 55,
-    maxScore: 60,
-    feedback: 'Good use of search algorithms.',
-    fileName: 'ai_problems.pl'
-  },
-  {
-    id: 5,
-    assignmentId: 5,
-    studentName: 'Karan Mehta',
-    studentId: 'BCA101',
-    subject: 'Database Management Systems',
-    program: 'M.Tech CSE',
-    year: '1st Year',
-    semester: '2nd Semester',
-    submittedDate: '2025-01-18',
-    status: 'Graded',
-    score: 62,
-    maxScore: 70,
-    feedback: 'Correct normalization and queries.',
-    fileName: 'dbms_assignment.sql'
+    feedback: 'Excellent ML implementation.',
+    fileName: 'ml_models.ipynb'
   },
   {
     id: 6,
-    assignmentId: 6,
-    studentName: 'Rajesh Kumar',
-    studentId: 'MCS201',
-    subject: 'Operating Systems',
-    program: 'M.Tech CSE',
-    year: '2nd Year',
-    semester: '2nd Semester',
-    submittedDate: '2024-12-18',
-    status: 'Graded',
-    score: 85,
-    maxScore: 90,
-    feedback: 'Accurate scheduling algorithm implementation.',
-    fileName: 'os_scheduling.py'
-  },
-  {
-    id: 7,
-    assignmentId: 7,
-    studentName: 'Vikash Yadav',
-    studentId: 'ECE201',
-    subject: 'Computer Networks',
-    program: 'B.Tech ECE',
-    year: '2nd Year',
-    semester: '1st Semester',
-    submittedDate: '2024-12-20',
-    status: 'Graded',
-    score: 68,
-    maxScore: 75,
-    feedback: 'Good explanation of routing protocols.',
-    fileName: 'network_layer.docx'
-  },
-  {
-    id: 8,
-    assignmentId: 8,
-    studentName: 'Anita Verma',
-    studentId: 'MSC201',
-    subject: 'Web Technologies',
-    program: 'M.Tech CSE',
-    year: '2nd Year',
-    semester: '2nd Semester',
-    submittedDate: '2025-01-23',
-    status: 'Graded',
-    score: 78,
-    maxScore: 85,
-    feedback: 'Responsive and functional web app.',
-    fileName: 'web_project.zip'
-  },
-  {
-    id: 9,
-    assignmentId: 9,
-    studentName: 'Arjun Patel',
-    studentId: 'CS301',
-    subject: 'Digital Electronics',
+    assignmentId: 1,
+    studentName: 'Sonia Verma',
+    studentId: 'CS104',
+    subject: 'Computer Programming',
     program: 'B.Tech CSE',
-    year: '3rd Year',
+    year: '1st Year',
     semester: '1st Semester',
-    submittedDate: '2024-12-12',
+    submittedDate: '2024-12-07',
     status: 'Graded',
-    score: 93,
-    maxScore: 100,
-    feedback: 'Perfect circuit design and simplification.',
-    fileName: 'digital_logic.vhd'
-  },
-  {
-    id: 10,
-    assignmentId: 10,
-    studentName: 'Suresh Kumar',
-    studentId: 'MECE301',
-    subject: 'Communication Systems',
-    program: 'M.Tech ECE',
-    year: '3rd Year',
-    semester: '1st Semester',
-    submittedDate: '2024-12-26',
-    status: 'Graded',
-    score: 108,
-    maxScore: 120,
-    feedback: 'Excellent explanation of modulation.',
-    fileName: 'communication_systems.pdf'
-  },
-  {
-    id: 11,
-    assignmentId: 11,
-    studentName: 'Deepak Joshi',
-    studentId: 'MCS401',
-    subject: 'Cloud Computing',
-    program: 'M.Tech CSE',
-    year: '4th Year',
-    semester: '1st Semester',
-    submittedDate: '2025-01-28',
-    status: 'Submitted',
-    score: null,
-    maxScore: 150,
-    feedback: null,
-    fileName: 'cloud_security.docx'
-  },
-  {
-    id: 12,
-    assignmentId: 12,
-    studentName: 'Sonia Singh',
-    studentId: 'MCA401',
-    subject: 'Research Methodology',
-    program: 'B.Tech CSE',
-    year: '4th Year',
-    semester: '2nd Semester',
-    submittedDate: '2025-03-10',
-    status: 'Pending Review',
-    score: null,
-    maxScore: 100,
-    feedback: null,
-    fileName: 'research_proposal.pdf'
+    score: 48,
+    maxScore: 50,
+    feedback: 'Excellent implementation.',
+    fileName: 'c_programming.c'
   }
 ];
-
-const tabs = ['submissions', 'assignments'];
 
 function getStatusColor(status) {
   if (status === 'Submitted') return 'bg-blue-100 text-blue-800';
@@ -425,6 +243,8 @@ const Assignment = () => {
   const [editingAssignment, setEditingAssignment] = useState(null);
   const [viewingSubmission, setViewingSubmission] = useState(null);
   const [viewingAssignment, setViewingAssignment] = useState(null);
+  const [viewingAssignmentSubmissions, setViewingAssignmentSubmissions] = useState(null);
+  const [gradingSubmission, setGradingSubmission] = useState(null);
 
   const [assignments, setAssignments] = useState(assignmentsDemo);
   const [submissions, setSubmissions] = useState(submissionsDemo);
@@ -441,7 +261,6 @@ const Assignment = () => {
     questions: ''
   });
 
-  // Enhanced filtering with program filter
   const filteredSubmissions = submissions
     .filter(submission =>
       (!selectedSubject || submission.subject === selectedSubject) &&
@@ -460,6 +279,20 @@ const Assignment = () => {
       
       return a.subject.localeCompare(b.subject);
     });
+
+  const groupedSubmissions = filteredSubmissions.reduce((acc, submission) => {
+    const assignment = assignments.find(a => a.id === submission.assignmentId);
+    if (assignment) {
+      if (!acc[submission.assignmentId]) {
+        acc[submission.assignmentId] = {
+          assignment: assignment,
+          submissions: []
+        };
+      }
+      acc[submission.assignmentId].submissions.push(submission);
+    }
+    return acc;
+  }, {});
 
   const filteredAssignments = assignments
     .filter(assignment =>
@@ -525,16 +358,25 @@ const Assignment = () => {
     ));
   }
 
+  function handleViewAssignmentSubmissions(assignmentId) {
+    const assignment = assignments.find(a => a.id === assignmentId);
+    const assignmentSubmissions = submissions.filter(s => s.assignmentId === assignmentId);
+    setViewingAssignmentSubmissions({ assignment, submissions: assignmentSubmissions });
+  }
+
+  function handleDeleteAssignment(assignmentId) {
+    setAssignments(assignments.filter(a => a.id !== assignmentId));
+    setSubmissions(submissions.filter(s => s.assignmentId !== assignmentId));
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
-      {/* Top mobile bar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-blue-600 text-white">
         <h1 className="text-lg font-bold flex items-center gap-2">
           <Menu className="w-6 h-6 cursor-pointer" onClick={() => setShowSidebar(true)} /> Online Test Management
         </h1>
       </div>
 
-      {/* Side drawer filter for mobile */}
       {showSidebar && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex">
           <div className="bg-white dark:bg-slate-800 w-3/4 h-full p-6 flex flex-col gap-4">
@@ -591,7 +433,6 @@ const Assignment = () => {
       )}
 
       <div className="p-4 md:max-w-8xl mx-auto">
-        {/* Header - Updated to match the image */}
         <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 rounded-lg p-8 text-white mb-6">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-2">Assignment Management</h1>
@@ -599,57 +440,55 @@ const Assignment = () => {
           </div>
         </div>
 
-     {/* Filter Dropdowns Section - Updated for proper light/dark mode */}
-<div className="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-4 rounded-lg mb-6 shadow-sm">
-  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Year</label>
-      <select 
-        value={selectedYear} 
-        onChange={e => setSelectedYear(e.target.value)}
-        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
-      >
-        <option value="">All Years</option>
-        {years.map(y => <option key={y} value={y}>{y}</option>)}
-      </select>
-    </div>
-    <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester</label>
-      <select 
-        value={selectedSemester} 
-        onChange={e => setSelectedSemester(e.target.value)}
-        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
-      >
-        <option value="">All Semesters</option>
-        {semesters.map(se => <option key={se} value={se}>{se}</option>)}
-      </select>
-    </div>
-    <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Program</label>
-      <select 
-        value={selectedProgram} 
-        onChange={e => setSelectedProgram(e.target.value)}
-        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
-      >
-        <option value="">All Programs</option>
-        {programs.map(p => <option key={p} value={p}>{p}</option>)}
-      </select>
-    </div>
-    <div>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
-      <select 
-        value={selectedSubject} 
-        onChange={e => setSelectedSubject(e.target.value)}
-        className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
-      >
-        <option value="">All Subjects</option>
-        {subjects.map(s => <option key={s} value={s}>{s}</option>)}
-      </select>
-    </div>
-  </div>
-</div>
+        <div className="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-4 rounded-lg mb-6 shadow-sm">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Year</label>
+              <select 
+                value={selectedYear} 
+                onChange={e => setSelectedYear(e.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+              >
+                <option value="">All Years</option>
+                {years.map(y => <option key={y} value={y}>{y}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester</label>
+              <select 
+                value={selectedSemester} 
+                onChange={e => setSelectedSemester(e.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+              >
+                <option value="">All Semesters</option>
+                {semesters.map(se => <option key={se} value={se}>{se}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Program</label>
+              <select 
+                value={selectedProgram} 
+                onChange={e => setSelectedProgram(e.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+              >
+                <option value="">All Programs</option>
+                {programs.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+              <select 
+                value={selectedSubject} 
+                onChange={e => setSelectedSubject(e.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-white dark:bg-slate-600 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-500 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400"
+              >
+                <option value="">All Subjects</option>
+                {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          </div>
+        </div>
 
-        {/* Tabs */}
         <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
           <button
             onClick={() => setActiveTab('submissions')}
@@ -659,7 +498,7 @@ const Assignment = () => {
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
             }`}
           >
-            Test Submissions ({filteredSubmissions.length})
+            Test Submissions ({Object.keys(groupedSubmissions).length})
           </button>
           <button
             onClick={() => setActiveTab('assignments')}
@@ -673,50 +512,74 @@ const Assignment = () => {
           </button>
         </div>
 
-        {/* Content */}
         <div>
-          {/* Submissions with Program display */}
           {activeTab === 'submissions' && (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredSubmissions.map(submission => (
-                <div key={submission.id} className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-5 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <User className="w-5 h-5 text-blue-500" />
-                      <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{submission.studentName}</span>
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">ID: {submission.studentId}</div>
-                    <div className="grid grid-cols-1 gap-1 text-xs text-gray-600 dark:text-gray-300">
-                      <div><strong>Program:</strong> {submission.program}</div>
-                      <div><strong>Subject:</strong> {submission.subject}</div>
-                      <div><strong>Year:</strong> {submission.year}</div>
-                      <div><strong>Semester:</strong> {submission.semester}</div>
-                      <div><strong>Submitted:</strong> {submission.submittedDate}</div>
-                    </div>
-                    <div className="mt-2">
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(submission.status)}`}>
-                        {submission.status}
-                      </span>
-                    </div>
-                    {submission.score !== null && (
-                      <div className="mt-2 flex items-center gap-2">
-                        <Award className="w-4 h-4 text-yellow-500" />
-                        <span className="font-semibold text-blue-700 text-sm">Score: {submission.score}/{submission.maxScore}</span>
+            <div className="space-y-4">
+              {Object.entries(groupedSubmissions).map(([assignmentId, data]) => {
+                const totalSubmissions = data.submissions.length;
+                const gradedSubmissions = data.submissions.filter(s => s.status === 'Graded').length;
+                const avgScore = data.submissions.filter(s => s.score !== null).reduce((sum, s) => sum + (s.score / s.maxScore * 100), 0) / data.submissions.filter(s => s.score !== null).length || 0;
+                
+                return (
+                  <div key={assignmentId} className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-5">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">{data.assignment.title}</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-gray-600 dark:text-gray-300">
+                          <div><strong>Program:</strong> {data.assignment.program}</div>
+                          <div><strong>Subject:</strong> {data.assignment.subject}</div>
+                          <div><strong>Year:</strong> {data.assignment.year}</div>
+                          <div><strong>Semester:</strong> {data.assignment.semester}</div>
+                        </div>
                       </div>
-                    )}
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+                        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-1">
+                          <Users className="w-4 h-4" />
+                          <span className="text-xs font-medium">Total Submissions</span>
+                        </div>
+                        <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{totalSubmissions}</p>
+                      </div>
+                      
+                      <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3">
+                        <div className="flex items-center gap-2 text-green-600 dark:text-green-400 mb-1">
+                          <Award className="w-4 h-4" />
+                          <span className="text-xs font-medium">Graded</span>
+                        </div>
+                        <p className="text-2xl font-bold text-green-700 dark:text-green-300">{gradedSubmissions}</p>
+                      </div>
+                      
+                      <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-3">
+                        <div className="flex items-center gap-2 text-yellow-600 dark:text-yellow-400 mb-1">
+                          <FileText className="w-4 h-4" />
+                          <span className="text-xs font-medium">Pending</span>
+                        </div>
+                        <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{totalSubmissions - gradedSubmissions}</p>
+                      </div>
+                      
+                      <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
+                        <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-1">
+                          <Award className="w-4 h-4" />
+                          <span className="text-xs font-medium">Avg Score</span>
+                        </div>
+                        <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{avgScore.toFixed(1)}%</p>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={() => handleViewAssignmentSubmissions(parseInt(assignmentId))}
+                      className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2 text-sm font-medium transition-colors"
+                    >
+                      <Eye className="w-4 h-4" /> View All Submissions ({totalSubmissions})
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setViewingSubmission(submission)}
-                    className="mt-4 px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 flex items-center gap-2 text-sm"
-                  >
-                    <Eye className="w-4 h-4" /> View Details
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
-          {/* Assignments with Program display and Edit functionality */}
           {activeTab === 'assignments' && (
             <div>
               <div className="flex justify-between items-center mb-6">
@@ -758,103 +621,124 @@ const Assignment = () => {
                           <option value="">Subject</option>
                           {subjects.map(s => <option key={s} value={s}>{s}</option>)}
                         </select>
-                        <select 
-                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
-                          value={editingAssignment.year}
-                          onChange={e => setEditingAssignment({...editingAssignment, year: e.target.value})}
-                        >
-                          <option value="">Year</option>
-                          {years.map(y => <option key={y} value={y}>{y}</option>)}
-                        </select>
-                        <select 
-                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
-                          value={editingAssignment.semester}
-                          onChange={e => setEditingAssignment({...editingAssignment, semester: e.target.value})}
-                        >
-                          <option value="">Semester</option>
-                          {semesters.map(se => <option key={se} value={se}>{se}</option>)}
-                        </select>
-                        <input 
-                          type="date" 
-                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
-                          value={editingAssignment.dueDate}
-                          onChange={e => setEditingAssignment({...editingAssignment, dueDate: e.target.value})} 
-                        />
-                        <input 
-                          type="number" 
-                          className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
-                          value={editingAssignment.totalMarks}
-                          onChange={e => setEditingAssignment({...editingAssignment, totalMarks: parseInt(e.target.value)})}
-                          placeholder="Total Marks" 
-                        />
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <select 
+                            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                            value={editingAssignment.year}
+                            onChange={e => setEditingAssignment({...editingAssignment, year: e.target.value})}
+                          >
+                            <option value="">Year</option>
+                            {years.map(y => <option key={y} value={y}>{y}</option>)}
+                          </select>
+                          
+                          <select 
+                            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
+                            value={editingAssignment.semester}
+                            onChange={e => setEditingAssignment({...editingAssignment, semester: e.target.value})}
+                          >
+                            <option value="">Semester</option>
+                            {semesters.map(se => <option key={se} value={se}>{se}</option>)}
+                          </select>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <input 
+                            type="date" 
+                            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm" 
+                            value={editingAssignment.dueDate}
+                            onChange={e => setEditingAssignment({...editingAssignment, dueDate: e.target.value})}
+                          />
+                          
+                          <input 
+                            type="number" 
+                            className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm" 
+                            value={editingAssignment.totalMarks}
+                            onChange={e => setEditingAssignment({...editingAssignment, totalMarks: e.target.value})}
+                            placeholder="Marks"
+                          />
+                        </div>
+                        
                         <textarea 
                           className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm" 
-                          rows={2}
                           value={editingAssignment.description}
                           onChange={e => setEditingAssignment({...editingAssignment, description: e.target.value})}
                           placeholder="Description"
+                          rows={2}
                         />
+                        
                         <textarea 
                           className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm" 
-                          rows={3}
-                          value={editingAssignment.questions || ''}
+                          value={editingAssignment.questions}
                           onChange={e => setEditingAssignment({...editingAssignment, questions: e.target.value})}
-                          placeholder="Questions (optional)"
+                          placeholder="Questions"
+                          rows={3}
                         />
+                        
                         <div className="flex gap-2">
                           <button 
                             onClick={handleSaveEdit}
-                            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-1 text-sm"
+                            className="flex-1 px-2 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600 flex items-center justify-center gap-1"
                           >
-                            <Save className="w-4 h-4" /> Save
+                            <Save className="w-3 h-3" /> Save
                           </button>
                           <button 
                             onClick={() => setEditingAssignment(null)}
-                            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 flex items-center gap-1 text-sm"
+                            className="flex-1 px-2 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600 flex items-center justify-center gap-1"
                           >
-                            <X className="w-4 h-4" /> Cancel
+                            <X className="w-3 h-3" /> Cancel
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <>
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100">{assignment.title}</h3>
-                          <div className="flex gap-1">
+                      <div>
+                        <div className="flex justify-between items-start mb-3">
+                          <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm leading-tight">{assignment.title}</h3>
+                          <div className="flex gap-1 ml-2">
                             <button 
                               onClick={() => setViewingAssignment(assignment)}
-                              className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-1 text-xs"
+                              className="p-1 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
                             >
-                              <Eye className="w-3 h-3" /> View
+                              <Eye className="w-3 h-3" />
                             </button>
                             <button 
                               onClick={() => handleEditAssignment(assignment)}
-                              className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center gap-1 text-xs"
+                              className="p-1 text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
                             >
-                              <Edit className="w-3 h-3" /> Edit
+                              <Edit className="w-3 h-3" />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteAssignment(assignment.id)}
+                              className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+                            >
+                              <X className="w-3 h-3" />
                             </button>
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 gap-1 text-xs text-gray-700 dark:text-gray-300 mb-2">
-                          <div><strong>Program:</strong> {assignment.program}</div>
+                        
+                        <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
                           <div><strong>Subject:</strong> {assignment.subject}</div>
+                          <div><strong>Program:</strong> {assignment.program}</div>
                           <div><strong>Year:</strong> {assignment.year}</div>
                           <div><strong>Semester:</strong> {assignment.semester}</div>
-                          <div><strong>Due:</strong> {assignment.dueDate}</div>
-                        </div>
-                        <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">{assignment.description}</div>
-                        <div className="flex justify-between items-center mt-2">
-                          <div className="text-xs text-blue-600 font-medium">
-                            Total Marks: {assignment.totalMarks}
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            <span>{assignment.dueDate}</span>
                           </div>
-                          {assignment.questionPaper && (
-                            <div className="flex items-center gap-1 text-xs text-green-600">
-                              <File className="w-3 h-3" />
-                              <span>Has Paper</span>
-                            </div>
-                          )}
+                          <div className="flex items-center gap-1">
+                            <Award className="w-3 h-3" />
+                            <span>{assignment.totalMarks} marks</span>
+                          </div>
                         </div>
-                      </>
+                        
+                        <button
+                          onClick={() => handleViewAssignmentSubmissions(assignment.id)}
+                          className="w-full mt-3 px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 flex items-center justify-center gap-1"
+                        >
+                          <Users className="w-3 h-3" />
+                          View Submissions ({submissions.filter(s => s.assignmentId === assignment.id).length})
+                        </button>
+                      </div>
                     )}
                   </div>
                 ))}
@@ -864,266 +748,424 @@ const Assignment = () => {
         </div>
       </div>
 
-      {/* Add Assignment Modal - Updated with Program field */}
+      {/* Add Assignment Modal */}
       {showAddForm && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-md mx-auto max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Add New Test</h2>
-            <div className="space-y-3">
-              <input 
-                type="text" 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                value={newAssignment.title}
-                onChange={e => setNewAssignment({...newAssignment, title: e.target.value})}
-                placeholder="Test Title" 
-              />
-              
-              <select 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                value={newAssignment.program}
-                onChange={e => setNewAssignment({...newAssignment, program: e.target.value})}
-              >
-                <option value="">Select Program</option>
-                {programs.map(p => <option key={p} value={p}>{p}</option>)}
-              </select>
-              
-              <select 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                value={newAssignment.subject}
-                onChange={e => setNewAssignment({...newAssignment, subject: e.target.value})}
-              >
-                <option value="">Select Subject</option>
-                {subjects.map(s => <option key={s} value={s}>{s}</option>)}
-              </select>
-              <select 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                value={newAssignment.year}
-                onChange={e => setNewAssignment({...newAssignment, year: e.target.value})}
-              >
-                <option value="">Select Year</option>
-                {years.map(y => <option key={y} value={y}>{y}</option>)}
-              </select>
-              <select 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                value={newAssignment.semester}
-                onChange={e => setNewAssignment({...newAssignment, semester: e.target.value})}
-              >
-                <option value="">Select Semester</option>
-                {semesters.map(se => <option key={se} value={se}>{se}</option>)}
-              </select>
-              <input 
-                type="date" 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                value={newAssignment.dueDate}
-                onChange={e => setNewAssignment({...newAssignment, dueDate: e.target.value})} 
-                title="Due Date"
-              />
-              <input 
-                type="number" 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                value={newAssignment.totalMarks}
-                onChange={e => setNewAssignment({...newAssignment, totalMarks: e.target.value})}
-                placeholder="Total Marks" 
-                min="1"
-              />
-              <textarea 
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
-                rows={3}
-                value={newAssignment.description}
-                onChange={e => setNewAssignment({...newAssignment, description: e.target.value})}
-                placeholder="Test Description"
-              />
-              
-              {/* Question Paper Upload */}
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                  <Upload className="w-4 h-4" />
-                  Upload Question Paper (Optional)
-                </label>
-                <input 
-                  type="file" 
-                  accept=".pdf,.doc,.docx,.txt"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-gray-600 dark:file:text-gray-200"
-                  onChange={e => setNewAssignment({...newAssignment, questionPaper: e.target.files[0]})}
-                />
-                {newAssignment.questionPaper && (
-                  <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
-                    <File className="w-3 h-3" />
-                    Selected: {newAssignment.questionPaper.name}
-                  </p>
-                )}
-              </div>
-
-              {/* Questions Text Field */}
-              <div>
-                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  Test Questions (Optional)
-                </label>
-                <textarea 
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
-                  rows={5}
-                  value={newAssignment.questions}
-                  onChange={e => setNewAssignment({...newAssignment, questions: e.target.value})}
-                  placeholder="Enter questions here (one per line)&#10;Example:&#10;1. What is the capital of France?&#10;2. Explain the concept of inheritance in OOP.&#10;3. Calculate the derivative of f(x) = x² + 2x + 1"
-                />
-              </div>
-            </div>
-            
-            <div className="flex gap-3 mt-6 justify-end">
-              <button 
-                onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 flex items-center gap-2"
-              >
-                <X className="w-4 h-4" /> Cancel
-              </button>
-              <button 
-                onClick={handleAddAssignment}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2"
-                disabled={!newAssignment.title || !newAssignment.subject || !newAssignment.program || !newAssignment.year || !newAssignment.semester}
-              >
-                <Plus className="w-4 h-4" /> Add Test
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Assignment Details Modal - Updated to show Program */}
-      {viewingAssignment && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-2xl mx-auto max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                <FileText className="w-5 h-5" />
-                Test Details
-              </h2>
-              <button 
-                onClick={() => setViewingAssignment(null)} 
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Add New Test</h2>
+              <button onClick={() => setShowAddForm(false)} className="text-gray-500 hover:text-gray-700">
                 <X className="w-6 h-6" />
               </button>
             </div>
             
             <div className="space-y-4">
-              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">{viewingAssignment.title}</h3>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div><strong>Program:</strong> {viewingAssignment.program}</div>
-                  <div><strong>Subject:</strong> {viewingAssignment.subject}</div>
-                  <div><strong>Year:</strong> {viewingAssignment.year}</div>
-                  <div><strong>Semester:</strong> {viewingAssignment.semester}</div>
-                  <div><strong>Due Date:</strong> {viewingAssignment.dueDate}</div>
-                  <div><strong>Total Marks:</strong> {viewingAssignment.totalMarks}</div>
-                  <div><strong>Created:</strong> {viewingAssignment.createdDate}</div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
+                <input 
+                  type="text" 
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                  value={newAssignment.title}
+                  onChange={e => setNewAssignment({...newAssignment, title: e.target.value})}
+                  placeholder="Assignment title"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Program</label>
+                  <select 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    value={newAssignment.program}
+                    onChange={e => setNewAssignment({...newAssignment, program: e.target.value})}
+                  >
+                    <option value="">Select Program</option>
+                    {programs.map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+                  <select 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    value={newAssignment.subject}
+                    onChange={e => setNewAssignment({...newAssignment, subject: e.target.value})}
+                  >
+                    <option value="">Select Subject</option>
+                    {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
                 </div>
               </div>
-
-              {viewingAssignment.description && (
+              
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
-                    Description
-                  </h4>
-                  <p className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded p-3">
-                    {viewingAssignment.description}
-                  </p>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Year</label>
+                  <select 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    value={newAssignment.year}
+                    onChange={e => setNewAssignment({...newAssignment, year: e.target.value})}
+                  >
+                    <option value="">Select Year</option>
+                    {years.map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
                 </div>
-              )}
-
-              {viewingAssignment.questionPaper && (
+                
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
-                    <File className="w-4 h-4" />
-                    Question Paper
-                  </h4>
-                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
-                      <File className="w-4 h-4" />
-                      <span className="text-sm">{viewingAssignment.questionPaper}</span>
-                    </div>
-                    <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 text-sm underline">
-                      Download
-                    </button>
-                  </div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester</label>
+                  <select 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    value={newAssignment.semester}
+                    onChange={e => setNewAssignment({...newAssignment, semester: e.target.value})}
+                  >
+                    <option value="">Select Semester</option>
+                    {semesters.map(se => <option key={se} value={se}>{se}</option>)}
+                  </select>
                 </div>
-              )}
-
-              {viewingAssignment.questions && (
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
-                    Questions
-                  </h4>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded p-3">
-                    <pre className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap text-sm">
-                      {viewingAssignment.questions}
-                    </pre>
-                  </div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due Date</label>
+                  <input 
+                    type="date" 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                    value={newAssignment.dueDate}
+                    onChange={e => setNewAssignment({...newAssignment, dueDate: e.target.value})}
+                  />
                 </div>
-              )}
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Total Marks</label>
+                  <input 
+                    type="number" 
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                    value={newAssignment.totalMarks}
+                    onChange={e => setNewAssignment({...newAssignment, totalMarks: e.target.value})}
+                    placeholder="100"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+                <textarea 
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                  value={newAssignment.description}
+                  onChange={e => setNewAssignment({...newAssignment, description: e.target.value})}
+                  placeholder="Assignment description"
+                  rows={3}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Questions</label>
+                <textarea 
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                  value={newAssignment.questions}
+                  onChange={e => setNewAssignment({...newAssignment, questions: e.target.value})}
+                  placeholder="Enter questions (one per line)"
+                  rows={5}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Question Paper (Optional)</label>
+                <input 
+                  type="file" 
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                  onChange={e => setNewAssignment({...newAssignment, questionPaper: e.target.files[0]})}
+                  accept=".pdf,.doc,.docx"
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={handleAddAssignment}
+                className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center justify-center gap-2"
+              >
+                <Plus className="w-4 h-4" /> Create Test
+              </button>
+              <button
+                onClick={() => setShowAddForm(false)}
+                className="flex-1 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 flex items-center justify-center gap-2"
+              >
+                <X className="w-4 h-4" /> Cancel
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Submission Details Modal */}
-      {viewingSubmission && (
+      {/* View Assignment Details Modal */}
+      {viewingAssignment && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-md mx-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Submission Details</h2>
-              <button 
-                onClick={() => setViewingSubmission(null)} 
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Assignment Details</h2>
+              <button onClick={() => setViewingAssignment(null)} className="text-gray-500 hover:text-gray-700">
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-2 text-sm mb-2 text-gray-700 dark:text-gray-300">
+            
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{viewingAssignment.title}</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div><strong>Subject:</strong> {viewingAssignment.subject}</div>
+                  <div><strong>Program:</strong> {viewingAssignment.program}</div>
+                  <div><strong>Year:</strong> {viewingAssignment.year}</div>
+                  <div><strong>Semester:</strong> {viewingAssignment.semester}</div>
+                  <div><strong>Due Date:</strong> {viewingAssignment.dueDate}</div>
+                  <div><strong>Total Marks:</strong> {viewingAssignment.totalMarks}</div>
+                  <div><strong>Created:</strong> {viewingAssignment.createdDate}</div>
+                  {viewingAssignment.questionPaper && (
+                    <div><strong>Question Paper:</strong> {viewingAssignment.questionPaper}</div>
+                  )}
+                </div>
+              </div>
+              
+              {viewingAssignment.description && (
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Description</h4>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">{viewingAssignment.description}</p>
+                </div>
+              )}
+              
+              {viewingAssignment.questions && (
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Questions</h4>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                    <pre className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">{viewingAssignment.questions}</pre>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={() => handleViewAssignmentSubmissions(viewingAssignment.id)}
+                className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
+              >
+                <Users className="w-4 h-4" />
+                View Submissions ({submissions.filter(s => s.assignmentId === viewingAssignment.id).length})
+              </button>
+              <button
+                onClick={() => setViewingAssignment(null)}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Assignment Submissions Modal */}
+      {viewingAssignmentSubmissions && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Submissions for: {viewingAssignmentSubmissions.assignment.title}</h2>
+                <p className="text-gray-600 dark:text-gray-400">{viewingAssignmentSubmissions.assignment.subject} - {viewingAssignmentSubmissions.assignment.program}</p>
+              </div>
+              <button onClick={() => setViewingAssignmentSubmissions(null)} className="text-gray-500 hover:text-gray-700">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-gray-700">
+                    <th className="text-left py-2 px-3 font-medium text-gray-900 dark:text-gray-100">Student</th>
+                    <th className="text-left py-2 px-3 font-medium text-gray-900 dark:text-gray-100">ID</th>
+                    <th className="text-left py-2 px-3 font-medium text-gray-900 dark:text-gray-100">Submitted</th>
+                    <th className="text-left py-2 px-3 font-medium text-gray-900 dark:text-gray-100">Status</th>
+                    <th className="text-left py-2 px-3 font-medium text-gray-900 dark:text-gray-100">Score</th>
+                    <th className="text-left py-2 px-3 font-medium text-gray-900 dark:text-gray-100">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {viewingAssignmentSubmissions.submissions.map(submission => (
+                    <tr key={submission.id} className="border-b border-gray-100 dark:border-gray-700">
+                      <td className="py-2 px-3 text-gray-900 dark:text-gray-100">{submission.studentName}</td>
+                      <td className="py-2 px-3 text-gray-600 dark:text-gray-400">{submission.studentId}</td>
+                      <td className="py-2 px-3 text-gray-600 dark:text-gray-400">{submission.submittedDate}</td>
+                      <td className="py-2 px-3">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(submission.status)}`}>
+                          {submission.status}
+                        </span>
+                      </td>
+                      <td className="py-2 px-3 text-gray-900 dark:text-gray-100">
+                        {submission.score !== null ? `${submission.score}/${submission.maxScore}` : '-'}
+                      </td>
+                      <td className="py-2 px-3">
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => setViewingSubmission(submission)}
+                            className="p-1 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => setGradingSubmission(submission)}
+                            className="p-1 text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => setViewingAssignmentSubmissions(null)}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Submission Details Modal */}
+      {viewingSubmission && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Submission Details</h2>
+              <button onClick={() => setViewingSubmission(null)} className="text-gray-500 hover:text-gray-700">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div><strong>Student:</strong> {viewingSubmission.studentName}</div>
-                <div><strong>ID:</strong> {viewingSubmission.studentId}</div>
-                <div><strong>Program:</strong> {viewingSubmission.program}</div>
+                <div><strong>Student ID:</strong> {viewingSubmission.studentId}</div>
                 <div><strong>Subject:</strong> {viewingSubmission.subject}</div>
-                <div><strong>File:</strong> {viewingSubmission.fileName}</div>
+                <div><strong>Program:</strong> {viewingSubmission.program}</div>
+                <div><strong>Submitted:</strong> {viewingSubmission.submittedDate}</div>
+                <div><strong>Status:</strong> 
+                  <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(viewingSubmission.status)}`}>
+                    {viewingSubmission.status}
+                  </span>
+                </div>
               </div>
+              
+              {viewingSubmission.fileName && (
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                  <div className="flex items-center gap-2">
+                    <File className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{viewingSubmission.fileName}</span>
+                  </div>
+                </div>
+              )}
+              
+              {viewingSubmission.score !== null && (
+                <div>
+                  <strong>Score:</strong> {viewingSubmission.score}/{viewingSubmission.maxScore} ({((viewingSubmission.score / viewingSubmission.maxScore) * 100).toFixed(1)}%)
+                </div>
+              )}
+              
+              {viewingSubmission.feedback && (
+                <div>
+                  <strong>Feedback:</strong>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mt-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{viewingSubmission.feedback}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={() => {
+                  setViewingSubmission(null);
+                  setGradingSubmission(viewingSubmission);
+                }}
+                className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center justify-center gap-2"
+              >
+                <Edit className="w-4 h-4" /> Grade Submission
+              </button>
+              <button
+                onClick={() => setViewingSubmission(null)}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Grade Submission Modal */}
+      {gradingSubmission && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Grade Submission</h2>
+              <button onClick={() => setGradingSubmission(null)} className="text-gray-500 hover:text-gray-700">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Score</label>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                  <strong>Student:</strong> {gradingSubmission.studentName} ({gradingSubmission.studentId})
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Score (out of {gradingSubmission.maxScore})
+                </label>
                 <input 
-                  type="number"
-                  defaultValue={viewingSubmission.score || ''}
-                  max={viewingSubmission.maxScore}
-                  className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                  placeholder={`Enter score out of ${viewingSubmission.maxScore}`}
-                  onBlur={e => {
-                    const score = parseInt(e.target.value);
-                    const feedback = document.getElementById('feedback-textarea').value;
-                    if (score >= 0 && score <= viewingSubmission.maxScore) {
-                      handleScoreUpdate(viewingSubmission.id, score, feedback);
-                    }
-                  }} 
+                  type="number" 
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                  defaultValue={gradingSubmission.score || ''}
+                  min="0"
+                  max={gradingSubmission.maxScore}
+                  onChange={e => setGradingSubmission({...gradingSubmission, score: parseInt(e.target.value) || 0})}
                 />
               </div>
+              
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Feedback</label>
-                <textarea
-                  id="feedback-textarea"
-                  defaultValue={viewingSubmission.feedback}
-                  className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                  rows="3"
-                  placeholder="Feedback for the student"
-                  onBlur={e => {
-                    const feedback = e.target.value;
-                    const scoreInput = document.querySelector('input[type="number"]');
-                    const score = parseInt(scoreInput.value);
-                    if (!isNaN(score) && score >= 0 && score <= viewingSubmission.maxScore) {
-                      handleScoreUpdate(viewingSubmission.id, score, feedback);
-                    }
-                  }}
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Feedback</label>
+                <textarea 
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
+                  defaultValue={gradingSubmission.feedback || ''}
+                  onChange={e => setGradingSubmission({...gradingSubmission, feedback: e.target.value})}
+                  placeholder="Enter feedback for the student"
+                  rows={4}
                 />
               </div>
+            </div>
+            
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={() => {
+                  handleScoreUpdate(gradingSubmission.id, gradingSubmission.score, gradingSubmission.feedback);
+                  setGradingSubmission(null);
+                }}
+                className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" /> Save Grade
+              </button>
+              <button
+                onClick={() => setGradingSubmission(null)}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

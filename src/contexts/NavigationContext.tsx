@@ -85,16 +85,23 @@ const SIDEBAR_ITEMS = {
     ],
     'Master Admin': [
       { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
-      { name: 'Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
+      { 
+        name: 'Infrastructure', 
+        path: '/home', 
+        icon: 'Settings',
+        children: [
+          { name: 'Campus Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
+      { name: 'Hostel Infrastructure', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
+        ]
+      },
+
       { name: 'Courses ',path:'/master/home/data-management', icon:'Database'   },
       { name: 'Timetable', path: '/master/create/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Mail' },
-      { name: 'Faculty leave Configure', path: '/master/faculty/leave-configure ', icon: 'Calendar' },
+      { name: 'Employee leave Configure', path: '/master/faculty/leave-configure', icon: 'Users' },
       { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Calendar' },
       {name:'Scholarships', path:'/master/scholarship-registration', icon:'IndianRupee'},
       {name:'Fee Management', path:'/master/fee-management', icon:'DollarSign'},
-      { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
-      { name: 'Events', path: '/master/home/events', icon: 'Calendar' },
    
     ],
     'College Secretary': [
@@ -1012,15 +1019,9 @@ const SIDEBAR_ITEMS = {
     ],
     'Hostel Incharge': [
     { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
-    { 
-      name: 'Hostel Setup', 
-      path: '/hostel/setup', 
-      icon: 'Settings',
-      children: [
-        { name: 'Buildings & Blocks', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
-        { name: 'Rules & Policies', path: '/hostel/setup/rules', icon: 'FileText' }
-      ]
-    },
+    
+        { name: 'Rules & Policies', path: '/hostel/setup/rules', icon: 'FileText' },
+      
     { 
       name: 'Occupancy & Rooms', 
       path: '/hostel/rooms', 
