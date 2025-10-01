@@ -117,6 +117,12 @@ export default function BlockManagementCards() {
   return (
     <div className="">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+        <div>
+                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                                Define Infrastructure
+                            </h1>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2">Create and manage the Blocks and Rooms available in the campus.</p>
+                        </div>
         <h1 className="text-3xl font-bold text-primary-800 dark:text-gray-100"></h1>
         <button onClick={openAddBlock} className="bg-primary-600 hover:bg-primary-700 dark:bg-primary-800 text-white rounded px-4 py-2 shadow transition flex items-center gap-2" type="button"><Plus size={18} /> Add Block</button>
       </div>
