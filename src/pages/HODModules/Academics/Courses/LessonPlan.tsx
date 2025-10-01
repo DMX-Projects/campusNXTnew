@@ -59,7 +59,7 @@ const initialLessonPlans: LessonPlan[] = [
     totalPlannedClasses: 48,
     topics: [
       {
-        id: '1',
+        id: '1-1',
         slNo: 1,
         topic: 'Introduction to Data Structures: Arrays, Linked Lists, and their Operations',
         unit: 1,
@@ -67,7 +67,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '2',
+        id: '1-2',
         slNo: 2,
         topic: 'Stack Operations: Push, Pop, and Applications',
         unit: 1,
@@ -75,7 +75,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lab'
       },
       {
-        id: '3',
+        id: '1-3',
         slNo: 3,
         topic: 'Queue Implementation and Circular Queue',
         unit: 1,
@@ -83,7 +83,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '4',
+        id: '1-4',
         slNo: 4,
         topic: 'Binary Trees and Tree Traversals',
         unit: 2,
@@ -91,7 +91,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '5',
+        id: '1-5',
         slNo: 5,
         topic: 'Binary Search Trees and AVL Trees',
         unit: 2,
@@ -99,7 +99,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lab'
       },
       {
-        id: '6',
+        id: '1-6',
         slNo: 6,
         topic: 'Graph Representation and BFS/DFS Algorithms',
         unit: 3,
@@ -123,7 +123,7 @@ const initialLessonPlans: LessonPlan[] = [
     totalPlannedClasses: 36,
     topics: [
       {
-        id: '7',
+        id: '2-1',
         slNo: 1,
         topic: 'Introduction to Database Systems and ER Model',
         unit: 1,
@@ -131,7 +131,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '8',
+        id: '2-2',
         slNo: 2,
         topic: 'Relational Model and Normalization Techniques',
         unit: 1,
@@ -139,7 +139,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lab'
       },
       {
-        id: '9',
+        id: '2-3',
         slNo: 3,
         topic: 'SQL Queries and Database Design',
         unit: 2,
@@ -163,7 +163,7 @@ const initialLessonPlans: LessonPlan[] = [
     totalPlannedClasses: 36,
     topics: [
       {
-        id: '10',
+        id: '3-1',
         slNo: 1,
         topic: 'Network Models: OSI and TCP/IP Reference Models',
         unit: 1,
@@ -171,7 +171,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '11',
+        id: '3-2',
         slNo: 2,
         topic: 'Data Link Layer Protocols and Error Detection',
         unit: 1,
@@ -179,7 +179,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '12',
+        id: '3-3',
         slNo: 3,
         topic: 'Network Layer: Routing Algorithms and IP Protocol',
         unit: 2,
@@ -203,7 +203,7 @@ const initialLessonPlans: LessonPlan[] = [
     totalPlannedClasses: 48,
     topics: [
       {
-        id: '13',
+        id: '4-1',
         slNo: 1,
         topic: 'Introduction to Operating Systems and System Calls',
         unit: 1,
@@ -211,7 +211,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '14',
+        id: '4-2',
         slNo: 2,
         topic: 'Process Management and CPU Scheduling',
         unit: 1,
@@ -219,7 +219,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lab'
       },
       {
-        id: '15',
+        id: '4-3',
         slNo: 3,
         topic: 'Memory Management and Virtual Memory',
         unit: 2,
@@ -243,7 +243,7 @@ const initialLessonPlans: LessonPlan[] = [
     totalPlannedClasses: 36,
     topics: [
       {
-        id: '16',
+        id: '5-1',
         slNo: 1,
         topic: 'Introduction to Machine Learning and Types of Learning',
         unit: 1,
@@ -251,7 +251,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '17',
+        id: '5-2',
         slNo: 2,
         topic: 'Supervised Learning: Linear and Logistic Regression',
         unit: 1,
@@ -259,7 +259,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lab'
       },
       {
-        id: '18',
+        id: '5-3',
         slNo: 3,
         topic: 'Decision Trees and Random Forest Algorithms',
         unit: 2,
@@ -283,7 +283,7 @@ const initialLessonPlans: LessonPlan[] = [
     totalPlannedClasses: 36,
     topics: [
       {
-        id: '19',
+        id: '6-1',
         slNo: 1,
         topic: 'Software Development Life Cycle Models',
         unit: 1,
@@ -291,7 +291,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lecture'
       },
       {
-        id: '20',
+        id: '6-2',
         slNo: 2,
         topic: 'Requirements Engineering and Analysis',
         unit: 1,
@@ -299,7 +299,7 @@ const initialLessonPlans: LessonPlan[] = [
         modeOfTeaching: 'Lab'
       },
       {
-        id: '21',
+        id: '6-3',
         slNo: 3,
         topic: 'Software Design Patterns and Architecture',
         unit: 2,
@@ -347,6 +347,7 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
   const [selectedFaculty, setSelectedFaculty] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
   // Get unique values for filter dropdowns
@@ -361,6 +362,10 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
   const uniqueYears = useMemo(() => {
     return Array.from(new Set(lessonPlans.map(plan => plan.courseYear))).sort();
   }, [lessonPlans]);
+    
+  const uniqueSemesters = useMemo(() => {
+    return Array.from(new Set(lessonPlans.map(plan => plan.semester))).sort();
+  }, [lessonPlans]);
 
   // Filtered lesson plans
   const filteredLessonPlans = useMemo(() => {
@@ -373,10 +378,11 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
       const matchesFaculty = selectedFaculty === '' || plan.facultyName === selectedFaculty;
       const matchesSubject = selectedSubject === '' || plan.courseName === selectedSubject;
       const matchesYear = selectedYear === '' || plan.courseYear === selectedYear;
+      const matchesSemester = selectedSemester === '' || plan.semester === selectedSemester;
 
-      return matchesSearch && matchesFaculty && matchesSubject && matchesYear;
+      return matchesSearch && matchesFaculty && matchesSubject && matchesYear && matchesSemester;
     });
-  }, [lessonPlans, searchTerm, selectedFaculty, selectedSubject, selectedYear]);
+  }, [lessonPlans, searchTerm, selectedFaculty, selectedSubject, selectedYear, selectedSemester]);
 
   // Clear all filters
   const clearFilters = () => {
@@ -384,6 +390,7 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
     setSelectedFaculty('');
     setSelectedSubject('');
     setSelectedYear('');
+    setSelectedSemester('');
   };
 
   const themeClasses = isDarkMode 
@@ -456,7 +463,8 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
       academicPeriod: plan.academicPeriod,
       classesPerWeek: plan.classesPerWeek,
       totalPlannedClasses: plan.totalPlannedClasses,
-      topics: plan.topics.map(({ id, ...topic }) => topic)
+      // Map existing topics for form, omitting the unique ID for re-creation/updates
+      topics: plan.topics.map(({ id, ...topic }) => topic) 
     });
     setIsEditing(true);
     setCurrentPlanId(plan.id);
@@ -491,6 +499,7 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
           ? {
               ...plan,
               ...formData,
+              // Re-add unique IDs to topics
               topics: formData.topics.map((topic, index) => ({
                 ...topic,
                 id: `${currentPlanId}-${index}`
@@ -501,12 +510,13 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
       ));
     } else {
       // Add new plan
+      const newId = Date.now().toString();
       const newPlan: LessonPlan = {
-        id: Date.now().toString(),
+        id: newId,
         ...formData,
         topics: formData.topics.map((topic, index) => ({
           ...topic,
-          id: `${Date.now()}-${index}`
+          id: `${newId}-${index}` // Assign stable topic ID based on plan ID
         })),
         createdAt: new Date(),
         updatedAt: new Date()
@@ -518,7 +528,7 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
 
   // Delete lesson plan
   const deleteLessonPlan = (id: string) => {
-    if (confirm('Are you sure you want to delete this lesson plan?')) {
+    if (window.confirm('Are you sure you want to delete this lesson plan?')) {
       setLessonPlans(prev => prev.filter(plan => plan.id !== id));
     }
   };
@@ -540,16 +550,21 @@ Classes per Week: ${plan.classesPerWeek}
 Total Planned Classes: ${plan.totalPlannedClasses}
 
 Topics to be Covered:
+------------------------------------------------------------------------------------------------
+SL. No | Topic                                 | Unit | Hours | Mode of Teaching
+------------------------------------------------------------------------------------------------
 ${plan.topics.map(topic => 
-  `${topic.slNo}. ${topic.topic} | Unit: ${topic.unit} | Hours: ${topic.hoursRequired} | Mode: ${topic.modeOfTeaching}`
+  `${String(topic.slNo).padEnd(6)} | ${topic.topic.padEnd(35).substring(0, 35)} | ${String(topic.unit).padEnd(4)} | ${String(topic.hoursRequired).padEnd(5)} | ${topic.modeOfTeaching}`
 ).join('\n')}
+------------------------------------------------------------------------------------------------
 
-Total Hours: ${plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0)}
+Total Hours Planned: ${plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0)}
 
 Generated on: ${new Date().toLocaleDateString()}
 HOD Approval: ________________
     `;
 
+    // Functionality to create and trigger file download
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -560,14 +575,122 @@ HOD Approval: ________________
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+    
+  // Helper component for View Modal details (inlined)
+  const PlanDetailItem = ({ icon: Icon, label, value }) => {
+      const textSecondary = isDarkMode ? 'text-gray-300' : 'text-gray-600';
+      return (
+          <div className="flex items-start">
+              <Icon size={18} className={`mr-3 flex-shrink-0 text-blue-500`} />
+              <div>
+                  <p className={`font-medium ${textSecondary}`}>{label}</p>
+                  <p className="font-semibold">{value}</p>
+              </div>
+          </div>
+      );
+  };
 
+  // View Modal Component (inlined)
+  const LessonPlanViewModal = ({ plan, closeModal, downloadPlan, modalClasses }) => {
+    
+    // Calculate total hours for display
+    const totalHours = plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0);
+    
+    // Define classes based on mode for sub-elements
+    const textPrimary = isDarkMode ? 'text-white' : 'text-gray-900';
+    const borderClass = isDarkMode ? 'border-gray-700' : 'border-gray-200';
+    const tableHeaderClass = isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700';
+    const tableRowClass = isDarkMode ? 'even:bg-gray-800 odd:bg-gray-900/50' : 'even:bg-gray-50 odd:bg-white';
+    const cardColor = isDarkMode ? 'bg-gray-700' : 'bg-gray-100';
+
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className={`rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl ${modalClasses}`}>
+                {/* Header */}
+                <div className={`p-4 md:p-6 border-b ${borderClass} flex justify-between items-center sticky top-0 ${modalClasses}`}>
+                    <h2 className="text-xl font-semibold flex items-center gap-2">
+                        <FileText size={24} className="text-blue-500" />
+                        Lesson Plan: <span className="font-mono text-base">{plan.courseCode}</span>
+                    </h2>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => downloadPlan(plan)}
+                            className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-1 transition-colors shadow-md"
+                        >
+                            <Download size={16} /> Download
+                        </button>
+                        <button 
+                            onClick={closeModal} 
+                            className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-400'}`}
+                        >
+                            <X size={24} />
+                        </button>
+                    </div>
+                </div>
+
+                <div className="p-4 md:p-6">
+                    <div className={`p-4 rounded-lg shadow-inner mb-6 ${cardColor}`}>
+                        <h3 className={`text-lg font-bold mb-3 ${textPrimary}`}>{plan.courseName}</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                            <PlanDetailItem icon={User} label="Faculty" value={plan.facultyName} />
+                            <PlanDetailItem icon={GraduationCap} label="Program" value={plan.programName} />
+                            <PlanDetailItem icon={Calendar} label="Academic Period" value={plan.academicPeriod} />
+                            <PlanDetailItem icon={Clock} label="Total Hours" value={`${totalHours} hrs`} />
+                            <PlanDetailItem icon={Calendar} label="Year/Sem" value={`${plan.courseYear} / ${plan.semester}`} />
+                            <PlanDetailItem icon={Users} label="Classes/Week" value={`${plan.classesPerWeek}`} />
+                            <PlanDetailItem icon={Calendar} label="Last Updated" value={new Date(plan.updatedAt).toLocaleDateString()} />
+                        </div>
+                    </div>
+
+                    <h3 className={`text-lg font-bold mt-8 mb-4 border-b pb-2 ${borderClass} ${textPrimary}`}>Topic Breakdown ({plan.topics.length} topics)</h3>
+
+                    <div className="overflow-x-auto rounded-lg border">
+                        <table className={`min-w-full divide-y ${borderClass}`}>
+                            <thead className={tableHeaderClass}>
+                                <tr>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-1/12">SL. No</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-5/12">Topic</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-1/12">Unit</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-2/12">Hours</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-3/12">Mode</th>
+                                </tr>
+                            </thead>
+                            <tbody className={`divide-y ${borderClass} text-sm ${textPrimary}`}>
+                                {plan.topics.map((topic, index) => (
+                                    <tr key={topic.id || index} className={tableRowClass}>
+                                        <td className="px-6 py-4 whitespace-nowrap">{topic.slNo}</td>
+                                        <td className="px-6 py-4">{topic.topic}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{topic.unit}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">{topic.hoursRequired}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                                topic.modeOfTeaching === 'Lecture' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' :
+                                                topic.modeOfTeaching === 'Lab' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' :
+                                                'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200'
+                                            }`}>
+                                                {topic.modeOfTeaching}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+  };
+    
   return (
     <div className={`p-4 md:p-6 min-h-screen transition-colors duration-200 ${themeClasses}`}>
       {/* Header */}
       <div className="mb-6 md:mb-8">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2"> Lesson Plan Management</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2"></h1>
+            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}></p>
           </div>
           <button
             onClick={openAddModal}
@@ -605,12 +728,12 @@ HOD Approval: ________________
                 isDarkMode 
                   ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
+              } ${showFilters ? 'ring-2 ring-blue-500' : ''}`}
             >
               <Filter size={16} />
               Filters
             </button>
-            {(selectedFaculty || selectedSubject || selectedYear) && (
+            {(selectedFaculty || selectedSubject || selectedYear || selectedSemester) && (
               <button
                 onClick={clearFilters}
                 className="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200"
@@ -623,26 +746,10 @@ HOD Approval: ________________
 
         {/* Filter Dropdowns */}
         {showFilters && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                <Users size={16} className="inline mr-1" />
-                Program
-              </label>
-              <select
-                value={selectedFaculty}
-                onChange={(e) => setSelectedFaculty(e.target.value)}
-                className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-              >
-                <option value="">All Programs</option>
-                {uniqueFaculties.map(faculty => (
-                  <option key={faculty} value={faculty}>{faculty}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                <Users size={16} className="inline mr-1" />
+                <User size={16} className="inline mr-1" />
                 Faculty
               </label>
               <select
@@ -693,28 +800,29 @@ HOD Approval: ________________
             <div>
               <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
                 <GraduationCap size={16} className="inline mr-1" />
-                Semster
+                Semester
               </label>
               <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
+                value={selectedSemester}
+                onChange={(e) => setSelectedSemester(e.target.value)}
                 className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
               >
-                <option value="">All Semsters</option>
-                {uniqueYears.map(year => (
-                  <option key={year} value={year}>{year}</option>
+                <option value="">All Semesters</option>
+                {uniqueSemesters.map(semester => (
+                  <option key={semester} value={semester}>{semester}</option>
                 ))}
               </select>
             </div>
           </div>
         )}
-
-        {/* Results Summary */}
         
+        <p className={`text-sm mt-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Showing {filteredLessonPlans.length} of {lessonPlans.length} total lesson plans.
+        </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
         <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
           <div className="flex items-center">
             <FileText className="h-6 md:h-8 w-6 md:w-8 text-blue-600" />
@@ -731,7 +839,7 @@ HOD Approval: ________________
             <BookOpen className="h-6 md:h-8 w-6 md:w-8 text-green-600" />
             <div className="ml-3 md:ml-4">
               <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                CSE Courses
+                Unique Courses
               </p>
               <p className="text-xl md:text-2xl font-bold">
                 {new Set(filteredLessonPlans.map(p => p.courseCode)).size}
@@ -744,7 +852,7 @@ HOD Approval: ________________
             <User className="h-6 md:h-8 w-6 md:w-8 text-purple-600" />
             <div className="ml-3 md:ml-4">
               <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                Faculty
+                Unique Faculty
               </p>
               <p className="text-xl md:text-2xl font-bold">
                 {new Set(filteredLessonPlans.map(p => p.facultyName)).size}
@@ -829,19 +937,19 @@ HOD Approval: ________________
 
                 <div className="border-t pt-4 dark:border-gray-600">
                   <p className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Topics: {plan.topics.length}
+                    Units: {new Set(plan.topics.map(t => t.unit)).size}
                   </p>
                   <div className="flex flex-wrap gap-1">
-                    {plan.topics.slice(0, 3).map(topic => (
-                      <span key={topic.id} className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs rounded">
-                        Unit {topic.unit}
+                    {Array.from(new Set(plan.topics.map(t => t.unit))).slice(0, 4).map(unit => (
+                      <span key={unit} className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs rounded">
+                        Unit {unit}
                       </span>
                     ))}
-                    {plan.topics.length > 3 && (
+                    {Array.from(new Set(plan.topics.map(t => t.unit))).length > 4 && (
                       <span className={`px-2 py-1 text-xs rounded ${
                         isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
                       }`}>
-                        +{plan.topics.length - 3} more
+                        +{Array.from(new Set(plan.topics.map(t => t.unit))).length - 4} more
                       </span>
                     )}
                   </div>
@@ -942,7 +1050,6 @@ HOD Approval: ________________
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                   />
                 </div>
-                
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
                     isDarkMode ? 'text-gray-200' : 'text-gray-700'
@@ -955,10 +1062,7 @@ HOD Approval: ________________
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                   >
                     <option value="">Select Year</option>
-                    <option value="FIRST">First</option>
-                    <option value="SECOND">Second</option>
-                    <option value="THIRD">Third</option>
-                    <option value="FOURTH">Fourth</option>
+                    {['FIRST', 'SECOND', 'THIRD', 'FOURTH'].map(year => <option key={year} value={year}>{year}</option>)}
                   </select>
                 </div>
                 <div>
@@ -967,21 +1071,13 @@ HOD Approval: ________________
                   }`}>
                     Semester
                   </label>
-                  <select
+                  <input
+                    type="text"
                     value={formData.semester}
                     onChange={(e) => handleFormChange('semester', e.target.value)}
+                    placeholder="e.g., 3rd or V"
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-                  >
-                    <option value="">Select Semester</option>
-                    <option value="1st">1st</option>
-                    <option value="2nd">2nd</option>
-                    <option value="3rd">3rd</option>
-                    <option value="4th">4th</option>
-                    <option value="5th">5th</option>
-                    <option value="6th">6th</option>
-                    <option value="7th">7th</option>
-                    <option value="8th">8th</option>
-                  </select>
+                  />
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
@@ -1005,9 +1101,9 @@ HOD Approval: ________________
                   </label>
                   <input
                     type="number"
-                    value={formData.classesPerWeek}
-                    onChange={(e) => handleFormChange('classesPerWeek', parseInt(e.target.value))}
-                    min="1"
+                    value={formData.classesPerWeek || ''}
+                    onChange={(e) => handleFormChange('classesPerWeek', Number(e.target.value))}
+                    min="0"
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                   />
                 </div>
@@ -1019,320 +1115,132 @@ HOD Approval: ________________
                   </label>
                   <input
                     type="number"
-                    value={formData.totalPlannedClasses}
-                    onChange={(e) => handleFormChange('totalPlannedClasses', parseInt(e.target.value))}
-                    min="1"
+                    value={formData.totalPlannedClasses || ''}
+                    onChange={(e) => handleFormChange('totalPlannedClasses', Number(e.target.value))}
+                    min="0"
                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
                   />
                 </div>
               </div>
 
-              {/* Topics Section */}
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium">Topics to be Covered</h3>
-                  <button
-                    onClick={addTopic}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
-                  >
-                    <Plus size={16} />
-                    Add Topic
-                  </button>
-                </div>
+              {/* Topic Details Section */}
+              <h3 className="text-lg font-semibold border-t pt-4 mt-6 mb-4 flex items-center gap-2">
+                <BookOpen size={20} />
+                Topics & Hours
+              </h3>
+              
+              <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
+                {formData.topics.map((topic, index) => (
+                  <div key={index} className={`p-4 rounded-lg border ${cardClasses} shadow-sm`}>
+                    <div className="flex justify-between items-center mb-3">
+                      <h4 className="font-medium">Topic {topic.slNo}</h4>
+                      <button 
+                        onClick={() => removeTopic(index)}
+                        className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-full transition-colors"
+                        title="Remove Topic"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      {/* Topic Description */}
+                      <div className="md:col-span-4">
+                        <label className="block text-xs font-medium mb-1">Description</label>
+                        <input
+                          type="text"
+                          value={topic.topic}
+                          onChange={(e) => handleTopicChange(index, 'topic', e.target.value)}
+                          className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                          placeholder="Topic Name"
+                        />
+                      </div>
+                      
+                      {/* Unit */}
+                      <div>
+                        <label className="block text-xs font-medium mb-1">Unit</label>
+                        <input
+                          type="number"
+                          value={topic.unit}
+                          onChange={(e) => handleTopicChange(index, 'unit', Number(e.target.value))}
+                          min="1"
+                          className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                        />
+                      </div>
+                      
+                      {/* Hours Required */}
+                      <div>
+                        <label className="block text-xs font-medium mb-1">Hours</label>
+                        <input
+                          type="number"
+                          value={topic.hoursRequired}
+                          onChange={(e) => handleTopicChange(index, 'hoursRequired', Number(e.target.value))}
+                          min="1"
+                          className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                        />
+                      </div>
 
-                <div className="space-y-4">
-                  {formData.topics.map((topic, index) => (
-                    <div key={index} className={`border rounded-lg p-4 ${
-                      isDarkMode ? 'border-gray-600' : 'border-gray-200'
-                    }`}>
-                      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <div>
-                          <label className={`block text-sm font-medium mb-1 ${
-                            isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                          }`}>
-                            Sl No.
-                          </label>
-                          <input
-                            type="number"
-                            value={topic.slNo}
-                            onChange={(e) => handleTopicChange(index, 'slNo', parseInt(e.target.value))}
-                            className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <label className={`block text-sm font-medium mb-1 ${
-                            isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                          }`}>
-                            Topic
-                          </label>
-                          <textarea
-                            value={topic.topic}
-                            onChange={(e) => handleTopicChange(index, 'topic', e.target.value)}
-                            rows={2}
-                            placeholder="Enter topic description..."
-                            className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-                          />
-                        </div>
-                        <div>
-                          <label className={`block text-sm font-medium mb-1 ${
-                            isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                          }`}>
-                            Unit
-                          </label>
-                          <input
-                            type="number"
-                            value={topic.unit}
-                            onChange={(e) => handleTopicChange(index, 'unit', parseInt(e.target.value))}
-                            min="1"
-                            className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-                          />
-                        </div>
-                        <div>
-                          <label className={`block text-sm font-medium mb-1 ${
-                            isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                          }`}>
-                            Hours
-                          </label>
-                          <input
-                            type="number"
-                            value={topic.hoursRequired}
-                            onChange={(e) => handleTopicChange(index, 'hoursRequired', parseInt(e.target.value))}
-                            min="1"
-                            className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-                          />
-                        </div>
-                        <div>
-                          <label className={`block text-sm font-medium mb-1 ${
-                            isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                          }`}>
-                            Mode of Teaching
-                          </label>
-                          <select
-                            value={topic.modeOfTeaching}
-                            onChange={(e) => handleTopicChange(index, 'modeOfTeaching', e.target.value)}
-                            className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
-                          >
-                            <option value="Lecture">Lecture</option>
-                            <option value="Lab">Lab</option>
-                          </select>
-                        </div>
+                      {/* Mode of Teaching */}
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-medium mb-1">Mode of Teaching</label>
+                        <select
+                          value={topic.modeOfTeaching}
+                          onChange={(e) => handleTopicChange(index, 'modeOfTeaching', e.target.value)}
+                          className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                        >
+                          <option value="Lecture">Lecture</option>
+                          <option value="Lab">Lab</option>
+                          <option value="Seminar">Seminar</option>
+                          <option value="Tutorial">Tutorial</option>
+                        </select>
                       </div>
-                      {formData.topics.length > 1 && (
-                        <div className="mt-2 flex justify-end">
-                          <button
-                            onClick={() => removeTopic(index)}
-                            className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 flex items-center gap-1 text-sm"
-                          >
-                            <Trash2 size={16} />
-                            Remove
-                          </button>
-                        </div>
-                      )}
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Form Actions */}
-              <div className="flex flex-col sm:flex-row justify-end gap-4">
-                <button
-                  onClick={closeModal}
-                  className={`px-6 py-2 border rounded-lg transition-colors duration-200 ${
-                    isDarkMode 
-                      ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={saveLessonPlan}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200"
-                >
-                  <Save size={16} />
-                  {isEditing ? 'Update' : 'Save'} Lesson Plan
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* View Modal */}
-      {isViewModalOpen && viewingPlan && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className={`rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto ${modalClasses}`}>
-            <div className={`p-4 md:p-6 border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Lesson Plan Details</h2>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => downloadLessonPlan(viewingPlan)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
-                  >
-                    <Download size={16} />
-                    Download
-                  </button>
-                  <button 
-                    onClick={closeViewModal} 
-                    className={`hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-400'
-                    }`}
-                  >
-                    <X size={24} />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-4 md:p-6">
-              {/* Header Section */}
-              <div className="text-center mb-6">
-                <h1 className="text-xl md:text-2xl font-bold mb-2">
-                   AICAS INSTITUTE FOR EDUCATION AND TECHNOLOGY
-                </h1>
-                <h2 className="text-lg md:text-xl font-semibold mb-1">Computer Science Engineering Department</h2>
-                <h3 className="text-base font-medium">Lesson Plan</h3>
-              </div>
-
-              {/* Course Information Table */}
-              <div className={`border-2 mb-6 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                  <div className={`border-b border-r p-3 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    <div className="grid grid-cols-3">
-                      <div className={`font-semibold border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Faculty Name
-                      </div>
-                      <div className="col-span-2 pl-2">{viewingPlan.facultyName}</div>
-                    </div>
-                  </div>
-                  <div className={`border-b p-3 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    <div className="grid grid-cols-3">
-                      <div className={`font-semibold border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Name of the Program
-                      </div>
-                      <div className="col-span-2 pl-2">{viewingPlan.programName}</div>
-                    </div>
-                  </div>
-                  <div className={`border-b border-r p-3 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    <div className="grid grid-cols-3">
-                      <div className={`font-semibold border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Course Name
-                      </div>
-                      <div className="col-span-2 pl-2">{viewingPlan.courseName}</div>
-                    </div>
-                  </div>
-                  <div className={`border-b p-3 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    <div className="grid grid-cols-3">
-                      <div className={`font-semibold border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Course Code
-                      </div>
-                      <div className="col-span-2 pl-2">{viewingPlan.courseCode}</div>
-                    </div>
-                  </div>
-                  <div className={`border-b border-r p-3 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    <div className="grid grid-cols-6">
-                      <div className={`font-semibold border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Course Year
-                      </div>
-                      <div className={`pl-2 border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        {viewingPlan.courseYear}
-                      </div>
-                      <div className={`font-semibold border-r pr-2 pl-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Semester
-                      </div>
-                      <div className={`pl-2 border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        {viewingPlan.semester}
-                      </div>
-                      <div className={`font-semibold border-r pr-2 pl-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Academic Period
-                      </div>
-                      <div className="pl-2">{viewingPlan.academicPeriod}</div>
-                    </div>
-                  </div>
-                  <div className={`p-3 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    <div className="grid grid-cols-6">
-                      <div className={`font-semibold border-r pr-2 col-span-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        No. of Classes allotted per Week
-                      </div>
-                      <div className={`pl-2 border-r pr-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        {viewingPlan.classesPerWeek}
-                      </div>
-                      <div className={`font-semibold border-r pr-2 pl-2 col-span-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                        Planned Classes Required to Complete the Course
-                      </div>
-                      <div className="pl-2">{viewingPlan.totalPlannedClasses}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Topics Table */}
-              <div className={`border-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                <div className={`grid grid-cols-6 bg-gray-200 dark:bg-gray-700 font-semibold ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                  <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    Sl No.
-                  </div>
-                  <div className={`p-3 border-r text-center col-span-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    Topics to be covered
-                  </div>
-                  <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    Unit
-                  </div>
-                  <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                    No. of hours Required
-                  </div>
-                  <div className="p-3 text-center">Mode of Teaching</div>
-                </div>
-                {viewingPlan.topics.map((topic, index) => (
-                  <div key={topic.id} className={`grid grid-cols-6 ${
-                    index !== viewingPlan.topics.length - 1 ? `border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}` : ''
-                  }`}>
-                    <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      {topic.slNo}
-                    </div>
-                    <div className={`p-3 border-r col-span-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      {topic.topic}
-                    </div>
-                    <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      {topic.unit}
-                    </div>
-                    <div className={`p-3 border-r text-center ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      {topic.hoursRequired.toString().padStart(2, '0')}
-                    </div>
-                    <div className="p-3 text-center">{topic.modeOfTeaching}</div>
                   </div>
                 ))}
               </div>
 
-              {/* Summary and Approval */}
-              <div className="mt-6 space-y-4">
-                <div className="text-center">
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Total Topics: {viewingPlan.topics.length} | 
-                    Total Hours: {viewingPlan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0)} | 
-                    Generated on: {new Date().toLocaleDateString()}
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                  <div>
-                    <p className="font-medium mb-2">Faculty Signature:</p>
-                    <div className={`border-b-2 pb-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      &nbsp;
-                    </div>
-                  </div>
-                  <div>
-                    <p className="font-medium mb-2">HOD Approval:</p>
-                    <div className={`border-b-2 pb-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'}`}>
-                      &nbsp;
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={addTopic}
+                className="w-full mt-4 flex items-center justify-center gap-2 border-2 border-dashed border-blue-500 text-blue-500 p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-200"
+              >
+                <Plus size={20} /> Add Topic
+              </button>
+            </div>
+
+            {/* Modal Footer */}
+            <div className={`p-4 md:p-6 border-t ${isDarkMode ? 'border-gray-600' : 'border-gray-200'} flex justify-end gap-3 sticky bottom-0 ${modalClasses}`}>
+              <button
+                onClick={closeModal}
+                className={`px-4 py-2 border rounded-lg transition-colors duration-200 ${
+                  isDarkMode 
+                    ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveLessonPlan}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-md"
+              >
+                <Save size={20} /> 
+                {isEditing ? 'Update Plan' : 'Save Plan'}
+              </button>
             </div>
           </div>
         </div>
+      )}
+        
+      {/* View Modal */}
+      {isViewModalOpen && viewingPlan && (
+          <LessonPlanViewModal 
+              plan={viewingPlan} 
+              closeModal={closeViewModal} 
+              downloadPlan={downloadLessonPlan} 
+              isDarkMode={isDarkMode}
+              modalClasses={modalClasses}
+          />
       )}
     </div>
   );

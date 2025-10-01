@@ -1,212 +1,507 @@
-import React, { useState, useMemo } from "react";
+import { useState } from 'react';
+import { Plus, Search, Filter, Download, Upload, X, FileText, Check, Clock, Package } from 'lucide-react';
 
 interface Purchase {
-  id: number;
-  assetName: string;
-  purchaseDate: string;
+  id: string;
+  itemName: string;
   vendorName: string;
-  department: string;
-  cost: number;
+  datePurchased: string;
+  status: 'Pending' | 'Received' | 'Inspected';
+  notes: string;
+  attachments: string[];
 }
 
-const mockPurchases: Purchase[] = [
+const initialPurchases: Purchase[] = [
   {
-    id: 1,
-    assetName: "Laptop",
-    purchaseDate: "2023-12-01",
-    vendorName: "Dell Supplies",
-    department: "IT",
-    cost: 60000,
+    id: '1',
+    itemName: 'Computer Desk',
+    vendorName: 'ABC Furnish',
+    datePurchased: '2025-09-15',
+    status: 'Received',
+    notes: 'Good quality',
+    attachments: ['PO_001.pdf', 'GRN_001.pdf']
   },
   {
-    id: 2,
-    assetName: "Projector",
-    purchaseDate: "2023-11-15",
-    vendorName: "AV World",
-    department: "ECE",
-    cost: 25000,
+    id: '2',
+    itemName: 'UPS Battery',
+    vendorName: 'PowerTech',
+    datePurchased: '2025-09-18',
+    status: 'Pending',
+    notes: 'Urgent need',
+    attachments: ['PO_002.pdf']
   },
   {
-    id: 3,
-    assetName: "Desk Chairs",
-    purchaseDate: "2023-10-02",
-    vendorName: "Furniture Co.",
-    department: "Admin",
-    cost: 8500,
-  },
-  {
-    id: 4,
-    assetName: "Air Conditioner",
-    purchaseDate: "2023-10-20",
-    vendorName: "Cooling Inc.",
-    department: "Maintenance",
-    cost: 45000,
-  },
-  {
-    id: 5,
-    assetName: "Microscopes",
-    purchaseDate: "2023-08-25",
-    vendorName: "Lab Supplies Ltd",
-    department: "Biotech",
-    cost: 120000,
-  },
+    id: '3',
+    itemName: 'Network Switch',
+    vendorName: 'TechVendor Inc',
+    datePurchased: '2025-09-20',
+    status: 'Inspected',
+    notes: 'Installation pending',
+    attachments: ['PO_003.pdf', 'GRN_003.pdf', 'Invoice_003.pdf']
+  }
 ];
 
-// Modal Component
-function DetailsModal({ open, onClose, purchase }: { open: boolean; onClose: () => void; purchase: Purchase | null }) {
-  if (!open || !purchase) return null;
-  return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center" onClick={onClose}>
-      <div
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-sm sm:max-w-md w-full mx-3 p-6 relative"
-        onClick={e => e.stopPropagation()}
-      >
-        <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:hover:text-white"
-          onClick={onClose}
-          aria-label="Close details modal"
-        >
-          ×
-        </button>
-        <h2 className="text-xl font-semibold mb-3 text-primary-700 dark:text-primary-100">Purchase Details</h2>
-        <div className="space-y-2 text-base">
-          <div>
-            <span className="font-medium">Asset:</span> {purchase.assetName}
-          </div>
-          <div>
-            <span className="font-medium">Purchased On:</span> {purchase.purchaseDate}
-          </div>
-          <div>
-            <span className="font-medium">Vendor:</span> {purchase.vendorName}
-          </div>
-          <div>
-            <span className="font-medium">Department:</span> {purchase.department}
-          </div>
-          <div>
-            <span className="font-medium">Cost:</span> ₹{purchase.cost}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+function App() {
+  const [purchases, setPurchases] = useState<Purchase[]>(initialPurchases);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterVendor, setFilterVendor] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [selectedPurchase, setSelectedPurchase] = useState<Purchase | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-export default function PurchaseManagement() {
-  const [purchases, setPurchases] = useState<Purchase[]>(mockPurchases);
-  const [vendorFilter, setVendorFilter] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [modalPurchase, setModalPurchase] = useState<Purchase | null>(null);
+  const [formData, setFormData] = useState({
+    itemName: '',
+    vendorName: '',
+    datePurchased: '',
+    status: 'Pending' as Purchase['status'],
+    notes: '',
+    attachments: [] as string[]
+  });
 
-  const uniqueVendors = useMemo(() => {
-    return Array.from(new Set(purchases.map((p) => p.vendorName)));
-  }, [purchases]);
+  const vendors = ['all', ...Array.from(new Set(purchases.map(p => p.vendorName)))];
 
-  const uniqueDepartments = useMemo(() => {
-    return Array.from(new Set(purchases.map((p) => p.department)));
-  }, [purchases]);
+  const handleAddPurchase = () => {
+    if (!formData.itemName || !formData.vendorName || !formData.datePurchased) {
+      alert('Please fill in all required fields');
+      return;
+    }
 
-  const filteredPurchases = useMemo(() => {
-    return purchases.filter(
-      (p) =>
-        (vendorFilter === "" || p.vendorName === vendorFilter) &&
-        (departmentFilter === "" || p.department === departmentFilter)
-    );
-  }, [purchases, vendorFilter, departmentFilter]);
+    const newPurchase: Purchase = {
+      id: Date.now().toString(),
+      ...formData
+    };
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this purchase record?")) {
-      setPurchases((prev) => prev.filter((p) => p.id !== id));
+    setPurchases([newPurchase, ...purchases]);
+    setIsAddModalOpen(false);
+    setFormData({
+      itemName: '',
+      vendorName: '',
+      datePurchased: '',
+      status: 'Pending',
+      notes: '',
+      attachments: []
+    });
+  };
+
+  const handleFileUpload = () => {
+    const fileName = prompt('Enter file name (e.g., PO_004.pdf):');
+    if (fileName) {
+      setFormData({
+        ...formData,
+        attachments: [...formData.attachments, fileName]
+      });
+    }
+  };
+
+  const handleRemoveAttachment = (index: number) => {
+    setFormData({
+      ...formData,
+      attachments: formData.attachments.filter((_, i) => i !== index)
+    });
+  };
+
+  const handleExport = () => {
+    alert('Export functionality triggered. CSV/PDF export would happen here.');
+  };
+
+  const handleViewPurchase = (purchase: Purchase) => {
+    setSelectedPurchase(purchase);
+    setIsViewModalOpen(true);
+  };
+
+  const handleUpdateStatus = (id: string, newStatus: Purchase['status']) => {
+    setPurchases(purchases.map(p =>
+      p.id === id ? { ...p, status: newStatus } : p
+    ));
+  };
+
+  const filteredPurchases = purchases.filter(purchase => {
+    const matchesSearch = purchase.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         purchase.vendorName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesVendor = filterVendor === 'all' || purchase.vendorName === filterVendor;
+    const matchesStatus = filterStatus === 'all' || purchase.status === filterStatus;
+    return matchesSearch && matchesVendor && matchesStatus;
+  });
+
+  const getStatusIcon = (status: Purchase['status']) => {
+    switch (status) {
+      case 'Pending':
+        return <Clock className="w-4 h-4" />;
+      case 'Received':
+        return <Package className="w-4 h-4" />;
+      case 'Inspected':
+        return <Check className="w-4 h-4" />;
+    }
+  };
+
+  const getStatusColor = (status: Purchase['status']) => {
+    switch (status) {
+      case 'Pending':
+        return 'bg-amber-100 text-amber-700 border-amber-200';
+      case 'Received':
+        return 'bg-blue-100 text-blue-700 border-blue-200';
+      case 'Inspected':
+        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
     }
   };
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-semibold mb-8 text-primary-900 dark:text-primary-100">
-        Purchase Management
-      </h1>
-      <div className="flex flex-col sm:flex-row gap-5 mb-6">
-        <select
-          value={departmentFilter}
-          onChange={(e) => setDepartmentFilter(e.target.value)}
-          className="border rounded px-4 py-2 bg-white dark:bg-gray-900 dark:text-gray-100"
-        >
-          <option value="">Filter by Department</option>
-          {uniqueDepartments.map((dept) => (
-            <option key={dept} value={dept}>
-              {dept}
-            </option>
-          ))}
-        </select>
-        <select
-          value={vendorFilter}
-          onChange={(e) => setVendorFilter(e.target.value)}
-          className="border rounded px-4 py-2 bg-white dark:bg-gray-900 dark:text-gray-100"
-        >
-          <option value="">Filter by Vendor</option>
-          {uniqueVendors.map((vendor) => (
-            <option key={vendor} value={vendor}>
-              {vendor}
-            </option>
-          ))}
-        </select>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Purchase Management</h1>
+         
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 mb-6 p-6">
+          <div className="flex flex-col lg:flex-row gap-4 items-end">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Search</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search by item or vendor name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                />
+              </div>
+            </div>
+
+            <div className="w-full lg:w-48">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Vendor</label>
+              <select
+                value={filterVendor}
+                onChange={(e) => setFilterVendor(e.target.value)}
+                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+              >
+                {vendors.map(vendor => (
+                  <option key={vendor} value={vendor}>
+                    {vendor === 'all' ? 'All Vendors' : vendor}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="w-full lg:w-48">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white"
+              >
+                <option value="all">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Received">Received</option>
+                <option value="Inspected">Inspected</option>
+              </select>
+            </div>
+
+            <button
+              onClick={handleExport}
+              className="px-6 py-2.5 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-all flex items-center gap-2 shadow-sm hover:shadow"
+            >
+              <Download className="w-4 h-4" />
+              Export
+            </button>
+
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all flex items-center gap-2 shadow-sm hover:shadow"
+            >
+              <Plus className="w-4 h-4" />
+              Add Purchase
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    Item Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    Vendor Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    Date Purchased
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    Attachments
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {filteredPurchases.map((purchase) => (
+                  <tr key={purchase.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="font-medium text-slate-900">{purchase.itemName}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-slate-700">{purchase.vendorName}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-slate-600">{new Date(purchase.datePurchased).toLocaleDateString()}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <select
+                          value={purchase.status}
+                          onChange={(e) => handleUpdateStatus(purchase.id, e.target.value as Purchase['status'])}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1 ${getStatusColor(purchase.status)} cursor-pointer`}
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Received">Received</option>
+                          <option value="Inspected">Inspected</option>
+                        </select>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-slate-400" />
+                        <span className="text-sm text-slate-600">{purchase.attachments.length} file(s)</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleViewPurchase(purchase)}
+                        className="px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {filteredPurchases.length === 0 && (
+            <div className="text-center py-12">
+              <Package className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+              <p className="text-slate-500">No purchases found</p>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="overflow-x-auto rounded-lg border shadow">
-        <table className="min-w-full divide-y divide-primary-200 dark:divide-primary-700">
-          <thead className="bg-primary-100 dark:bg-primary-800">
-            <tr>
-              {[
-                "Asset Name",
-                "Purchase Date",
-                "Vendor Name",
-                "Department",
-                "Cost",
-                "Actions",
-              ].map((heading) => (
-                <th
-                  key={heading}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-primary-700 uppercase tracking-wider"
+
+      {isAddModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-slate-900">Add New Purchase</h2>
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Item Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.itemName}
+                  onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
+                  placeholder="e.g., Computer Desk, UPS Battery"
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Vendor Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.vendorName}
+                  onChange={(e) => setFormData({ ...formData, vendorName: e.target.value })}
+                  placeholder="e.g., ABC Furnish, PowerTech"
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Date Purchased <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={formData.datePurchased}
+                  onChange={(e) => setFormData({ ...formData, datePurchased: e.target.value })}
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as Purchase['status'] })}
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 >
-                  {heading}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-gray-900 divide-y divide-primary-200 dark:divide-primary-700">
-            {filteredPurchases.map((purchase) => (
-              <tr key={purchase.id} className="hover:bg-primary-50 dark:hover:bg-primary-900">
-                <td className="px-6 py-4 max-w-xs">{purchase.assetName}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{purchase.purchaseDate}</td>
-                <td className="px-6 py-4">{purchase.vendorName}</td>
-                <td className="px-6 py-4">{purchase.department}</td>
-                <td className="px-6 py-4">₹{purchase.cost}</td>
-                <td className="px-6 py-4 whitespace-nowrap flex gap-2">
-                  <button
-                    onClick={() => setModalPurchase(purchase)}
-                    className="px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 transition"
-                    aria-label={`View details of ${purchase.assetName}`}
-                  >
-                    View
-                  </button>
-                  
-                </td>
-              </tr>
-            ))}
-            {filteredPurchases.length === 0 && (
-              <tr>
-                <td className="px-6 py-4 text-center text-primary-600" colSpan={6}>
-                  No Purchase Records Found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      <DetailsModal
-        open={!!modalPurchase}
-        onClose={() => setModalPurchase(null)}
-        purchase={modalPurchase}
-      />
+                  <option value="Pending">Pending</option>
+                  <option value="Received">Received</option>
+                  <option value="Inspected">Inspected</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Notes</label>
+                <textarea
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  placeholder="Any relevant comments on delivery, item quality, or procurement reason..."
+                  rows={3}
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Attachments</label>
+                <button
+                  onClick={handleFileUpload}
+                  className="w-full px-4 py-3 border-2 border-dashed border-slate-300 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-center gap-2 text-slate-600 hover:text-blue-600"
+                >
+                  <Upload className="w-5 h-5" />
+                  Upload Documents (PO, GRN, etc.)
+                </button>
+
+                {formData.attachments.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {formData.attachments.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-4 h-4 text-slate-500" />
+                          <span className="text-sm text-slate-700">{file}</span>
+                        </div>
+                        <button
+                          onClick={() => handleRemoveAttachment(index)}
+                          className="p-1 hover:bg-slate-200 rounded transition-colors"
+                        >
+                          <X className="w-4 h-4 text-slate-500" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-slate-50 border-t border-slate-200 px-6 py-4 flex gap-3 justify-end">
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-6 py-2.5 text-slate-700 hover:bg-slate-200 rounded-lg transition-colors font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddPurchase}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm hover:shadow font-medium"
+              >
+                Add Purchase
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isViewModalOpen && selectedPurchase && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-slate-900">Purchase Details</h2>
+              <button
+                onClick={() => setIsViewModalOpen(false)}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-500 mb-1">Item Name</label>
+                  <p className="text-lg font-semibold text-slate-900">{selectedPurchase.itemName}</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-500 mb-1">Vendor Name</label>
+                  <p className="text-lg font-semibold text-slate-900">{selectedPurchase.vendorName}</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-500 mb-1">Date Purchased</label>
+                  <p className="text-lg text-slate-900">{new Date(selectedPurchase.datePurchased).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-500 mb-1">Status</label>
+                  <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border ${getStatusColor(selectedPurchase.status)}`}>
+                    {getStatusIcon(selectedPurchase.status)}
+                    {selectedPurchase.status}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-500 mb-2">Notes</label>
+                <p className="text-slate-900 bg-slate-50 p-4 rounded-lg">
+                  {selectedPurchase.notes || 'No notes provided'}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-500 mb-3">Attachments ({selectedPurchase.attachments.length})</label>
+                {selectedPurchase.attachments.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedPurchase.attachments.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <FileText className="w-5 h-5 text-blue-500" />
+                          <span className="text-slate-900 font-medium">{file}</span>
+                        </div>
+                        <button className="px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium">
+                          Download
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-slate-500 text-center py-4">No attachments</p>
+                )}
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-slate-50 border-t border-slate-200 px-6 py-4 flex justify-end">
+              <button
+                onClick={() => setIsViewModalOpen(false)}
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm hover:shadow font-medium"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+export default App;

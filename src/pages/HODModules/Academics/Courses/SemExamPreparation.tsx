@@ -1,220 +1,299 @@
-import React, { useState } from "react";
-import { Pie } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+// ====================================================================
+// 1. TYPE DEFINITIONS & INTERFACES
+// ====================================================================
 
-type Topic = { name: string; status: "Completed" | "Pending" };
-type Subject = { name: string; topics: Topic[]; faculty?: string };
-type Branch = { name: string; subjects: Subject[] };
-type Program = { name: string; branches: Branch[] };
+export type Theme = 'light' | 'dark';
 
-const programs: Program[] = [
-  {
-    name: "B.Tech",
-    branches: [
-      {
-        name: "CSE",
-        subjects: [
-          {
-            name: "Data Structures",
-            faculty: "Dr. A Kumar",
-            topics: [
-              { name: "Arrays", status: "Completed" },
-              { name: "Linked Lists", status: "Completed" },
-              { name: "Trees", status: "Pending" },
-              { name: "Graphs", status: "Pending" },
-            ],
-          },
-          {
-            name: "Computer Networks",
-            faculty: "Ms. S Rao",
-            topics: [
-              { name: "OSI Model", status: "Completed" },
-              { name: "TCP/IP", status: "Completed" },
-              { name: "Routing", status: "Pending" },
-            ],
-          },
-        ],
-      },
-      {
-        name: "ECE",
-        subjects: [
-          {
-            name: "Signals & Systems",
-            faculty: "Dr. T Mehta",
-            topics: [
-              { name: "Time domain analysis", status: "Completed" },
-              { name: "Frequency domain", status: "Pending" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: "M.Tech",
-    branches: [
-      {
-        name: "CSE",
-        subjects: [
-          {
-            name: "Advanced Algorithms",
-            faculty: "Prof. R Sharma",
-            topics: [
-              { name: "Dynamic Programming", status: "Completed" },
-              { name: "Greedy Algorithms", status: "Completed" },
-              { name: "Approximation", status: "Pending" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+// Core data model for a single submitted question paper
+export interface QuestionPaperSubmission {
+  paperId: string;
+  courseCode: string; // e.g., "CS-301"
+  courseName: string; // e.g., "Database Management Systems"
+  facultyName: string; // Faculty who submitted the paper
+  submissionDate: Date;
+  status: 'Draft' | 'Submitted' | 'Reviewed' | 'Approved' | 'Rejected';
+  syllabusCoverage: number; // Percentage, for HOD quick check
+  difficultyDistribution: {
+    easy: number; // Count of easy questions
+    medium: number;
+    hard: number;
+  };
+}
+
+// Data model for HOD's quick-view analytics
+export interface DepartmentExamAnalytics {
+  totalPapersSubmitted: number;
+  awaitingApproval: number;
+  rejectedLast7Days: number;
+  averagePassRate: number; // Overall pass rate for the department
+  facultyComplianceRate: number; // % of faculty who met all deadlines
+}
+
+// Theme Context Definition
+interface ThemeContextType {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
+// ====================================================================
+// 2. MOCK DATA
+// ====================================================================
+
+const mockAnalytics: DepartmentExamAnalytics = {
+  totalPapersSubmitted: 15,
+  awaitingApproval: 3,
+  rejectedLast7Days: 1,
+  averagePassRate: 78.5,
+  facultyComplianceRate: 92,
+};
+
+const mockSubmissions: QuestionPaperSubmission[] = [
+  { paperId: 'P001', courseCode: 'EE-205', courseName: 'Circuit Analysis', facultyName: 'Dr. A. Sharma', submissionDate: new Date(), status: 'Submitted', syllabusCoverage: 90, difficultyDistribution: { easy: 5, medium: 10, hard: 5 } },
+  { paperId: 'P002', courseCode: 'ME-410', courseName: 'Fluid Mechanics', facultyName: 'Prof. S. Khan', submissionDate: new Date('2025-09-28'), status: 'Approved', syllabusCoverage: 100, difficultyDistribution: { easy: 7, medium: 11, hard: 2 } },
+  { paperId: 'P003', courseCode: 'CS-401', courseName: 'AI & ML', facultyName: 'Dr. Z. Huq', submissionDate: new Date('2025-09-29'), status: 'Rejected', syllabusCoverage: 75, difficultyDistribution: { easy: 2, medium: 8, hard: 10 } },
+  { paperId: 'P004', courseCode: 'CE-302', courseName: 'Structural Design', facultyName: 'Prof. J. Kaur', submissionDate: new Date('2025-10-01'), status: 'Submitted', syllabusCoverage: 88, difficultyDistribution: { easy: 4, medium: 12, hard: 4 } },
 ];
 
-function CompletionPieChart({ completed, total }: { completed: number; total: number }) {
-  const data = {
-    labels: ["Completed", "Remaining"],
-    datasets: [
-      {
-        label: "Progress",
-        data: [completed, total - completed],
-        backgroundColor: ["#22C55E", "#484848"], // no blue, darker gray in dark mode instead
-        borderWidth: 0,
-      },
-    ],
-  };
-  return (
-    <Pie
-      data={data}
-      options={{
-        plugins: { legend: { display: false } },
-        cutout: "70%",
-      }}
-    />
+
+// ====================================================================
+// 3. THEME CONTEXT AND HOOKS
+// ====================================================================
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // Use a state for theme, checking local storage for persistence
+  const [theme, setTheme] = useState<Theme>(
+    () => (localStorage.getItem('erp-theme') as Theme) || 'light'
   );
-}
 
-export default function ExamPreparationStatus() {
-  const [selectedProgram, setSelectedProgram] = useState(programs[0].name);
-  const [selectedBranch, setSelectedBranch] = useState(programs[0].branches[0].name);
-
-  const currentProgram = programs.find((p) => p.name === selectedProgram);
-  const currentBranch = currentProgram?.branches.find((b) => b.name === selectedBranch);
+  const toggleTheme = () => {
+    setTheme(currentTheme => {
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('erp-theme', newTheme);
+      return newTheme;
+    });
+  };
 
   return (
-    <div className="min-h-screen py-10 px-4 bg-gradient-to-br from-primary-50 via-white to-accent-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 transition-colors duration-500">
-      <div className="max-w-7xl mx-auto">
-        <header className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-4xl font-extrabold text-primary-800 dark:text-primary-200 tracking-tight">
-            Semester Exam Preparation 
-          </h1>
-        </header>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
 
-        {/* Filters Without Theme Toggle */}
-        <section className="flex gap-4 items-center mb-6 flex-wrap">
-          <div>
-            <label className="font-semibold text-primary-700 dark:text-primary-300 mr-2 block">
-              Program:
-            </label>
-            <select
-              className="rounded-lg px-3 py-2 border border-primary-300 dark:border-primary-700 bg-white dark:bg-gray-800 text-primary-900 dark:text-primary-200 font-semibold focus:outline-primary-600"
-              value={selectedProgram}
-              onChange={(e) => {
-                setSelectedProgram(e.target.value);
-                const prog = programs.find((x) => x.name === e.target.value);
-                setSelectedBranch(prog?.branches[0]?.name || "");
-              }}
-            >
-              {programs.map((prog) => (
-                <option key={prog.name}>{prog.name}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="font-semibold text-primary-700 dark:text-primary-300 mr-2 block">
-              Branch:
-            </label>
-            <select
-              className="rounded-lg px-3 py-2 border border-primary-300 dark:border-primary-700 bg-white dark:bg-gray-800 text-primary-900 dark:text-primary-200 font-semibold focus:outline-primary-600"
-              value={selectedBranch}
-              onChange={(e) => setSelectedBranch(e.target.value)}
-            >
-              {currentProgram?.branches.map((branch) => (
-                <option key={branch.name}>{branch.name}</option>
-              ))}
-            </select>
-          </div>
-        </section>
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
 
-        {/* Subjects Grid */}
-        <section className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-          {currentBranch?.subjects.map((subject, idx) => {
-            const totalTopics = subject.topics.length;
-            const completedTopics = subject.topics.filter((t) => t.status === "Completed").length;
-            const completionPercent = totalTopics
-              ? Math.round((completedTopics / totalTopics) * 100)
-              : 0;
-            return (
-              <div
-                key={idx}
-                className="relative group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow p-6 overflow-hidden"
-              >
-                <h2 className="text-xl font-bold mb-2 text-primary-900 dark:text-primary-200">
-                  {subject.name}
-                </h2>
-                <span className="text-xs rounded px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 inline-block mt-1">
-                  {subject.faculty}
-                </span>
+// ====================================================================
+// 4. PRESENTATION COMPONENTS
+// ====================================================================
 
-                <div className="self-center mb-4 w-28 h-28">
-                  <CompletionPieChart completed={completedTopics} total={totalTopics} />
-                </div>
+const PaperCard: React.FC<{ paper: QuestionPaperSubmission, theme: Theme }> = ({ paper, theme }) => (
+  <div style={{ padding: '15px', borderRadius: '8px', marginBottom: '10px', boxShadow: theme === 'light' ? '0 1px 3px rgba(0, 0, 0, 0.1)' : '0 1px 5px rgba(255, 255, 255, 0.1)', backgroundColor: theme === 'light' ? 'white' : '#1f2937' }}>
+    <h4 style={{ margin: '0 0 5px 0', color: '#3b82f6' }}>{paper.courseCode} - {paper.courseName}</h4>
+    <p style={{ margin: '0 0 5px 0', fontSize: '14px' }}>**Submitted by:** {paper.facultyName}</p>
+    <p style={{ margin: '0 0 10px 0', fontWeight: 'bold' }}>Status: {paper.status}</p>
+    {paper.status === 'Submitted' && (
+      <button style={{ padding: '8px 15px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+        Review/Approve
+      </button>
+    )}
+  </div>
+);
 
-                <div className="flex flex-col gap-2">
-                  {subject.topics.map((topic, tdx) => (
-                    <div
-                      key={tdx}
-                      className="flex justify-between flex-wrap rounded-lg p-3 border border-primary-100 dark:border-primary-700 bg-primary-50 dark:bg-primary-900"
-                    >
-                      <p className="text-primary-800 dark:text-primary-200">{topic.name}</p>
-                      <span
-                        className={`font-semibold px-3 py-1 rounded-lg text-xs shadow ${
-                          topic.status === "Completed"
-                            ? "bg-green-400/20 text-green-600 dark:bg-green-700/30 dark:text-green-400"
-                            : "bg-red-400/20 text-red-600 dark:bg-red-700/30 dark:text-red-400"
-                        }`}
-                      >
-                        {topic.status}
-                      </span>
-                    </div>
-                  ))}
-                  {subject.topics.length === 0 && (
-                    <span className="block text-gray-400 dark:text-gray-500 mt-3 text-xs">
-                      No topics yet.
-                    </span>
-                  )}
-                </div>
+// ====================================================================
+// 5. THE HOD DASHBOARD COMPONENT (MAIN EXPORT)
+// ====================================================================
 
-                <div className="absolute top-4 right-4 text-primary-500 dark:text-primary-300 text-xs select-none">
-                  {completionPercent}% Prepared
-                </div>
-              </div>
-            );
-          })}
-          {currentBranch?.subjects.length === 0 && (
-            <span className="text-primary-700 dark:text-primary-300 text-center py-10 col-span-full">
-              No subjects found in this branch.
-            </span>
-          )}
-        </section>
+const HodExamDashboard: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+  const [submissions, setSubmissions] = useState<QuestionPaperSubmission[]>([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Simulate data fetching
+  useEffect(() => {
+    setSubmissions(mockSubmissions);
+  }, []);
+
+  // Handle responsiveness via window resize
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Base styles (for single component structure)
+  const baseStyles = {
+    // Colors for theming
+    light: {
+      backgroundColor: '#f4f7fa',
+      textColor: '#1f2937',
+      surfaceColor: '#ffffff',
+    },
+    dark: {
+      backgroundColor: '#121212',
+      textColor: '#f3f4f6',
+      surfaceColor: '#1f2937',
+    },
+    primaryColor: '#3b82f6',
+    
+    // Layout and common styles
+    dashboard: {
+      padding: '20px',
+      minHeight: '100vh',
+      fontFamily: 'Arial, sans-serif',
+    },
+    header: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '30px',
+    },
+    statsContainer: {
+      display: 'flex',
+      gap: '20px',
+      flexWrap: isMobile ? 'wrap' : 'nowrap',
+      marginBottom: '30px',
+    },
+    statCard: {
+      flex: isMobile ? '1 1 100%' : '1',
+      padding: '20px',
+      borderRadius: '10px',
+      textAlign: 'center' as const,
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse' as const,
+      marginTop: '20px',
+      display: isMobile ? 'none' : 'table', // Responsiveness: Hide table on mobile
+    },
+    cardList: {
+      display: isMobile ? 'block' : 'none', // Responsiveness: Show cards on mobile
+    },
+    button: {
+      padding: '10px 18px',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      fontWeight: 'bold' as const,
+    },
+    statusSubmitted: { color: '#f59e0b', fontWeight: 'bold' as const },
+    statusApproved: { color: '#10b981', fontWeight: 'bold' as const },
+    statusRejected: { color: '#ef4444', fontWeight: 'bold' as const },
+    statusDraft: { color: '#6b7280', fontWeight: 'bold' as const },
+  };
+
+  const currentThemeStyles = baseStyles[theme];
+
+  const handleApprove = (paperId: string) => {
+    alert(`HOD approved paper ${paperId}. (Implementation required)`);
+    // In a real app: API call to update status, then update 'submissions' state
+  };
+
+  return (
+    <div style={{ ...baseStyles.dashboard, backgroundColor: currentThemeStyles.backgroundColor, color: currentThemeStyles.textColor }}>
+      <header style={baseStyles.header}>
+        <h1 style={{ margin: 0, fontSize: isMobile ? '24px' : '32px' }}>HOD Exam Preparation Oversight 🧠</h1>
+        <button 
+          onClick={toggleTheme} 
+          style={{ ...baseStyles.button, backgroundColor: baseStyles.primaryColor, color: 'white' }}
+        >
+          Switch to {theme === 'light' ? 'Dark 🌙' : 'Light ☀️'}
+        </button>
+      </header>
+
+      <h2>Department Exam Analytics</h2>
+      <div style={baseStyles.statsContainer}>
+        {/* Stat Card 1: Awaiting Approval */}
+        <div style={{ ...baseStyles.statCard, backgroundColor: currentThemeStyles.surfaceColor }}>
+          <h3 style={{ margin: 0, fontSize: '36px', color: baseStyles.primaryColor }}>{mockAnalytics.awaitingApproval}</h3>
+          <p style={{ margin: '5px 0 0 0' }}>Papers Awaiting Review</p>
+        </div>
+        
+        {/* Stat Card 2: Avg. Pass Rate */}
+        <div style={{ ...baseStyles.statCard, backgroundColor: currentThemeStyles.surfaceColor }}>
+          <h3 style={{ margin: 0, fontSize: '36px', color: baseStyles.statusApproved.color }}>{mockAnalytics.averagePassRate}%</h3>
+          <p style={{ margin: '5px 0 0 0' }}>Avg. Expected Pass Rate</p>
+        </div>
+        
+        {/* Stat Card 3: Faculty Compliance */}
+        <div style={{ ...baseStyles.statCard, backgroundColor: currentThemeStyles.surfaceColor }}>
+          <h3 style={{ margin: 0, fontSize: '36px', color: baseStyles.statusSubmitted.color }}>{mockAnalytics.facultyComplianceRate}%</h3>
+          <p style={{ margin: '5px 0 0 0' }}>Faculty Compliance Rate</p>
+        </div>
       </div>
+
+      {/* ==================================================================== */}
+      {/* Question Paper Approval Queue (The core table/card view) */}
+      {/* ==================================================================== */}
+      
+      <h2>Question Paper Approval Queue</h2>
+
+      {/* 5.1 MOBILE/CARD VIEW (RESPONSIVE) */}
+      <div style={baseStyles.cardList}>
+        {submissions.map(paper => <PaperCard key={paper.paperId} paper={paper} theme={theme} />)}
+      </div>
+
+      {/* 5.2 DESKTOP/TABLE VIEW */}
+      <table style={{...baseStyles.table, backgroundColor: currentThemeStyles.surfaceColor, border: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}`, color: currentThemeStyles.textColor }}>
+        <thead>
+          <tr style={{ backgroundColor: theme === 'light' ? '#f3f4f6' : '#374151' }}>
+            {/* FIX APPLIED HERE: Removed the trailing ' from the template literal */}
+            <th style={{ padding: '12px', textAlign: 'left', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>Course</th>
+            <th style={{ padding: '12px', textAlign: 'left', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>Faculty</th>
+            <th style={{ padding: '12px', textAlign: 'left', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>Coverage %</th>
+            <th style={{ padding: '12px', textAlign: 'left', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>Status</th>
+            <th style={{ padding: '12px', textAlign: 'left', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {submissions.map(paper => (
+            <tr key={paper.paperId}>
+              {/* FIX APPLIED HERE: Removed the trailing ' from the template literal */}
+              <td style={{ padding: '12px', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>{paper.courseCode}</td>
+              <td style={{ padding: '12px', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>{paper.facultyName}</td>
+              <td style={{ padding: '12px', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>{paper.syllabusCoverage}</td>
+              <td style={{ padding: '12px', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>
+                <span style={baseStyles[`status${paper.status}` as keyof typeof baseStyles]}>
+                  {paper.status}
+                </span>
+              </td>
+              <td style={{ padding: '12px', borderBottom: `1px solid ${theme === 'light' ? '#e5e7eb' : '#374151'}` }}>
+                {paper.status === 'Submitted' && (
+                  <button 
+                    onClick={() => handleApprove(paper.paperId)}
+                    style={{ ...baseStyles.button, padding: '6px 12px', backgroundColor: baseStyles.primaryColor, color: 'white' }}
+                  >
+                    Review & Approve
+                  </button>
+                )}
+                {paper.status === 'Approved' && <span style={{ color: baseStyles.statusApproved.color }}>Audit Trail</span>}
+                {paper.status === 'Rejected' && <span style={{ color: baseStyles.statusRejected.color }}>View Feedback</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
+
+// ====================================================================
+// WRAPPER FOR USAGE
+// ====================================================================
+
+export const AppWrapper: React.FC = () => (
+  <ThemeProvider>
+    <HodExamDashboard />
+  </ThemeProvider>
+);
+
+export default AppWrapper;
