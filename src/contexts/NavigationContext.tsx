@@ -85,14 +85,13 @@ const SIDEBAR_ITEMS = {
     ],
     'Master Admin': [
       { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
-      { name: 'Course Management',path:'/master/home/data-management', icon:'Database'   },
-      { name: 'Create Timetable', path: '/master/create/timetable', icon: 'Calendar' },
-      { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Calendar' },
+      { name: 'Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
+      { name: 'Courses ',path:'/master/home/data-management', icon:'Database'   },
+      { name: 'Timetable', path: '/master/create/timetable', icon: 'Calendar' },
+      { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Mail' },
       { name: 'Faculty leave Configure', path: '/master/faculty/leave-configure ', icon: 'Calendar' },
-      { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Calendar' },
-      {name:'Fee Structure', path:'/master/scholarship-registration', icon:'IndianRupee'},
-      { name: 'Notifications', path: '/master/home/notifications', icon: 'Bell' },
-      { name: 'Events', path: '/master/home/events', icon: 'Calendar' }
+      { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Link' },
+      {name:'Scholerships', path:'/master/scholarship-registration', icon:'IndianRupee'},
     ],
     'College Secretary': [
       { name: 'Dashboard', path: '/home/dashboard', icon: 'BarChart3' },
@@ -613,7 +612,7 @@ const SIDEBAR_ITEMS = {
 
   'Infrastructure Management' : {
     'Administration Officer': [
-       { name: 'Infrastructure Management', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
+       
       
           { 
             name: 'Inventory Management', 

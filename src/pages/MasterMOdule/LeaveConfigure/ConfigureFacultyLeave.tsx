@@ -344,11 +344,11 @@ export default function ConfigureFacultyLeave() {
                     )}
                 </main>
 
-                <footer className="text-center mt-12">
+                {/* <footer className="text-center mt-12">
                      <button className="bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 flex items-center justify-center mx-auto">
                         <Save className="mr-2" /> Save & Publish Policy
                     </button>
-                </footer>
+                </footer> */}
             </div>
 
             <LeaveTypeModal
