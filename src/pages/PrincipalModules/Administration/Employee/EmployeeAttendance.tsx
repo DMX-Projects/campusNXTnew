@@ -34,7 +34,7 @@ interface EmployeeData {
   employeeType: 'teaching_faculty' | 'non_teaching_faculty' | 'administrative_staff' | 'support_staff' | 'technical_staff';
   joiningDate: string;
   shiftTiming: string;
-  todayStatus: 'present' | 'absent' | 'late' | 'half_day' | 'on_leave';
+  todayStatus: 'present' | 'absent' | 'half_day' | 'on_leave';
   checkInTime?: string;
   checkOutTime?: string;
   workingHours?: number;
@@ -325,7 +325,7 @@ const EmployeeAttendance: React.FC = () => {
     setShowDetailModal(true);
   };
 
-  const handleStatusUpdate = (employeeId: string, status: 'present' | 'absent' | 'late' | 'half_day') => {
+  const handleStatusUpdate = (employeeId: string, status: 'present' | 'absent' | 'half_day') => {
     console.log(`Updating employee ${employeeId} status to ${status}`);
     showToast(`Employee status updated to ${status}`);
   };
@@ -394,7 +394,7 @@ const EmployeeAttendance: React.FC = () => {
     totalEmployees: filteredData.length,
     presentToday: filteredData.filter(e => e.todayStatus === 'present').length,
     absentToday: filteredData.filter(e => e.todayStatus === 'absent').length,
-    lateToday: filteredData.filter(e => e.todayStatus === 'late').length,
+    // lateToday: filteredData.filter(e => e.todayStatus === 'late').length,
     onLeaveToday: filteredData.filter(e => e.todayStatus === 'on_leave').length,
     avgAttendance: filteredData.length > 0 ? Number((filteredData.reduce((sum, e) => sum + e.monthlyAttendance, 0) / filteredData.length).toFixed(1)) : 0,
     earlyDepartures: filteredData.filter(e => e.todayStatus === 'half_day').length,
@@ -405,7 +405,7 @@ const EmployeeAttendance: React.FC = () => {
     switch (status) {
       case 'present': return 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-700';
       case 'absent': return 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900 dark:text-red-100 dark:border-red-700';
-      case 'late': return 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700';
+      // case 'late': return 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-700';
       case 'half_day': return 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900 dark:text-orange-100 dark:border-orange-700';
       case 'on_leave': return 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:border-blue-700';
       default: return 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600';
@@ -482,44 +482,36 @@ const handleExport = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total Employees</p>
-              <p className="text-2xl font-bold">{summaryStats.totalEmployees}</p>
-            </div>
-            <div className="bg-blue-300 bg-opacity-30 rounded-lg p-2">
-              <Users className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+    {/* Summary Cards */}
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-5 mb-7">
+  {/* Total Employees */}
+  <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                  bg-blue-100 dark:bg-blue-900/40 
+                  text-gray-800 dark:text-white">
+    <div>
+      <p className="text-sm font-medium text-blue-600 dark:text-blue-300">Total Employees</p>
+      <p className="text-2xl font-bold">{summaryStats.totalEmployees}</p>
+    </div>
+  </div>
 
-        <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Present Today</p>
-              <p className="text-2xl font-bold">{summaryStats.presentToday}</p>
-            </div>
-            <div className="bg-green-300 bg-opacity-30 rounded-lg p-2">
-              <UserCheck className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                  bg-green-100 dark:bg-green-900/40 
+                  text-gray-800 dark:text-white">
+    <div>
+      <p className="text-sm font-medium text-green-600 dark:text-green-300">Present Today</p>
+      <p className="text-2xl font-bold">{summaryStats.presentToday}</p>
+    </div>
+  </div>
 
-        <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-100 text-sm font-medium">Absent Today</p>
-              <p className="text-2xl font-bold">{summaryStats.absentToday}</p>
-            </div>
-            <div className="bg-red-300 bg-opacity-30 rounded-lg p-2">
-              <UserX className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+       <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                  bg-red-100 dark:bg-red-900/40 
+                  text-gray-800 dark:text-white">
+    <div>
+      <p className="text-sm font-medium text-red-600 dark:text-red-300">Absent Today</p>
+      <p className="text-2xl font-bold">{summaryStats.absentToday}</p>
+    </div>
+  </div>
+        {/* <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-yellow-100 text-sm font-medium">Late Today</p>
@@ -529,55 +521,44 @@ const handleExport = () => {
               <AlertTriangle className="w-6 h-6" />
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">On Leave</p>
-              <p className="text-2xl font-bold">{summaryStats.onLeaveToday}</p>
-            </div>
-            <div className="bg-purple-300 bg-opacity-30 rounded-lg p-2">
-              <Calendar className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-indigo-100 text-sm font-medium">Avg Attendance</p>
-              <p className="text-2xl font-bold">{summaryStats.avgAttendance}%</p>
-            </div>
-            <div className="bg-indigo-300 bg-opacity-30 rounded-lg p-2">
-              <TrendingUp className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-orange-100 text-sm font-medium">Half Day</p>
-              <p className="text-2xl font-bold">{summaryStats.earlyDepartures}</p>
-            </div>
-            <div className="bg-orange-300 bg-opacity-30 rounded-lg p-2">
-              <Clock className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-teal-100 text-sm font-medium">Pending Checkout</p>
-              <p className="text-2xl font-bold">{summaryStats.pendingCheckouts}</p>
-            </div>
-            <div className="bg-teal-300 bg-opacity-30 rounded-lg p-2">
-              <CheckCircle className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+         {/* On Leave */}
+  <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                  bg-purple-100 dark:bg-purple-900/40 
+                  text-gray-800 dark:text-white">
+    <div>
+      <p className="text-sm font-medium text-purple-600 dark:text-purple-300">On Leave</p>
+      <p className="text-2xl font-bold">{summaryStats.onLeaveToday}</p>
+    </div>
+  </div>
+       {/* Avg Attendance */}
+  <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                  bg-indigo-100 dark:bg-indigo-900/40 
+                  text-gray-800 dark:text-white">
+    <div>
+      <p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">Avg Attendance</p>
+      <p className="text-2xl font-bold">{summaryStats.avgAttendance}%</p>
+    </div>
+  </div>
+        {/* Half Day */}
+  <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                  bg-orange-100 dark:bg-orange-900/40 
+                  text-gray-800 dark:text-white">
+    <div>
+      <p className="text-sm font-medium text-orange-600 dark:text-orange-300">Half Day</p>
+      <p className="text-2xl font-bold">{summaryStats.earlyDepartures}</p>
+    </div>
+  </div>
+         {/* Pending Checkout */}
+  <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                  bg-teal-100 dark:bg-teal-900/40 
+                  text-gray-800 dark:text-white">
+    <div>
+      <p className="text-sm font-medium text-teal-600 dark:text-teal-300">Pending Checkout</p>
+      <p className="text-2xl font-bold">{summaryStats.pendingCheckouts}</p>
+    </div>
+  </div>
       </div>
 
       {/* Filters Section */}
@@ -651,7 +632,7 @@ const handleExport = () => {
             <option value="">All Status</option>
             <option value="present">Present</option>
             <option value="absent">Absent</option>
-            <option value="late">Late</option>
+            {/* <option value="late">Late</option> */}
             <option value="half_day">Half Day</option>
             <option value="on_leave">On Leave</option>
           </select>
@@ -769,7 +750,7 @@ const handleExport = () => {
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {paginatedData.map((employee, index) => (
+              {paginatedData.filter(e => e.todayStatus !== "late").map((employee, index) => (
                 <tr key={employee.id} className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 ${index % 2 === 0 ? 'bg-gray-25 dark:bg-gray-825' : ''}`}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-3">
@@ -812,7 +793,7 @@ const handleExport = () => {
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(employee.todayStatus)}`}>
                       {employee.todayStatus === 'present' && <CheckCircle className="w-3 h-3 mr-1" />}
                       {employee.todayStatus === 'absent' && <XCircle className="w-3 h-3 mr-1" />}
-                      {employee.todayStatus === 'late' && <AlertTriangle className="w-3 h-3 mr-1" />}
+                      {/* {employee.todayStatus === 'late' && <AlertTriangle className="w-3 h-3 mr-1" />} */}
                       {employee.todayStatus === 'half_day' && <Clock className="w-3 h-3 mr-1" />}
                       {employee.todayStatus === 'on_leave' && <Calendar className="w-3 h-3 mr-1" />}
                       {employee.todayStatus.replace(/_/g, ' ').toUpperCase()}
@@ -882,7 +863,7 @@ const handleExport = () => {
                         <Eye className="w-3 h-3" />
                         <span>View</span>
                       </button>
-                      {employee.todayStatus !== 'present' && employee.todayStatus !== 'on_leave' && (
+                      {/* {employee.todayStatus !== 'present' && employee.todayStatus !== 'on_leave' && (
                         <button
                           className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center space-x-1"
                           onClick={() => handleStatusUpdate(employee.id, 'present')}
@@ -891,7 +872,7 @@ const handleExport = () => {
                           <CheckCircle className="w-3 h-3" />
                           <span>Present</span>
                         </button>
-                      )}
+                      )} */}
                     </div>
                   </td>
                 </tr>
@@ -1101,10 +1082,10 @@ const handleExport = () => {
                         <span className="font-medium text-gray-700 dark:text-gray-300">Working Days:</span>
                         <span className="text-gray-900 dark:text-gray-100">{selectedEmployee.totalWorkingDays} days</span>
                       </div>
-                      <div className="flex justify-between">
+                      {/* <div className="flex justify-between">
                         <span className="font-medium text-gray-700 dark:text-gray-300">Late Count:</span>
                         <span className="text-yellow-600 dark:text-yellow-400 font-medium">{selectedEmployee.lateCount} times</span>
-                      </div>
+                      </div> */}
                       <div className="flex justify-between">
                         <span className="font-medium text-gray-700 dark:text-gray-300">Leaves Taken:</span>
                         <span className="text-blue-600 dark:text-blue-400 font-medium">{selectedEmployee.leavesTaken} days</span>
@@ -1122,7 +1103,7 @@ const handleExport = () => {
               >
                 Close
               </button>
-              {selectedEmployee.todayStatus !== 'present' && selectedEmployee.todayStatus !== 'on_leave' && (
+              {/* {selectedEmployee.todayStatus !== 'present' && selectedEmployee.todayStatus !== 'on_leave' && (
                 <button
                   className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center space-x-2"
                   onClick={() => {
@@ -1133,7 +1114,7 @@ const handleExport = () => {
                   <CheckCircle className="w-4 h-4" />
                   <span>Mark Present</span>
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         </div>

@@ -610,102 +610,94 @@ const handleExport = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total Requests</p>
-              <p className="text-2xl font-bold">{summaryStats.totalRequests}</p>
-            </div>
-            <div className="bg-blue-300 bg-opacity-30 rounded-lg p-2">
-              <FileText className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-blue-100 dark:bg-blue-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-blue-600 dark:text-blue-300">Total Requests</p>
+      <p className="text-2xl font-bold">{summaryStats.totalRequests}</p>
+    </div>
+  </div>
+</div>
 
-        <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-yellow-100 text-sm font-medium">Pending</p>
-              <p className="text-2xl font-bold">{summaryStats.pendingRequests}</p>
-            </div>
-            <div className="bg-yellow-300 bg-opacity-30 rounded-lg p-2">
-              <Clock className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+       <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-yellow-100 dark:bg-yellow-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-yellow-600 dark:text-yellow-300">Pending</p>
+      <p className="text-2xl font-bold">{summaryStats.pendingRequests}</p>
+    </div>
+  </div>
+</div>
 
-        <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Approved</p>
-              <p className="text-2xl font-bold">{summaryStats.approvedRequests}</p>
-            </div>
-            <div className="bg-green-300 bg-opacity-30 rounded-lg p-2">
-              <CheckCircle className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+       <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-green-100 dark:bg-green-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-green-600 dark:text-green-300">Approved</p>
+      <p className="text-2xl font-bold">{summaryStats.approvedRequests}</p>
+    </div>
+  </div>
+</div>
 
-        <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-100 text-sm font-medium">Rejected</p>
-              <p className="text-2xl font-bold">{summaryStats.rejectedRequests}</p>
-            </div>
-            <div className="bg-red-300 bg-opacity-30 rounded-lg p-2">
-              <XCircle className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+     <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-red-100 dark:bg-red-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-red-600 dark:text-red-300">Rejected</p>
+      <p className="text-2xl font-bold">{summaryStats.rejectedRequests}</p>
+    </div>
+  </div>
+</div>
 
-        <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-orange-100 text-sm font-medium">Urgent</p>
-              <p className="text-2xl font-bold">{summaryStats.urgentRequests}</p>
-            </div>
-            <div className="bg-orange-300 bg-opacity-30 rounded-lg p-2">
-              <AlertTriangle className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+       <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-orange-100 dark:bg-orange-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-orange-600 dark:text-orange-300">Urgent</p>
+      <p className="text-2xl font-bold">{summaryStats.urgentRequests}</p>
+    </div>
+  </div>
+</div>
 
-        <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">Avg Time</p>
-              <p className="text-2xl font-bold">{summaryStats.avgProcessingTime}d</p>
-            </div>
-            <div className="bg-purple-300 bg-opacity-30 rounded-lg p-2">
-              <TrendingUp className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+       <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-purple-100 dark:bg-purple-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-purple-600 dark:text-purple-300">Avg Time</p>
+      <p className="text-2xl font-bold">{summaryStats.avgProcessingTime}d</p>
+    </div>
+  </div>
+</div>
 
-        <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-indigo-100 text-sm font-medium">This Month</p>
-              <p className="text-2xl font-bold">{summaryStats.thisMonthRequests}</p>
-            </div>
-            <div className="bg-indigo-300 bg-opacity-30 rounded-lg p-2">
-              <Calendar className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
+        <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-indigo-100 dark:bg-indigo-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">This Month</p>
+      <p className="text-2xl font-bold">{summaryStats.thisMonthRequests}</p>
+    </div>
+  </div>
+</div>
 
-        <div className="bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-teal-100 text-sm font-medium">Active Leaves</p>
-              <p className="text-2xl font-bold">{summaryStats.activeLeaves}</p>
-            </div>
-            <div className="bg-teal-300 bg-opacity-30 rounded-lg p-2">
-              <UserCheck className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-      </div>
+       <div className="rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 
+                bg-teal-100 dark:bg-teal-900/40 
+                text-gray-800 dark:text-white">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-sm font-medium text-teal-600 dark:text-teal-300">Active Leaves</p>
+      <p className="text-2xl font-bold">{summaryStats.activeLeaves}</p>
+    </div>
+   </div>
+  </div>
+</div>
 
       {/* Filters Section */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-6 shadow-sm">
@@ -986,7 +978,7 @@ const handleExport = () => {
                         title="View Details"
                       >
                         <Eye className="w-3 h-3" />
-                        <span>View</span>
+                        {/* <span>View</span> */}
                       </button>
                       {request.status === 'pending' && (
                         <>
@@ -996,7 +988,7 @@ const handleExport = () => {
                             title="Approve Request"
                           >
                             <CheckCircle className="w-3 h-3" />
-                            <span>Approve</span>
+                            {/* <span>Approve</span> */}
                           </button>
                           <button
                             className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 flex items-center space-x-1"
@@ -1004,7 +996,7 @@ const handleExport = () => {
                             title="Reject Request"
                           >
                             <XCircle className="w-3 h-3" />
-                            <span>Reject</span>
+                            {/* <span>Reject</span> */}
                           </button>
                         </>
                       )}

@@ -2,7 +2,8 @@ import { useState } from "react";
 
 type LeaveRequest = {
   id: number;
-  dates: string;
+  fromDate: string;
+  toDate: string;
   type: string;
   reason: string;
   status: "Pending" | "Approved" | "Rejected";
@@ -13,7 +14,8 @@ export default function LeaveRequest() {
   const [requests, setRequests] = useState<LeaveRequest[]>([
     {
       id: 1,
-      dates: "2025-09-10 to 2025-09-12",
+      fromDate: "2025-09-10",
+      toDate: "2025-09-12",
       type: "Casual Leave",
       reason: "Family function",
       status: "Approved",
@@ -21,7 +23,8 @@ export default function LeaveRequest() {
     },
     {
       id: 2,
-      dates: "2025-09-15",
+      fromDate: "2025-09-15",
+      toDate: "2025-09-15",
       type: "Sick Leave",
       reason: "Fever",
       status: "Pending",
@@ -29,67 +32,88 @@ export default function LeaveRequest() {
   ]);
 
   const [form, setForm] = useState({
-    dates: "",
+    fromDate: "",
+    toDate: "",
     type: "Casual Leave",
     reason: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.dates || !form.reason) {
+    if (!form.fromDate || !form.toDate || !form.reason) {
       alert("Please fill all required fields");
       return;
     }
     const newRequest: LeaveRequest = {
       id: requests.length + 1,
-      dates: form.dates,
+      fromDate: form.fromDate,
+      toDate: form.toDate,
       type: form.type,
       reason: form.reason,
       status: "Pending",
     };
     setRequests((prev) => [newRequest, ...prev]);
-    setForm({ dates: "", type: "Casual Leave", reason: "" });
+    setForm({ fromDate: "", toDate: "", type: "Casual Leave", reason: "" });
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 max-w-5xl mx-auto">
       <h2 className="text-2xl font-semibold mb-4 dark:text-white">Faculty Leave Request</h2>
 
       {/* Leave Form */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-md mb-6"
+        className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md mb-6"
       >
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="block mb-1 text-sm font-medium dark:text-gray-200">
-              Leave Dates<span className="text-red-500">*</span>
+        <div className="mb-4 grid gap-4 md:grid-cols-3 sm:grid-cols-1">
+          {/* Leave Dates */}
+          <div className="col-span-3 flex flex-col">
+            <label className="block mb-1 text-sm font-semibold dark:text-gray-200">
+              Leave Dates <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              name="dates"
-              placeholder="e.g. 2025-09-20 to 2025-09-22"
-              value={form.dates}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2 dark:bg-gray-700 dark:text-white"
-              required
-            />
+            <div className="flex gap-2">
+              <div className="flex flex-col w-full">
+                <span className="text-xs dark:text-gray-400 mb-1">From Date</span>
+                <input
+                  type="date"
+                  name="fromDate"
+                  value={form.fromDate}
+                  onChange={handleChange}
+                  className="border rounded-md p-2 dark:bg-gray-700 dark:text-white"
+                  required
+                />
+              </div>
+              <div className="flex flex-col w-full">
+                <span className="text-xs dark:text-gray-400 mb-1">To Date</span>
+                <input
+                  type="date"
+                  name="toDate"
+                  value={form.toDate}
+                  onChange={handleChange}
+                  className="border rounded-md p-2 dark:bg-gray-700 dark:text-white"
+                  required
+                />
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="block mb-1 text-sm font-medium dark:text-gray-200">
+          {/* Type of Leave */}
+          <div className="flex flex-col">
+            <label className="block mb-1 text-sm font-semibold dark:text-gray-200">
               Type of Leave
             </label>
             <select
               name="type"
               value={form.type}
               onChange={handleChange}
-              className="w-full border rounded-md p-2 dark:bg-gray-700 dark:text-white"
+              className="border rounded-md p-2 dark:bg-gray-700 dark:text-white"
             >
               <option>Casual Leave</option>
               <option>Sick Leave</option>
@@ -100,7 +124,7 @@ export default function LeaveRequest() {
         </div>
 
         <div className="mt-4">
-          <label className="block mb-1 text-sm font-medium dark:text-gray-200">
+          <label className="block mb-1 text-sm font-semibold dark:text-gray-200">
             Reason<span className="text-red-500">*</span>
           </label>
           <textarea
@@ -116,7 +140,7 @@ export default function LeaveRequest() {
 
         <button
           type="submit"
-          className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md"
+          className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md text-base"
         >
           Submit Request
         </button>
@@ -128,7 +152,8 @@ export default function LeaveRequest() {
         <table className="w-full border-collapse border rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-gray-200 dark:bg-gray-700">
-              <th className="px-4 py-2 text-left dark:text-white">Dates</th>
+              <th className="px-4 py-2 text-left dark:text-white">From</th>
+              <th className="px-4 py-2 text-left dark:text-white">To</th>
               <th className="px-4 py-2 text-left dark:text-white">Type</th>
               <th className="px-4 py-2 text-left dark:text-white">Reason</th>
               <th className="px-4 py-2 text-left dark:text-white">Status</th>
@@ -141,7 +166,8 @@ export default function LeaveRequest() {
                 key={req.id}
                 className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                <td className="px-4 py-2 dark:text-gray-200">{req.dates}</td>
+                <td className="px-4 py-2 dark:text-gray-200">{req.fromDate}</td>
+                <td className="px-4 py-2 dark:text-gray-200">{req.toDate}</td>
                 <td className="px-4 py-2 dark:text-gray-200">{req.type}</td>
                 <td className="px-4 py-2 dark:text-gray-200">{req.reason}</td>
                 <td
@@ -151,8 +177,7 @@ export default function LeaveRequest() {
                       : req.status === "Rejected"
                       ? "text-red-600"
                       : "text-yellow-600"
-                  }`}
-                >
+                  }`}>
                   {req.status}
                 </td>
                 <td className="px-4 py-2 dark:text-gray-200">{req.hodNote || "-"}</td>
