@@ -85,7 +85,16 @@ const SIDEBAR_ITEMS = {
     ],
     'Master Admin': [
       { name: 'Dashboard', path: '/master/home/dashboard', icon: 'BarChart3' },
-      { name: 'Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
+      { 
+        name: 'Infrastructure', 
+        path: '/home', 
+        icon: 'Settings',
+        children: [
+          { name: 'Campus Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
+      { name: 'Hostel Infrastructure', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
+        ]
+      },
+
       { name: 'Courses ',path:'/master/home/data-management', icon:'Database'   },
       { name: 'Timetable', path: '/master/create/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Mail' },
@@ -1010,15 +1019,9 @@ const SIDEBAR_ITEMS = {
     ],
     'Hostel Incharge': [
     { name: 'Dashboard', path: '/hostel/dashboard', icon: 'BarChart3' },
-    { 
-      name: 'Hostel Setup', 
-      path: '/hostel/setup', 
-      icon: 'Settings',
-      children: [
-        { name: 'Buildings & Blocks', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
-        { name: 'Rules & Policies', path: '/hostel/setup/rules', icon: 'FileText' }
-      ]
-    },
+    
+        { name: 'Rules & Policies', path: '/hostel/setup/rules', icon: 'FileText' },
+      
     { 
       name: 'Occupancy & Rooms', 
       path: '/hostel/rooms', 
