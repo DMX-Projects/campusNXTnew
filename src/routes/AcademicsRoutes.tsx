@@ -24,6 +24,7 @@ import ScheduleOnlineClass from '../pages/ChairpersonModule/Academics/Scheduleon
 import Reports from '../pages/ChairpersonModule/Academics/Reports/Reports';
 import FacultyAcademicDashboard from '../pages/FacultyModules/Academic/FacultyAcademicDashboard';
 import FacultyFeedbackPrincipal from '../pages/PrincipalModules/Academics/Faculty/FacultyFeedbackPrincipal';
+import HodFacultyFeedback from '../pages/HODModules/Academics/Faculties/FacultyFeedback';
 // import RaiseTicket from '../pages/Academics/RiseTicket/RiseTicket'
 
 import FacultyInbox from '../pages/FacultyModules/FacultyAcademic/FacultyInbox';
@@ -249,6 +250,7 @@ const AcademicsRoutes: React.FC = () => {
     //Hod Route paths
     <Route path="/faculty/faculty-details" element={<FacultyDetails  />} />
     <Route path="/faculty/faculty-attendance" element={<FacultyAttendanceAndFeedback  />} />
+    <Route path="/hod/faculty-feedback" element={<HodFacultyFeedback  />} />
     <Route path="/faculty/faculty-leave-requests" element={<FacultyLeaves  />} />
     <Route path="/hod/student-attendance" element={<HODStudentAttendance  />} />
     <Route path="/hod/student-leaves" element={<HODStudentLeaveDetails  />} />
