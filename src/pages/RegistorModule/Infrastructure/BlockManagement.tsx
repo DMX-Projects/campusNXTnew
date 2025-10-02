@@ -33,34 +33,32 @@ const initialBlocks: Block[] = [
     location: "Block B, East Campus",
     floors: [
       { floorNumber: 1, rooms: [{ roomName: "C2", roomType: "Classroom", capacity: 50 }] },
-      { floorNumber: 2, rooms: [{ roomName: "Sem1", roomType: "SeminarHall", capacity: 70 }] },
+      { floorNumber: 2, rooms: [{ roomName: "Sem1", roomType: "Seminar", capacity: 70 }] },
     ],
   },
-  // more as needed ...
 ];
 
 export default function BlockManagementCards() {
   const [blocks, setBlocks] = useState<Block[]>(initialBlocks);
 
-  // Block modal
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [blockForm, setBlockForm] = useState<Block>({ blockName: "", blockType: "", location: "", floors: [] });
   const [editBlockIndex, setEditBlockIndex] = useState<number | null>(null);
 
-  // Floor modal
   const [showFloorModal, setShowFloorModal] = useState(false);
   const [floorForm, setFloorForm] = useState<Floor>({ floorNumber: 1, rooms: [] });
   const [blockFloorIndex, setBlockFloorIndex] = useState<number | null>(null);
   const [editFloorIndex, setEditFloorIndex] = useState<number | null>(null);
 
-  // Room modal
   const [showRoomModal, setShowRoomModal] = useState(false);
   const [roomForm, setRoomForm] = useState<Room>({ roomName: "", roomType: "", capacity: 0 });
   const [blockRoomIndex, setBlockRoomIndex] = useState<number | null>(null);
   const [floorRoomIndex, setFloorRoomIndex] = useState<number | null>(null);
   const [editRoomIndex, setEditRoomIndex] = useState<number | null>(null);
+  const [roomTypes, setRoomTypes] = useState<string[]>(["Lab", "Seminar", "HODOffice", "StaffRoom", "Classroom"]);
+  const [showAddRoomType, setShowAddRoomType] = useState(false);
+  const [newRoomType, setNewRoomType] = useState("");
 
-  // --- Block logic ---
   const openAddBlock = () => { setBlockForm({ blockName: "", blockType: "", location: "", floors: [] }); setEditBlockIndex(null); setShowBlockModal(true); };
   const openEditBlock = (index: number) => { setBlockForm(blocks[index]); setEditBlockIndex(index); setShowBlockModal(true); };
   const handleBlockSubmit = (e: React.FormEvent) => { e.preventDefault();
@@ -72,7 +70,6 @@ export default function BlockManagementCards() {
     if (window.confirm("Are you sure to delete this block?")) setBlocks(blocks.filter((_, i) => i !== index));
   };
 
-  // --- Floor logic ---
   const openAddFloor = (blockIdx: number) => { setBlockFloorIndex(blockIdx); setFloorForm({ floorNumber: blocks[blockIdx].floors.length + 1, rooms: [] }); setEditFloorIndex(null); setShowFloorModal(true); };
   const openEditFloor = (blockIdx: number, floorIdx: number) => { setBlockFloorIndex(blockIdx); setFloorForm(blocks[blockIdx].floors[floorIdx]); setEditFloorIndex(floorIdx); setShowFloorModal(true); };
   const handleFloorSubmit = (e: React.FormEvent) => { e.preventDefault();
@@ -90,15 +87,22 @@ export default function BlockManagementCards() {
     }
   };
 
-  // --- Room logic ---
-  const openAddRoom = (blockIdx: number, floorIdx: number) => { setBlockRoomIndex(blockIdx); setFloorRoomIndex(floorIdx); setRoomForm({ roomName: "", roomType: "", capacity: 0 }); setEditRoomIndex(null); setShowRoomModal(true); };
-  const openEditRoom = (blockIdx: number, floorIdx: number, roomIdx: number) => { setBlockRoomIndex(blockIdx); setFloorRoomIndex(floorIdx); setRoomForm(blocks[blockIdx].floors[floorIdx].rooms[roomIdx]); setEditRoomIndex(roomIdx); setShowRoomModal(true); };
+  const openAddRoom = (blockIdx: number, floorIdx: number) => { setBlockRoomIndex(blockIdx); setFloorRoomIndex(floorIdx); setRoomForm({ roomName: "", roomType: "", capacity: 0 }); setEditRoomIndex(null); setShowAddRoomType(false); setNewRoomType(""); setShowRoomModal(true); };
+  const openEditRoom = (blockIdx: number, floorIdx: number, roomIdx: number) => { setBlockRoomIndex(blockIdx); setFloorRoomIndex(floorIdx); setRoomForm(blocks[blockIdx].floors[floorIdx].rooms[roomIdx]); setEditRoomIndex(roomIdx); setShowAddRoomType(false); setNewRoomType(""); setShowRoomModal(true); };
   const handleRoomSubmit = (e: React.FormEvent) => { e.preventDefault();
     if (blockRoomIndex === null || floorRoomIndex === null) return;
     const updatedBlocks = [...blocks];
     if (editRoomIndex !== null) { updatedBlocks[blockRoomIndex].floors[floorRoomIndex].rooms[editRoomIndex] = roomForm;
     } else { updatedBlocks[blockRoomIndex].floors[floorRoomIndex].rooms.push(roomForm); }
-    setBlocks(updatedBlocks); setShowRoomModal(false);
+    setBlocks(updatedBlocks); setShowRoomModal(false); setShowAddRoomType(false); setNewRoomType("");
+  };
+  const handleAddNewRoomType = () => {
+    if (newRoomType.trim() && !roomTypes.includes(newRoomType.trim())) {
+      setRoomTypes([...roomTypes, newRoomType.trim()]);
+      setRoomForm({ ...roomForm, roomType: newRoomType.trim() });
+      setShowAddRoomType(false);
+      setNewRoomType("");
+    }
   };
   const handleDeleteRoom = (blockIdx: number, floorIdx: number, roomIdx: number) => {
     if (window.confirm("Delete this room?")) {
@@ -108,7 +112,6 @@ export default function BlockManagementCards() {
     }
   };
 
-  // Summary cards
   const blocksCount = blocks.length;
   const floorsCount = blocks.reduce((s, b) => s + b.floors.length, 0);
   const roomsCount = blocks.reduce((s, b) => s + b.floors.reduce((fs, f) => fs + f.rooms.length, 0), 0);
@@ -117,16 +120,9 @@ export default function BlockManagementCards() {
   return (
     <div className="">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-        <div>
-                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                                Define Infrastructure
-                            </h1>
-                            <p className="text-gray-600 dark:text-gray-400 mt-2">Create and manage the Blocks and Rooms available in the campus.</p>
-                        </div>
         <h1 className="text-3xl font-bold text-primary-800 dark:text-gray-100"></h1>
         <button onClick={openAddBlock} className="bg-primary-600 hover:bg-primary-700 dark:bg-primary-800 text-white rounded px-4 py-2 shadow transition flex items-center gap-2" type="button"><Plus size={18} /> Add Block</button>
       </div>
-      {/* Summary */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         {[{ label: "Blocks", value: blocksCount }, { label: "Floors", value: floorsCount }, { label: "Rooms", value: roomsCount }, { label: "Room Types", value: roomTypesCount }]
           .map((card) => (
@@ -135,7 +131,6 @@ export default function BlockManagementCards() {
               <span className="text-3xl font-bold text-primary-700 dark:text-gray-50">{card.value}</span>
             </div>))}
       </div>
-      {/* Card layout for blocks */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {blocks.map((block, idx) => (
           <div key={idx} className="bg-white dark:bg-gray-800 shadow-xl rounded-xl p-5 flex flex-col gap-4">
@@ -185,10 +180,9 @@ export default function BlockManagementCards() {
           </div>
         ))}
       </div>
-      {/* BLOCK Modal */}
       {showBlockModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <form onSubmit={handleBlockSubmit} className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full shadow-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full shadow-lg">
             <h2 className="text-lg mb-4 font-semibold text-primary-800 dark:text-gray-100">{editBlockIndex !== null ? "Edit Block" : "Add Block"}</h2>
             <label className="block mb-3">
               <span className="font-medium text-primary-700 dark:text-gray-300">Block Name</span>
@@ -204,15 +198,14 @@ export default function BlockManagementCards() {
             </label>
             <div className="flex justify-end gap-3 mt-2">
               <button type="button" className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200" onClick={() => setShowBlockModal(false)}>Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white">{editBlockIndex !== null ? "Update" : "Add"}</button>
+              <button type="button" onClick={handleBlockSubmit} className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white">{editBlockIndex !== null ? "Update" : "Add"}</button>
             </div>
-          </form>
+          </div>
         </div>
       )}
-      {/* FLOOR Modal */}
       {showFloorModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <form onSubmit={handleFloorSubmit} className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full shadow-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full shadow-lg">
             <h2 className="text-lg mb-4 font-semibold text-primary-800 dark:text-gray-100">{editFloorIndex !== null ? "Edit Floor" : "Add Floor"}</h2>
             <label className="block mb-3">
               <span className="font-medium text-primary-700 dark:text-gray-300">Floor Number</span>
@@ -221,15 +214,14 @@ export default function BlockManagementCards() {
             </label>
             <div className="flex justify-end gap-3 mt-2">
               <button type="button" className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200" onClick={() => setShowFloorModal(false)}>Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white">{editFloorIndex !== null ? "Update" : "Add"}</button>
+              <button type="button" onClick={handleFloorSubmit} className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white">{editFloorIndex !== null ? "Update" : "Add"}</button>
             </div>
-          </form>
+          </div>
         </div>
       )}
-      {/* ROOM Modal */}
       {showRoomModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <form onSubmit={handleRoomSubmit} className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full shadow-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full shadow-lg">
             <h2 className="text-lg mb-4 font-semibold text-primary-800 dark:text-gray-100">{editRoomIndex !== null ? "Edit Room" : "Add Room"}</h2>
             <label className="block mb-3">
               <span className="font-medium text-primary-700 dark:text-gray-300">Room Name</span>
@@ -237,7 +229,33 @@ export default function BlockManagementCards() {
             </label>
             <label className="block mb-3">
               <span className="font-medium text-primary-700 dark:text-gray-300">Room Type</span>
-              <input className="w-full p-2 rounded border mt-1 bg-white dark:bg-gray-900" required value={roomForm.roomType} onChange={e => setRoomForm({ ...roomForm, roomType: e.target.value })}/>
+              {!showAddRoomType ? (
+                <div className="flex gap-2">
+                  <select className="flex-1 p-2 rounded border mt-1 bg-white dark:bg-gray-900" required value={roomForm.roomType} onChange={e => setRoomForm({ ...roomForm, roomType: e.target.value })}>
+                    <option value="">Select Room Type</option>
+                    {roomTypes.map(type => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                  <button type="button" onClick={() => setShowAddRoomType(true)} className="mt-1 px-3 py-2 rounded bg-accent-600 hover:bg-accent-700 text-white flex items-center gap-1">
+                    <Plus size={16} /> New
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-1">
+                  <div className="flex gap-2">
+                    <input 
+                      className="flex-1 p-2 rounded border bg-white dark:bg-gray-900" 
+                      placeholder="Enter new room type"
+                      value={newRoomType}
+                      onChange={e => setNewRoomType(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddNewRoomType(); } }}
+                    />
+                    <button type="button" onClick={handleAddNewRoomType} className="px-3 py-2 rounded bg-green-600 hover:bg-green-700 text-white">Add</button>
+                    <button type="button" onClick={() => { setShowAddRoomType(false); setNewRoomType(""); }} className="px-3 py-2 rounded bg-gray-400 hover:bg-gray-500 text-white">Cancel</button>
+                  </div>
+                </div>
+              )}
             </label>
             <label className="block mb-4">
               <span className="font-medium text-primary-700 dark:text-gray-300">Capacity</span>
@@ -246,9 +264,9 @@ export default function BlockManagementCards() {
             </label>
             <div className="flex justify-end gap-3 mt-2">
               <button type="button" className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200" onClick={() => setShowRoomModal(false)}>Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white">{editRoomIndex !== null ? "Update" : "Add"}</button>
+              <button type="button" onClick={handleRoomSubmit} className="px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white">{editRoomIndex !== null ? "Update" : "Add"}</button>
             </div>
-          </form>
+          </div>
         </div>
       )}
     </div>
