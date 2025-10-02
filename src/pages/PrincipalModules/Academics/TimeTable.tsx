@@ -1,31 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Book, MapPin, Filter, Search, Sun, Moon } from 'lucide-react';
+import { Calendar, Clock, User, Book, MapPin, Filter, Search } from 'lucide-react';
 
 const TimeTable: React.FC = () => {
   const [selectedView, setSelectedView] = useState<'grid' | 'list'>('grid');
-  const [selectedDepartment, setSelectedDepartment] = useState<string>('all');
+  const [selectedDepartment, setSelectedDepartment] = useState<string>('Computer Science');
   const [selectedSemester, setSelectedSemester] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    // Read initial theme from localStorage or default to false
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') === 'dark';
-    }
-    return false;
-  });
 
-  // Update dark mode class on root <html> and save preference
+  // Remove local isDarkMode state and useEffect - let the global state handle dark mode
   useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDarkMode) {
-      root.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      root.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isDarkMode]);
+    // Check if dark mode is already set by the global state
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    console.log('Dark mode status on component mount:', isDarkMode);
+  }, []);
 
   const timeSlots = [
     '09:00-09:50',
@@ -40,22 +27,19 @@ const TimeTable: React.FC = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const departments = ['Computer Science', 'Electronics', 'Mechanical', 'Civil', 'Information Technology'];
   const semesters = ['1st Semester','2nd Semester','3rd Semester','4th Semester','5th Semester','6th Semester'];
+  
   const sampleData = {
     Monday: {
       '09:00-09:50': { subject: 'Data Structures', faculty: 'Dr. Smith', room: 'CS-101', department: 'Computer Science', semester: '3rd Semester' },
-      // ... add more sample classes if needed ...
     },
-    // Other days data...
   };
 
   const filterData = () => {
     const filtered = JSON.parse(JSON.stringify(sampleData));
-    if (selectedDepartment !== 'all') {
-      for (const day in filtered) {
-        for (const time in filtered[day]) {
-          if (filtered[day][time].department !== selectedDepartment && filtered[day][time].department !== 'All') {
-            delete filtered[day][time];
-          }
+    for (const day in filtered) {
+      for (const time in filtered[day]) {
+        if (filtered[day][time].department !== selectedDepartment && filtered[day][time].department !== 'All') {
+          delete filtered[day][time];
         }
       }
     }
@@ -82,10 +66,12 @@ const TimeTable: React.FC = () => {
     }
     return filtered;
   };
+  
   const data = filterData();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      {/* Rest of your component remains the same */}
       <div className="max-w-7xl mx-auto p-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
@@ -103,7 +89,6 @@ const TimeTable: React.FC = () => {
               <Filter className="w-4 h-4" />
               {selectedView === 'grid' ? 'List View' : 'Grid View'}
             </button>
-          
           </div>
         </div>
 
@@ -114,7 +99,6 @@ const TimeTable: React.FC = () => {
             onChange={e => setSelectedDepartment(e.target.value)}
             className="block w-full px-3 py-2 rounded border border-gray-300 bg-white dark:bg-gray-800 text-black dark:text-white"
           >
-            <option value="all">All Departments</option>
             {departments.map(dep => <option key={dep} value={dep}>{dep}</option>)}
           </select>
           <select
