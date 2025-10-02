@@ -1,4 +1,4 @@
-// HODDashboard.tsx - Complete with Working Filters and Buttons (Faculty & Students Removed)
+
 import React, { useState, useEffect } from 'react';
 import { 
   AcademicCapIcon,
@@ -197,6 +197,10 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  
+  // Add state for viewing syllabus details
+  const [viewingSyllabus, setViewingSyllabus] = useState<Syllabus | null>(null);
+  const [showSyllabusModal, setShowSyllabusModal] = useState<boolean>(false);
 
   // Enhanced filters state
   const [filters, setFilters] = useState<FilterState>({
@@ -351,7 +355,7 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
       }
     ];
 
-    // Sample Syllabus with different statuses
+    // Sample Syllabus with different statuses and detailed content
     const sampleSyllabus: Syllabus[] = [
       {
         id: 'syl1',
@@ -362,19 +366,42 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
           units: [
             {
               id: 'unit1', number: 1, title: 'Introduction to Programming', 
-              description: 'Basic programming concepts', hours: 15,
+              description: 'Basic programming concepts, variables, data types', hours: 15,
               lectures: [{
                 id: 'lec1', topic: 'Programming Languages Overview', duration: 2,
                 learningOutcomes: ['Understand different paradigms', 'Learn syntax basics']
+              }, {
+                id: 'lec2', topic: 'Variables and Data Types', duration: 2,
+                learningOutcomes: ['Declare variables', 'Use different data types']
               }],
               tutorials: [{
                 id: 'tut1', topic: 'Basic Programming Exercises', duration: 1,
-                exercises: ['Hello World', 'Variable Declaration']
+                exercises: ['Hello World Program', 'Variable Declaration Practice']
               }],
               practicals: [{
-                id: 'prac1', topic: 'IDE Setup', duration: 2,
-                experiments: ['Install IDE', 'First Program'],
+                id: 'prac1', topic: 'IDE Setup and First Program', duration: 2,
+                experiments: ['Install IDE', 'Write First Program'],
                 equipment: ['Computer', 'IDE Software']
+              }]
+            },
+            {
+              id: 'unit2', number: 2, title: 'Control Structures', 
+              description: 'Conditional statements and loops', hours: 20,
+              lectures: [{
+                id: 'lec3', topic: 'If-else Statements', duration: 2,
+                learningOutcomes: ['Write conditional logic', 'Use nested conditions']
+              }, {
+                id: 'lec4', topic: 'Loops and Iteration', duration: 3,
+                learningOutcomes: ['Implement for/while loops', 'Handle loop control']
+              }],
+              tutorials: [{
+                id: 'tut2', topic: 'Control Structure Practice', duration: 2,
+                exercises: ['Decision Making Programs', 'Loop Implementation']
+              }],
+              practicals: [{
+                id: 'prac2', topic: 'Programming Control Flow', duration: 3,
+                experiments: ['Calculator Program', 'Number Pattern Programs'],
+                equipment: ['Computer', 'Compiler']
               }]
             }
           ],
@@ -390,8 +417,25 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
         id: 'syl2',
         courseId: 'course2',
         title: 'Mathematics for Computer Science Syllabus',
-        description: 'Discrete mathematics and mathematical foundations',
-        content: { units: [], totalHours: 45 },
+        description: 'Discrete mathematics and mathematical foundations for computer science',
+        content: {
+          units: [
+            {
+              id: 'unit3', number: 1, title: 'Set Theory and Logic', 
+              description: 'Mathematical foundations and logical reasoning', hours: 20,
+              lectures: [{
+                id: 'lec5', topic: 'Set Operations', duration: 2,
+                learningOutcomes: ['Understand set theory', 'Apply set operations']
+              }],
+              tutorials: [{
+                id: 'tut3', topic: 'Logic Problems', duration: 1,
+                exercises: ['Set Theory Problems', 'Logical Reasoning']
+              }],
+              practicals: []
+            }
+          ],
+          totalHours: 45
+        },
         definition: {
           duration: 16, credits: 3,
           assessmentStructure: { internals: 40, externals: 50, assignments: 10, practicals: 0 }
@@ -403,7 +447,28 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
         courseId: 'course3',
         title: 'Data Structures & Algorithms Syllabus',
         description: 'Advanced data structures and algorithmic techniques',
-        content: { units: [], totalHours: 60 },
+        content: { 
+          units: [
+            {
+              id: 'unit4', number: 1, title: 'Linear Data Structures', 
+              description: 'Arrays, linked lists, stacks, and queues', hours: 25,
+              lectures: [{
+                id: 'lec6', topic: 'Arrays and Pointers', duration: 3,
+                learningOutcomes: ['Implement arrays', 'Use pointer arithmetic']
+              }],
+              tutorials: [{
+                id: 'tut4', topic: 'Data Structure Implementation', duration: 2,
+                exercises: ['Array Operations', 'Linked List Creation']
+              }],
+              practicals: [{
+                id: 'prac3', topic: 'Data Structure Lab', duration: 3,
+                experiments: ['Stack Implementation', 'Queue Operations'],
+                equipment: ['Computer', 'Programming Environment']
+              }]
+            }
+          ], 
+          totalHours: 60 
+        },
         definition: {
           duration: 16, credits: 4,
           assessmentStructure: { internals: 30, externals: 50, assignments: 10, practicals: 10 }
@@ -414,13 +479,34 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
         id: 'syl4',
         courseId: 'course4',
         title: 'Database Management Systems Syllabus',
-        description: 'Database design and implementation',
-        content: { units: [], totalHours: 45 },
+        description: 'Database design, implementation, and management',
+        content: { 
+          units: [
+            {
+              id: 'unit5', number: 1, title: 'Database Fundamentals', 
+              description: 'Introduction to database concepts and ER modeling', hours: 20,
+              lectures: [{
+                id: 'lec7', topic: 'Database Architecture', duration: 2,
+                learningOutcomes: ['Understand database systems', 'Learn DBMS architecture']
+              }],
+              tutorials: [{
+                id: 'tut5', topic: 'ER Diagram Practice', duration: 2,
+                exercises: ['Entity Relationship Modeling', 'Database Design']
+              }],
+              practicals: [{
+                id: 'prac4', topic: 'Database Creation', duration: 3,
+                experiments: ['Create Database Schema', 'Insert Sample Data'],
+                equipment: ['Computer', 'Database Software']
+              }]
+            }
+          ],
+          totalHours: 45 
+        },
         definition: {
           duration: 16, credits: 3,
           assessmentStructure: { internals: 30, externals: 40, assignments: 15, practicals: 15 }
         },
-        status: 'Rejected', createdBy: 'fac3', rejectionReason: 'Assessment structure needs revision',
+        status: 'Rejected', createdBy: 'fac3', rejectionReason: 'Assessment structure needs revision - practical weightage too high',
         createdAt: currentDate, updatedAt: currentDate
       }
     ];
@@ -519,6 +605,12 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
       addDocument(file, type);
       showToast(`${type} document uploaded successfully`, 'success');
     }
+  };
+
+  // View Syllabus Details Function
+  const viewSyllabusDetails = (syllabus: Syllabus) => {
+    setViewingSyllabus(syllabus);
+    setShowSyllabusModal(true);
   };
 
   // CRUD Operations for HOD
@@ -789,6 +881,7 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
           </div>
         </div>
       )}
+
       {/* Navigation Tabs */}
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -801,6 +894,7 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                   onClick={() => {
                     setActiveTab(tab.id as HODTabType);
                     setShowModal(false);
+                    setShowSyllabusModal(false);
                     setEditingId(null);
                     resetFilters();
                   }}
@@ -1226,6 +1320,7 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                             </span>
                             
                             <button
+                              onClick={() => viewSyllabusDetails(syllabus)}
                               className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
                               title="View Details"
                             >
@@ -1385,7 +1480,10 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                                 Year/Semester
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
-                                Credits & Type
+                                Credits
+                              </th>
+                              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
+                                Type
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                                 Status
@@ -1413,24 +1511,23 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                                   {getProgramName(course.programId)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">
-                                  <div>
-                                    <div>{getYearName(course.yearId)}</div>
-                                    <div className="text-xs text-slate-400">{getSemesterName(course.semesterId)}</div>
-                                  </div>
+                                  {getYearName(course.yearId)} / {getSemesterName(course.semesterId)}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">
-                                  <div>
-                                    <div className="font-medium">{course.credits} Credits</div>
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                      course.type === 'Core' 
-                                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                                        : course.type === 'Elective' 
-                                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                        : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                    }`}>
-                                      {course.type}
-                                    </span>
-                                  </div>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                                    {course.credits}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                    course.type === 'Core' 
+                                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                                      : course.type === 'Elective' 
+                                      ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                      : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                  }`}>
+                                    {course.type}
+                                  </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -1441,11 +1538,11 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                                     {course.isActive ? 'Active' : 'Inactive'}
                                   </span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">
-                                  <div className="flex space-x-2">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                                  <div className="flex items-center space-x-3">
                                     <button
                                       onClick={() => editCourse(course)}
-                                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                                      className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                                       title="Edit"
                                     >
                                       <PencilIcon className="h-4 w-4" />
@@ -1477,13 +1574,13 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                                 Program
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
-                                Year & Semester
+                                Year/Semester
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                                 Capacity
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
-                                Students
+                                Enrollment
                               </th>
                               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                                 Status
@@ -1502,12 +1599,8 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                                       <RectangleGroupIcon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                     </div>
                                     <div>
-                                      <div className="text-sm font-medium text-slate-900 dark:text-white">
-                                        Section {section.name}
-                                      </div>
-                                      <div className="text-sm text-slate-500 dark:text-slate-400">
-                                        Created {new Date(section.createdAt).toLocaleDateString()}
-                                      </div>
+                                      <div className="text-sm font-medium text-slate-900 dark:text-white">Section {section.name}</div>
+                                      <div className="text-sm text-slate-500 dark:text-slate-400">Semester {section.semesterNumber}</div>
                                     </div>
                                   </div>
                                 </td>
@@ -1515,28 +1608,28 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                                   {getProgramName(section.programId)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">
-                                  <div>
-                                    <div>{getYearName(section.yearId)}</div>
-                                    <div className="text-xs text-slate-400">Semester {section.semesterNumber}</div>
-                                  </div>
+                                  {getYearName(section.yearId)} / Sem {section.semesterNumber}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">
                                   <span className="font-semibold text-slate-900 dark:text-white">{section.maxStudents}</span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">
-                                  <div className="flex items-center space-x-2">
-                                    <div className={`w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 ${
-                                      section.currentStudents > section.maxStudents * 0.9 ? 'bg-red-200' : 
-                                      section.currentStudents > section.maxStudents * 0.8 ? 'bg-yellow-200' : 'bg-green-200'
-                                    }`}>
-                                      <div className={`h-2 rounded-full ${
-                                        section.currentStudents > section.maxStudents * 0.9 ? 'bg-red-500' : 
-                                        section.currentStudents > section.maxStudents * 0.8 ? 'bg-yellow-500' : 'bg-green-500'
-                                      }`} style={{width: `${Math.min((section.currentStudents / section.maxStudents) * 100, 100)}%`}}></div>
-                                    </div>
-                                    <span className="text-xs font-medium whitespace-nowrap">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="flex items-center">
+                                    <span className="text-sm font-medium text-slate-900 dark:text-white mr-2">
                                       {section.currentStudents}/{section.maxStudents}
                                     </span>
+                                    <div className="w-16 bg-slate-200 dark:bg-slate-600 rounded-full h-2">
+                                      <div 
+                                        className={`h-2 rounded-full ${
+                                          (section.currentStudents / section.maxStudents) * 100 > 90 
+                                            ? 'bg-red-500' 
+                                            : (section.currentStudents / section.maxStudents) * 100 > 75 
+                                            ? 'bg-yellow-500' 
+                                            : 'bg-green-500'
+                                        }`}
+                                        style={{ width: `${(section.currentStudents / section.maxStudents) * 100}%` }}
+                                      ></div>
+                                    </div>
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -1548,11 +1641,11 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                                     {section.isActive ? 'Active' : 'Inactive'}
                                   </span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">
-                                  <div className="flex space-x-2">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                                  <div className="flex items-center space-x-3">
                                     <button
                                       onClick={() => editSection(section)}
-                                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                                      className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                                       title="Edit"
                                     >
                                       <PencilIcon className="h-4 w-4" />
@@ -1580,23 +1673,28 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
         )}
       </main>
 
-      {/* Enhanced Modal for Forms */}
+      {/* Course/Section Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                {editingId ? `Edit ${activeTab.slice(0, -1)}` : `Add ${activeTab.slice(0, -1)}`}
-              </h3>
-              <button
-                onClick={() => setShowModal(false)}
-                className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-              >
-                <XMarkIcon className="h-5 w-5" />
-              </button>
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  {editingId ? 'Edit' : 'Add'} {activeTab === 'courses' ? 'Course' : 'Section'}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowModal(false);
+                    setEditingId(null);
+                  }}
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
             </div>
 
-            <div className="p-6">
+            <div className="px-6 py-4">
               {/* Course Form */}
               {activeTab === 'courses' && (
                 <form onSubmit={handleCourseSubmit} className="space-y-6">
@@ -1607,8 +1705,10 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       </label>
                       <select
                         value={courseForm.programId}
-                        onChange={(e) => setCourseForm({...courseForm, programId: e.target.value, yearId: '', semesterId: ''})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        onChange={(e) => {
+                          setCourseForm({ ...courseForm, programId: e.target.value, yearId: '', semesterId: '' });
+                        }}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
                         required
                       >
                         <option value="">Select Program</option>
@@ -1624,36 +1724,58 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       </label>
                       <select
                         value={courseForm.yearId}
-                        onChange={(e) => setCourseForm({...courseForm, yearId: e.target.value, semesterId: ''})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        onChange={(e) => {
+                          setCourseForm({ ...courseForm, yearId: e.target.value, semesterId: '' });
+                        }}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
                         required
+                        disabled={!courseForm.programId}
                       >
-                        <option value="">Select Academic Year</option>
-                        {academicYears.filter(y => y.isActive && y.programId === courseForm.programId).map(year => (
-                          <option key={year.id} value={year.id}>{year.name}</option>
-                        ))}
+                        <option value="">Select Year</option>
+                        {academicYears
+                          .filter(year => year.programId === courseForm.programId && year.isActive)
+                          .map(year => (
+                            <option key={year.id} value={year.id}>{year.name}</option>
+                          ))}
                       </select>
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      Semester *
-                    </label>
-                    <select
-                      value={courseForm.semesterId}
-                      onChange={(e) => setCourseForm({...courseForm, semesterId: e.target.value})}
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
-                      required
-                    >
-                      <option value="">Select Semester</option>
-                      {semesters.filter(s => s.isActive && s.yearId === courseForm.yearId).map(sem => (
-                        <option key={sem.id} value={sem.id}>{sem.name}</option>
-                      ))}
-                    </select>
-                  </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Semester *
+                      </label>
+                      <select
+                        value={courseForm.semesterId}
+                        onChange={(e) => setCourseForm({ ...courseForm, semesterId: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        required
+                        disabled={!courseForm.yearId}
+                      >
+                        <option value="">Select Semester</option>
+                        {semesters
+                          .filter(sem => sem.yearId === courseForm.yearId && sem.isActive)
+                          .map(sem => (
+                            <option key={sem.id} value={sem.id}>{sem.name}</option>
+                          ))}
+                      </select>
+                    </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Course Type *
+                      </label>
+                      <select
+                        value={courseForm.type}
+                        onChange={(e) => setCourseForm({ ...courseForm, type: e.target.value as 'Core' | 'Elective' | 'Lab' })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        required
+                      >
+                        <option value="Core">Core</option>
+                        <option value="Elective">Elective</option>
+                        <option value="Lab">Lab</option>
+                      </select>
+                    </div>
+
                     <div>
                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                         Course Name *
@@ -1661,9 +1783,9 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       <input
                         type="text"
                         value={courseForm.name}
-                        onChange={(e) => setCourseForm({...courseForm, name: e.target.value})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
-                        placeholder="e.g., Data Structures & Algorithms"
+                        onChange={(e) => setCourseForm({ ...courseForm, name: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter course name"
                         required
                       />
                     </div>
@@ -1675,15 +1797,13 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       <input
                         type="text"
                         value={courseForm.code}
-                        onChange={(e) => setCourseForm({...courseForm, code: e.target.value.toUpperCase()})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
-                        placeholder="e.g., CS201"
+                        onChange={(e) => setCourseForm({ ...courseForm, code: e.target.value.toUpperCase() })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter course code (e.g., CS101)"
                         required
                       />
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                         Credits *
@@ -1691,142 +1811,101 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       <input
                         type="number"
                         min="1"
-                        max="10"
+                        max="6"
                         value={courseForm.credits}
-                        onChange={(e) => setCourseForm({...courseForm, credits: parseInt(e.target.value) || 0})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        onChange={(e) => setCourseForm({ ...courseForm, credits: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter credits (1-6)"
                         required
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Course Type *
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={courseForm.isActive}
+                        onChange={(e) => setCourseForm({ ...courseForm, isActive: e.target.checked })}
+                        className="h-4 w-4 text-green-600 focus:ring-green-500 border-slate-300 rounded"
+                      />
+                      <label className="ml-2 block text-sm text-slate-700 dark:text-slate-300">
+                        Active Course
                       </label>
-                      <select
-                        value={courseForm.type}
-                        onChange={(e) => setCourseForm({...courseForm, type: e.target.value as 'Core' | 'Elective' | 'Lab'})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
-                        required
-                      >
-                        <option value="Core">Core</option>
-                        <option value="Elective">Elective</option>
-                        <option value="Lab">Lab</option>
-                      </select>
                     </div>
                   </div>
 
-                  {/* Course Documents Section */}
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-4">
-                      Course Documents
-                    </label>
+                  {/* Document Upload Section */}
+                  <div className="border-t border-slate-200 dark:border-slate-600 pt-6">
+                    <h4 className="text-md font-medium text-slate-900 dark:text-white mb-4">Course Documents</h4>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-slate-600 dark:text-slate-400">
-                          Syllabus
-                        </label>
-                        <input
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          onChange={(e) => handleFileUpload(e, 'syllabus')}
-                          className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-slate-600 dark:text-slate-400">
-                          Lecture Notes
-                        </label>
-                        <input
-                          type="file"
-                          accept=".pdf,.doc,.docx,.ppt,.pptx"
-                          onChange={(e) => handleFileUpload(e, 'notes')}
-                          className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-slate-600 dark:text-slate-400">
-                          Assignments
-                        </label>
-                        <input
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          onChange={(e) => handleFileUpload(e, 'assignments')}
-                          className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-xs font-medium text-slate-600 dark:text-slate-400">
-                          References
-                        </label>
-                        <input
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          onChange={(e) => handleFileUpload(e, 'references')}
-                          className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
-                        />
-                      </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                      {['syllabus', 'notes', 'assignments', 'references'].map((docType) => (
+                        <div key={docType} className="relative">
+                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 capitalize">
+                            {docType}
+                          </label>
+                          <div className="flex items-center justify-center w-full h-32 border-2 border-slate-300 dark:border-slate-600 border-dashed rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                            <div className="text-center">
+                              <DocumentArrowUpIcon className="mx-auto h-8 w-8 text-slate-400 mb-2" />
+                              <label className="cursor-pointer">
+                                <span className="text-sm text-slate-600 dark:text-slate-400">Upload {docType}</span>
+                                <input
+                                  type="file"
+                                  className="hidden"
+                                  accept=".pdf,.doc,.docx,.ppt,.pptx,.txt"
+                                  onChange={(e) => handleFileUpload(e, docType as any)}
+                                />
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
 
-                    {/* Uploaded Documents List */}
+                    {/* Display uploaded documents */}
                     {courseForm.documents.length > 0 && (
-                      <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
-                        <h4 className="text-sm font-medium text-slate-900 dark:text-white mb-3">Uploaded Documents</h4>
-                        <div className="space-y-2">
-                          {courseForm.documents.map((doc, index) => (
-                            <div key={doc.id} className="flex items-center justify-between p-2 bg-white dark:bg-slate-600 rounded-lg">
-                              <div className="flex items-center space-x-3">
-                                <DocumentIcon className="h-5 w-5 text-slate-400" />
-                                <div>
-                                  <p className="text-sm font-medium text-slate-900 dark:text-white">{doc.name}</p>
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    {doc.type} | {(doc.fileSize / 1024).toFixed(1)} KB
-                                  </p>
-                                </div>
+                      <div className="space-y-2">
+                        <h5 className="text-sm font-medium text-slate-900 dark:text-white">Uploaded Documents:</h5>
+                        {courseForm.documents.map((doc, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                            <div className="flex items-center space-x-3">
+                              <DocumentIcon className="h-5 w-5 text-slate-500" />
+                              <div>
+                                <p className="text-sm font-medium text-slate-900 dark:text-white">{doc.name}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">
+                                  {doc.type} • {(doc.fileSize / (1024 * 1024)).toFixed(2)} MB
+                                </p>
                               </div>
-                              <button
-                                type="button"
-                                onClick={() => removeDocument(index)}
-                                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                              >
-                                <XMarkIcon className="h-4 w-4" />
-                              </button>
                             </div>
-                          ))}
-                        </div>
+                            <button
+                              type="button"
+                              onClick={() => removeDocument(index)}
+                              className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={courseForm.isActive}
-                      onChange={(e) => setCourseForm({...courseForm, isActive: e.target.checked})}
-                      className="h-4 w-4 text-green-600 focus:ring-green-500 border-slate-300 rounded"
-                    />
-                    <label className="ml-3 block text-sm text-slate-700 dark:text-slate-300">
-                      Active Course
-                    </label>
-                  </div>
-
+                  {/* Form Actions */}
                   <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200 dark:border-slate-600">
                     <button
                       type="button"
-                      onClick={() => setShowModal(false)}
-                      className="px-6 py-3 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                      onClick={() => {
+                        setShowModal(false);
+                        setEditingId(null);
+                      }}
+                      className="px-4 py-2 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                     >
-                      {editingId ? 'Update' : 'Create'} Course
+                      {editingId ? 'Update' : 'Add'} Course
                     </button>
                   </div>
                 </form>
@@ -1842,8 +1921,10 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       </label>
                       <select
                         value={sectionForm.programId}
-                        onChange={(e) => setSectionForm({...sectionForm, programId: e.target.value, yearId: ''})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        onChange={(e) => {
+                          setSectionForm({ ...sectionForm, programId: e.target.value, yearId: '' });
+                        }}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
                         required
                       >
                         <option value="">Select Program</option>
@@ -1859,34 +1940,34 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       </label>
                       <select
                         value={sectionForm.yearId}
-                        onChange={(e) => setSectionForm({...sectionForm, yearId: e.target.value})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        onChange={(e) => setSectionForm({ ...sectionForm, yearId: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
                         required
+                        disabled={!sectionForm.programId}
                       >
-                        <option value="">Select Academic Year</option>
-                        {academicYears.filter(y => y.isActive && y.programId === sectionForm.programId).map(year => (
-                          <option key={year.id} value={year.id}>{year.name}</option>
-                        ))}
+                        <option value="">Select Year</option>
+                        {academicYears
+                          .filter(year => year.programId === sectionForm.programId && year.isActive)
+                          .map(year => (
+                            <option key={year.id} value={year.id}>{year.name}</option>
+                          ))}
                       </select>
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                         Semester Number *
                       </label>
-                      <select
+                      <input
+                        type="number"
+                        min="1"
+                        max="8"
                         value={sectionForm.semesterNumber}
-                        onChange={(e) => setSectionForm({...sectionForm, semesterNumber: parseInt(e.target.value)})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        onChange={(e) => setSectionForm({ ...sectionForm, semesterNumber: parseInt(e.target.value) || 1 })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter semester number (1-8)"
                         required
-                      >
-                        <option value={0}>Select Semester</option>
-                        {[1,2,3,4,5,6,7,8,9,10].map(num => (
-                          <option key={num} value={num}>Semester {num}</option>
-                        ))}
-                      </select>
+                      />
                     </div>
 
                     <div>
@@ -1896,76 +1977,338 @@ const HODDashboard: React.FC<HODDashboardProps> = ({
                       <input
                         type="text"
                         value={sectionForm.name}
-                        onChange={(e) => setSectionForm({...sectionForm, name: e.target.value.toUpperCase()})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
-                        placeholder="e.g., A, B, C"
-                        maxLength={2}
+                        onChange={(e) => setSectionForm({ ...sectionForm, name: e.target.value.toUpperCase() })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter section name (e.g., A, B, C)"
                         required
                       />
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Max Students *
+                        Maximum Students *
                       </label>
                       <input
                         type="number"
-                        min="10"
+                        min="20"
                         max="100"
                         value={sectionForm.maxStudents}
-                        onChange={(e) => setSectionForm({...sectionForm, maxStudents: parseInt(e.target.value) || 60})}
-                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        onChange={(e) => setSectionForm({ ...sectionForm, maxStudents: parseInt(e.target.value) || 60 })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter maximum capacity (20-100)"
                         required
                       />
                     </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                        Current Students
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max={sectionForm.maxStudents}
+                        value={sectionForm.currentStudents}
+                        onChange={(e) => setSectionForm({ ...sectionForm, currentStudents: parseInt(e.target.value) || 0 })}
+                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
+                        placeholder="Enter current enrollment"
+                      />
+                    </div>
+
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={sectionForm.isActive}
+                        onChange={(e) => setSectionForm({ ...sectionForm, isActive: e.target.checked })}
+                        className="h-4 w-4 text-green-600 focus:ring-green-500 border-slate-300 rounded"
+                      />
+                      <label className="ml-2 block text-sm text-slate-700 dark:text-slate-300">
+                        Active Section
+                      </label>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                      Current Students
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      max={sectionForm.maxStudents}
-                      value={sectionForm.currentStudents}
-                      onChange={(e) => setSectionForm({...sectionForm, currentStudents: parseInt(e.target.value) || 0})}
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-slate-700 dark:text-white"
-                    />
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      Number of students currently enrolled in this section
-                    </p>
-                  </div>
-
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={sectionForm.isActive}
-                      onChange={(e) => setSectionForm({...sectionForm, isActive: e.target.checked})}
-                      className="h-4 w-4 text-green-600 focus:ring-green-500 border-slate-300 rounded"
-                    />
-                    <label className="ml-3 block text-sm text-slate-700 dark:text-slate-300">
-                      Active Section
-                    </label>
-                  </div>
-
+                  {/* Form Actions */}
                   <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200 dark:border-slate-600">
                     <button
                       type="button"
-                      onClick={() => setShowModal(false)}
-                      className="px-6 py-3 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                      onClick={() => {
+                        setShowModal(false);
+                        setEditingId(null);
+                      }}
+                      className="px-4 py-2 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                     >
-                      {editingId ? 'Update' : 'Create'} Section
+                      {editingId ? 'Update' : 'Add'} Section
                     </button>
                   </div>
                 </form>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Syllabus Details Modal */}
+      {showSyllabusModal && viewingSyllabus && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+                    {viewingSyllabus.title}
+                  </h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    Course: {getCourseName(viewingSyllabus.courseId)}
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowSyllabusModal(false);
+                    setViewingSyllabus(null);
+                  }}
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
+              </div>
+            </div>
+
+            <div className="px-6 py-4 space-y-6">
+              {/* Syllabus Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium text-blue-900 dark:text-blue-200">Duration</h4>
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {viewingSyllabus.definition.duration} weeks
+                  </p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium text-green-900 dark:text-green-200">Credits</h4>
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    {viewingSyllabus.definition.credits}
+                  </p>
+                </div>
+                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium text-purple-900 dark:text-purple-200">Units</h4>
+                  <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                    {viewingSyllabus.content.units.length}
+                  </p>
+                </div>
+                <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium text-orange-900 dark:text-orange-200">Total Hours</h4>
+                  <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                    {viewingSyllabus.content.totalHours}
+                  </p>
+                </div>
+              </div>
+
+              {/* Assessment Structure */}
+              <div className="bg-slate-50 dark:bg-slate-700 p-4 rounded-lg">
+                <h4 className="text-lg font-medium text-slate-900 dark:text-white mb-3">Assessment Structure</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Internals</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white">
+                      {viewingSyllabus.definition.assessmentStructure.internals}%
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Externals</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white">
+                      {viewingSyllabus.definition.assessmentStructure.externals}%
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Assignments</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white">
+                      {viewingSyllabus.definition.assessmentStructure.assignments}%
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Practicals</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white">
+                      {viewingSyllabus.definition.assessmentStructure.practicals}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Description */}
+              <div>
+                <h4 className="text-lg font-medium text-slate-900 dark:text-white mb-2">Course Description</h4>
+                <p className="text-slate-600 dark:text-slate-300">{viewingSyllabus.description}</p>
+              </div>
+
+              {/* Units Details */}
+              <div>
+                <h4 className="text-lg font-medium text-slate-900 dark:text-white mb-4">Course Units</h4>
+                <div className="space-y-6">
+                  {viewingSyllabus.content.units.map((unit, index) => (
+                    <div key={unit.id} className="border border-slate-200 dark:border-slate-600 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h5 className="text-md font-semibold text-slate-900 dark:text-white">
+                          Unit {unit.number}: {unit.title}
+                        </h5>
+                        <span className="text-sm text-slate-500 dark:text-slate-400">
+                          {unit.hours} hours
+                        </span>
+                      </div>
+                      
+                      <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">{unit.description}</p>
+
+                      {/* Unit Content Tabs */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Lectures */}
+                        {unit.lectures.length > 0 && (
+                          <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                            <h6 className="text-sm font-medium text-blue-900 dark:text-blue-200 mb-2">
+                              Lectures ({unit.lectures.length})
+                            </h6>
+                            <div className="space-y-2">
+                              {unit.lectures.map((lecture, lectureIndex) => (
+                                <div key={lecture.id} className="text-xs">
+                                  <p className="font-medium text-blue-800 dark:text-blue-300">
+                                    {lecture.topic} ({lecture.duration}h)
+                                  </p>
+                                  <ul className="text-blue-600 dark:text-blue-400 ml-2">
+                                    {lecture.learningOutcomes.map((outcome, outcomeIndex) => (
+                                      <li key={outcomeIndex}>• {outcome}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tutorials */}
+                        {unit.tutorials.length > 0 && (
+                          <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                            <h6 className="text-sm font-medium text-green-900 dark:text-green-200 mb-2">
+                              Tutorials ({unit.tutorials.length})
+                            </h6>
+                            <div className="space-y-2">
+                              {unit.tutorials.map((tutorial, tutorialIndex) => (
+                                <div key={tutorial.id} className="text-xs">
+                                  <p className="font-medium text-green-800 dark:text-green-300">
+                                    {tutorial.topic} ({tutorial.duration}h)
+                                  </p>
+                                  <ul className="text-green-600 dark:text-green-400 ml-2">
+                                    {tutorial.exercises.map((exercise, exerciseIndex) => (
+                                      <li key={exerciseIndex}>• {exercise}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Practicals */}
+                        {unit.practicals.length > 0 && (
+                          <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">
+                            <h6 className="text-sm font-medium text-purple-900 dark:text-purple-200 mb-2">
+                              Practicals ({unit.practicals.length})
+                            </h6>
+                            <div className="space-y-2">
+                              {unit.practicals.map((practical, practicalIndex) => (
+                                <div key={practical.id} className="text-xs">
+                                  <p className="font-medium text-purple-800 dark:text-purple-300">
+                                    {practical.topic} ({practical.duration}h)
+                                  </p>
+                                  <div className="text-purple-600 dark:text-purple-400 ml-2">
+                                    <p className="font-medium">Experiments:</p>
+                                    <ul>
+                                      {practical.experiments.map((exp, expIndex) => (
+                                        <li key={expIndex}>• {exp}</li>
+                                      ))}
+                                    </ul>
+                                    <p className="font-medium mt-1">Equipment:</p>
+                                    <ul>
+                                      {practical.equipment.map((eq, eqIndex) => (
+                                        <li key={eqIndex}>• {eq}</li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Syllabus Status and Actions */}
+              <div className="border-t border-slate-200 dark:border-slate-600 pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                      viewingSyllabus.status === 'Approved' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                      viewingSyllabus.status === 'Under Review' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+                      viewingSyllabus.status === 'Rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                      'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300'
+                    }`}>
+                      {viewingSyllabus.status}
+                    </span>
+                    <div className="text-sm text-slate-500 dark:text-slate-400">
+                      Created: {new Date(viewingSyllabus.createdAt).toLocaleDateString()}
+                    </div>
+                    {viewingSyllabus.approvedBy && (
+                      <div className="text-sm text-slate-500 dark:text-slate-400">
+                        Approved by HOD
+                      </div>
+                    )}
+                  </div>
+
+                  {viewingSyllabus.status === 'Under Review' && (
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={() => {
+                          handleSyllabusApproval(viewingSyllabus.id, 'approve');
+                          setShowSyllabusModal(false);
+                          setViewingSyllabus(null);
+                        }}
+                        className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      >
+                        <CheckCircleIcon className="h-4 w-4" />
+                        <span>Approve</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          const reason = prompt('Please provide a reason for rejection:');
+                          if (reason) {
+                            handleSyllabusApproval(viewingSyllabus.id, 'reject', reason);
+                            setShowSyllabusModal(false);
+                            setViewingSyllabus(null);
+                          }
+                        }}
+                        className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                      >
+                        <XCircleIcon className="h-4 w-4" />
+                        <span>Reject</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {viewingSyllabus.rejectionReason && (
+                  <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <p className="text-sm text-red-800 dark:text-red-200">
+                      <span className="font-medium">Rejection Reason:</span> {viewingSyllabus.rejectionReason}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
