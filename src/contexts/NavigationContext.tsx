@@ -92,8 +92,20 @@ const SIDEBAR_ITEMS = {
         children: [
           { name: 'Campus Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
       { name: 'Hostel Infrastructure', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
+      
+      { name: 'Fixed Assets', path: '/management/infrastructure-management/asset/fixed-assets', icon: 'Database' },
+             
         ]
       },
+      { 
+            name: 'Inventory Management', 
+            path: '/management/infrastructure-management/inventory/stock-control', 
+            icon: 'Boxes',
+            children: [
+              { name: 'Stock Control', path: '/management/infrastructure-management/inventory/stock-control', icon: 'PackageCheck' },
+              { name: 'Stock Management', path: '/management/infrastructure-management/inventory/stock-management', icon: 'ClipboardList' }
+            ]
+          },
 
       { name: 'Courses ',path:'/master/home/data-management', icon:'Database'   },
       { name: 'Timetable', path: '/master/create/timetable', icon: 'Calendar' },
