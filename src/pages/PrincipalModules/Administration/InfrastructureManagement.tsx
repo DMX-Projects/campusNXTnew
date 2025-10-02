@@ -37,22 +37,9 @@ interface TabConfig {
 }
 
 const InfrastructureManagement: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme ? savedTheme === 'dark' : false;
-  });
 
   const [activeTab, setActiveTab] = useState<string>('block-management');
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
 
   const tabs: TabConfig[] = [
     {
@@ -156,24 +143,6 @@ const InfrastructureManagement: React.FC = () => {
               Comprehensive management of college infrastructure, blocks, assets, and vendor relationships
             </p>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 border border-gray-200 dark:border-gray-600">
-              <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent text-sm focus:outline-none text-gray-700 dark:text-gray-300"
-              />
-            </div>
-            <button
-              className="bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              aria-label="Toggle theme"
-            >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-          </div>
         </div>
 
         {/* Current Tab Info */}
@@ -230,84 +199,6 @@ const InfrastructureManagement: React.FC = () => {
             >
               <ActiveComponent />
             </React.Suspense>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Stats Footer */}
-      <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-6 py-4 mt-8">
-        <div className="mb-3">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-            <TrendingUp className="w-5 h-5 mr-2 text-blue-500" />
-            Quick Infrastructure Stats
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Real-time overview of infrastructure metrics</p>
-        </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-4">
-          <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <Blocks className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">12</div>
-            <div className="text-xs text-indigo-100">Blocks</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <Building2 className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">248</div>
-            <div className="text-xs text-blue-100">Fixed Assets</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <Wrench className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">15</div>
-            <div className="text-xs text-green-100">Maintenance</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <ShoppingCart className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">28</div>
-            <div className="text-xs text-orange-100">New Orders</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <Package className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">156</div>
-            <div className="text-xs text-purple-100">Stock Items</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <Users className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">42</div>
-            <div className="text-xs text-pink-100">Vendors</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-cyan-400 to-cyan-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <TrendingUp className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">98%</div>
-            <div className="text-xs text-cyan-100">Efficiency</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-teal-400 to-teal-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <Warehouse className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">₹2.4L</div>
-            <div className="text-xs text-teal-100">Monthly Cost</div>
-          </div>
-          
-          <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-lg p-3 text-white text-center hover:shadow-lg transition-shadow duration-300">
-            <Settings className="w-6 h-6 mx-auto mb-1" />
-            <div className="text-lg font-bold">5</div>
-            <div className="text-xs text-red-100">Active Issues</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Helper */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3">
-          <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Current Module:</div>
-          <div className="text-sm font-medium text-blue-600 dark:text-blue-400 flex items-center">
-            {getCurrentTab().icon}
-            <span className="ml-2">{getCurrentTab().label}</span>
           </div>
         </div>
       </div>
