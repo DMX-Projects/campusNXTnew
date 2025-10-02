@@ -273,6 +273,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Faculty Details', path: '/academics/faculty/faculty-details', icon: 'GraduationCap' },
       { name: 'Faculty Attendance', path: '/academics/faculty/faculty-attendance', icon: 'MessageSquare' },
       { name: 'Faculty Leave Requests', path: '/academics/leave-requests', icon: 'MessageSquare' },
+      { name: 'Faculty Feedback', path: '/academics/hod/faculty-feedback', icon: 'MessageSquare' }
     ]
   },
 
@@ -315,7 +316,6 @@ const SIDEBAR_ITEMS = {
 
   { name: 'CAT', path: '/academics/hod/cat', icon: 'Code' },
   { name: 'Leave Portal', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
-  { name: 'Faculty Leave Requests', path: '/academics/leave-request', icon: 'FileText' },
   { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
   { name: 'Raise Ticket', path: '/academics/raise-ticket', icon: 'AlertCircle' }

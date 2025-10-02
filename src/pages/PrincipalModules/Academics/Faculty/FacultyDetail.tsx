@@ -14,7 +14,7 @@ interface Faculty {
   joiningDate: string;
 }
 
-export default function FacultyDetails() {
+export default function PrincipalFacultyDetails() {
   const { isDarkMode } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('all');
