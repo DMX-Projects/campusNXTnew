@@ -93,7 +93,7 @@ const SIDEBAR_ITEMS = {
           { name: 'Campus Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
       { name: 'Hostel Infrastructure', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
       
-      { name: 'Fixed Assets', path: '/management/infrastructure-management/asset/fixed-assets', icon: 'Database' },
+      
              
         ]
       },
@@ -102,7 +102,7 @@ const SIDEBAR_ITEMS = {
             path: '/management/infrastructure-management/inventory/stock-control', 
             icon: 'Boxes',
             children: [
-              { name: 'Stock Control', path: '/management/infrastructure-management/inventory/stock-control', icon: 'PackageCheck' },
+              
               { name: 'Stock Management', path: '/management/infrastructure-management/inventory/stock-management', icon: 'ClipboardList' }
             ]
           },
@@ -636,6 +636,18 @@ const SIDEBAR_ITEMS = {
 
   'Infrastructure Management' : {
     'Administration Officer': [
+      { 
+        name: 'Infrastructure', 
+        path: '/home', 
+        icon: 'Settings',
+        children: [
+          { name: 'Campus Infrastructure ', path: '/management/infrastructure-management/infrastructure', icon: 'ShoppingBag' },
+      { name: 'Hostel Infrastructure', path: '/hostel/setup/buildings-and-blocks', icon: 'Building2' },
+      
+      
+             
+        ]
+      },
        
       
           { 
@@ -643,21 +655,12 @@ const SIDEBAR_ITEMS = {
             path: '/management/infrastructure-management/inventory/stock-control', 
             icon: 'Boxes',
             children: [
-              { name: 'Stock Control', path: '/management/infrastructure-management/inventory/stock-control', icon: 'PackageCheck' },
+             
               { name: 'Stock Management', path: '/management/infrastructure-management/inventory/stock-management', icon: 'ClipboardList' }
             ]
           },
 
-          { 
-            name: 'Asset Management', 
-            path: '/management/infrastructure-management/asset', 
-            icon: 'Package',
-            children: [
-              { name: 'Fixed Assets', path: '/management/infrastructure-management/asset/fixed-assets', icon: 'Database' },
-             
-            ]
-          },
-
+         
           { name: 'Purchase Management', path: '/management/infrastructure-management/purchase', icon: 'ShoppingBag' },
 
           { 

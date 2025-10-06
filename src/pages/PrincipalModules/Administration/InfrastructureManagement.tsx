@@ -19,14 +19,14 @@ import {
 
 // Import your existing components - correct component names
 import BlockManagement from '../../../pages/RegistorModule/Infrastructure/BlockManagement';
-import FixedAssessment from '../../../pages/RegistorModule/Infrastructure/FixedAssesment';
-import MaintenanceCosts from '../../../pages/RegistorModule/Infrastructure/MaintenanceCosts';
+//import FixedAssessment from '../../../pages/RegistorModule/Infrastructure/FixedAssesment';
+//import MaintenanceCosts from '../../../pages/RegistorModule/Infrastructure/MaintenanceCosts';
 import ManagementHistory from '../../../pages/RegistorModule/Infrastructure/ManagementHistory';
-import NewAssetPurchase from '../../../pages/RegistorModule/Infrastructure/NewAssetPurchase';
-import PurchaseManagement from '../../../pages/RegistorModule/Infrastructure/PurchaseManagement';
-import { StockControl } from '../../../pages/RegistorModule/Infrastructure/StockControl';
+//import NewAssetPurchase from '../../../pages/RegistorModule/Infrastructure/NewAssetPurchase';
+//import PurchaseManagement from '../../../pages/RegistorModule/Infrastructure/PurchaseManagement';
+//import { StockControl } from '../../../pages/RegistorModule/Infrastructure/StockControl';
 import StockManagement from '../../../pages/RegistorModule/Infrastructure/StockManagement';
-import VendorManagement from '../../../pages/RegistorModule/Infrastructure/VendorManagement';
+//import VendorManagement from '../../../pages/RegistorModule/Infrastructure/VendorManagement';
 
 interface TabConfig {
   id: string;
@@ -49,20 +49,8 @@ const InfrastructureManagement: React.FC = () => {
       component: BlockManagement,
       description: 'Manage college blocks, buildings, and physical infrastructure'
     },
-    {
-      id: 'fixed-assessment',
-      label: 'Fixed Assessment',
-      icon: <Building2 className="w-5 h-5" />,
-      component: FixedAssessment,
-      description: 'Assess and evaluate fixed assets and infrastructure'
-    },
-    {
-      id: 'maintenance-costs',
-      label: 'Maintenance Costs',
-      icon: <Wrench className="w-5 h-5" />,
-      component: MaintenanceCosts,
-      description: 'Track and manage maintenance expenses'
-    },
+    
+    
     {
       id: 'management-history',
       label: 'Management History',
@@ -70,27 +58,9 @@ const InfrastructureManagement: React.FC = () => {
       component: ManagementHistory,
       description: 'View infrastructure management history and logs'
     },
-    {
-      id: 'new-asset-purchase',
-      label: 'New Asset Purchase',
-      icon: <ShoppingCart className="w-5 h-5" />,
-      component: NewAssetPurchase,
-      description: 'Purchase new assets and equipment'
-    },
-    {
-      id: 'purchase-management',
-      label: 'Purchase Management',
-      icon: <Package className="w-5 h-5" />,
-      component: PurchaseManagement,
-      description: 'Manage all purchase orders and procurement'
-    },
-    {
-      id: 'stock-control',
-      label: 'Stock Control',
-      icon: <BarChart3 className="w-5 h-5" />,
-      component: StockControl,
-      description: 'Control and monitor stock levels'
-    },
+    
+   
+    
     {
       id: 'stock-management',
       label: 'Stock Management',
@@ -98,13 +68,7 @@ const InfrastructureManagement: React.FC = () => {
       component: StockManagement,
       description: 'Comprehensive stock and inventory management'
     },
-    {
-      id: 'vendor-management',
-      label: 'Vendor Management',
-      icon: <Users className="w-5 h-5" />,
-      component: VendorManagement,
-      description: 'Manage vendors and supplier relationships'
-    }
+    
   ];
 
   const getCurrentTab = () => {
