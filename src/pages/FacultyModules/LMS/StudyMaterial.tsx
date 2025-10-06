@@ -19,6 +19,8 @@ import {
 
   HeartIcon
 } from 'lucide-react';
+import { Button } from '../../../components/shared/Button';
+import { SearchBar } from '../../../components/shared/SearchBar';
 
 interface StudyMaterial {
   id: string;
@@ -422,43 +424,41 @@ const StudyMaterial: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Study Materials Management</h1>
-              <p className="text-gray-600 mt-1">Organize, manage, and distribute academic resources efficiently</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Study Materials Management</h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-1">Organize, manage, and distribute academic resources efficiently</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <button
+              <Button
                 onClick={() => setIsUploadModalOpen(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                leftIcon={<UploadIcon size={20} />}
               >
-                <UploadIcon size={20} />
                 Upload Material
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={exportMaterials}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                variant="secondary"
+                leftIcon={<DownloadIcon size={20} />}
+                className="bg-green-600 hover:bg-green-700 text-white"
               >
-                <DownloadIcon size={20} />
                 Export CSV
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Search and Filters */}
           <div className="flex flex-col lg:flex-row gap-4 mb-4">
-            <div className="relative flex-1">
-              <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
+            <div className="flex-1">
+              <SearchBar
                 placeholder="Search by title, subject, description, or tags..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={setSearchTerm}
+                className="w-full"
               />
             </div>
             
@@ -466,7 +466,7 @@ const StudyMaterial: React.FC = () => {
               <select
                 value={filterDepartment}
                 onChange={(e) => setFilterDepartment(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               >
                 <option value="all">All Departments</option>
                 {departments.map(dept => (
@@ -477,7 +477,7 @@ const StudyMaterial: React.FC = () => {
               <select
                 value={filterSemester}
                 onChange={(e) => setFilterSemester(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               >
                 <option value="all">All Semesters</option>
                 {semesters.map(sem => (
@@ -488,7 +488,7 @@ const StudyMaterial: React.FC = () => {
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               >
                 <option value="all">All Types</option>
                 {fileTypes.map(type => (
@@ -499,7 +499,7 @@ const StudyMaterial: React.FC = () => {
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
               >
                 <option value="all">All Categories</option>
                 {categories.map(category => (
@@ -571,7 +571,7 @@ const StudyMaterial: React.FC = () => {
 
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Total Materials</p>
@@ -581,7 +581,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Total Downloads</p>
@@ -591,7 +591,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Total Views</p>
@@ -601,7 +601,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Avg. Rating</p>
@@ -611,7 +611,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Verified</p>
@@ -621,7 +621,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Favorites</p>
@@ -636,12 +636,12 @@ const StudyMaterial: React.FC = () => {
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredMaterials.map((material) => (
-              <div key={material.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all">
+              <div key={material.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="text-3xl">{getFileIcon(material.type)}</div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-gray-900 mb-1">{material.title}</h3>
+                      <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-1">{material.title}</h3>
                       <div className="flex items-center gap-2">
                         {material.isVerified && <CheckCircleIcon size={16} className="text-blue-500" />}
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(material.type)}`}>
@@ -736,9 +736,9 @@ const StudyMaterial: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 {filteredMaterials.length} Materials Found
               </h2>
               
@@ -845,7 +845,7 @@ const StudyMaterial: React.FC = () => {
         {/* Upload Modal */}
         {isUploadModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Upload Study Material</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1012,9 +1012,9 @@ const StudyMaterial: React.FC = () => {
         {/* Preview Modal */}
         {isPreviewModalOpen && selectedMaterial && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-gray-900">{selectedMaterial.title}</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{selectedMaterial.title}</h2>
                 <button
                   onClick={() => setIsPreviewModalOpen(false)}
                   className="text-gray-400 hover:text-gray-600"
@@ -1132,7 +1132,7 @@ const StudyMaterial: React.FC = () => {
         {/* Edit Modal */}
         {isEditModalOpen && editingMaterial && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Edit Study Material</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1216,9 +1216,9 @@ const StudyMaterial: React.FC = () => {
         {/* Delete Confirmation Modal */}
         {isDeleteModalOpen && selectedMaterial && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Delete Material</h2>
-              <p className="text-gray-600 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Delete Material</h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Are you sure you want to delete "<strong>{selectedMaterial.title}</strong>"? 
                 This action cannot be undone.
               </p>

@@ -1,5 +1,5 @@
 export interface User {
-  details: unknown;
+  id: string;
   username: string;
   password: string;
   role: string;
@@ -7,6 +7,18 @@ export interface User {
   department?: string;
   studentId?: string;
   childId?: string;
+  authority?: string;
+  campusId?: string;
+  collegeId?: string;
+  departmentId?: string;
+  employeeId?: string;
+  labIds?: string[];
+  year?: number;
+  section?: string;
+  childStudentId?: string;
+  routeIds?: string[];
+  hostelIds?: string[];
+  libraryId?: string;
 }
 
 export interface AuthContextType {
@@ -14,6 +26,7 @@ export interface AuthContextType {
   login: (username: string, password: string) => boolean;
   logout: () => void;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 export interface Student {

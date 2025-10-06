@@ -422,14 +422,14 @@ const StudyMaterial: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Study Materials Management</h1>
-              <p className="text-gray-600 mt-1">Organize, manage, and distribute academic resources efficiently</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Study Materials Management</h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-1">Organize, manage, and distribute academic resources efficiently</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <button
@@ -571,17 +571,17 @@ const StudyMaterial: React.FC = () => {
 
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Total Materials</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalMaterials}</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stats.totalMaterials}</p>
               </div>
               <FileTextIcon className="text-blue-500" size={24} />
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Total Downloads</p>
@@ -591,7 +591,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Total Views</p>
@@ -601,7 +601,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Avg. Rating</p>
@@ -611,7 +611,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Verified</p>
@@ -621,7 +621,7 @@ const StudyMaterial: React.FC = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm">Favorites</p>
@@ -636,12 +636,12 @@ const StudyMaterial: React.FC = () => {
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredMaterials.map((material) => (
-              <div key={material.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all">
+              <div key={material.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="text-3xl">{getFileIcon(material.type)}</div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-gray-900 mb-1">{material.title}</h3>
+                      <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-1">{material.title}</h3>
                       <div className="flex items-center gap-2">
                         {material.isVerified && <CheckCircleIcon size={16} className="text-blue-500" />}
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(material.type)}`}>
@@ -736,9 +736,9 @@ const StudyMaterial: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 {filteredMaterials.length} Materials Found
               </h2>
               
@@ -746,13 +746,13 @@ const StudyMaterial: React.FC = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="text-left p-3 font-medium text-gray-900">Material</th>
-                      <th className="text-left p-3 font-medium text-gray-900">Subject</th>
-                      <th className="text-left p-3 font-medium text-gray-900">Department</th>
-                      <th className="text-left p-3 font-medium text-gray-900">Type</th>
-                      <th className="text-left p-3 font-medium text-gray-900">Stats</th>
-                      <th className="text-left p-3 font-medium text-gray-900">Rating</th>
-                      <th className="text-left p-3 font-medium text-gray-900">Actions</th>
+                      <th className="text-left p-3 font-medium text-gray-900 dark:text-gray-100">Material</th>
+                      <th className="text-left p-3 font-medium text-gray-900 dark:text-gray-100">Subject</th>
+                      <th className="text-left p-3 font-medium text-gray-900 dark:text-gray-100">Department</th>
+                      <th className="text-left p-3 font-medium text-gray-900 dark:text-gray-100">Type</th>
+                      <th className="text-left p-3 font-medium text-gray-900 dark:text-gray-100">Stats</th>
+                      <th className="text-left p-3 font-medium text-gray-900 dark:text-gray-100">Rating</th>
+                      <th className="text-left p-3 font-medium text-gray-900 dark:text-gray-100">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -763,7 +763,7 @@ const StudyMaterial: React.FC = () => {
                             <div className="text-2xl">{getFileIcon(material.type)}</div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <h3 className="font-medium text-gray-900">{material.title}</h3>
+                                <h3 className="font-medium text-gray-900 dark:text-gray-100">{material.title}</h3>
                                 {material.isVerified && <CheckCircleIcon size={16} className="text-blue-500" />}
                                 {material.isFavorite && <HeartIcon size={16} className="text-red-500 fill-current" />}
                               </div>
@@ -845,8 +845,8 @@ const StudyMaterial: React.FC = () => {
         {/* Upload Modal */}
         {isUploadModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Upload Study Material</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">Upload Study Material</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -1014,7 +1014,7 @@ const StudyMaterial: React.FC = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-gray-900">{selectedMaterial.title}</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{selectedMaterial.title}</h2>
                 <button
                   onClick={() => setIsPreviewModalOpen(false)}
                   className="text-gray-400 hover:text-gray-600"
@@ -1132,7 +1132,7 @@ const StudyMaterial: React.FC = () => {
         {/* Edit Modal */}
         {isEditModalOpen && editingMaterial && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-bold text-gray-900 mb-6">Edit Study Material</h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

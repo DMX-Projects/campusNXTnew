@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState ,useEffect} from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { path } from 'framer-motion/client';
+// import { path } from 'framer-motion/client'; // Removed unused import
 interface NavigationContextType {
   activeModule: string;
   setActiveModule: (module: string) => void;
@@ -12,7 +12,7 @@ interface NavigationContextType {
   expandedItems: string[];
   toggleExpanded: (itemPath: string) => void;
 }
-const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
+export const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 export const useNavigation = () => {
   const context = useContext(NavigationContext);
   if (context === undefined) {
@@ -1297,7 +1297,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const moduleItems = SIDEBAR_ITEMS[module as keyof typeof SIDEBAR_ITEMS];
     if (!moduleItems) return [];
     
-    return moduleItems[role as keyof typeof moduleItems] || moduleItems.default || [];
+    return moduleItems[role as keyof typeof moduleItems] || (moduleItems as any).default || [];
   };
 
   const toggleExpanded = (itemPath: string) => {

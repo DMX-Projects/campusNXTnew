@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuthLegacy as useAuth } from '../../hooks/useAuthLegacy';
+import { useNavigationLegacy as useNavigation } from '../../hooks/useNavigationLegacy';
 import { useTheme } from '../../contexts/ThemeContext';
-import { useNavigation } from '../../contexts/NavigationContext';
 import { Bell, Sun, Moon, Search, Menu, User, Lock, LogOut, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,8 +12,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) => {
   const { user, logout } = useAuth();
-  const { isDark, toggleTheme } = useTheme();
   const { activeModule, setActiveModule, getModulesForRole } = useNavigation();
+  const { isDark, toggleTheme } = useTheme();
   const [showMoreDropdown, setShowMoreDropdown] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false); 
   const [visibleModules, setVisibleModules] = useState<string[]>([]);
@@ -25,18 +25,6 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
 
   const availableModules = user ? getModulesForRole(user.role) : ['Home'];
 
-  const moduleIcons = {
-    Home: '🏠',
-    Students: '👥',
-    Faculty: '👨‍🏫',
-    Courses: '📚',
-    Attendance: '✅',
-    Grades: '📊',
-    Library: '📖',
-    Finance: '💰',
-    Reports: '📈',
-    Settings: '⚙️'
-  };
   useEffect(() => {
     const handleResize = () => {
       if (tabsRef.current) {
@@ -83,7 +71,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
       {/* Main Header */}
       <header className="px-4 py-2">
         <div className="flex items-center justify-between">
-          {/* Left Section (unchanged) */}
+          {/* Left Section */}
           <div className="flex items-center space-x-4">
             <button
               onClick={toggleSidebar}
@@ -139,11 +127,11 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarCollapsed }) =>
                 className="flex items-center space-x-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="w-7 h-7 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
-                  {user?.name?.charAt(0)}
+                  {user?.name?.charAt(0) || user?.fullName?.charAt(0) || 'U'}
                 </div>
                 <div className="hidden lg:block text-left">
                   <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                    {user?.name}
+                    {user?.name || user?.fullName || 'User'}
                   </p>
                   <p className="text-xs text-gray-400 dark:text-gray-500">
                     {user?.role}

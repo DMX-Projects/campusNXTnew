@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useNavigation } from '../../contexts/NavigationContext';
+import { useAuthLegacy as useAuth } from '../../hooks/useAuthLegacy';
+import { useNavigationLegacy as useNavigation } from '../../hooks/useNavigationLegacy';
 import { 
   ChevronLeft, ChevronRight, School, ChevronDown,
   BarChart3, Users, GraduationCap, BookOpen, Calendar, 
@@ -45,7 +45,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   };
 
   const menuItems = user ? getSidebarItemsForModule(activeModule, user.role) : [];
-
 
   const truncateText = (text: string, maxLength: number = 25) => {
     if (text.length <= maxLength) return text;
@@ -101,14 +100,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
             </div>
           )}
         </div>
-        
+
         {hasChildren && !isCollapsed && isExpanded && (
-          <div className="mt-1">
-            <div className="max-h-80 overflow-y-auto overflow-x-hidden space-y-1 border-l border-gray-200 dark:border-gray-600">
-              <div className="space-y-1">
-                {item.children.map((child: any) => renderMenuItem(child, level + 1))}
-              </div>
-            </div>
+          <div className="ml-2 mt-1 space-y-1">
+            {item.children.map((child: any) => renderMenuItem(child, level + 1))}
           </div>
         )}
       </div>
@@ -116,71 +111,32 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   };
 
   return (
-    <div className={`${isCollapsed ? 'w-12' : 'w-64'} bg-white dark:bg-gray-800 shadow-sm h-full flex flex-col transition-all duration-300 ease-in-out border-r border-gray-200 dark:border-gray-700`}>
-      <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
+    <div className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out ${
+      isCollapsed ? 'w-16' : 'w-64'
+    }`}>
+      {/* Sidebar Header */}
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 flex items-center justify-center">
-              <img 
-                src="/2(B)Without_Text_Transparent.png" 
-                alt="AICAS Logo" 
-                className="w-6 h-6 object-contain"
-              />
-            </div>
-            <div>
-              <span className="font-bold text-gray-900 dark:text-white text-xs">AICAS</span>
-              <p className="text-xs text-gray-400 dark:text-gray-500">Campus System</p>
-            </div>
+            <School className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <span className="font-semibold text-gray-900 dark:text-white">AICAS</span>
           </div>
         )}
         <button
           onClick={toggleSidebar}
-          className={`p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${isCollapsed ? 'mx-auto' : ''}`}
+          className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
         >
-          {isCollapsed ? 
-            <ChevronRight className="w-3 h-3 text-gray-600 dark:text-gray-400" /> : 
-            <ChevronLeft className="w-3 h-3 text-gray-600 dark:text-gray-400" />
-          }
+          {isCollapsed ? (
+            <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          ) : (
+            <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          )}
         </button>
       </div>
 
-      {!isCollapsed && (
-        <div className="p-3 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
-              {user?.name?.charAt(0) || 'A'}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-gray-900 dark:text-white truncate" title={user?.name}>
-                {truncateText(user?.name || 'Admin User', 12)}
-              </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 truncate" title={user?.role}>
-                {truncateText(user?.role || 'Administrator', 12)}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
-        {!isCollapsed && (
-          <div className="mb-2 pb-1 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-              {activeModule} Module
-            </h3>
-          </div>
-        )}
-        
+      {/* Menu Items */}
+      <div className="p-2 space-y-1 overflow-y-auto">
         {menuItems.map((item) => renderMenuItem(item))}
-        
-        {menuItems.length === 0 && !isCollapsed && (
-          <div className="text-center text-gray-500 dark:text-gray-400 text-xs py-4">
-            No items available for this module
-          </div>
-        )}
-      </nav>
-
-      <div className="p-2 border-t border-gray-200 dark:border-gray-700">
       </div>
     </div>
   );
