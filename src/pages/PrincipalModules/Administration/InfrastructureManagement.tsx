@@ -21,7 +21,7 @@ import {
 import BlockManagement from '../../../pages/RegistorModule/Infrastructure/BlockManagement';
 //import FixedAssessment from '../../../pages/RegistorModule/Infrastructure/FixedAssesment';
 //import MaintenanceCosts from '../../../pages/RegistorModule/Infrastructure/MaintenanceCosts';
-import ManagementHistory from '../../../pages/RegistorModule/Infrastructure/ManagementHistory';
+//import ManagementHistory from '../../../pages/RegistorModule/Infrastructure/ManagementHistory';
 //import NewAssetPurchase from '../../../pages/RegistorModule/Infrastructure/NewAssetPurchase';
 //import PurchaseManagement from '../../../pages/RegistorModule/Infrastructure/PurchaseManagement';
 //import { StockControl } from '../../../pages/RegistorModule/Infrastructure/StockControl';
@@ -51,13 +51,6 @@ const InfrastructureManagement: React.FC = () => {
     },
     
     
-    {
-      id: 'management-history',
-      label: 'Management History',
-      icon: <History className="w-5 h-5" />,
-      component: ManagementHistory,
-      description: 'View infrastructure management history and logs'
-    },
     
    
     
