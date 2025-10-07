@@ -3,7 +3,7 @@ import { Eye, Filter, Coffee, Clock, User, Grid } from 'lucide-react';
 
 // --- MOCK DATA (Simulate fetching from a database/localStorage) ---
 const MOCK_TIMETABLE_DATA = {
-    allSubjects: [
+    allCourses: [
         { id: 'SUB001', name: 'Quantum Physics', code: 'PHY-401', lab: false },
         { id: 'SUB002', name: 'Advanced Algorithms', code: 'CS-402', lab: false },
         { id: 'SUB003', name: 'Machine Learning', code: 'AI-403', lab: false },
@@ -106,7 +106,7 @@ const TimetableCell = ({ slot, color }) => (
         {slot ? (
             <div className={`p-2 rounded-md h-full flex flex-col justify-between text-xs ${color}`}>
                 <div>
-                    <p className="font-bold text-gray-800 dark:text-gray-900">{slot.subject.name}</p>
+                    <p className="font-bold text-gray-800 dark:text-gray-900">{slot.course.name}</p>
                     <p className="text-gray-600 dark:text-gray-700">{slot.faculty.name}</p>
                 </div>
                 <p className="text-gray-500 dark:text-gray-600 font-medium">{slot.classroom.name}</p>
@@ -117,7 +117,7 @@ const TimetableCell = ({ slot, color }) => (
     </td>
 );
 
-const TimetableGrid = ({ config, timetable, subjectColorMap, data, selectedDay = '' }) => {
+const TimetableGrid = ({ config, timetable, courseColorMap, data, selectedDay = '' }) => {
     const allDaySlots = useMemo(() => {
         const teaching = config.timeSlots.map(ts => ({ type: 'class', time: ts }));
         const lunch = { type: 'lunch', time: `${config.lunchTime.startTime} - ${config.lunchTime.endTime}`, name: config.lunchTime.name };
@@ -131,7 +131,7 @@ const TimetableGrid = ({ config, timetable, subjectColorMap, data, selectedDay =
     const getFullSlotData = (slot) => {
         if (!slot) return null;
         return {
-            subject: data.allSubjects.find(s => s.id === slot.subjectId),
+            course: data.allCourses.find(s => s.id === slot.subjectId),
             faculty: data.allFaculties.find(f => f.id === slot.facultyId),
             classroom: data.allClassrooms.find(c => c.id === slot.classroomId),
         };
@@ -169,7 +169,7 @@ const TimetableGrid = ({ config, timetable, subjectColorMap, data, selectedDay =
                                 {daysToDisplay.map(day => {
                                     const key = `${day}-${slotInfo.time}`;
                                     const slotData = getFullSlotData(timetable[key]);
-                                    const color = slotData ? subjectColorMap[slotData.subject.id]?.cellBg : 'bg-gray-200';
+                                    const color = slotData ? courseColorMap[slotData.course.id]?.cellBg : 'bg-gray-200';
                                     return <TimetableCell key={key} slot={slotData} color={color} />;
                                 })}
                             </tr>
@@ -234,14 +234,14 @@ const HodView = ({ data }) => {
         return '';
     }, [viewMode, filters, data.allFaculties, sections]);
 
-    const subjectColorMap = useMemo(() => {
+    const courseColorMap = useMemo(() => {
         const colors = ['bg-sky-200', 'bg-amber-200', 'bg-emerald-200', 'bg-rose-200', 'bg-violet-200'];
         const map = {};
-        data.allSubjects.forEach((subject, index) => {
-            map[subject.id] = { cellBg: colors[index % colors.length] };
+        data.allCourses.forEach((course, index) => {
+            map[course.id] = { cellBg: colors[index % colors.length] };
         });
         return map;
-    }, [data.allSubjects]);
+    }, [data.allCourses]);
 
     const getButtonClass = (mode) => viewMode === mode 
         ? 'px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg shadow-md flex items-center' 
@@ -322,7 +322,7 @@ const HodView = ({ data }) => {
             {viewTitle ? (
                  <div>
                     <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">{viewTitle}</h2>
-                    <TimetableGrid config={data.config} timetable={displayedTimetable} subjectColorMap={subjectColorMap} data={data} selectedDay={filters.day} />
+                    <TimetableGrid config={data.config} timetable={displayedTimetable} courseColorMap={courseColorMap} data={data} selectedDay={filters.day} />
                  </div>
             ) : (
                 <div className="text-center p-10 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
@@ -369,4 +369,3 @@ export default function ViewTimetable() {
         </div>
     );
 }
-

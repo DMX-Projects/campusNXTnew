@@ -2,87 +2,59 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, School, Download, CheckCircle, AlertTriangle, Edit, X, Save, Plus, Trash2, Users, ArrowRightLeft, Clock, Coffee } from 'lucide-react';
 
 // --- MOCK DATA (Simulating a hierarchical database structure) ---
-const MOCK_DEPARTMENT_DATA = {
-    // Shared resources for the whole department
-    allSubjects: [
-        { id: 'SUB001', name: 'Quantum Physics', code: 'PHY-401', lab: false },
-        { id: 'SUB002', name: 'Advanced Algorithms', code: 'CS-402', lab: false },
-        { id: 'SUB003', name: 'Machine Learning', code: 'AI-403', lab: false },
-        { id: 'SUB004', name: 'ML Lab', code: 'AI-403L', lab: true },
-        { id: 'SUB005', name: 'Compiler Design', code: 'CS-404', lab: false },
-        { id: 'SUB006', name: 'Networks Lab', code: 'CS-405L', lab: true },
-    ],
-    allFaculties: [
-        { id: 'FAC01', name: 'Dr. Evelyn Reed', expertise: ['SUB001'] },
-        { id: 'FAC02', name: 'Prof. Samuel Tan', expertise: ['SUB002', 'SUB005'] },
-        { id: 'FAC03', name: 'Dr. Ananya Sharma', expertise: ['SUB003', 'SUB004'] },
-        { id: 'FAC04', name: 'Prof. Ben Carter', expertise: ['SUB006'] },
-    ],
-    allClassrooms: [
-        { id: 'CR01', name: 'Room 101', capacity: 60, isLab: false },
-        { id: 'CR02', name: 'Room 102', capacity: 60, isLab: false },
-        { id: 'LAB01', name: 'AI & ML Lab', capacity: 40, isLab: true },
-        { id: 'LAB02', name: 'Networks Lab', capacity: 40, isLab: true },
-    ],
-    // New hierarchical structure for classes
-    programs: [
+const MOCK_DATA = {
+    departments: [
         {
-            id: 'PROG01',
-            name: 'Bachelor of Technology (B.Tech)',
-            courses: [
+            id: 'DEPT01',
+            name: 'GKCoE Engineering',
+            programs: [
                 {
-                    id: 'COURSE01',
-                    name: 'Computer Science & Engineering',
+                    id: 'PROG01',
+                    name: 'Bachelor of Engineering (B.E)',
                     years: [
                         {
                             id: 'YEAR01',
-                            name: '4th Year',
+                            name: 'Second Year',
                             sections: [
                                 {
-                                    id: 'CSE-A-4',
-                                    name: 'Section A',
+                                    id: 'EEE-A-2',
+                                    name: 'EEE - Section A',
                                     strength: 55,
-                                    subjects: [
-                                        { subjectId: 'SUB002', hours: 4 },
-                                        { subjectId: 'SUB003', hours: 3 },
-                                        { subjectId: 'SUB004', hours: 2 }
+                                    courses: [
+                                        { courseId: 'SUB001', hours: 4 },
+                                        { courseId: 'SUB002', hours: 4 },
                                     ]
                                 },
                                 {
-                                    id: 'CSE-B-4',
-                                    name: 'Section B',
-                                    strength: 58,
-                                    subjects: [
-                                        { subjectId: 'SUB005', hours: 3 },
-                                        { subjectId: 'SUB006', hours: 2 }
+                                    id: 'CSE-A-2',
+                                    name: 'CSE - Section A',
+                                    strength: 60,
+                                    courses: [
+                                        { courseId: 'SUB003', hours: 3 },
+                                        { courseId: 'SUB004', hours: 2 },
                                     ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    id: 'COURSE02',
-                    name: 'Physics',
-                    years: [
-                        {
-                            id: 'YEAR02',
-                            name: '4th Year',
-                            sections: [
-                                {
-                                    id: 'PHY-A-4',
-                                    name: 'Section A',
-                                    strength: 50,
-                                    subjects: [
-                                        { subjectId: 'SUB001', hours: 4 }
-                                    ]
-                                }
+                                },
                             ]
                         }
                     ]
                 }
             ]
         }
+    ],
+    allCourses: [
+        { id: 'SUB001', name: 'Mathematics-1', code: 'LST112', lab: false },
+        { id: 'SUB002', name: 'Digital Circuits', code: 'EC-201', lab: true },
+        { id: 'SUB003', name: 'Data Structures', code: 'CS-202', lab: false },
+        { id: 'SUB004', name: 'Algorithms Lab', code: 'CS-202L', lab: true },
+    ],
+    allFaculties: [
+        { id: 'FAC01', name: 'Mr. Sandeep Bandari', expertise: ['SUB001'] },
+        { id: 'FAC02', name: 'Prof. Ada Lovelace', expertise: ['SUB002', 'SUB004'] },
+        { id: 'FAC03', name: 'Dr. Alan Turing', expertise: ['SUB003'] },
+    ],
+    allClassrooms: [
+        { id: 'CR102', name: 'Room 102', capacity: 60, isLab: false, building: 'ACHARYA BLOCK' },
+        { id: 'LAB01', name: 'Digital Lab', capacity: 40, isLab: true, building: 'MAIN BLOCK' },
     ]
 };
 
@@ -107,7 +79,7 @@ const Stepper = ({ currentPhase }) => {
     );
 };
 
-const SubjectPill = ({ subject, onDragStart, onDragEnd, remainingHours, color }) => (
+const CoursePill = ({ course, onDragStart, onDragEnd, remainingHours, color }) => (
     <div
         draggable
         onDragStart={onDragStart}
@@ -115,8 +87,8 @@ const SubjectPill = ({ subject, onDragStart, onDragEnd, remainingHours, color })
         className={`p-3 border rounded-lg cursor-grab flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-indigo-500 ${color.pillBg} ${color.border}`}
     >
         <div>
-            <p className="font-bold text-sm text-gray-800 dark:text-gray-900">{subject.name}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-600">{subject.code}</p>
+            <p className="font-bold text-sm text-gray-800 dark:text-gray-900">{course.name}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-600">{course.code}</p>
         </div>
         <div className="text-right">
             <p className="text-xs font-semibold text-gray-700 dark:text-gray-800">Hours Left</p>
@@ -138,7 +110,7 @@ const TimetableCell = ({ slotData, onDrop, onDragOver, onEditClick, onGridDragSt
                 onDragEnd={onGridDragEnd}
                 className={`p-2 rounded-md h-full flex flex-col justify-between text-xs cursor-grab hover:ring-2 hover:ring-indigo-500 ${color.cellBg}`}>
                 <div>
-                    <p className="font-bold text-gray-800 dark:text-gray-900">{slotData.subject.name}</p>
+                    <p className="font-bold text-gray-800 dark:text-gray-900">{slotData.course.name}</p>
                     <p className="text-gray-600 dark:text-gray-700">{slotData.faculty.name}</p>
                 </div>
                 <p className="text-gray-500 dark:text-gray-600 font-medium">{slotData.classroom.name}</p>
@@ -168,7 +140,7 @@ const ConflictAlert = ({ conflict, onClose }) => {
     );
 };
 
-const EditSlotModal = ({ slot, onClose, onSave, subjects, faculties, classrooms, onConflictCheck }) => {
+const EditSlotModal = ({ slot, onClose, onSave, courses, faculties, classrooms, onConflictCheck }) => {
     const [editedSlot, setEditedSlot] = useState(slot.data);
     const [originalSlot,] = useState(slot.data);
 
@@ -188,11 +160,11 @@ const EditSlotModal = ({ slot, onClose, onSave, subjects, faculties, classrooms,
         }
     };
 
-    const handleSubjectChange = (subjectId) => {
-        const subject = subjects.find(s => s.id === subjectId);
-        const faculty = faculties.find(f => f.expertise.includes(subject.id)) || originalSlot.faculty;
-        const classroom = classrooms.find(c => c.isLab === subject.lab) || originalSlot.classroom;
-        setEditedSlot({ subject, faculty, classroom });
+    const handleCourseChange = (courseId) => {
+        const course = courses.find(s => s.id === courseId);
+        const faculty = faculties.find(f => f.expertise.includes(course.id)) || originalSlot.faculty;
+        const classroom = classrooms.find(c => c.isLab === course.lab) || originalSlot.classroom;
+        setEditedSlot({ course, faculty, classroom });
     };
 
     return (
@@ -204,21 +176,21 @@ const EditSlotModal = ({ slot, onClose, onSave, subjects, faculties, classrooms,
                 </div>
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
-                        <select value={editedSlot.subject.id} onChange={(e) => handleSubjectChange(e.target.value)} className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200">
-                            {subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Course</label>
+                        <select value={editedSlot.course.id} onChange={(e) => handleCourseChange(e.target.value)} className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200">
+                            {courses.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                         </select>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Faculty</label>
                         <select value={editedSlot.faculty.id} onChange={(e) => setEditedSlot(prev => ({ ...prev, faculty: faculties.find(f => f.id === e.target.value) }))} className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200">
-                            {faculties.filter(f => f.expertise.includes(editedSlot.subject.id)).map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                            {faculties.filter(f => f.expertise.includes(editedSlot.course.id)).map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
                         </select>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Classroom</label>
                         <select value={editedSlot.classroom.id} onChange={(e) => setEditedSlot(prev => ({ ...prev, classroom: classrooms.find(c => c.id === e.target.value) }))} className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200">
-                            {classrooms.filter(c => c.isLab === editedSlot.subject.lab).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                            {classrooms.filter(c => c.isLab === editedSlot.course.lab).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                         </select>
                     </div>
                 </div>
@@ -282,7 +254,7 @@ export default function CreateTimetable() {
     const [activeSectionId, setActiveSectionId] = useState(null);
     const [draggedItem, setDraggedItem] = useState(null);
     const [conflict, setConflict] = useState(null);
-    const [view, setView] = useState({ type: 'class' });
+    const [view, setView] = useState({}); // <<< FIX: Initialize with an empty object
     const [unavailableSlots, setUnavailableSlots] = useState([]);
     const [conflictToResolve, setConflictToResolve] = useState(null);
     const [config, setConfig] = useState({
@@ -290,40 +262,43 @@ export default function CreateTimetable() {
         dayStartTime: '09:00',
         dayEndTime: '16:30',
         timeSlots: [],
-        lunchTime: { name: 'Lunch Break', startTime: '12:00', endTime: '13:00' },
+        lunchTime: { name: 'Lunch Break', startTime: '12:40', endTime: '13:30' },
         breakTimes: [
-            { id: 1, name: 'Morning Break', startTime: '10:30', endTime: '10:45' },
+            { id: 1, name: 'Morning Break', startTime: '10:40', endTime: '11:00' },
         ],
     });
-    const [departmentData, setDepartmentData] = useState(() => JSON.parse(JSON.stringify(MOCK_DEPARTMENT_DATA)));
+    const [departmentData, setDepartmentData] = useState(() => JSON.parse(JSON.stringify(MOCK_DATA)));
     const [editingSlot, setEditingSlot] = useState(null);
     const [isManualPeriodEdit, setIsManualPeriodEdit] = useState(false);
 
-    const [allPrograms, allCourses, allSections] = useMemo(() => {
-        const programs = departmentData.programs;
-        const courses = [];
+    const { allDepartments, allPrograms, allYears, allSections } = useMemo(() => {
+        const departments = departmentData.departments;
+        const programs = [];
+        const years = [];
         const sections = [];
-        departmentData.programs.forEach(prog => {
-            prog.courses.forEach(course => {
-                courses.push({
-                    ...course,
-                    programId: prog.id,
-                });
-                course.years.forEach(year => {
-                    year.sections.forEach(sec => {
+
+        departmentData.departments.forEach(dept => {
+            (dept.programs || []).forEach(prog => {
+                programs.push({ ...prog, departmentId: dept.id, departmentName: dept.name });
+                (prog.years || []).forEach(year => {
+                    years.push({ ...year, programId: prog.id, programName: prog.name });
+                    (year.sections || []).forEach(sec => {
                         sections.push({
                             ...sec,
                             yearId: year.id,
-                            courseId: course.id,
+                            yearName: year.name,
                             programId: prog.id,
-                            fullDisplayName: `${prog.name} - ${course.name} - ${year.name} - ${sec.name}`
+                            programName: prog.name,
+                            departmentId: dept.id,
+                            departmentName: dept.name,
+                            fullDisplayName: `${prog.name} / ${year.name} / ${sec.name}`
                         });
                     });
                 });
             });
         });
-        return [programs, courses, sections];
-    }, [departmentData.programs]);
+        return { allDepartments: departments, allPrograms: programs, allYears: years, allSections: sections };
+    }, [departmentData]);
 
     const configStr = JSON.stringify({
         dayStartTime: config.dayStartTime,
@@ -375,7 +350,7 @@ export default function CreateTimetable() {
             const startMins = timeToMinutes(block.start);
             const endMins = timeToMinutes(block.end);
             const duration = endMins - startMins;
-            const periods = Math.round(duration / 60);
+            const periods = Math.round(duration / 50); // Assuming 50 min period
             if (periods > 0) {
                 const periodDuration = duration / periods;
                 for (let i = 0; i < periods; i++) {
@@ -405,7 +380,7 @@ export default function CreateTimetable() {
         return combined.sort((a, b) => getStartTime(a.time).localeCompare(getStartTime(b.time)));
     }, [config.timeSlots, config.lunchTime, config.breakTimes]);
 
-    const subjectColorMap = useMemo(() => {
+    const courseColorMap = useMemo(() => {
         const colors = [
             { cellBg: 'bg-sky-200', pillBg: 'bg-sky-100 dark:bg-sky-300/70', border: 'border-sky-300 dark:border-sky-400' },
             { cellBg: 'bg-amber-200', pillBg: 'bg-amber-100 dark:bg-amber-300/70', border: 'border-amber-300 dark:border-amber-400' },
@@ -417,35 +392,34 @@ export default function CreateTimetable() {
             { cellBg: 'bg-fuchsia-200', pillBg: 'bg-fuchsia-100 dark:bg-fuchsia-300/70', border: 'border-fuchsia-300 dark:border-fuchsia-400' },
         ];
         const map = {};
-        departmentData.allSubjects.forEach((subject, index) => {
-            map[subject.id] = colors[index % colors.length];
+        departmentData.allCourses.forEach((course, index) => {
+            map[course.id] = colors[index % colors.length];
         });
         return map;
-    }, [departmentData.allSubjects]);
+    }, [departmentData.allCourses]);
 
     const activeSection = useMemo(() => allSections.find(c => c.id === activeSectionId), [activeSectionId, allSections]);
     const activeTimetable = useMemo(() => timetables[activeSectionId] || {}, [timetables, activeSectionId]);
 
-    const unassignedSubjects = useMemo(() => {
+    const unassignedCourses = useMemo(() => {
         if (!activeSection) return [];
 
         const assignedHours = Object.values(activeTimetable).reduce((acc, slot) => {
-            acc[slot.subject.id] = (acc[slot.subject.id] || 0) + 1;
+            acc[slot.course.id] = (acc[slot.course.id] || 0) + 1;
             return acc;
         }, {});
 
-        return activeSection.subjects.map(classSub => {
-            const subjectDetails = departmentData.allSubjects.find(s => s.id === classSub.subjectId);
-            if (!subjectDetails) return null;
+        return (activeSection.courses || []).map(classSub => {
+            const courseDetails = departmentData.allCourses.find(s => s.id === classSub.courseId);
+            if (!courseDetails) return null;
             return {
-                ...subjectDetails,
+                ...courseDetails,
                 hoursPerWeek: classSub.hours,
-                remainingHours: classSub.hours - (assignedHours[classSub.subjectId] || 0),
+                remainingHours: classSub.hours - (assignedHours[classSub.courseId] || 0),
             }
-        }).filter(subject => subject && subject.remainingHours > 0);
+        }).filter(course => course && course.remainingHours > 0);
 
-    }, [activeTimetable, departmentData.allSubjects, activeSection]);
-
+    }, [activeTimetable, departmentData.allCourses, activeSection]);
 
     const handleAutoGenerate = () => {
         if (!activeSectionId) return;
@@ -456,26 +430,26 @@ export default function CreateTimetable() {
             return newTimetableForClass[key] ? null : { day, hour };
         })).filter(Boolean);
 
-        const subjectsToSchedule = unassignedSubjects.flatMap(subject => {
-            return Array(subject.remainingHours).fill(subject);
+        const coursesToSchedule = unassignedCourses.flatMap(course => {
+            return Array(course.remainingHours).fill(course);
         });
 
-        let tempUnassigned = [...subjectsToSchedule];
+        let tempUnassigned = [...coursesToSchedule];
 
         while (tempUnassigned.length > 0 && availableSlots.length > 0) {
-            const subject = tempUnassigned.shift();
+            const course = tempUnassigned.shift();
 
             for (let i = availableSlots.length - 1; i >= 0; i--) {
                 const { day, hour } = availableSlots[i];
 
-                const faculty = departmentData.allFaculties.find(f => f.expertise.includes(subject.id));
-                const classroom = departmentData.allClassrooms.find(r => r.isLab === subject.lab);
+                const faculty = departmentData.allFaculties.find(f => f.expertise.includes(course.id));
+                const classroom = departmentData.allClassrooms.find(r => r.isLab === course.lab);
                 if (!faculty || !classroom) continue;
 
                 const potentialConflict = checkForConflict({ day, hour, faculty, classroom, ignoreSectionId: activeSectionId });
                 if (!potentialConflict) {
                     const key = `${day}-${hour}`;
-                    newTimetableForClass[key] = { subject, faculty, classroom };
+                    newTimetableForClass[key] = { course, faculty, classroom };
                     availableSlots.splice(i, 1);
                     break;
                 }
@@ -517,21 +491,21 @@ export default function CreateTimetable() {
         setUnavailableSlots(busySlots);
     };
 
-    const handlePillDragStart = (e, subject) => {
-        if (subject.remainingHours <= 0) {
+    const handlePillDragStart = (e, course) => {
+        if (course.remainingHours <= 0) {
             e.preventDefault();
             return;
         }
-        const faculty = departmentData.allFaculties.find(f => f.expertise.includes(subject.id));
-        const classroom = departmentData.allClassrooms.find(r => r.isLab === subject.lab);
+        const faculty = departmentData.allFaculties.find(f => f.expertise.includes(course.id));
+        const classroom = departmentData.allClassrooms.find(r => r.isLab === course.lab);
         if (!faculty || !classroom) {
-            setConflict({ message: `No available faculty or ${subject.lab ? 'lab' : 'room'} for ${subject.name}.` });
+            setConflict({ message: `No available faculty or ${course.lab ? 'lab' : 'room'} for ${course.name}.` });
             setTimeout(() => setConflict(null), 3000);
             e.preventDefault();
             return;
         }
         calculateUnavailableSlots(faculty);
-        setDraggedItem({ subject, faculty, classroom, source: 'pill' });
+        setDraggedItem({ course, faculty, classroom, source: 'pill' });
     };
 
     const handleGridDragStart = (e, day, hour, slotData) => {
@@ -558,13 +532,14 @@ export default function CreateTimetable() {
         const targetKey = `${day}-${hour}`;
         const { source, sourceKey } = draggedItem;
 
+        // Avoid re-dropping in the same cell
         if (source === 'grid' && sourceKey === targetKey) {
-            setDraggedItem(null);
+            handleDragEnd();
             return;
         }
 
         const itemToPlace = {
-            subject: draggedItem.subject,
+            course: draggedItem.course,
             faculty: draggedItem.faculty,
             classroom: draggedItem.classroom,
         };
@@ -580,7 +555,9 @@ export default function CreateTimetable() {
             }
         } else {
             setTimetables(prev => {
-                const newTimetableForClass = { ...(prev[activeSectionId] || {}) };
+                const newTimetables = JSON.parse(JSON.stringify(prev));
+                const newTimetableForClass = newTimetables[activeSectionId] || {};
+
                 const swappedItem = newTimetableForClass[targetKey];
                 newTimetableForClass[targetKey] = itemToPlace;
 
@@ -592,22 +569,26 @@ export default function CreateTimetable() {
                     }
                 }
 
-                return { ...prev, [activeSectionId]: newTimetableForClass };
+                newTimetables[activeSectionId] = newTimetableForClass;
+                return newTimetables;
             });
         }
-        setDraggedItem(null);
+        handleDragEnd();
     };
 
     const handleDropOnUnassigned = () => {
         if (draggedItem && draggedItem.source === 'grid' && activeSectionId) {
             setTimetables(prev => {
-                const newTimetableForClass = { ...(prev[activeSectionId] || {}) };
-                delete newTimetableForClass[draggedItem.sourceKey];
-                return { ...prev, [activeSectionId]: newTimetableForClass };
+                const newTimetables = JSON.parse(JSON.stringify(prev));
+                if (newTimetables[activeSectionId]) {
+                    delete newTimetables[activeSectionId][draggedItem.sourceKey];
+                }
+                return newTimetables;
             });
         }
         handleDragEnd();
     };
+
 
     const handleResolveConflict = (newClassroomId) => {
         if (!conflictToResolve) return;
@@ -621,19 +602,22 @@ export default function CreateTimetable() {
         };
 
         setTimetables(prev => {
-            const newTimetableForClass = { ...(prev[activeSectionId] || {}) };
+            const newTimetables = JSON.parse(JSON.stringify(prev));
+            const newTimetableForClass = newTimetables[activeSectionId] || {};
             const targetKey = `${day}-${hour}`;
             newTimetableForClass[targetKey] = itemToPlace;
 
             if (draggedItem.source === 'grid' && draggedItem.sourceKey) {
                 delete newTimetableForClass[draggedItem.sourceKey];
             }
-
-            return { ...prev, [activeSectionId]: newTimetableForClass };
+            newTimetables[activeSectionId] = newTimetableForClass;
+            return newTimetables;
         });
 
         setConflictToResolve(null);
+        handleDragEnd();
     };
+
 
     const findAvailableRooms = (day, hour, isLab) => {
         const busyRoomIds = new Set();
@@ -646,10 +630,10 @@ export default function CreateTimetable() {
         return departmentData.allClassrooms.filter(room => room.isLab === isLab && !busyRoomIds.has(room.id));
     };
 
-    const handleHierarchicalDataChange = (path, field, value) => {
+    const handleDataChange = (path, field, value) => {
         setDepartmentData(prev => {
             const newData = JSON.parse(JSON.stringify(prev));
-            let current = newData.programs;
+            let current = newData.departments;
             for (let i = 0; i < path.length - 1; i++) {
                 current = current[path[i].index][path[i].key];
             }
@@ -661,18 +645,18 @@ export default function CreateTimetable() {
     const handleAddItem = (path, type) => {
         setDepartmentData(prev => {
             const newData = JSON.parse(JSON.stringify(prev));
-            let list = newData.programs;
+            let list = newData.departments;
 
             path.forEach(p => {
                 list = list[p.index][p.key];
             });
 
-            const newId = `${type.slice(0, 3).toUpperCase()}${Date.now()}`;
+            const newId = `${type.slice(0, 4).toUpperCase()}${Date.now()}`;
             let newItem = {};
-            if (type === 'program') newItem = { id: newId, name: 'New Program', courses: [] };
-            if (type === 'course') newItem = { id: newId, name: 'New Course', years: [] };
+            if (type === 'department') newItem = { id: newId, name: 'New Department', programs: [] };
+            if (type === 'program') newItem = { id: newId, name: 'New Program', years: [] };
             if (type === 'year') newItem = { id: newId, name: 'New Year', sections: [] };
-            if (type === 'section') newItem = { id: newId, name: 'New Section', strength: 60, subjects: [] };
+            if (type === 'section') newItem = { id: newId, name: 'New Section', strength: 60, courses: [] };
 
             list.push(newItem);
             return newData;
@@ -682,7 +666,7 @@ export default function CreateTimetable() {
     const handleDeleteItem = (path) => {
         setDepartmentData(prev => {
             const newData = JSON.parse(JSON.stringify(prev));
-            let list = newData.programs;
+            let list = newData.departments;
             for (let i = 0; i < path.length - 1; i++) {
                 list = list[path[i].index][path[i].key];
             }
@@ -691,27 +675,30 @@ export default function CreateTimetable() {
         });
     }
 
-    const handleSubjectAssignmentChange = (path, subjectIndex, field, value) => {
+    const handleCourseAssignmentChange = (dIdx, pIdx, yIdx, sIdx, courseIndex, field, value) => {
         setDepartmentData(prev => {
             const newData = JSON.parse(JSON.stringify(prev));
-            let section = newData.programs[path[0].index].courses[path[1].index].years[path[2].index].sections[path[3].index];
-            section.subjects[subjectIndex][field] = value;
+            const section = newData.departments[dIdx].programs[pIdx].years[yIdx].sections[sIdx];
+            section.courses[courseIndex][field] = value;
             return newData;
         });
     }
-    const handleAddSubjectAssignment = (path) => {
+    const handleAddCourseAssignment = (dIdx, pIdx, yIdx, sIdx) => {
         setDepartmentData(prev => {
             const newData = JSON.parse(JSON.stringify(prev));
-            let section = newData.programs[path[0].index].courses[path[1].index].years[path[2].index].sections[path[3].index];
-            section.subjects.push({ subjectId: '', hours: 3 });
+            const section = newData.departments[dIdx].programs[pIdx].years[yIdx].sections[sIdx];
+            if (!section.courses) {
+                section.courses = [];
+            }
+            section.courses.push({ courseId: '', hours: 3 });
             return newData;
         });
     }
-    const handleRemoveSubjectAssignment = (path, subjectIndex) => {
+    const handleRemoveCourseAssignment = (dIdx, pIdx, yIdx, sIdx, courseIndex) => {
         setDepartmentData(prev => {
             const newData = JSON.parse(JSON.stringify(prev));
-            let section = newData.programs[path[0].index].courses[path[1].index].years[path[2].index].sections[path[3].index];
-            section.subjects.splice(subjectIndex, 1);
+            const section = newData.departments[dIdx].programs[pIdx].years[yIdx].sections[sIdx];
+            section.courses.splice(courseIndex, 1);
             return newData;
         });
     }
@@ -777,14 +764,15 @@ export default function CreateTimetable() {
 
     const renderTimetable = (colorMap) => {
         let timetableToDisplay = {};
-        const currentViewSection = allSections.find(c => c.id === view.id);
 
-        if (view.type === 'program' || view.type === 'course') {
+        if (view.type === 'department' || view.type === 'program' || view.type === 'year') {
             let sectionsToDisplay = [];
-            if (view.type === 'program') {
+            if (view.type === 'department') {
+                sectionsToDisplay = allSections.filter(s => s.departmentId === view.id);
+            } else if (view.type === 'program') {
                 sectionsToDisplay = allSections.filter(s => s.programId === view.id);
-            } else { // course
-                sectionsToDisplay = allSections.filter(s => s.courseId === view.id);
+            } else { // year
+                sectionsToDisplay = allSections.filter(s => s.yearId === view.id);
             }
             const sectionIdSet = new Set(sectionsToDisplay.map(s => s.id));
 
@@ -796,16 +784,14 @@ export default function CreateTimetable() {
 
                         const slot = timetables[sectionId][key];
                         const sectionInfo = allSections.find(s => s.id === sectionId);
-                        const nameParts = sectionInfo.fullDisplayName.split(' - ');
-                        const subName = (view.type === 'program') ? nameParts.slice(1).join(' / ') : nameParts.slice(2).join(' / ');
-
-                        filteredSlots[key] = { ...slot, subject: { ...slot.subject, name: `${slot.subject.name} (${subName})` } };
+                        const subName = `${sectionInfo.name}`
+                        filteredSlots[key] = { ...slot, course: { ...slot.course, name: `${slot.course.name} (${subName})` } };
                     }
                 }
             }
             timetableToDisplay = filteredSlots;
 
-        } else if (view.type === 'class' && currentViewSection) {
+        } else if (view.type === 'class') {
             timetableToDisplay = timetables[view.id] || {};
         } else if (view.type === 'faculty' || view.type === 'room') {
             let filteredSlots = {};
@@ -815,8 +801,8 @@ export default function CreateTimetable() {
                     const match = (view.type === 'faculty' && slot.faculty.id === view.id) || (view.type === 'room' && slot.classroom.id === view.id);
                     if (match) {
                         const sectionInfo = allSections.find(s => s.id === sectionId);
-                        const sectionShortName = sectionInfo.fullDisplayName.split(' - ').slice(1).join(' / ');
-                        filteredSlots[key] = { ...slot, subject: { ...slot.subject, name: `${slot.subject.name} (${sectionShortName})` } };
+                        const sectionShortName = `${sectionInfo.name}`;
+                        filteredSlots[key] = { ...slot, course: { ...slot.course, name: `${slot.course.name} (${sectionShortName})` } };
                     }
                 }
             }
@@ -859,7 +845,7 @@ export default function CreateTimetable() {
                                         const key = `${day}-${time}`;
                                         const slotData = timetableToDisplay[key];
                                         const isUnavailable = unavailableSlots.includes(key);
-                                        const color = slotData ? colorMap[slotData.subject.id] : { cellBg: 'bg-gray-200' };
+                                        const color = slotData ? colorMap[slotData.course.id] : { cellBg: 'bg-gray-200' };
                                         return (
                                             <TimetableCell
                                                 key={key}
@@ -888,9 +874,10 @@ export default function CreateTimetable() {
     const renderPhase1ScheduleAndAcademics = () => (
         <div className="p-4 md:p-8">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Phase 1: Configure Schedule & Academics</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-8">Define the daily schedule, academic structure, and assign subjects to sections.</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">Define the daily schedule, academic structure, and assign courses to sections.</p>
 
             <div className="space-y-8">
+                {/* General Schedule Settings */}
                 <div className="p-4 border rounded-lg border-gray-200 dark:border-gray-700">
                     <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-200 mb-4">General Schedule Settings</h3>
                     <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -981,139 +968,66 @@ export default function CreateTimetable() {
                     </div>
                 </div>
 
+                {/* Academic Structure */}
                 <div className="p-4 border rounded-lg border-gray-200 dark:border-gray-700">
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-200">Academic Structure</h3>
-                        <button onClick={() => handleAddItem([], 'program')} className="text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center"><Plus size={16} className="mr-1" /> Add Program</button>
+                        <button onClick={() => handleAddItem([], 'department')} className="text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center"><Plus size={16} className="mr-1" /> Add Department</button>
                     </div>
                     <div className="space-y-4">
-                        {departmentData.programs.map((program, pIdx) => (
-                            <div key={program.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 border rounded-md border-gray-200 dark:border-gray-700">
+                        {departmentData.departments.map((dept, dIdx) => (
+                            <div key={dept.id} className="p-3 bg-gray-50 dark:bg-gray-700/50 border rounded-md border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <select
-  value={program.name}
-  onChange={(e) => handleHierarchicalDataChange([{ index: pIdx }], "name", e.target.value)}
-  className="p-2 border rounded font-semibold text-gray-800 dark:text-gray-100 w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
->
-  <option value="">Select Program</option>
-  {MOCK_DEPARTMENT_DATA.programs.map((p) => (
-    <option key={p.id} value={p.name}>{p.name}</option>
-  ))}
-</select>
-
-                                    <button onClick={() => handleAddItem([{ key: 'courses', index: pIdx }], 'course')} className="p-2 text-sm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md whitespace-nowrap">Add Department</button>
-                                    <button onClick={() => handleDeleteItem([{ index: pIdx }])} className="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md"><Trash2 size={16} /></button>
+                                    <input value={dept.name} onChange={(e) => handleDataChange([{ index: dIdx }], "name", e.target.value)} className="p-2 border rounded font-semibold text-gray-800 dark:text-gray-100 w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600" />
+                                    <button onClick={() => handleAddItem([{ key: 'programs', index: dIdx }], 'program')} className="p-2 text-sm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md whitespace-nowrap">Add Program</button>
+                                    <button onClick={() => handleDeleteItem([{ index: dIdx }])} className="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md"><Trash2 size={16} /></button>
                                 </div>
                                 <div className="pl-6 space-y-3">
-                                    {program.courses.map((course, cIdx) => (
-                                        <div key={course.id} className="p-2 bg-white dark:bg-gray-800 border rounded border-gray-200 dark:border-gray-600">
+                                    {(dept.programs || []).map((prog, pIdx) => (
+                                        <div key={prog.id} className="p-2 bg-white dark:bg-gray-800 border rounded border-gray-200 dark:border-gray-600">
                                             <div className="flex items-center gap-2 mb-2">
-                                                <select
-  value={course.name}
-  onChange={(e) =>
-    handleHierarchicalDataChange(
-      [{ key: "courses", index: pIdx }, { index: cIdx }],
-      "name",
-      e.target.value
-    )
-  }
-  className="p-1 border rounded font-medium text-gray-700 dark:text-gray-200 w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500"
->
-  <option value="">Select Course</option>
-  {MOCK_DEPARTMENT_DATA.programs
-    .flatMap((p) => p.courses)
-    .map((c) => (
-      <option key={c.id} value={c.name}>{c.name}</option>
-  ))}
-</select>
-
-                                                <button onClick={() => handleAddItem([{ key: 'courses', index: pIdx }, { key: 'years', index: cIdx }], 'year')} className="p-1 text-xs text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded whitespace-nowrap">Add Year</button>
-                                                <button onClick={() => handleDeleteItem([{ key: 'courses', index: pIdx }, { index: cIdx }])} className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded"><Trash2 size={14} /></button>
+                                                <input value={prog.name} onChange={(e) => handleDataChange([{ key: "programs", index: dIdx }, { index: pIdx }], "name", e.target.value)} className="p-1 border rounded font-medium text-gray-700 dark:text-gray-200 w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500" />
+                                                <button onClick={() => handleAddItem([{ key: 'programs', index: dIdx }, { key: 'years', index: pIdx }], 'year')} className="p-1 text-xs text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded whitespace-nowrap">Add Year</button>
+                                                <button onClick={() => handleDeleteItem([{ key: 'programs', index: dIdx }, { index: pIdx }])} className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded"><Trash2 size={14} /></button>
                                             </div>
                                             <div className="pl-4 space-y-2">
-                                                {course.years.map((year, yIdx) => (
+                                                {(prog.years || []).map((year, yIdx) => (
                                                     <div key={year.id} className="p-2 bg-gray-50 dark:bg-gray-700/50 border rounded border-gray-200 dark:border-gray-600">
                                                         <div className="flex items-center gap-2 mb-2">
-                                                            <select
-  value={year.name}
-  onChange={(e) =>
-    handleHierarchicalDataChange(
-      [
-        { key: "courses", index: pIdx },
-        { key: "years", index: cIdx },
-        { index: yIdx },
-      ],
-      "name",
-      e.target.value
-    )
-  }
-  className="p-1 border rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500"
->
-  <option value="">Select Year</option>
-  {MOCK_DEPARTMENT_DATA.programs
-    .flatMap((p) => p.courses)
-    .flatMap((c) => c.years)
-    .map((y) => (
-      <option key={y.id} value={y.name}>{y.name}</option>
-  ))}
-</select>
-
-                                                            <button onClick={() => handleAddItem([{ key: 'courses', index: pIdx }, { key: 'years', index: cIdx }, { key: 'sections', index: yIdx }], 'section')} className="p-1 text-xs text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded whitespace-nowrap">Add Section</button>
-                                                            <button onClick={() => handleDeleteItem([{ key: 'courses', index: pIdx }, { key: 'years', index: cIdx }, { index: yIdx }])} className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded"><Trash2 size={14} /></button>
+                                                            <input value={year.name} onChange={(e) => handleDataChange([{ key: "programs", index: dIdx }, { key: "years", index: pIdx }, { index: yIdx }], "name", e.target.value)} className="p-1 border rounded w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500" />
+                                                            <button onClick={() => handleAddItem([{ key: 'programs', index: dIdx }, { key: 'years', index: pIdx }, { key: 'sections', index: yIdx }], 'section')} className="p-1 text-xs text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded whitespace-nowrap">Add Section</button>
+                                                            <button onClick={() => handleDeleteItem([{ key: 'programs', index: dIdx }, { key: 'years', index: pIdx }, { index: yIdx }])} className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded"><Trash2 size={14} /></button>
                                                         </div>
                                                         <div className="pl-4 space-y-2">
-                                                            {year.sections.map((section, sIdx) => {
-                                                                const sectionPath = [{ key: 'courses', index: pIdx }, { key: 'years', index: cIdx }, { key: 'sections', index: yIdx }, { index: sIdx }];
-                                                                const subjectPath = [{ key: 'courses', index: pIdx }, { key: 'years', index: cIdx }, { key: 'sections', index: yIdx }, { index: sIdx, key: 'subjects' }];
-
-                                                                return (
-                                                                    <div key={section.id} className="p-2 bg-white dark:bg-gray-800 border rounded border-gray-200 dark:border-gray-600">
-                                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-center mb-2">
-                                                                           <select
-  value={section.name}
-  onChange={(e) => handleHierarchicalDataChange(sectionPath, "name", e.target.value)}
-  className="p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500"
->
-  <option value="">Select Section</option>
-  {MOCK_DEPARTMENT_DATA.programs
-    .flatMap((p) => p.courses)
-    .flatMap((c) => c.years)
-    .flatMap((y) => y.sections)
-    .map((s) => (
-      <option key={s.id} value={s.name}>{s.name}</option>
-  ))}
-</select>
-
-                                                                            {/* <input placeholder="Strength" type="number" value={section.strength} onChange={(e) => handleHierarchicalDataChange(sectionPath, 'strength', parseInt(e.target.value) || 0)} className="p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500" /> */}
-                                                                            <button onClick={() => handleDeleteItem(sectionPath)} className="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md justify-self-end"><Trash2 size={16} /></button>
+                                                            {(year.sections || []).map((section, sIdx) => (
+                                                                <div key={section.id} className="p-2 bg-white dark:bg-gray-800 border rounded border-gray-200 dark:border-gray-600">
+                                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-center mb-2">
+                                                                        <input placeholder="Section Name" value={section.name} onChange={(e) => handleDataChange([{ key: "programs", index: dIdx }, { key: "years", index: pIdx }, { key: "sections", index: yIdx }, { index: sIdx }], 'name', e.target.value)} className="p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500" />
+                                                                        <input placeholder="Strength" type="number" value={section.strength} onChange={(e) => handleDataChange([{ key: "programs", index: dIdx }, { key: "years", index: pIdx }, { key: "sections", index: yIdx }, { index: sIdx }], 'strength', parseInt(e.target.value) || 0)} className="p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500" />
+                                                                        <button onClick={() => handleDeleteItem([{ key: 'programs', index: dIdx }, { key: 'years', index: pIdx }, { key: 'sections', index: yIdx }, { index: sIdx }])} className="p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md justify-self-end"><Trash2 size={16} /></button>
+                                                                    </div>
+                                                                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                                                                        <div className="flex justify-between items-center mb-2">
+                                                                            <h4 className="font-medium text-sm text-gray-600 dark:text-gray-300">Courses & Hours/Week:</h4>
+                                                                            <button onClick={() => handleAddCourseAssignment(dIdx, pIdx, yIdx, sIdx)} className="text-xs font-medium text-indigo-600 dark:text-indigo-400 flex items-center"><Plus size={14} className="mr-1" /> Add Course</button>
                                                                         </div>
-                                                                        <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                                                                            <div className="flex justify-between items-center mb-2">
-                                                                <div className="grid grid-cols-3 gap-2 w-full">
-                                                                    <h4 className="font-medium text-sm text-gray-600 dark:text-gray-300 col-span-2">Subjects:</h4>
-                                                                    <h4 className="font-medium text-sm text-gray-600 dark:text-gray-300">Hours/Week:</h4>
-                                                                </div>
-                                                                                <button onClick={() => handleAddSubjectAssignment(subjectPath)} className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center"><Plus size={14} className="mr-1" /> Assign Courses</button>
-                                                                            </div>
-                                                                            <div className="space-y-1">
-                                                                                {section.subjects.map((sub, j) => (
-                                                                                    <div key={j} className="grid grid-cols-3 gap-2 items-center">
-                                                                                        
-                                                                                        <select value={sub.subjectId} onChange={(e) => handleSubjectAssignmentChange(subjectPath, j, 'subjectId', e.target.value)} className="p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500 col-span-2 text-xs">
-                                                                                            <option value="">Select Subject</option>
-                                                                                            {departmentData.allSubjects.map(s => <option key={s.id} value={s.id}>{s.code} - {s.name}</option>)}
-                                                                                        </select>
-                                                                                        <div className="flex items-center">
-                                                                                            <input type="number" value={sub.hours} onChange={(e) => handleSubjectAssignmentChange(subjectPath, j, 'hours', parseInt(e.target.value) || 0)} className="p-1 border rounded w-full text-xs bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500" />
-                                                                                            <button onClick={() => handleRemoveSubjectAssignment(subjectPath, j)} className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md"><Trash2 size={14} /></button>
-                                                                                        </div>
+                                                                        <div className="space-y-1">
+                                                                            {(section.courses || []).map((sub, j) => (
+                                                                                <div key={j} className="grid grid-cols-3 gap-2 items-center">
+                                                                                    <select value={sub.courseId} onChange={(e) => handleCourseAssignmentChange(dIdx, pIdx, yIdx, sIdx, j, 'courseId', e.target.value)} className="p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500 col-span-2 text-xs">
+                                                                                        <option value="">Select Course</option>
+                                                                                        {departmentData.allCourses.map(s => <option key={s.id} value={s.id}>{s.code} - {s.name}</option>)}
+                                                                                    </select>
+                                                                                    <div className="flex items-center">
+                                                                                        <input type="number" value={sub.hours} onChange={(e) => handleCourseAssignmentChange(dIdx, pIdx, yIdx, sIdx, j, 'hours', parseInt(e.target.value) || 0)} className="p-1 border rounded w-full text-xs bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-500" />
+                                                                                        <button onClick={() => handleRemoveCourseAssignment(dIdx, pIdx, yIdx, sIdx, j)} className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md"><Trash2 size={14} /></button>
                                                                                     </div>
-                                                                                ))}
-                                                                            </div>
+                                                                                </div>
+                                                                            ))}
                                                                         </div>
                                                                     </div>
-                                                                )
-                                                            })}
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 ))}
@@ -1158,9 +1072,9 @@ export default function CreateTimetable() {
                     </div>
                     <div className="grid md:grid-cols-3 gap-6">
                         <div>
-                            <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-2">Subjects ({departmentData.allSubjects.length})</h3>
+                            <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-2">Courses ({departmentData.allCourses.length})</h3>
                             <ul className="space-y-2 text-sm text-gray-800 dark:text-gray-200 max-h-48 overflow-y-auto p-3 bg-gray-50 dark:bg-gray-900/50 rounded-md border border-gray-200 dark:border-gray-700">
-                                {departmentData.allSubjects.map(s => <li key={s.id} className="p-2 bg-white dark:bg-gray-800 rounded shadow-xs">{s.code} - {s.name}</li>)}
+                                {departmentData.allCourses.map(s => <li key={s.id} className="p-2 bg-white dark:bg-gray-800 rounded shadow-xs">{s.code} - {s.name}</li>)}
                             </ul>
                         </div>
                         <div>
@@ -1212,17 +1126,17 @@ export default function CreateTimetable() {
                         onDrop={handleDropOnUnassigned}
                         onDragOver={handleDragOver}
                     >
-                        <h3 className="font-bold mb-4 text-gray-700 dark:text-gray-200">Unassigned Classes</h3>
+                        <h3 className="font-bold mb-4 text-gray-700 dark:text-gray-200">Unassigned Courses</h3>
                         <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-                            {unassignedSubjects.map(subject => {
-                                const color = colorMap[subject.id] || { pillBg: 'bg-gray-100', border: 'border-gray-300' };
-                                return <SubjectPill key={subject.id} subject={subject} remainingHours={subject.remainingHours}
-                                    onDragStart={(e) => handlePillDragStart(e, subject)}
+                            {unassignedCourses.map(course => {
+                                const color = colorMap[course.id] || { pillBg: 'bg-gray-100', border: 'border-gray-300' };
+                                return <CoursePill key={`${course.id}-${course.remainingHours}`} course={course} remainingHours={course.remainingHours}
+                                    onDragStart={(e) => handlePillDragStart(e, course)}
                                     onDragEnd={handleDragEnd}
                                     color={color}
                                 />
                             })}
-                            {unassignedSubjects.length === 0 && activeSectionId && <div className="text-sm text-center text-gray-500 dark:text-gray-400 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">All classes assigned!</div>}
+                            {unassignedCourses.length === 0 && activeSectionId && <div className="text-sm text-center text-gray-500 dark:text-gray-400 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">All courses assigned!</div>}
                             {!activeSectionId && <p className="text-sm text-center text-gray-500 dark:text-gray-400 p-4">Please select a section.</p>}
                         </div>
                     </div>
@@ -1247,14 +1161,15 @@ export default function CreateTimetable() {
 
     const renderPhase4Review = (colorMap) => {
         const filterOptions = {
+            department: allDepartments,
             program: allPrograms,
-            course: allCourses,
+            year: allYears,
             class: allSections.map(s => ({ ...s, name: s.fullDisplayName })),
             faculty: departmentData.allFaculties,
             room: departmentData.allClassrooms,
         };
 
-        const viewTypes = ['program', 'course', 'class', 'faculty', 'room'];
+        const viewTypes = ['department', 'program', 'year', 'class', 'faculty', 'room'];
         const currentOptions = filterOptions[view.type] || [];
 
         return (
@@ -1329,8 +1244,8 @@ export default function CreateTimetable() {
                     <div className="border-t border-gray-200 dark:border-gray-700">
                         {phase === 1 && renderPhase1ScheduleAndAcademics()}
                         {phase === 2 && renderPhase2Confirm()}
-                        {phase === 3 && renderPhase3Generate(subjectColorMap)}
-                        {phase === 4 && renderPhase4Review(subjectColorMap)}
+                        {phase === 3 && renderPhase3Generate(courseColorMap)}
+                        {phase === 4 && renderPhase4Review(courseColorMap)}
                     </div>
                 </div>
                 <ConflictAlert conflict={conflict} onClose={() => setConflict(null)} />
@@ -1339,7 +1254,7 @@ export default function CreateTimetable() {
                         slot={editingSlot}
                         onClose={() => setEditingSlot(null)}
                         onSave={handleUpdateSlot}
-                        subjects={departmentData.allSubjects.filter(s => activeSection.subjects.map(cs => cs.subjectId).includes(s.id))}
+                        courses={departmentData.allCourses.filter(s => (activeSection.courses || []).map(cs => cs.courseId).includes(s.id))}
                         faculties={departmentData.allFaculties}
                         classrooms={departmentData.allClassrooms}
                         onConflictCheck={(details) => checkForConflict({ ...details, ignoreSectionId: activeSectionId })}
@@ -1350,7 +1265,7 @@ export default function CreateTimetable() {
                         details={conflictToResolve}
                         onClose={() => setConflictToResolve(null)}
                         onResolve={handleResolveConflict}
-                        availableRooms={findAvailableRooms(conflictToResolve.day, conflictToResolve.hour, conflictToResolve.draggedItem.subject.lab)}
+                        availableRooms={findAvailableRooms(conflictToResolve.day, conflictToResolve.hour, conflictToResolve.draggedItem.course.lab)}
                     />
                 )}
             </main>
