@@ -8,6 +8,7 @@ import DataManagement from '../pages/PrincipalModules/Administration/DataManagem
 import FeesStructure from '../pages/MasterMOdule/LeaveConfigure/FeesStructure';
 import Scholarships from '../pages/MasterMOdule/LeaveConfigure/Scholarships';
 import MasterDashboard from '../pages/MasterMOdule/MasterDashboard';
+import CourseManagement from '../pages/PrincipalModules/Administration/CourseManagement';
 const MasterRoutes: React.FC = () => {
   return (
     <Routes>
@@ -16,6 +17,7 @@ const MasterRoutes: React.FC = () => {
         <Route path="/faculty/leave-configure" element={<ConfigureFacultyLeave />} />
         <Route path="/student/leave-configure" element={<ConfigureStudentLeave />} />
       <Route path="/home/data-management" element={<DataManagement />} />
+      <Route path="/course-management" element={<CourseManagement />} />
       <Route path="/scholarship-registration" element={<Scholarships />} />
       <Route path="/fee-management" element={<FeesStructure />} />
       <Route path="/home/dashboard" element={<MasterDashboard />} />

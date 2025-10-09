@@ -107,7 +107,7 @@ const SIDEBAR_ITEMS = {
             ]
           },
 
-      { name: 'Courses ',path:'/academics/course-faculties', icon:'Database'   },
+      { name: 'Course Management', path: '/master/course-management', icon: 'BookOpen' },
       { name: 'Timetable', path: '/master/create/timetable', icon: 'Calendar' },
       { name: 'Academic Calendar', path: '/master/academic/calendar', icon: 'Mail' },
       { name: 'Employee leave Configure', path: '/master/faculty/leave-configure', icon: 'Users' },
