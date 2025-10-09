@@ -201,13 +201,13 @@ const HodExamDashboard: React.FC = () => {
   return (
     <div style={{ ...baseStyles.dashboard, backgroundColor: currentThemeStyles.backgroundColor, color: currentThemeStyles.textColor }}>
       <header style={baseStyles.header}>
-        <h1 style={{ margin: 0, fontSize: isMobile ? '24px' : '32px' }}>HOD Exam Preparation Oversight 🧠</h1>
-        <button 
+        <h1 style={{ margin: 0, fontSize: isMobile ? '24px' : '32px' }}>HOD Exam Preparation Oversight </h1>
+        {/* <button 
           onClick={toggleTheme} 
           style={{ ...baseStyles.button, backgroundColor: baseStyles.primaryColor, color: 'white' }}
         >
           Switch to {theme === 'light' ? 'Dark 🌙' : 'Light ☀️'}
-        </button>
+        </button> */}
       </header>
 
       <h2>Department Exam Analytics</h2>

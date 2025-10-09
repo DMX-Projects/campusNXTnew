@@ -134,6 +134,7 @@ import SemExamPrepararation from '../pages/FacultyModules/FacultyAcademic/SemExa
 
 import { i } from 'framer-motion/client';
 import FacultyLessonPlan from '../pages/FacultyModules/Academic/FacultyLessonplan';
+import Dashboard from '../components/Dashboard';
 
 
 

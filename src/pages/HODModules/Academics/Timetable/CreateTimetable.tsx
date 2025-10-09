@@ -6,7 +6,7 @@ const MOCK_DATA = {
     departments: [
         {
             id: 'DEPT01',
-            name: 'GKCoE Engineering',
+            name: 'Computer Science and  Engineering',
             programs: [
                 {
                     id: 'PROG01',
