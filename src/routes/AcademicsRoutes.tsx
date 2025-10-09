@@ -74,7 +74,6 @@ import TimeTable from '../pages/StudentModules/Academics/TimeTable';
 import StudentAttendence from '../pages/StudentModules/Academics/StudentAttendence';
 import Results from '../pages/StudentModules/Academics/Results';
 import LeaveRequest from '../pages/StudentModules/Academics/LeaveRequest';
-import Dashboard from '../pages/StudentModules/Academics/Dashboard';
 import MyProjects from '../pages/StudentModules/Academics/MyProjects';
 import CAT from '../pages/StudentModules/Academics/CAT';
 
