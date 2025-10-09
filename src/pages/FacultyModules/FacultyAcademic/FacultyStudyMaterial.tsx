@@ -686,7 +686,7 @@ const FacultyStudyMaterial: React.FC = () => {
                   </a>
                 ) : (
                   <>
-                    <a
+                    {/* <a
                       href={selectedMaterial.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -694,7 +694,7 @@ const FacultyStudyMaterial: React.FC = () => {
                     >
                       <Eye className="w-5 h-5" />
                       Open File
-                    </a>
+                    </a> */}
                     <a
                       href={selectedMaterial.fileUrl}
                       download={selectedMaterial.fileName}
@@ -712,201 +712,199 @@ const FacultyStudyMaterial: React.FC = () => {
       )}
 
       {/* Upload Modal */}
-      {isUploadModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Upload Study Material</h2>
-                <button
-                  onClick={() => setIsUploadModalOpen(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X className="w-6 h-6 text-gray-500" />
-                </button>
-              </div>
-            </div>
+{isUploadModalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-900">Upload Study Material</h2>
+          <button
+            onClick={() => setIsUploadModalOpen(false)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X className="w-6 h-6 text-gray-500" />
+          </button>
+        </div>
+      </div>
 
-            <div className="p-6 space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title*</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={uploadForm.title}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter material title"
-                />
-              </div>
+      <div className="p-6 space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Title*</label>
+          <input
+            type="text"
+            name="title"
+            value={uploadForm.title}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Enter material title"
+          />
+        </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea
-                  name="description"
-                  value={uploadForm.description}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Describe the content and purpose"
-                />
-              </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <textarea
+            name="description"
+            value={uploadForm.description}
+            onChange={handleInputChange}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Describe the content and purpose"
+          />
+        </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Subject*</label>
-                  <select
-                    name="subject"
-                    value={uploadForm.subject}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="">Select Subject</option>
-                    {assignedSubjects.map(subject => (
-                      <option key={subject.code} value={subject.code}>
-                        {subject.name} ({subject.code})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Subject*</label>
+            <select
+              name="subject"
+              value={uploadForm.subject}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">Select Subject</option>
+              {assignedSubjects.map(subject => (
+                <option key={subject.code} value={subject.code}>
+                  {subject.name} ({subject.code})
+                </option>
+              ))}
+            </select>
+          </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Unit/Chapter</label>
-                  <input
-                    type="text"
-                    name="unit"
-                    value={uploadForm.unit}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Unit 1, Chapter 3"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Topic</label>
-                  <input
-                    type="text"
-                    name="topic"
-                    value={uploadForm.topic}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Binary Trees, SQL Queries"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
-                  <input
-                    type="text"
-                    name="tags"
-                    value={uploadForm.tags}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="comma,separated,tags"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name="isLink"
-                    checked={uploadForm.isLink}
-                    onChange={handleInputChange}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-sm text-gray-700">This is an external link</span>
-                </label>
-              </div>
-
-              {uploadForm.isLink ? (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">External Link URL*</label>
-                  <input
-                    type="url"
-                    name="linkUrl"
-                    value={uploadForm.linkUrl}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://example.com/resource"
-                  />
-                </div>
-              ) : (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">File Upload*</label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <div className="space-y-2">
-                      <p className="text-gray-600">
-                        <span className="font-semibold text-blue-600 cursor-pointer">Click to upload</span> or drag and drop
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        PDF, DOC, PPT, MP4, PNG, JPG (max 100MB)
-                      </p>
-                    </div>
-                    <input
-                      type="file"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                      accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.mp3,.png,.jpg,.jpeg,.txt"
-                      id="fileInput"
-                    />
-                    <label
-                      htmlFor="fileInput"
-                      className="absolute inset-0 cursor-pointer"
-                    ></label>
-                  </div>
-                  {uploadForm.file && (
-                    <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <File className="w-5 h-5 text-blue-600" />
-                        <div className="flex-1">
-                          <p className="font-medium text-blue-900">{uploadForm.file.name}</p>
-                          <p className="text-sm text-blue-700">
-                            {(uploadForm.file.size / (1024 * 1024)).toFixed(2)} MB
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => setUploadForm(prev => ({ ...prev, file: null }))}
-                          className="p-1 hover:bg-blue-200 rounded"
-                        >
-                          <X className="w-4 h-4 text-blue-600" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
-              <button
-                onClick={() => setIsUploadModalOpen(false)}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpload}
-                disabled={isUploading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isUploading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Uploading...
-                  </div>
-                ) : (
-                  'Upload Material'
-                )}
-              </button>
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Unit/Chapter</label>
+            <input
+              type="text"
+              name="unit"
+              value={uploadForm.unit}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="e.g., Unit 1, Chapter 3"
+            />
           </div>
         </div>
-      )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Topic</label>
+            <input
+              type="text"
+              name="topic"
+              value={uploadForm.topic}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="e.g., Binary Trees, SQL Queries"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+            <input
+              type="text"
+              name="tags"
+              value={uploadForm.tags}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="comma,separated,tags"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="isLink"
+              checked={uploadForm.isLink}
+              onChange={handleInputChange}
+              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="text-sm text-gray-700">This is an external link</span>
+          </label>
+        </div>
+
+        {uploadForm.isLink ? (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">External Link URL*</label>
+            <input
+              type="url"
+              name="linkUrl"
+              value={uploadForm.linkUrl}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="https://example.com/resource"
+            />
+          </div>
+        ) : (
+          <div
+            className="relative border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer"
+            onClick={() => document.getElementById('fileInput')?.click()}
+          >
+            <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <div className="space-y-2">
+              <p className="text-gray-600">
+                <span className="font-semibold text-blue-600">Click to upload</span> or drag and drop
+              </p>
+              <p className="text-sm text-gray-500">
+                PDF, DOC, PPT, MP4, PNG, JPG (max 100MB)
+              </p>
+            </div>
+            <input
+              type="file"
+              id="fileInput"
+              onChange={handleFileSelect}
+              className="hidden"
+              accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.mp3,.png,.jpg,.jpeg,.txt"
+            />
+
+            {uploadForm.file && (
+              <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <File className="w-5 h-5 text-blue-600" />
+                  <div className="flex-1">
+                    <p className="font-medium text-blue-900">{uploadForm.file.name}</p>
+                    <p className="text-sm text-blue-700">
+                      {(uploadForm.file.size / (1024 * 1024)).toFixed(2)} MB
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setUploadForm(prev => ({ ...prev, file: null }))}
+                    className="p-1 hover:bg-blue-200 rounded"
+                  >
+                    <X className="w-4 h-4 text-blue-600" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
+        <button
+          onClick={() => setIsUploadModalOpen(false)}
+          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleUpload}
+          disabled={isUploading}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isUploading ? (
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              Uploading...
+            </div>
+          ) : (
+            'Upload Material'
+          )}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

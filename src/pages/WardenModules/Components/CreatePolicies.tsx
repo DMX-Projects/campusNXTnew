@@ -29,7 +29,7 @@ const CreatePolicies: React.FC = () => {
       setIsSubmitting(false);
       alert('Policy created successfully!');
       // In a real app, you would add the new policy to your global state or refetch the list
-      navigate('/hostel/rules');
+      navigate('/hostel/setup/rules');
     }, 1500);
   };
 

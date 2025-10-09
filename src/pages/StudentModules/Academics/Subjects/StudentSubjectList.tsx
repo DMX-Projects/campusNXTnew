@@ -654,13 +654,13 @@ const StudentSubjectList: React.FC = () => {
             View and manage all your enrolled subjects, units, and course information
           </p>
         </div>
-        <button
+        {/* <button
           className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           onClick={() => setIsDarkMode(!isDarkMode)}
           aria-label="Toggle theme"
         >
           {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
+        </button> */}
       </div>
 
       {/* Summary Cards */}
@@ -1102,12 +1102,12 @@ const StudentSubjectList: React.FC = () => {
                               <p className="text-xs text-gray-500 dark:text-gray-400">{resource.description}</p>
                             </div>
                           </div>
-                          <button 
+                          {/* <button 
                             onClick={() => window.open(resource.url, '_blank')}
                             className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-200"
                           >
                             <Eye className="w-4 h-4" />
-                          </button>
+                          </button> */}
                         </div>
                       ))}
                     </div>
