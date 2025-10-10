@@ -9,6 +9,7 @@ import FeesStructure from '../pages/MasterMOdule/LeaveConfigure/FeesStructure';
 import Scholarships from '../pages/MasterMOdule/LeaveConfigure/Scholarships';
 import MasterDashboard from '../pages/MasterMOdule/MasterDashboard';
 import CourseManagement from '../pages/PrincipalModules/Administration/CourseManagement';
+import BulkUpload from '../pages/MasterMOdule/BulkUpload';
 const MasterRoutes: React.FC = () => {
   return (
     <Routes>
@@ -21,6 +22,8 @@ const MasterRoutes: React.FC = () => {
       <Route path="/scholarship-registration" element={<Scholarships />} />
       <Route path="/fee-management" element={<FeesStructure />} />
       <Route path="/home/dashboard" element={<MasterDashboard />} />
+      <Route path="/bulk-upload" element={<BulkUpload />} />
+      
 
     </Routes>
   );

@@ -1,16 +1,43 @@
-
-
 import React, { useMemo, useState } from 'react';
-import { Plus, Search, Edit3, Trash2, X, Settings, Award, Percent } from 'lucide-react';
+import { Plus, Search, Edit3, Trash2, X, Award, Percent } from 'lucide-react';
 
 const RegistrarScholarship = () => {
   const [types, setTypes] = useState(['Merit', 'Need', 'Government', 'Private']);
   const [schemes, setSchemes] = useState([
-    { id: 1, name: 'Merit Scholarship', type: 'Merit', category: 'General', reduction: 50, deadline: '2025-12-31', status: 'Active', description: 'Merit-based scholarship for high performers' },
-    { id: 2, name: 'SC/ST Support', type: 'Government', category: 'SC', reduction: 75, deadline: '2025-11-30', status: 'Active', description: 'Government-funded support for SC/ST students' },
-    { id: 3, name: 'OBC Welfare', type: 'Government', category: 'OBC', reduction: 60, deadline: '2025-10-15', status: 'Active', description: 'Fee reduction for OBC category students' }
+    {
+      id: 1,
+      name: 'Merit Scholarship',
+      type: 'Merit',
+      category: 'General',
+      reductionType: 'percent',
+      reduction: 50,
+      deadline: '2025-12-31',
+      status: 'Active',
+      description: 'Merit-based scholarship for high performers'
+    },
+    {
+      id: 2,
+      name: 'SC/ST Support',
+      type: 'Government',
+      category: 'SC',
+      reductionType: 'fixed',
+      reduction: 25000,
+      deadline: '2025-11-30',
+      status: 'Active',
+      description: 'Govt-funded support for SC/ST students'
+    },
+    {
+      id: 3,
+      name: 'OBC Welfare',
+      type: 'Government',
+      category: 'OBC',
+      reductionType: 'percent',
+      reduction: 60,
+      deadline: '2025-10-15',
+      status: 'Active',
+      description: 'Fee reduction for OBC category students'
+    }
   ]);
-
   const [search, setSearch] = useState('');
   const [filterCat, setFilterCat] = useState('');
   const [filterType, setFilterType] = useState('');
@@ -22,14 +49,17 @@ const RegistrarScholarship = () => {
     name: '',
     type: '',
     category: '',
-    reduction: 50,
+    reductionType: 'percent',
+    reduction: '',
     deadline: '',
     status: 'Active',
     description: ''
   });
 
-  // Derived filter options: include any values typed in saved schemes
-  const derivedTypes = useMemo(() => Array.from(new Set([...types, ...schemes.map(s => s.type)])), [types, schemes]);
+  const derivedTypes = useMemo(
+    () => Array.from(new Set([...types, ...schemes.map(s => s.type)])),
+    [types, schemes]
+  );
   const derivedCategories = useMemo(
     () => Array.from(new Set([...schemes.map(s => s.category), 'General', 'OBC', 'SC', 'ST', 'EWS'])),
     [schemes]
@@ -44,18 +74,35 @@ const RegistrarScholarship = () => {
     });
   }, [schemes, search, filterCat, filterType]);
 
-  const stats = useMemo(
-    () => ({
+  const stats = useMemo(() => {
+    const percentSchemes = schemes.filter(s => s.reductionType === 'percent');
+    const fixedSchemes = schemes.filter(s => s.reductionType === 'fixed');
+    return {
       total: schemes.length,
       active: schemes.filter(s => s.status === 'Active').length,
-      avgReduction: schemes.length ? Math.round(schemes.reduce((a, s) => a + s.reduction, 0) / schemes.length) : 0
-    }),
-    [schemes]
-  );
+      avgPercent:
+        percentSchemes.length
+          ? Math.round(percentSchemes.reduce((a, s) => a + Number(s.reduction), 0) / percentSchemes.length)
+          : 0,
+      avgFixed:
+        fixedSchemes.length
+          ? Math.round(fixedSchemes.reduce((a, s) => a + Number(s.reduction), 0) / fixedSchemes.length)
+          : 0
+    };
+  }, [schemes]);
 
   const openCreate = () => {
     setEditId(null);
-    setForm({ name: '', type: '', category: '', reduction: 50, deadline: '', status: 'Active', description: '' });
+    setForm({
+      name: '',
+      type: '',
+      category: '',
+      reductionType: 'percent',
+      reduction: '',
+      deadline: '',
+      status: 'Active',
+      description: ''
+    });
     setShowModal(true);
   };
 
@@ -65,6 +112,7 @@ const RegistrarScholarship = () => {
       name: s.name,
       type: s.type,
       category: s.category,
+      reductionType: s.reductionType || 'percent',
       reduction: s.reduction,
       deadline: s.deadline,
       status: s.status,
@@ -74,21 +122,33 @@ const RegistrarScholarship = () => {
   };
 
   const save = () => {
-    if (!form.name.trim() || !form.deadline.trim()) return alert('Name and deadline are required');
-    if (!form.type.trim()) return alert('Type is required (enter any custom label)');
-    if (!form.category.trim()) return alert('Category is required (enter any custom label)');
-    if (form.reduction < 1 || form.reduction > 100) return alert('Reduction must be 1-100%');
+    if (!form.name.trim() || !form.deadline.trim())
+      return alert('Name and deadline are required');
+    if (!form.type.trim())
+      return alert('Type is required');
+    if (!form.category.trim())
+      return alert('Category is required');
+    if (form.reductionType === 'percent') {
+      if (form.reduction === '' || Number(form.reduction) < 1 || Number(form.reduction) > 100)
+        return alert('Percent must be between 1-100');
+    } else if (form.reductionType === 'fixed') {
+      if (form.reduction === '' || Number(form.reduction) < 1)
+        return alert('Fixed amount must be greater than 0');
+    }
 
     if (editId) {
-      setSchemes(prev => prev.map(s => (s.id === editId ? { ...form, id: editId } : s)));
+      setSchemes(prev =>
+        prev.map(s => (s.id === editId ? { ...form, id: editId, reduction: Number(form.reduction) } : s))
+      );
     } else {
-      setSchemes(prev => [...prev, { ...form, id: Date.now() }]);
+      setSchemes(prev => [...prev, { ...form, id: Date.now(), reduction: Number(form.reduction) }]);
     }
     setShowModal(false);
   };
 
   const remove = (id: number) => {
-    if (confirm('Delete this scholarship?')) setSchemes(prev => prev.filter(s => s.id !== id));
+    if (confirm('Delete this scholarship?'))
+      setSchemes(prev => prev.filter(s => s.id !== id));
   };
 
   const addType = () => {
@@ -113,14 +173,12 @@ const RegistrarScholarship = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-                             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                                
-                                Scholarship Management
-                            </h1>
-                            <p className="text-gray-600 dark:text-gray-400 mt-2">Manage fee reduction scholarships.</p>
-                        </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+              Scholarship Management
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">Manage fee reduction scholarships.</p>
+          </div>
           <div className="flex gap-3">
-            
             <button
               onClick={openCreate}
               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 flex items-center gap-2 shadow-sm"
@@ -157,8 +215,10 @@ const RegistrarScholarship = () => {
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Avg Reduction</p>
-                <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-1">{stats.avgReduction}%</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Avg Reduction (Percent)</p>
+                <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-1">{stats.avgPercent}%</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">Avg Reduction (Fixed)</p>
+                <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{stats.avgFixed ? `₹${stats.avgFixed.toLocaleString()}` : '-'}</p>
               </div>
               <div className="p-3 bg-indigo-100 dark:bg-indigo-900 rounded-full">
                 <Percent className="text-indigo-600 dark:text-indigo-400" size={24} />
@@ -239,13 +299,18 @@ const RegistrarScholarship = () => {
               <div className="space-y-3 mb-4">
                 <div className="flex items-center justify-between p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
                   <span className="text-sm text-gray-600 dark:text-gray-400">Fee Reduction</span>
-                  <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{s.reduction}%</span>
+                  <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    {s.reductionType === 'percent' ? `${s.reduction}%` : `₹${Number(s.reduction).toLocaleString()}`}
+                  </span>
                 </div>
-
                 <div className="text-sm space-y-1">
                   <p className="text-gray-600 dark:text-gray-400">
                     <span className="font-medium">Deadline:</span>{' '}
-                    {new Date(s.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(s.deadline).toLocaleDateString('en-IN', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
                   </p>
                   {s.description && <p className="text-gray-600 dark:text-gray-400 mt-2">{s.description}</p>}
                 </div>
@@ -277,63 +342,97 @@ const RegistrarScholarship = () => {
         )}
       </div>
 
-      {/* Scholarship Modal (Type & Category = free text) */}
+      {/* Scholarship Modal - Scrollable with 2 Column Layout */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-lg shadow-xl border border-gray-200 dark:border-gray-700">
-            <div className="flex justify-between items-center p-5 border-b border-gray-200 dark:border-gray-700">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-4xl shadow-xl border border-gray-200 dark:border-gray-700 my-8">
+            {/* Sticky Header */}
+            <div className="flex justify-between items-center p-5 border-b border-gray-200 dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10 rounded-t-xl">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">{editId ? 'Edit' : 'Create'} Scholarship</h2>
               <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                 <X size={24} />
               </button>
             </div>
 
-            <div className="p-5 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Scholarship Name *</label>
-                <input
-                  className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                  placeholder="e.g., Merit Scholarship"
-                  value={form.name}
-                  onChange={e => setForm({ ...form, name: e.target.value })}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type *</label>
+            {/* Scrollable Content */}
+            <div className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Scholarship Name - Full Width */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Scholarship Name *</label>
                   <input
                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                    placeholder="Type (e.g., Merit, Need, Govt, Private, Category, Corporate)"
+                    placeholder="e.g., Merit Scholarship"
+                    value={form.name}
+                    onChange={e => setForm({ ...form, name: e.target.value })}
+                  />
+                </div>
+
+                {/* Type */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Type *</label>
+                  <input
+                    className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    placeholder="e.g., Merit, Need, Government"
                     value={form.type}
                     onChange={e => setForm({ ...form, type: e.target.value })}
                   />
                 </div>
+
+                {/* Category */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Category *</label>
                   <input
                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                    placeholder="Category (e.g., General, OBC, SC, ST, EWS, Gen)"
+                    placeholder="e.g., General, OBC, SC, ST"
                     value={form.category}
                     onChange={e => setForm({ ...form, category: e.target.value })}
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reduction % *</label>
+                {/* Reduction - Full Width */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Reduction *</label>
+                  <div className="flex items-center gap-6 mb-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="reductionType"
+                        value="percent"
+                        checked={form.reductionType === 'percent'}
+                        onChange={() => setForm({ ...form, reductionType: 'percent', reduction: '' })}
+                        className="accent-indigo-600 w-4 h-4"
+                      />
+                      <span className="text-sm text-gray-900 dark:text-gray-100">Percentage (%)</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="reductionType"
+                        value="fixed"
+                        checked={form.reductionType === 'fixed'}
+                        onChange={() => setForm({ ...form, reductionType: 'fixed', reduction: '' })}
+                        className="accent-indigo-600 w-4 h-4"
+                      />
+                      <span className="text-sm text-gray-900 dark:text-gray-100">Fixed price (₹)</span>
+                    </label>
+                  </div>
                   <input
                     type="number"
                     min={1}
-                    max={100}
+                    max={form.reductionType === 'percent' ? 100 : undefined}
                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                    value={form.reduction}
-                    onChange={e => setForm({ ...form, reduction: Number(e.target.value) })}
+                    value={form.reduction || ''}
+                    onWheel={e => e.currentTarget.blur()}
+                    onChange={e => setForm({ ...form, reduction: e.target.value ? Number(e.target.value) : '' })}
+                    placeholder={form.reductionType === 'percent' ? 'Enter percentage (e.g., 75)' : 'Enter amount (e.g., 25000)'}
+                    key={form.reductionType}
                   />
                 </div>
+
+                {/* Deadline */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deadline *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Deadline *</label>
                   <input
                     type="date"
                     className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
@@ -341,42 +440,45 @@ const RegistrarScholarship = () => {
                     onChange={e => setForm({ ...form, deadline: e.target.value })}
                   />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-                <select
-                  className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                  value={form.status}
-                  onChange={e => setForm({ ...form, status: e.target.value })}
-                >
-                  <option>Active</option>
-                  <option>Inactive</option>
-                </select>
-              </div>
+                {/* Status */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Status</label>
+                  <select
+                    className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    value={form.status}
+                    onChange={e => setForm({ ...form, status: e.target.value })}
+                  >
+                    <option>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-                <textarea
-                  className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                  rows={3}
-                  placeholder="Brief description..."
-                  value={form.description}
-                  onChange={e => setForm({ ...form, description: e.target.value })}
-                />
+                {/* Description - Full Width */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Description</label>
+                  <textarea
+                    className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none"
+                    rows={3}
+                    placeholder="Brief description..."
+                    value={form.description}
+                    onChange={e => setForm({ ...form, description: e.target.value })}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="p-5 border-t border-gray-200 dark:border-gray-700 flex gap-3">
+            {/* Footer Buttons */}
+            <div className="p-5 border-t border-gray-200 dark:border-gray-700 flex gap-3 bg-gray-50 dark:bg-gray-900 rounded-b-xl">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+                className="flex-1 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition"
               >
                 Cancel
               </button>
               <button
                 onClick={save}
-                className="flex-1 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium"
+                className="flex-1 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition shadow-sm"
               >
                 Save Scholarship
               </button>
@@ -385,7 +487,7 @@ const RegistrarScholarship = () => {
         </div>
       )}
 
-      {/* Type Management Modal (optional, for top filter options) */}
+      {/* Type Management Modal */}
       {showTypeModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md shadow-xl border border-gray-200 dark:border-gray-700">
@@ -398,7 +500,6 @@ const RegistrarScholarship = () => {
                 <X size={24} />
               </button>
             </div>
-
             <div className="p-5 space-y-4">
               <div className="flex gap-2">
                 <input
@@ -412,7 +513,6 @@ const RegistrarScholarship = () => {
                   Add
                 </button>
               </div>
-
               <div className="space-y-2">
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Current Types:</p>
                 <div className="flex flex-wrap gap-2">
@@ -427,7 +527,6 @@ const RegistrarScholarship = () => {
                 </div>
               </div>
             </div>
-
             <div className="p-5 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => setShowTypeModal(false)}

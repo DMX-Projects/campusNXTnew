@@ -114,6 +114,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Student leave Configure', path: '/master/student/leave-configure', icon: 'Calendar' },
       {name:'Scholarships', path:'/master/scholarship-registration', icon:'IndianRupee'},
       {name:'Fee Management', path:'/master/fee-management', icon:'DollarSign'},
+      { name: 'Bulk Upload', path: '/master/bulk-upload', icon: 'Upload' }
    
     ],
     'College Secretary': [
@@ -228,12 +229,12 @@ const SIDEBAR_ITEMS = {
     ]
   },
   
-  {name:'Faculty Feedback', path:'/academics/student/faculty-feedback', icon:'MessageSquare'},
+  // {name:'Faculty Feedback', path:'/academics/student/faculty-feedback', icon:'MessageSquare'},
 
   {name:'Online Classes', path:'/academics/student/online-classes', icon:'Video'},
   { name: 'My Results', path: '/academics/student-results', icon: 'FileText' },
   { name: 'My Projects', path: '/academics/student-myprojects', icon: 'FolderOpen' },
-  { name: 'CAT', path: '/academics/cat', icon: 'BookOpen' },
+  { name: 'Continuous Assessments', path: '/academics/cat', icon: 'BookOpen' },
   { name: 'Leave Portal', path: '/academics/leaveRequest', icon: 'Send' },
   { name: 'Raise Tickets', path: '/academics/raise-ticket', icon: 'MessageSquare' }
 ],
@@ -326,7 +327,7 @@ const SIDEBAR_ITEMS = {
     ]
   },
 
-  { name: 'CAT', path: '/academics/hod/cat', icon: 'Code' },
+  { name: 'Continuous Assessments', path: '/academics/hod/cat', icon: 'Code' },
   { name: 'Leave Portal', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
   { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
@@ -373,7 +374,7 @@ const SIDEBAR_ITEMS = {
     ]
   },
 
-  { name: 'CAT', path: '/academics/faculty/student-cat', icon: 'FileText' },
+  { name: 'Continuous Assessments', path: '/academics/faculty/student-cat', icon: 'FileText' },
   { name: 'Online Classes', path: '/academics/faculty/online-classes', icon: 'Video' },
   { name: 'Leave Portal', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
   { name: 'Reports', path: '/academics/faculty-reports', icon: 'BarChart' },
