@@ -56,7 +56,7 @@ import StudentfeeManagement from '../pages/FacultyModules/FacultyAcademic/studen
 import StudentRecordsResults from '../pages/FacultyModules/FacultyAcademic/StudentRecords&Results';
 import StudentClassSchedule from '../pages/FacultyModules/FacultyAcademic/StudentClassSchedule';
 import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/StudentCourse';
-import FacultyFeedbackStudent from '../pages/StudentModules/Academics/FacultyFeedbackStudent';
+// import FacultyFeedbackStudent from '../pages/StudentModules/Academics/FacultyFeedbackStudent';
 import OnlineClassesFaculty from '../pages/FacultyModules/Academic/OnlineClassesFaculty';
 import StudyMaterial from '../pages/StudentModules/Academics/Subjects/StudyMaterial';
 
@@ -134,6 +134,7 @@ import SemExamPrepararation from '../pages/FacultyModules/FacultyAcademic/SemExa
 
 import { i } from 'framer-motion/client';
 import FacultyLessonPlan from '../pages/FacultyModules/Academic/FacultyLessonplan';
+import Dashboard from '../components/Dashboard';
 
 
 
@@ -230,7 +231,7 @@ const AcademicsRoutes: React.FC = () => {
 
     <Route path="/student/online-classes" element={<OnlineClasses />} />
     <Route path="/student-subjects-syllabus" element={<Subjects />} />
-    <Route path="/student/faculty-feedback" element={<FacultyFeedbackStudent />} />
+    {/* <Route path="/student/faculty-feedback" element={<FacultyFeedbackStudent />} /> */}
 
     <Route path="/student/coding-assessment" element={<StudentCodingAssesments />} />
     <Route path="/student/assignment" element={<StudentAssignements />} />
