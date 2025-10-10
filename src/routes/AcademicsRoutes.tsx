@@ -135,6 +135,7 @@ import SemExamPrepararation from '../pages/FacultyModules/FacultyAcademic/SemExa
 import { i } from 'framer-motion/client';
 import FacultyLessonPlan from '../pages/FacultyModules/Academic/FacultyLessonplan';
 import Dashboard from '../components/Dashboard';
+import BookPermissions from '../pages/StudentModules/Academics/BookPermissions';
 
 
 
@@ -225,6 +226,7 @@ const AcademicsRoutes: React.FC = () => {
 
     <Route path="/student-timetable" element={<TimeTable />} />
     <Route path="/attendance" element={<StudentAttendence />} />
+    <Route path="/book-permissions" element={<BookPermissions />} />
     <Route path="/student-results" element={<Results />} />
     <Route path="/leaveRequest" element={<LeaveRequest />} />
     <Route path="/studentdashboard" element={<Dashboard />} />

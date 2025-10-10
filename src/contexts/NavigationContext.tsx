@@ -202,6 +202,7 @@ const SIDEBAR_ITEMS = {
   { name: 'Academic Calender', path: '/master/academic/calendar', icon: 'Calendar' },
   { name: 'Time Table', path: '/academics/student-timetable', icon: 'Clock' },
   { name: 'My Attendance', path: '/academics/attendance', icon: 'CheckCircle' },
+  { name: 'Book Permissions', path: '/academics/book-permissions', icon: 'UserMinus' },
   {
     name: 'Subjects',
     path: '/academics/Student-Subjects',
