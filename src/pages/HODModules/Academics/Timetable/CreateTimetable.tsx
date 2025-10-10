@@ -761,113 +761,177 @@ export default function CreateTimetable() {
     const handleRemovePeriod = (index) => {
         setConfig(prev => ({ ...prev, timeSlots: prev.timeSlots.filter((_, i) => i !== index) }))
     }
+const renderTimetable = (colorMap) => {
+  let timetableToDisplay = {};
 
-    const renderTimetable = (colorMap) => {
-        let timetableToDisplay = {};
+  if (view.type === 'department' || view.type === 'program' || view.type === 'year') {
+    let sectionsToDisplay = [];
+    if (view.type === 'department') {
+      sectionsToDisplay = allSections.filter(s => s.departmentId === view.id);
+    } else if (view.type === 'program') {
+      sectionsToDisplay = allSections.filter(s => s.programId === view.id);
+    } else {
+      sectionsToDisplay = allSections.filter(s => s.yearId === view.id);
+    }
 
-        if (view.type === 'department' || view.type === 'program' || view.type === 'year') {
-            let sectionsToDisplay = [];
-            if (view.type === 'department') {
-                sectionsToDisplay = allSections.filter(s => s.departmentId === view.id);
-            } else if (view.type === 'program') {
-                sectionsToDisplay = allSections.filter(s => s.programId === view.id);
-            } else { // year
-                sectionsToDisplay = allSections.filter(s => s.yearId === view.id);
-            }
-            const sectionIdSet = new Set(sectionsToDisplay.map(s => s.id));
+    const sectionIdSet = new Set(sectionsToDisplay.map(s => s.id));
+    const filteredSlots = {};
 
-            const filteredSlots = {};
-            for (const sectionId in timetables) {
-                if (sectionIdSet.has(sectionId)) {
-                    for (const key in timetables[sectionId]) {
-                        if (filteredSlots[key]) continue;
+    for (const sectionId in timetables) {
+      if (sectionIdSet.has(sectionId)) {
+        for (const key in timetables[sectionId]) {
+          if (filteredSlots[key]) continue;
 
-                        const slot = timetables[sectionId][key];
-                        const sectionInfo = allSections.find(s => s.id === sectionId);
-                        const subName = `${sectionInfo.name}`
-                        filteredSlots[key] = { ...slot, course: { ...slot.course, name: `${slot.course.name} (${subName})` } };
-                    }
-                }
-            }
-            timetableToDisplay = filteredSlots;
-
-        } else if (view.type === 'class') {
-            timetableToDisplay = timetables[view.id] || {};
-        } else if (view.type === 'faculty' || view.type === 'room') {
-            let filteredSlots = {};
-            for (const sectionId in timetables) {
-                for (const key in timetables[sectionId]) {
-                    const slot = timetables[sectionId][key];
-                    const match = (view.type === 'faculty' && slot.faculty.id === view.id) || (view.type === 'room' && slot.classroom.id === view.id);
-                    if (match) {
-                        const sectionInfo = allSections.find(s => s.id === sectionId);
-                        const sectionShortName = `${sectionInfo.name}`;
-                        filteredSlots[key] = { ...slot, course: { ...slot.course, name: `${slot.course.name} (${sectionShortName})` } };
-                    }
-                }
-            }
-            timetableToDisplay = filteredSlots;
-        } else {
-            timetableToDisplay = activeTimetable;
+          const slot = timetables[sectionId][key];
+          const sectionInfo = allSections.find(s => s.id === sectionId);
+          const subName = `${sectionInfo.name}`;
+          filteredSlots[key] = {
+            ...slot,
+            course: { ...slot.course, name: `${slot.course.name} (${subName})` },
+          };
         }
+      }
+    }
 
-        return (
-            <div className="overflow-x-auto">
-                <table className="w-full table-fixed border-collapse">
-                    <thead>
-                        <tr className="bg-gray-100 dark:bg-gray-700">
-                            <th className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 w-32 border border-gray-200 dark:border-gray-600">Time</th>
-                            {config.days.map(day => (
-                                <th key={day} className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{day}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {allDaySlots.map(slot => {
-                            const { type, time, name } = slot;
-                            if (type === 'lunch' || type === 'break') {
-                                return (
-                                    <tr key={time}>
-                                        <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{time}</td>
-                                        <td colSpan={config.days.length} className={`p-3 font-bold text-center border ${type === 'lunch' ? 'bg-amber-100 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-700' : 'bg-sky-100 dark:bg-sky-800/50 text-sky-800 dark:text-sky-200 border-sky-200 dark:border-sky-700'}`}>
-                                            <div className="flex items-center justify-center">
-                                                {type === 'lunch' ? <Coffee size={16} className="mr-2" /> : <Clock size={16} className="mr-2" />}
-                                                {name.toUpperCase()}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            }
-                            return (
-                                <tr key={time}>
-                                    <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{time}</td>
-                                    {config.days.map(day => {
-                                        const key = `${day}-${time}`;
-                                        const slotData = timetableToDisplay[key];
-                                        const isUnavailable = unavailableSlots.includes(key);
-                                        const color = slotData ? colorMap[slotData.course.id] : { cellBg: 'bg-gray-200' };
-                                        return (
-                                            <TimetableCell
-                                                key={key}
-                                                slotData={slotData}
-                                                onDrop={() => handleDrop(day, time)}
-                                                onDragOver={handleDragOver}
-                                                onEditClick={() => slotData && activeSectionId && setEditingSlot({ key, data: slotData })}
-                                                onGridDragStart={(e) => handleGridDragStart(e, day, time, slotData)}
-                                                onGridDragEnd={handleDragEnd}
-                                                isUnavailable={isUnavailable}
-                                                color={color}
-                                            />
-                                        )
-                                    })}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            </div>
-        );
-    };
+    timetableToDisplay = filteredSlots;
+  } else if (view.type === 'class') {
+    timetableToDisplay = timetables[view.id] || {};
+  } else if (view.type === 'faculty' || view.type === 'room') {
+    const filteredSlots = {};
+    for (const sectionId in timetables) {
+      for (const key in timetables[sectionId]) {
+        const slot = timetables[sectionId][key];
+        const match =
+          (view.type === 'faculty' && slot.faculty.id === view.id) ||
+          (view.type === 'room' && slot.classroom.id === view.id);
+        if (match) {
+          const sectionInfo = allSections.find(s => s.id === sectionId);
+          const sectionShortName = `${sectionInfo.name}`;
+          filteredSlots[key] = {
+            ...slot,
+            course: { ...slot.course, name: `${slot.course.name} (${sectionShortName})` },
+          };
+        }
+      }
+    }
+    timetableToDisplay = filteredSlots;
+  } else {
+    timetableToDisplay = activeTimetable;
+  }
+
+  // ✅ Render the table
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full table-fixed border-collapse">
+        <thead>
+          <tr className="bg-gray-100 dark:bg-gray-700">
+            <th className="p-3 font-semibold text-center text-gray-600 dark:text-gray-300 w-32 border border-gray-200 dark:border-gray-600">
+              Day
+            </th>
+            {allDaySlots.map(slot => {
+              const { type, time, name } = slot;
+              if (type === 'lunch' || type === 'break') {
+                return (
+                  <th
+                    key={time}
+                   className="p-3 font-semibold text-center text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
+
+                  >
+                    <div className="flex flex-col items-center justify-center">
+                      {/* {type === 'lunch' ? <Coffee size={16} className="mb-1" /> : <Clock size={16} className="mb-1" />} */}
+                      {/* <span className="text-xs uppercase font-bold">{name}</span> */}
+                     <span className="text-xs font-semibold mt-1">{time}</span>
+
+                    </div>
+                  </th>
+                );
+              }
+              return (
+                <th
+                  key={time}
+                  className="p-3 font-semibold text-center text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 min-w-[120px]"
+                >
+                  <div className="text-xs">{time}</div>
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+
+        <tbody>
+          {config.days.map((day, dayIndex) => (
+            <tr key={day}>
+              <td className="p-3 font-semibold text-center text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800">
+                {day}
+              </td>
+
+              {allDaySlots.map(slot => {
+                const { type, time, name } = slot;
+
+                // ✅ Render Lunch/Break only once (merged vertically)
+                if (type === 'lunch' || type === 'break') {
+                  if (dayIndex === 0) {
+                    return (
+                      <td
+                        key={time}
+                        rowSpan={config.days.length}
+                        className={`border p-2 text-center align-middle ${
+                          type === 'lunch'
+                            ? 'bg-amber-100 dark:bg-amber-800/50 border-amber-200 dark:border-amber-700'
+                            : 'bg-sky-100 dark:bg-sky-800/50 border-sky-200 dark:border-sky-700'
+                        }`}
+                      >
+                        <div className="flex flex-col items-center justify-center h-full">
+                          {type === 'lunch' ? (
+                            <Coffee size={20} className="mb-1 text-amber-800 dark:text-amber-200" />
+                          ) : (
+                            <Clock size={20} className="mb-1 text-sky-800 dark:text-sky-200" />
+                          )}
+                          <span
+                            className={`text-xs font-bold uppercase ${
+                              type === 'lunch'
+                                ? 'text-amber-800 dark:text-amber-200'
+                                : 'text-sky-800 dark:text-sky-200'
+                            }`}
+                          >
+                            {name}
+                          </span>
+                        </div>
+                      </td>
+                    );
+                  }
+                  return null; // ✅ Skip for other days
+                }
+
+                // 🎓 Regular class slot
+                const key = `${day}-${time}`;
+                const slotData = timetableToDisplay[key];
+                const isUnavailable = unavailableSlots.includes(key);
+                const color = slotData ? colorMap[slotData.course.id] : { cellBg: 'bg-gray-200' };
+
+                return (
+                  <TimetableCell
+                    key={key}
+                    slotData={slotData}
+                    onDrop={() => handleDrop(day, time)}
+                    onDragOver={handleDragOver}
+                    onEditClick={() =>
+                      slotData && activeSectionId && setEditingSlot({ key, data: slotData })
+                    }
+                    onGridDragStart={(e) => handleGridDragStart(e, day, time, slotData)}
+                    onGridDragEnd={handleDragEnd}
+                    isUnavailable={isUnavailable}
+                    color={color}
+                  />
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
     // --- Phase Renderers ---
 

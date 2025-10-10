@@ -124,49 +124,60 @@ const TimeTable: React.FC = () => {
         </div>
 
         {/* Timetable Content */}
-        {selectedView === 'grid' ? (
-          <div className="overflow-auto rounded shadow bg-white dark:bg-gray-800">
-            <table className="min-w-[800px] w-full text-sm text-left">
-              <thead className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white">
-                <tr>
-                  <th className="sticky left-0 bg-inherit z-20 px-5 py-3 font-medium border-r border-gray-300 dark:border-gray-600">
-                    <div className="flex items-center gap-2"><Clock /> Time \ Day</div>
-                  </th>
-                  {days.map(day => (
-                    <th key={day} className="min-w-[160px] px-5 py-3">{day}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {timeSlots.map((slot, idx) => {
-                  const rowBg = idx % 2 === 0 ? 'bg-gray-50 dark:bg-gray-700' : 'bg-white dark:bg-gray-600';
-                  return (
-                    <tr key={slot} className={rowBg}>
-                      <td className="sticky left-0 bg-inherit z-10 px-5 py-3 font-semibold border-r border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-300">{slot}</td>
-                      {days.map(day => {
-                        const cls = data[day]?.[slot];
-                        return (
-                          <td key={day} className="px-3 py-2 border-r border-gray-300 dark:border-gray-600">
-                            {!cls ? (
-                              <div className="h-20 flex items-center justify-center text-gray-400 dark:text-gray-500">
-                                No Class
-                              </div>
-                            ) : (
-                              <div className="rounded-lg p-3 cursor-pointer transition-colors duration-200 bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white" title={`${cls.subject} - ${cls.faculty}`}>
-                                <div className="font-semibold text-sm mb-1">{cls.subject}</div>
-                                <div className="text-xs flex items-center gap-1 opacity-80 mb-1"><User className="w-3 h-3" />{cls.faculty}</div>
-                                <div className="text-xs flex items-center gap-1 opacity-80"><MapPin className="w-3 h-3" />{cls.room}</div>
-                              </div>
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+       {selectedView === 'grid' ? (
+  <div className="overflow-auto rounded shadow bg-white dark:bg-gray-800">
+    <table className="min-w-[800px] w-full text-sm text-left">
+      <thead className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white">
+        <tr>
+          <th className="sticky left-0 bg-inherit z-20 px-5 py-3 font-medium border-r border-gray-300 dark:border-gray-600">
+            <div className="flex items-center gap-2"><Calendar /> Day \ Time</div>
+          </th>
+          {timeSlots.map(slot => (
+            <th key={slot} className="min-w-[160px] px-5 py-3 text-center">
+              {slot}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {days.map((day, dayIdx) => {
+          const rowBg = dayIdx % 2 === 0 ? 'bg-gray-50 dark:bg-gray-700' : 'bg-white dark:bg-gray-600';
+          return (
+            <tr key={day} className={rowBg}>
+              <td className="sticky left-0 bg-inherit z-10 px-5 py-3 font-semibold border-r border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-300">
+                {day}
+              </td>
+              {timeSlots.map(slot => {
+                const cls = data[day]?.[slot];
+                return (
+                  <td key={slot} className="px-3 py-2 border-r border-gray-300 dark:border-gray-600 text-center">
+                    {!cls ? (
+                      <div className="h-20 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                        No Class
+                      </div>
+                    ) : (
+                      <div
+                        className="rounded-lg p-3 cursor-pointer transition-colors duration-200 bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 text-white"
+                        title={`${cls.subject} - ${cls.faculty}`}
+                      >
+                        <div className="font-semibold text-sm mb-1">{cls.subject}</div>
+                        <div className="text-xs flex items-center gap-1 opacity-80 mb-1">
+                          <User className="w-3 h-3" />{cls.faculty}
+                        </div>
+                        <div className="text-xs flex items-center gap-1 opacity-80">
+                          <MapPin className="w-3 h-3" />{cls.room}
+                        </div>
+                      </div>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
         ) : (
           <div className="space-y-6">
             {days.map(day => {
