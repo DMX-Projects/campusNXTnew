@@ -132,45 +132,81 @@ const TimetableGrid = ({ config, timetable, subjectColorMap, data, selectedDay =
         };
     };
 
+    
     return (
         <div className="overflow-x-auto">
-            <table className="w-full table-fixed border-collapse">
+            <table className="w-full border-collapse border border-gray-200 dark:border-gray-700 text-sm">
                 <thead>
                     <tr className="bg-gray-100 dark:bg-gray-700">
-                        <th className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 w-32 border border-gray-200 dark:border-gray-600">Time</th>
-                        {daysToDisplay.map(day => (
-                            <th key={day} className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{day}</th>
+                        <th className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 border border-gray-300 w-32">
+                            Day
+                        </th>
+                        {allDaySlots.map(slotInfo => (
+                            <th key={slotInfo.time} className="p-3 font-semibold text-center text-gray-600 dark:text-gray-300 border border-gray-300">
+                                {slotInfo.time}
+                            </th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {allDaySlots.map(slotInfo => {
-                        if (slotInfo.type !== 'class') {
-                            return (
-                                <tr key={slotInfo.time}>
-                                    <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{slotInfo.time}</td>
-                                    <td colSpan={daysToDisplay.length} className={`p-3 font-bold text-center border ${slotInfo.type === 'lunch' ? 'bg-amber-100 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200' : 'bg-sky-100 dark:bg-sky-800/50 text-sky-800 dark:text-sky-200'}`}>
-                                        <div className="flex items-center justify-center">
-                                            {slotInfo.type === 'lunch' ? <Coffee size={16} className="mr-2" /> : <Clock size={16} className="mr-2" />}
-                                            {slotInfo.name.toUpperCase()}
-                                        </div>
-                                    </td>
-                                </tr>
-                            );
-                        }
-                        return (
-                            <tr key={slotInfo.time}>
-                                <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{slotInfo.time}</td>
-                                {daysToDisplay.map(day => {
-                                    const key = `${day}-${slotInfo.time}`;
-                                    const slotData = getFullSlotData(timetable[key]);
-                                    const color = slotData ? subjectColorMap[slotData.subject.id]?.cellBg : 'bg-gray-200';
-                                    return <TimetableCell key={key} slot={slotData} color={color} />;
-                                })}
-                            </tr>
-                        );
-                    })}
-                </tbody>
+  {daysToDisplay.map((day, dayIndex) => (
+    <tr key={day} className="even:bg-gray-50 dark:even:bg-gray-800/40">
+      {/* Day column */}
+      <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-300 whitespace-nowrap">
+        {day}
+      </td>
+
+      {allDaySlots.map((slotInfo) => {
+        // --- Handle Lunch / Break as vertically merged columns ---
+        if (slotInfo.type !== "class") {
+          // Only render once (on the first day's row)
+          if (dayIndex === 0) {
+            return (
+              <td
+                key={slotInfo.time}
+                rowSpan={daysToDisplay.length}
+                className={`p-0 border border-gray-200 ${
+                  slotInfo.type === "lunch"
+                    ? "bg-amber-100 dark:bg-amber-800/40 text-amber-800 dark:text-amber-200"
+                    : "bg-sky-100 dark:bg-sky-800/40 text-sky-800 dark:text-sky-200"
+                }`}
+              >
+                <div className="h-full w-full flex flex-col items-center justify-center p-3 text-center rounded-lg">
+                  {slotInfo.type === "lunch" ? (
+                    <Coffee size={20} className="mb-2 opacity-80" />
+                  ) : (
+                    <Clock size={20} className="mb-2 opacity-80" />
+                  )}
+                  <span className="text-xs font-bold uppercase tracking-wide">
+                    {slotInfo.name}
+                  </span>
+                  <span className="text-[10px] opacity-70">
+                    {slotInfo.time}
+                  </span>
+                </div>
+              </td>
+            );
+          } else {
+            // Skip rendering for other rows (since merged)
+            return null;
+          }
+        }
+
+        // --- Regular class slots ---
+        const key = `${day}-${slotInfo.time}`;
+        const slotData = getFullSlotData(timetable[key]);
+        const color = slotData
+          ? subjectColorMap[slotData.subject.id]?.cellBg
+          : "bg-gray-100 dark:bg-gray-800/30";
+
+        return (
+          <TimetableCell key={key} slot={slotData} color={color} />
+        );
+      })}
+    </tr>
+  ))}
+</tbody>
+
             </table>
         </div>
     );

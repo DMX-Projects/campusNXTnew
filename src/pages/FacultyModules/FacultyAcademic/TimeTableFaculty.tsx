@@ -112,68 +112,115 @@ const TimetableCell = ({ slot, color }) => (
 );
 
 const TimetableGrid = ({ config, timetable, subjectColorMap, data, selectedDay = '' }) => {
-    const allDaySlots = useMemo(() => {
-        const teaching = config.timeSlots.map(ts => ({ type: 'class', time: ts }));
-        const lunch = { type: 'lunch', time: `${config.lunchTime.startTime} - ${config.lunchTime.endTime}`, name: config.lunchTime.name };
-        const breaks = config.breakTimes.map(bt => ({ type: 'break', time: `${bt.startTime} - ${bt.endTime}`, name: bt.name }));
-        const combined = [...teaching, lunch, ...breaks];
-        return combined.sort((a, b) => a.time.split(' - ')[0].localeCompare(b.time.split(' - ')[0]));
-    }, [config]);
-
-    const daysToDisplay = selectedDay ? [selectedDay] : config.days;
-
-    const getFullSlotData = (slot) => {
-        if (!slot) return null;
-        return {
-            subject: data.allSubjects.find(s => s.id === slot.subjectId),
-            faculty: data.allFaculties.find(f => f.id === slot.facultyId),
-            classroom: data.allClassrooms.find(c => c.id === slot.classroomId),
-        };
+  const allDaySlots = useMemo(() => {
+    const teaching = config.timeSlots.map(ts => ({ type: 'class', time: ts }));
+    const lunch = {
+      type: 'lunch',
+      time: `${config.lunchTime.startTime} - ${config.lunchTime.endTime}`,
+      name: config.lunchTime.name,
     };
+    const breaks = config.breakTimes.map(bt => ({
+      type: 'break',
+      time: `${bt.startTime} - ${bt.endTime}`,
+      name: bt.name,
+    }));
 
-    return (
-        <div className="overflow-x-auto">
-            <table className="w-full table-fixed border-collapse">
-                <thead>
-                    <tr className="bg-gray-100 dark:bg-gray-700">
-                        <th className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 w-32 border border-gray-200 dark:border-gray-600">Time</th>
-                        {daysToDisplay.map(day => (
-                            <th key={day} className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{day}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {allDaySlots.map(slotInfo => {
-                        if (slotInfo.type !== 'class') {
-                            return (
-                                <tr key={slotInfo.time}>
-                                    <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{slotInfo.time}</td>
-                                    <td colSpan={daysToDisplay.length} className={`p-3 font-bold text-center border ${slotInfo.type === 'lunch' ? 'bg-amber-100 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200' : 'bg-sky-100 dark:bg-sky-800/50 text-sky-800 dark:text-sky-200'}`}>
-                                        <div className="flex items-center justify-center">
-                                            {slotInfo.type === 'lunch' ? <Coffee size={16} className="mr-2" /> : <Clock size={16} className="mr-2" />}
-                                            {slotInfo.name.toUpperCase()}
-                                        </div>
-                                    </td>
-                                </tr>
-                            );
-                        }
-                        return (
-                            <tr key={slotInfo.time}>
-                                <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">{slotInfo.time}</td>
-                                {daysToDisplay.map(day => {
-                                    const key = `${day}-${slotInfo.time}`;
-                                    const slotData = getFullSlotData(timetable[key]);
-                                    const color = slotData ? subjectColorMap[slotData.subject.id]?.cellBg : 'bg-gray-200';
-                                    return <TimetableCell key={key} slot={slotData} color={color} />;
-                                })}
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </div>
+    const combined = [...teaching, lunch, ...breaks];
+    return combined.sort((a, b) =>
+      a.time.split(' - ')[0].localeCompare(b.time.split(' - ')[0])
     );
+  }, [config]);
+
+  const daysToDisplay = selectedDay ? [selectedDay] : config.days;
+
+  const getFullSlotData = (slot) => {
+    if (!slot) return null;
+    return {
+      subject: data.allSubjects.find(s => s.id === slot.subjectId),
+      faculty: data.allFaculties.find(f => f.id === slot.facultyId),
+      classroom: data.allClassrooms.find(c => c.id === slot.classroomId),
+    };
+  };
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full table-fixed border-collapse">
+       <thead>
+  <tr className="bg-gray-100 dark:bg-gray-700">
+    <th className="p-3 font-semibold text-left text-gray-600 dark:text-gray-300 w-32 border border-gray-300 dark:border-gray-600">
+      Day
+    </th>
+    {allDaySlots.map((slotInfo) => (
+      <th
+        key={slotInfo.time}
+        className="p-3 font-semibold text-center text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
+      >
+        {slotInfo.time}
+      </th>
+    ))}
+  </tr>
+</thead>
+
+
+        <tbody>
+          {daysToDisplay.map((day, dayIndex) => (
+            <tr key={day} className="even:bg-gray-50 dark:even:bg-gray-800/40">
+              {/* Day Label */}
+              <td className="p-3 font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700">
+                {day}
+              </td>
+
+              {allDaySlots.map((slotInfo) => {
+                // --- Show break/lunch only once vertically ---
+                if (slotInfo.type !== 'class') {
+                  if (dayIndex === 0) {
+                    return (
+                      <td
+                        key={slotInfo.time}
+                        rowSpan={daysToDisplay.length}
+                        className={`p-0 border border-gray-300 dark:border-gray-700 ${
+                          slotInfo.type === 'lunch'
+                            ? 'bg-amber-100 dark:bg-amber-800/40 text-amber-800 dark:text-amber-200'
+                            : 'bg-sky-100 dark:bg-sky-800/40 text-sky-800 dark:text-sky-200'
+                        }`}
+                      >
+                        <div className="flex flex-col items-center justify-center h-full py-4 text-center rounded-lg">
+                          {slotInfo.type === 'lunch' ? (
+                            <Coffee size={20} className="mb-2 opacity-80" />
+                          ) : (
+                            <Clock size={20} className="mb-2 opacity-80" />
+                          )}
+                          <span className="text-xs font-bold uppercase tracking-wide">
+                            {slotInfo.name}
+                          </span>
+                          <span className="text-[10px] opacity-70">
+                            {slotInfo.time}
+                          </span>
+                        </div>
+                      </td>
+                    );
+                  }
+                  return null; // Skip rendering for other rows
+                }
+
+                // --- Normal class cells ---
+                const key = `${day}-${slotInfo.time}`;
+                const slotData = getFullSlotData(timetable[key]);
+                const color = slotData
+                  ? subjectColorMap[slotData.subject.id]?.cellBg
+                  : 'bg-gray-100 dark:bg-gray-800/30';
+                return (
+                  <TimetableCell key={key} slot={slotData} color={color} />
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
+
 
 
 // --- Faculty-Specific Component ---
