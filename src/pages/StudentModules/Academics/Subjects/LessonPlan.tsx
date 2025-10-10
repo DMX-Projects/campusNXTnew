@@ -1,669 +1,1311 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  BookOpen, 
-  Clock, 
-  Calendar, 
-  Play,
-  Download,
-  Search,
-  Filter,
-  Sun,
-  Moon,
-  Eye,
-  User,
-  FileText,
-  CheckCircle,
-  Video,
-  Link,
-  Star
-} from 'lucide-react';
-
-interface LessonPlan {
-  id: string;
-  title: string;
-  subject: string;
-  faculty: string;
-  unit: string;
-  chapter: string;
-  description: string;
-  date: string;
-  duration: number;
-  status: 'scheduled' | 'completed' | 'ongoing' | 'cancelled';
-  objectives: string[];
-  materials: string[];
-  resources: Resource[];
-  type: 'theory' | 'practical' | 'tutorial';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  attendance?: number;
-}
-
-interface Resource {
-  name: string;
-  type: 'pdf' | 'video' | 'link' | 'presentation';
-  url: string;
-  size?: string;
-}
-
-const LessonPlan: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme ? savedTheme === 'dark' : false;
-  });
-
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<string>('');
-  const [subjectFilter, setSubjectFilter] = useState<string>('');
-  const [selectedLesson, setSelectedLesson] = useState<LessonPlan | null>(null);
-  const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
-
-  // Sample lesson plans data
-  const [lessonPlans] = useState<LessonPlan[]>([
-    {
-      id: '1',
-      title: 'Introduction to Data Structures',
-      subject: 'Data Structures & Algorithms',
-      faculty: 'Dr. Rajesh Kumar',
-      unit: 'Unit 1',
-      chapter: 'Chapter 1',
-      description: 'Basic concepts of data structures, arrays, and memory management',
-      date: '2025-10-01',
-      duration: 60,
-      status: 'scheduled',
-      objectives: [
-        'Understand basic data structure concepts',
-        'Learn about arrays and their operations',
-        'Memory allocation and management'
-      ],
-      materials: ['Textbook Chapter 1', 'Code examples', 'Practice problems'],
-      resources: [
-        { name: 'Data Structures Notes.pdf', type: 'pdf', url: '#', size: '2.5 MB' },
-        { name: 'Array Operations Demo', type: 'video', url: '#', size: '45 MB' },
-        { name: 'GeeksforGeeks Arrays', type: 'link', url: '#' }
-      ],
-      type: 'theory',
-      difficulty: 'beginner'
-    },
-    {
-      id: '2',
-      title: 'Database Normalization Practical',
-      subject: 'Database Management Systems',
-      faculty: 'Prof. Priya Sharma',
-      unit: 'Unit 3',
-      chapter: 'Chapter 5',
-      description: 'Hands-on practice with database normalization techniques',
-      date: '2025-09-28',
-      duration: 90,
-      status: 'completed',
-      attendance: 45,
-      objectives: [
-        'Apply 1NF, 2NF, 3NF normalization',
-        'Identify functional dependencies',
-        'Design normalized database schemas'
-      ],
-      materials: ['Lab manual', 'Sample databases', 'ER diagrams'],
-      resources: [
-        { name: 'Normalization Guide.pdf', type: 'pdf', url: '#', size: '1.8 MB' },
-        { name: 'Normalization Examples', type: 'presentation', url: '#', size: '3.2 MB' },
-        { name: 'Practice Database', type: 'link', url: '#' }
-      ],
-      type: 'practical',
-      difficulty: 'intermediate'
-    },
-    {
-      id: '3',
-      title: 'Machine Learning Algorithms Overview',
-      subject: 'Machine Learning',
-      faculty: 'Dr. Arjun Reddy',
-      unit: 'Unit 2',
-      chapter: 'Chapter 3',
-      description: 'Comprehensive overview of supervised and unsupervised learning',
-      date: '2025-09-30',
-      duration: 75,
-      status: 'ongoing',
-      objectives: [
-        'Differentiate between supervised and unsupervised learning',
-        'Understand classification and regression',
-        'Explore clustering algorithms'
-      ],
-      materials: ['Research papers', 'Algorithm implementations', 'Dataset samples'],
-      resources: [
-        { name: 'ML Algorithms.pdf', type: 'pdf', url: '#', size: '4.1 MB' },
-        { name: 'Scikit-learn Tutorial', type: 'video', url: '#', size: '120 MB' },
-        { name: 'Kaggle Datasets', type: 'link', url: '#' }
-      ],
-      type: 'theory',
-      difficulty: 'advanced'
-    },
-    {
-      id: '4',
-      title: 'Web Development Frameworks',
-      subject: 'Web Technologies',
-      faculty: 'Ms. Kavya Singh',
-      unit: 'Unit 4',
-      chapter: 'Chapter 8',
-      description: 'Introduction to modern web frameworks: React, Angular, Vue',
-      date: '2025-10-03',
-      duration: 120,
-      status: 'scheduled',
-      objectives: [
-        'Compare different web frameworks',
-        'Set up React development environment',
-        'Build a simple React application'
-      ],
-      materials: ['Framework documentation', 'Code repositories', 'Tutorial videos'],
-      resources: [
-        { name: 'React Basics.pdf', type: 'pdf', url: '#', size: '3.7 MB' },
-        { name: 'React Setup Guide', type: 'video', url: '#', size: '85 MB' },
-        { name: 'Official React Docs', type: 'link', url: '#' }
-      ],
-      type: 'practical',
-      difficulty: 'intermediate'
-    },
-    {
-      id: '5',
-      title: 'Network Security Protocols',
-      subject: 'Network Security',
-      faculty: 'Prof. Deepika Nair',
-      unit: 'Unit 2',
-      chapter: 'Chapter 4',
-      description: 'Understanding SSL/TLS, IPSec, and other security protocols',
-      date: '2025-09-25',
-      duration: 80,
-      status: 'completed',
-      attendance: 42,
-      objectives: [
-        'Learn about encryption protocols',
-        'Understand certificate management',
-        'Implement basic security measures'
-      ],
-      materials: ['Security handbooks', 'Protocol specifications', 'Case studies'],
-      resources: [
-        { name: 'Security Protocols.pdf', type: 'pdf', url: '#', size: '5.2 MB' },
-        { name: 'SSL/TLS Demo', type: 'video', url: '#', size: '67 MB' },
-        { name: 'OWASP Guidelines', type: 'link', url: '#' }
-      ],
-      type: 'theory',
-      difficulty: 'advanced'
-    },
-    {
-      id: '6',
-      title: 'Software Testing Methodologies',
-      subject: 'Software Engineering',
-      faculty: 'Dr. Vikash Yadav',
-      unit: 'Unit 5',
-      chapter: 'Chapter 9',
-      description: 'Various testing approaches: unit, integration, and system testing',
-      date: '2025-10-05',
-      duration: 90,
-      status: 'scheduled',
-      objectives: [
-        'Understand different testing levels',
-        'Learn test case design techniques',
-        'Practice automated testing tools'
-      ],
-      materials: ['Testing frameworks', 'Sample applications', 'Bug reports'],
-      resources: [
-        { name: 'Testing Guide.pdf', type: 'pdf', url: '#', size: '2.9 MB' },
-        { name: 'JUnit Tutorial', type: 'video', url: '#', size: '95 MB' },
-        { name: 'Testing Tools', type: 'link', url: '#' }
-      ],
-      type: 'tutorial',
-      difficulty: 'intermediate'
-    }
-  ]);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
-
-  const filteredLessons = lessonPlans.filter(lesson => {
-    const matchesSearch = searchTerm === '' || 
-      lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lesson.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lesson.faculty.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === '' || lesson.status === statusFilter;
-    const matchesSubject = subjectFilter === '' || lesson.subject === subjectFilter;
-    
-    return matchesSearch && matchesStatus && matchesSubject;
-  });
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'scheduled': return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-100';
-      case 'ongoing': return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100';
-      case 'completed': return 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900 dark:text-purple-100';
-      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-100';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-100';
-    }
-  };
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-500 text-white';
-      case 'intermediate': return 'bg-yellow-500 text-white';
-      case 'advanced': return 'bg-red-500 text-white';
-      default: return 'bg-gray-500 text-white';
-    }
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'theory': return <BookOpen className="w-4 h-4" />;
-      case 'practical': return <Play className="w-4 h-4" />;
-      case 'tutorial': return <Video className="w-4 h-4" />;
-      default: return <FileText className="w-4 h-4" />;
-    }
-  };
-
-  const getResourceIcon = (type: string) => {
-    switch (type) {
-      case 'pdf': return <FileText className="w-4 h-4 text-red-500" />;
-      case 'video': return <Video className="w-4 h-4 text-blue-500" />;
-      case 'presentation': return <FileText className="w-4 h-4 text-orange-500" />;
-      case 'link': return <Link className="w-4 h-4 text-green-500" />;
-      default: return <FileText className="w-4 h-4" />;
-    }
-  };
-
-  const handleViewDetails = (lesson: LessonPlan) => {
-    setSelectedLesson(lesson);
-    setShowDetailModal(true);
-  };
-
-  const summaryStats = {
-    total: lessonPlans.length,
-    scheduled: lessonPlans.filter(l => l.status === 'scheduled').length,
-    ongoing: lessonPlans.filter(l => l.status === 'ongoing').length,
-    completed: lessonPlans.filter(l => l.status === 'completed').length,
-    cancelled: lessonPlans.filter(l => l.status === 'cancelled').length,
-    avgDuration: Math.round(lessonPlans.reduce((acc, l) => acc + l.duration, 0) / lessonPlans.length)
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex-1 mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center">
-            <BookOpen className="w-8 h-8 mr-3 text-blue-500" />
-            Lesson Plans
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Access detailed lesson plans, objectives, and learning resources for all your subjects
-          </p>
-        </div>
-        {/* <button
-          className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          aria-label="Toggle theme"
-        >
-          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button> */}
-      </div>
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total</p>
-              <p className="text-2xl font-bold">{summaryStats.total}</p>
-            </div>
-            <BookOpen className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-indigo-100 text-sm font-medium">Scheduled</p>
-              <p className="text-2xl font-bold">{summaryStats.scheduled}</p>
-            </div>
-            <Calendar className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Ongoing</p>
-              <p className="text-2xl font-bold">{summaryStats.ongoing}</p>
-            </div>
-            <Play className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">Completed</p>
-              <p className="text-2xl font-bold">{summaryStats.completed}</p>
-            </div>
-            <CheckCircle className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-red-400 to-red-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-100 text-sm font-medium">Cancelled</p>
-              <p className="text-2xl font-bold">{summaryStats.cancelled}</p>
-            </div>
-            <Calendar className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-yellow-100 text-sm font-medium">Avg Duration</p>
-              <p className="text-2xl font-bold">{summaryStats.avgDuration}m</p>
-            </div>
-            <Clock className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="relative">
-            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search lesson plans..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Status</option>
-            <option value="scheduled">Scheduled</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-
-          <select
-            value={subjectFilter}
-            onChange={(e) => setSubjectFilter(e.target.value)}
-            className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Subjects</option>
-            <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
-            <option value="Database Management Systems">Database Management Systems</option>
-            <option value="Machine Learning">Machine Learning</option>
-            <option value="Web Technologies">Web Technologies</option>
-            <option value="Network Security">Network Security</option>
-            <option value="Software Engineering">Software Engineering</option>
-          </select>
-
-          <button
-            onClick={() => {
-              setSearchTerm('');
-              setStatusFilter('');
-              setSubjectFilter('');
-            }}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300"
-          >
-            Clear Filters
-          </button>
-        </div>
-      </div>
-
-      {/* Lesson Plans Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredLessons.map((lesson) => (
-          <div
-            key={lesson.id}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-          >
-            {/* Card Header */}
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(lesson.difficulty)}`}>
-                    {lesson.difficulty.toUpperCase()}
-                  </span>
-                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center space-x-1">
-                    {getTypeIcon(lesson.type)}
-                    <span>{lesson.type.toUpperCase()}</span>
-                  </span>
-                </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(lesson.status)}`}>
-                  {lesson.status.toUpperCase()}
-                </span>
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
-                {lesson.title}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">
-                {lesson.description}
-              </p>
-            </div>
-
-            {/* Card Body */}
-            <div className="p-6">
-              <div className="space-y-3 mb-4">
-                <div className="flex items-center space-x-2">
-                  <BookOpen className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm font-medium">{lesson.subject}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <User className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">{lesson.faculty}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-orange-500" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {new Date(lesson.date).toLocaleDateString('en-IN')}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {lesson.duration} minutes
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div>{lesson.unit}</div>
-                  <div>{lesson.chapter}</div>
-                  {lesson.attendance && (
-                    <div className="col-span-2 text-green-600 dark:text-green-400 font-medium">
-                      Attendance: {lesson.attendance} students
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleViewDetails(lesson)}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center space-x-2"
-                >
-                  <Eye className="w-4 h-4" />
-                  <span>View Details</span>
-                </button>
-                {/* {lesson.resources.length > 0 && (
-                  <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
-                    <Download className="w-4 h-4" />
-                  </button>
-                )} */}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Detail Modal */}
-      {showDetailModal && selectedLesson && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4" onClick={() => setShowDetailModal(false)}>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {selectedLesson.title}
-              </h2>
-              <button
-                className="text-gray-400 hover:text-red-500 text-2xl font-bold"
-                onClick={() => setShowDetailModal(false)}
-              >
-                ✕
-              </button>
-            </div>
+  import React, { useState, useMemo } from 'react';
+ import { useTheme } from '../../../../contexts/ThemeContext'; // IMPORT YOUR EXISTING THEME CONTEXT
+ import { Plus, Edit3, Trash2, BookOpen, User, Calendar, Clock, X, Save, GraduationCap, FileText, Eye, Download, Search, Filter, Users, Book, ChevronDown, ChevronRight } from 'lucide-react';
+ 
+ // Types
+ interface LessonPlanTopic {
+   id: string;
+   slNo: number;
+   topic: string;
+   unit: number;
+   hoursRequired: number;
+   modeOfTeaching: string;
+ }
+ 
+ interface LessonPlan {
+   id: string;
+   facultyName: string;
+   courseName: string;
+   courseCode: string;
+   programName: string;
+   courseYear: string;
+   semester: string;
+   academicPeriod: string;
+   classesPerWeek: number;
+   totalPlannedClasses: number;
+   topics: LessonPlanTopic[];
+   createdAt: Date;
+   updatedAt: Date;
+ }
+ 
+ interface LessonPlanFormData {
+   facultyName: string;
+   courseName: string;
+   courseCode: string;
+   programName: string;
+   courseYear: string;
+   semester: string;
+   academicPeriod: string;
+   classesPerWeek: number;
+   totalPlannedClasses: number;
+   topics: Omit<LessonPlanTopic, 'id'>[];
+ }
+ 
+ // Enhanced mock data with CSE subjects
+ const initialLessonPlans: LessonPlan[] = [
+   {
+     id: '1',
+     facultyName: 'Dr. Priya Sharma',
+     courseName: 'DATA STRUCTURES AND ALGORITHMS',
+     courseCode: 'CSE301',
+     programName: 'B.TECH in Computer Science Engineering',
+     courseYear: 'SECOND',
+     semester: '3rd',
+     academicPeriod: '2024-25',
+     classesPerWeek: 4,
+     totalPlannedClasses: 48,
+     topics: [
+       {
+         id: '1-1',
+         slNo: 1,
+         topic: 'Introduction to Data Structures: Arrays, Linked Lists, and their Operations',
+         unit: 1,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '1-2',
+         slNo: 2,
+         topic: 'Stack Operations: Push, Pop, and Applications',
+         unit: 1,
+         hoursRequired: 2,
+         modeOfTeaching: 'Lab'
+       },
+       {
+         id: '1-3',
+         slNo: 3,
+         topic: 'Queue Implementation and Circular Queue',
+         unit: 1,
+         hoursRequired: 2,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '1-4',
+         slNo: 4,
+         topic: 'Binary Trees and Tree Traversals',
+         unit: 2,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '1-5',
+         slNo: 5,
+         topic: 'Binary Search Trees and AVL Trees',
+         unit: 2,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lab'
+       },
+       {
+         id: '1-6',
+         slNo: 6,
+         topic: 'Graph Representation and BFS/DFS Algorithms',
+         unit: 3,
+         hoursRequired: 4,
+         modeOfTeaching: 'Lecture'
+       }
+     ],
+     createdAt: new Date('2024-01-15'),
+     updatedAt: new Date('2024-01-15')
+   },
+   {
+     id: '2',
+     facultyName: 'Prof. Rajesh Kumar',
+     courseName: 'DATABASE MANAGEMENT SYSTEMS',
+     courseCode: 'CSE302',
+     programName: 'B.TECH in Computer Science Engineering',
+     courseYear: 'SECOND',
+     semester: '4th',
+     academicPeriod: '2024-25',
+     classesPerWeek: 3,
+     totalPlannedClasses: 36,
+     topics: [
+       {
+         id: '2-1',
+         slNo: 1,
+         topic: 'Introduction to Database Systems and ER Model',
+         unit: 1,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '2-2',
+         slNo: 2,
+         topic: 'Relational Model and Normalization Techniques',
+         unit: 1,
+         hoursRequired: 4,
+         modeOfTeaching: 'Lab'
+       },
+       {
+         id: '2-3',
+         slNo: 3,
+         topic: 'SQL Queries and Database Design',
+         unit: 2,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lab'
+       }
+     ],
+     createdAt: new Date('2024-02-10'),
+     updatedAt: new Date('2024-02-10')
+   },
+   {
+     id: '3',
+     facultyName: 'Dr. Anita Singh',
+     courseName: 'COMPUTER NETWORKS',
+     courseCode: 'CSE401',
+     programName: 'B.TECH in Computer Science Engineering',
+     courseYear: 'THIRD',
+     semester: '5th',
+     academicPeriod: '2024-25',
+     classesPerWeek: 3,
+     totalPlannedClasses: 36,
+     topics: [
+       {
+         id: '3-1',
+         slNo: 1,
+         topic: 'Network Models: OSI and TCP/IP Reference Models',
+         unit: 1,
+         hoursRequired: 2,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '3-2',
+         slNo: 2,
+         topic: 'Data Link Layer Protocols and Error Detection',
+         unit: 1,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '3-3',
+         slNo: 3,
+         topic: 'Network Layer: Routing Algorithms and IP Protocol',
+         unit: 2,
+         hoursRequired: 4,
+         modeOfTeaching: 'Lab'
+       }
+     ],
+     createdAt: new Date('2024-03-05'),
+     updatedAt: new Date('2024-03-05')
+   },
+   {
+     id: '4',
+     facultyName: 'Prof. Amit Patel',
+     courseName: 'OPERATING SYSTEMS',
+     courseCode: 'CSE303',
+     programName: 'B.TECH in Computer Science Engineering',
+     courseYear: 'SECOND',
+     semester: '4th',
+     academicPeriod: '2024-25',
+     classesPerWeek: 4,
+     totalPlannedClasses: 48,
+     topics: [
+       {
+         id: '4-1',
+         slNo: 1,
+         topic: 'Introduction to Operating Systems and System Calls',
+         unit: 1,
+         hoursRequired: 2,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '4-2',
+         slNo: 2,
+         topic: 'Process Management and CPU Scheduling',
+         unit: 1,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lab'
+       },
+       {
+         id: '4-3',
+         slNo: 3,
+         topic: 'Memory Management and Virtual Memory',
+         unit: 2,
+         hoursRequired: 4,
+         modeOfTeaching: 'Lecture'
+       }
+     ],
+     createdAt: new Date('2024-01-20'),
+     updatedAt: new Date('2024-01-20')
+   },
+   {
+     id: '5',
+     facultyName: 'Dr. Priya Sharma',
+     courseName: 'MACHINE LEARNING',
+     courseCode: 'CSE501',
+     programName: 'B.TECH in Computer Science Engineering',
+     courseYear: 'THIRD',
+     semester: '6th',
+     academicPeriod: '2024-25',
+     classesPerWeek: 3,
+     totalPlannedClasses: 36,
+     topics: [
+       {
+         id: '5-1',
+         slNo: 1,
+         topic: 'Introduction to Machine Learning and Types of Learning',
+         unit: 1,
+         hoursRequired: 2,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '5-2',
+         slNo: 2,
+         topic: 'Supervised Learning: Linear and Logistic Regression',
+         unit: 1,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lab'
+       },
+       {
+         id: '5-3',
+         slNo: 3,
+         topic: 'Decision Trees and Random Forest Algorithms',
+         unit: 2,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lab'
+       }
+     ],
+     createdAt: new Date('2024-02-15'),
+     updatedAt: new Date('2024-02-15')
+   },
+   {
+     id: '6',
+     facultyName: 'Prof. Vikash Gupta',
+     courseName: 'SOFTWARE ENGINEERING',
+     courseCode: 'CSE402',
+     programName: 'B.TECH in Computer Science Engineering',
+     courseYear: 'THIRD',
+     semester: '5th',
+     academicPeriod: '2024-25',
+     classesPerWeek: 3,
+     totalPlannedClasses: 36,
+     topics: [
+       {
+         id: '6-1',
+         slNo: 1,
+         topic: 'Software Development Life Cycle Models',
+         unit: 1,
+         hoursRequired: 2,
+         modeOfTeaching: 'Lecture'
+       },
+       {
+         id: '6-2',
+         slNo: 2,
+         topic: 'Requirements Engineering and Analysis',
+         unit: 1,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lab'
+       },
+       {
+         id: '6-3',
+         slNo: 3,
+         topic: 'Software Design Patterns and Architecture',
+         unit: 2,
+         hoursRequired: 3,
+         modeOfTeaching: 'Lecture'
+       }
+     ],
+     createdAt: new Date('2024-03-01'),
+     updatedAt: new Date('2024-03-01')
+   }
+ ];
+ 
+ const emptyForm: LessonPlanFormData = {
+   facultyName: '',
+   courseName: '',
+   courseCode: '',
+   programName: 'B.TECH in Computer Science Engineering',
+   courseYear: '',
+   semester: '',
+   academicPeriod: '2024-25',
+   classesPerWeek: 0,
+   totalPlannedClasses: 0,
+   topics: []
+ };
+ 
+ const emptyTopic = {
+   slNo: 1,
+   topic: '',
+   unit: 1,
+   hoursRequired: 1,
+   modeOfTeaching: 'Lecture'
+ };
+ 
+ const LessonPlanManager: React.FC = () => {
+   // USE YOUR EXISTING THEME CONTEXT (isDark instead of isDarkMode)
+   const { isDark } = useTheme();
+ 
+   const [lessonPlans, setLessonPlans] = useState<LessonPlan[]>(initialLessonPlans);
+   const [isModalOpen, setIsModalOpen] = useState(false);
+   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+   const [isEditing, setIsEditing] = useState(false);
+   const [currentPlanId, setCurrentPlanId] = useState<string | null>(null);
+   const [viewingPlan, setViewingPlan] = useState<LessonPlan | null>(null);
+   const [formData, setFormData] = useState<LessonPlanFormData>(emptyForm);
+ 
+   // State for tracking expanded units in hierarchical view
+   const [expandedUnits, setExpandedUnits] = useState<Set<number>>(new Set());
+ 
+   // Filter states
+   const [searchTerm, setSearchTerm] = useState('');
+   const [selectedFaculty, setSelectedFaculty] = useState('');
+   const [selectedSubject, setSelectedSubject] = useState('');
+   const [selectedYear, setSelectedYear] = useState('');
+   const [selectedSemester, setSelectedSemester] = useState('');
+   const [showFilters, setShowFilters] = useState(false);
+ 
+   // Get unique values for filter dropdowns
+   const uniqueFaculties = useMemo(() => {
+     return Array.from(new Set(lessonPlans.map(plan => plan.facultyName))).sort();
+   }, [lessonPlans]);
+ 
+   const uniqueSubjects = useMemo(() => {
+     return Array.from(new Set(lessonPlans.map(plan => plan.courseName))).sort();
+   }, [lessonPlans]);
+ 
+   const uniqueYears = useMemo(() => {
+     return Array.from(new Set(lessonPlans.map(plan => plan.courseYear))).sort();
+   }, [lessonPlans]);
+     
+   const uniqueSemesters = useMemo(() => {
+     return Array.from(new Set(lessonPlans.map(plan => plan.semester))).sort();
+   }, [lessonPlans]);
+ 
+   // Filtered lesson plans
+   const filteredLessonPlans = useMemo(() => {
+     return lessonPlans.filter(plan => {
+       const matchesSearch = searchTerm === '' || 
+         plan.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         plan.courseCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+         plan.facultyName.toLowerCase().includes(searchTerm.toLowerCase());
+ 
+       const matchesFaculty = selectedFaculty === '' || plan.facultyName === selectedFaculty;
+       const matchesSubject = selectedSubject === '' || plan.courseName === selectedSubject;
+       const matchesYear = selectedYear === '' || plan.courseYear === selectedYear;
+       const matchesSemester = selectedSemester === '' || plan.semester === selectedSemester;
+ 
+       return matchesSearch && matchesFaculty && matchesSubject && matchesYear && matchesSemester;
+     });
+   }, [lessonPlans, searchTerm, selectedFaculty, selectedSubject, selectedYear, selectedSemester]);
+ 
+   // Clear all filters
+   const clearFilters = () => {
+     setSearchTerm('');
+     setSelectedFaculty('');
+     setSelectedSubject('');
+     setSelectedYear('');
+     setSelectedSemester('');
+   };
+ 
+   // Toggle unit expansion
+   const toggleUnit = (unitNumber: number) => {
+     setExpandedUnits(prev => {
+       const newSet = new Set(prev);
+       if (newSet.has(unitNumber)) {
+         newSet.delete(unitNumber);
+       } else {
+         newSet.add(unitNumber);
+       }
+       return newSet;
+     });
+   };
+ 
+   // Group topics by unit
+   const groupTopicsByUnit = (topics: LessonPlanTopic[]) => {
+     const grouped = new Map<number, LessonPlanTopic[]>();
+     topics.forEach(topic => {
+       if (!grouped.has(topic.unit)) {
+         grouped.set(topic.unit, []);
+       }
+       grouped.get(topic.unit)!.push(topic);
+     });
+     return Array.from(grouped.entries()).sort((a, b) => a[0] - b[0]);
+   };
+ 
+   // CHANGED: Use isDark instead of isDarkMode
+   const themeClasses = isDark 
+     ? 'bg-gray-900 text-white' 
+     : 'bg-gray-50 text-gray-900';
+ 
+   const cardClasses = isDark 
+     ? 'bg-gray-800 border-gray-700' 
+     : 'bg-white border-gray-200';
+ 
+   const modalClasses = isDark 
+     ? 'bg-gray-800 text-white' 
+     : 'bg-white text-gray-900';
+ 
+   const inputClasses = isDark 
+     ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400' 
+     : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500';
+ 
+   // Handle form changes
+   const handleFormChange = (field: keyof Omit<LessonPlanFormData, 'topics'>, value: string | number) => {
+     setFormData(prev => ({
+       ...prev,
+       [field]: value
+     }));
+   };
+ 
+   // Handle topic changes
+   const handleTopicChange = (index: number, field: keyof Omit<LessonPlanTopic, 'id'>, value: string | number) => {
+     setFormData(prev => ({
+       ...prev,
+       topics: prev.topics.map((topic, i) => 
+         i === index ? { ...topic, [field]: value } : topic
+       )
+     }));
+   };
+ 
+   // Add new topic
+   const addTopic = () => {
+     setFormData(prev => ({
+       ...prev,
+       topics: [...prev.topics, { ...emptyTopic, slNo: prev.topics.length + 1 }]
+     }));
+   };
+ 
+   // Remove topic
+   const removeTopic = (index: number) => {
+     setFormData(prev => ({
+       ...prev,
+       topics: prev.topics.filter((_, i) => i !== index).map((topic, i) => ({ ...topic, slNo: i + 1 }))
+     }));
+   };
+ 
+   // Open modal for adding
+   const openAddModal = () => {
+     setFormData(emptyForm);
+     setIsEditing(false);
+     setCurrentPlanId(null);
+     setIsModalOpen(true);
+   };
+ 
+   // Open modal for editing
+   const openEditModal = (plan: LessonPlan) => {
+     setFormData({
+       facultyName: plan.facultyName,
+       courseName: plan.courseName,
+       courseCode: plan.courseCode,
+       programName: plan.programName,
+       courseYear: plan.courseYear,
+       semester: plan.semester,
+       academicPeriod: plan.academicPeriod,
+       classesPerWeek: plan.classesPerWeek,
+       totalPlannedClasses: plan.totalPlannedClasses,
+       topics: plan.topics.map(({ id, ...topic }) => topic)
+     });
+     setIsEditing(true);
+     setCurrentPlanId(plan.id);
+     setIsModalOpen(true);
+   };
+ 
+   // Open view modal with hierarchical structure
+   const openViewModal = (plan: LessonPlan) => {
+     setViewingPlan(plan);
+     setExpandedUnits(new Set());
+     setIsViewModalOpen(true);
+   };
+ 
+   // Close modals
+   const closeModal = () => {
+     setIsModalOpen(false);
+     setFormData(emptyForm);
+     setIsEditing(false);
+     setCurrentPlanId(null);
+   };
+ 
+   const closeViewModal = () => {
+     setIsViewModalOpen(false);
+     setViewingPlan(null);
+     setExpandedUnits(new Set());
+   };
+ 
+   // Save lesson plan
+   const saveLessonPlan = () => {
+     if (isEditing && currentPlanId) {
+       setLessonPlans(prev => prev.map(plan => 
+         plan.id === currentPlanId 
+           ? {
+               ...plan,
+               ...formData,
+               topics: formData.topics.map((topic, index) => ({
+                 ...topic,
+                 id: `${currentPlanId}-${index}`
+               })),
+               updatedAt: new Date()
+             }
+           : plan
+       ));
+     } else {
+       const newId = Date.now().toString();
+       const newPlan: LessonPlan = {
+         id: newId,
+         ...formData,
+         topics: formData.topics.map((topic, index) => ({
+           ...topic,
+           id: `${newId}-${index}`
+         })),
+         createdAt: new Date(),
+         updatedAt: new Date()
+       };
+       setLessonPlans(prev => [...prev, newPlan]);
+     }
+     closeModal();
+   };
+ 
+   // Delete lesson plan
+   const deleteLessonPlan = (id: string) => {
+     if (window.confirm('Are you sure you want to delete this lesson plan?')) {
+       setLessonPlans(prev => prev.filter(plan => plan.id !== id));
+     }
+   };
+ 
+   // Download lesson plan
+   const downloadLessonPlan = (plan: LessonPlan) => {
+     const content = `
+ GANDHI INSTITUTE FOR EDUCATION AND TECHNOLOGY
+ CSE Department - Lesson Plan
+ 
+ Faculty Name: ${plan.facultyName}
+ Course Name: ${plan.courseName}
+ Course Code: ${plan.courseCode}
+ Program Name: ${plan.programName}
+ Course Year: ${plan.courseYear}
+ Semester: ${plan.semester}
+ Academic Period: ${plan.academicPeriod}
+ Classes per Week: ${plan.classesPerWeek}
+ Total Planned Classes: ${plan.totalPlannedClasses}
+ 
+ Topics to be Covered:
+ ------------------------------------------------------------------------------------------------
+ SL. No | Topic                                 | Unit | Hours | Mode of Teaching
+ ------------------------------------------------------------------------------------------------
+ ${plan.topics.map(topic => 
+   `${String(topic.slNo).padEnd(6)} | ${topic.topic.padEnd(35).substring(0, 35)} | ${String(topic.unit).padEnd(4)} | ${String(topic.hoursRequired).padEnd(5)} | ${topic.modeOfTeaching}`
+ ).join('\n')}
+ ------------------------------------------------------------------------------------------------
+ 
+ Total Hours Planned: ${plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0)}
+ 
+ Generated on: ${new Date().toLocaleDateString()}
+ HOD Approval: ________________
+     `;
+ 
+     const blob = new Blob([content], { type: 'text/plain' });
+     const url = URL.createObjectURL(blob);
+     const a = document.createElement('a');
+     a.href = url;
+     a.download = `${plan.courseCode}_${plan.courseName}_LessonPlan.txt`;
+     document.body.appendChild(a);
+     a.click();
+     document.body.removeChild(a);
+     URL.revokeObjectURL(url);
+   };
+     
+   // Helper component for View Modal details
+   const PlanDetailItem = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => {
+     const textSecondary = isDark ? 'text-gray-300' : 'text-gray-600';
+     return (
+       <div className="flex items-start">
+         <Icon size={18} className="mr-3 flex-shrink-0 text-blue-500" />
+         <div>
+           <p className={`font-medium ${textSecondary}`}>{label}</p>
+           <p className="font-semibold">{value}</p>
+         </div>
+       </div>
+     );
+   };
+ 
+   // Enhanced View Modal Component with Hierarchical Structure
+   const LessonPlanViewModal = ({ plan, closeModal, downloadPlan, modalClasses }: { plan: LessonPlan, closeModal: () => void, downloadPlan: (plan: LessonPlan) => void, modalClasses: string }) => {
+     const totalHours = plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0);
+     const unitGroups = groupTopicsByUnit(plan.topics);
+     
+     const textPrimary = isDark ? 'text-white' : 'text-gray-900';
+     const borderClass = isDark ? 'border-gray-700' : 'border-gray-200';
+     const cardColor = isDark ? 'bg-gray-700' : 'bg-gray-100';
+     const unitHeaderClass = isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-blue-50 hover:bg-blue-100';
+     const topicRowClass = isDark ? 'bg-gray-800' : 'bg-white';
+ 
+     return (
+       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+         <div className={`rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl ${modalClasses}`}>
+           {/* Header */}
+           <div className={`p-4 md:p-6 border-b ${borderClass} flex justify-between items-center sticky top-0 ${modalClasses} z-10`}>
+             <h2 className="text-xl font-semibold flex items-center gap-2">
+               <FileText size={24} className="text-blue-500" />
+               Lesson Plan: <span className="font-mono text-base">{plan.courseCode}</span>
+             </h2>
+             <div className="flex gap-2">
+               <button
+                 onClick={() => downloadPlan(plan)}
+                 className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-1 transition-colors shadow-md"
+               >
+                 <Download size={16} /> Download
+               </button>
+               <button 
+                 onClick={closeModal} 
+                 className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${isDark ? 'text-gray-300' : 'text-gray-400'}`}
+               >
+                 <X size={24} />
+               </button>
+             </div>
+           </div>
+ 
+           <div className="p-4 md:p-6">
+             {/* Course Overview */}
+             <div className={`p-4 rounded-lg shadow-inner mb-6 ${cardColor}`}>
+               <h3 className={`text-lg font-bold mb-3 ${textPrimary}`}>{plan.courseName}</h3>
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                 <PlanDetailItem icon={User} label="Faculty" value={plan.facultyName} />
+                 <PlanDetailItem icon={GraduationCap} label="Program" value={plan.programName} />
+                 <PlanDetailItem icon={Calendar} label="Academic Period" value={plan.academicPeriod} />
+                 <PlanDetailItem icon={Clock} label="Total Hours" value={`${totalHours} hrs`} />
+                 <PlanDetailItem icon={Calendar} label="Year/Sem" value={`${plan.courseYear} / ${plan.semester}`} />
+                 <PlanDetailItem icon={Users} label="Classes/Week" value={`${plan.classesPerWeek}`} />
+                 <PlanDetailItem icon={Calendar} label="Last Updated" value={new Date(plan.updatedAt).toLocaleDateString()} />
+               </div>
+             </div>
+ 
+             {/* Hierarchical Unit Structure */}
+             <h3 className={`text-lg font-bold mt-8 mb-4 border-b pb-2 ${borderClass} ${textPrimary} flex items-center gap-2`}>
+               <BookOpen size={20} />
+               Units & Topics Breakdown ({unitGroups.length} units, {plan.topics.length} topics)
+             </h3>
+ 
+             <div className="space-y-3">
+               {unitGroups.map(([unitNumber, unitTopics]) => {
+                 const isExpanded = expandedUnits.has(unitNumber);
+                 const unitTotalHours = unitTopics.reduce((sum, topic) => sum + topic.hoursRequired, 0);
+                 
+                 return (
+                   <div key={unitNumber} className={`border rounded-lg overflow-hidden ${borderClass}`}>
+                     {/* Unit Header - Clickable */}
+                     <button
+                       onClick={() => toggleUnit(unitNumber)}
+                       className={`w-full p-4 flex items-center justify-between transition-colors ${unitHeaderClass}`}
+                     >
+                       <div className="flex items-center gap-3">
+                         {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                         <div className="text-left">
+                           <h4 className={`font-bold text-lg ${textPrimary}`}>Unit {unitNumber}</h4>
+                           <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                             {unitTopics.length} topic{unitTopics.length > 1 ? 's' : ''} • {unitTotalHours} hours total
+                           </p>
+                         </div>
+                       </div>
+                       <div className="flex items-center gap-2">
+                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                           isDark ? 'bg-blue-900/40 text-blue-200' : 'bg-blue-100 text-blue-700'
+                         }`}>
+                           {unitTotalHours}h
+                         </span>
+                       </div>
+                     </button>
+ 
+                     {/* Expanded Topics - Shows subjects and hours */}
+                     {isExpanded && (
+                       <div className={`${topicRowClass} border-t ${borderClass}`}>
+                         <div className="divide-y dark:divide-gray-700">
+                           {unitTopics.map((topic, index) => (
+                             <div 
+                               key={topic.id} 
+                               className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors ${
+                                 index % 2 === 0 ? (isDark ? 'bg-gray-800' : 'bg-gray-50') : ''
+                               }`}
+                             >
+                               <div className="flex items-start justify-between gap-4">
+                                 <div className="flex-1">
+                                   <div className="flex items-start gap-3">
+                                     <span className={`mt-1 px-2 py-1 rounded text-xs font-bold ${
+                                       isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
+                                     }`}>
+                                       {topic.slNo}
+                                     </span>
+                                     <div className="flex-1">
+                                       <p className={`font-medium ${textPrimary} mb-1`}>{topic.topic}</p>
+                                       <div className="flex items-center gap-3 text-sm">
+                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                           topic.modeOfTeaching === 'Lecture' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' :
+                                           topic.modeOfTeaching === 'Lab' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' :
+                                           'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200'
+                                         }`}>
+                                           {topic.modeOfTeaching}
+                                         </span>
+                                       </div>
+                                     </div>
+                                   </div>
+                                 </div>
+                                 {/* Hours Display */}
+                                 <div className="flex items-center gap-2">
+                                   <Clock size={16} className={isDark ? 'text-gray-400' : 'text-gray-500'} />
+                                   <span className={`font-bold text-lg ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                                     {topic.hoursRequired}h
+                                   </span>
+                                 </div>
+                               </div>
+                             </div>
+                           ))}
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 );
+               })}
+             </div>
+ 
             
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">Lesson Overview</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">{selectedLesson.description}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="font-medium">Subject:</span>
-                        <p className="text-gray-600 dark:text-gray-400">{selectedLesson.subject}</p>
-                      </div>
-                      <div>
-                        <span className="font-medium">Faculty:</span>
-                        <p className="text-gray-600 dark:text-gray-400">{selectedLesson.faculty}</p>
-                      </div>
-                      <div>
-                        <span className="font-medium">Unit:</span>
-                        <p className="text-gray-600 dark:text-gray-400">{selectedLesson.unit}</p>
-                      </div>
-                      <div>
-                        <span className="font-medium">Chapter:</span>
-                        <p className="text-gray-600 dark:text-gray-400">{selectedLesson.chapter}</p>
-                      </div>
-                      <div>
-                        <span className="font-medium">Date:</span>
-                        <p className="text-gray-600 dark:text-gray-400">{new Date(selectedLesson.date).toLocaleDateString('en-IN')}</p>
-                      </div>
-                      <div>
-                        <span className="font-medium">Duration:</span>
-                        <p className="text-gray-600 dark:text-gray-400">{selectedLesson.duration} minutes</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-3">Learning Objectives</h4>
-                    <ul className="space-y-2">
-                      {selectedLesson.objectives.map((objective, index) => (
-                        <li key={index} className="flex items-start space-x-2 text-sm">
-                          <Star className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-600 dark:text-gray-400">{objective}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-3">Required Materials</h4>
-                    <ul className="space-y-2">
-                      {selectedLesson.materials.map((material, index) => (
-                        <li key={index} className="flex items-start space-x-2 text-sm">
-                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-600 dark:text-gray-400">{material}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-3">Lesson Information</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span>Status:</span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(selectedLesson.status)}`}>
-                          {selectedLesson.status.toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Type:</span>
-                        <span className="flex items-center space-x-1">
-                          {getTypeIcon(selectedLesson.type)}
-                          <span className="capitalize">{selectedLesson.type}</span>
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Difficulty:</span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getDifficultyColor(selectedLesson.difficulty)}`}>
-                          {selectedLesson.difficulty.toUpperCase()}
-                        </span>
-                      </div>
-                      {selectedLesson.attendance && (
-                        <div className="flex justify-between">
-                          <span>Attendance:</span>
-                          <span className="font-medium text-green-600 dark:text-green-400">
-                            {selectedLesson.attendance} students
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-3">Learning Resources</h4>
-                    <div className="space-y-3">
-                      {selectedLesson.resources.map((resource, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg hover:shadow-md transition-shadow duration-200">
-                          {getResourceIcon(resource.type)}
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">
-                              {resource.name}
-                            </p>
-                            {resource.size && (
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
-                                {resource.size}
-                              </p>
-                            )}
-                          </div>
-                          {/* <button 
-                            onClick={() => window.open(resource.url, '_blank')}
-                            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-200"
-                          >
-                            {resource.type === 'link' ? <Link className="w-4 h-4" /> : <Download className="w-4 h-4" />}
-                          </button> */}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
-              <button
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
-                onClick={() => setShowDetailModal(false)}
-              >
-                Close
-              </button>
-              <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium">
-                Download All Resources
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default LessonPlan;
+               </div>
+             </div>
+           // </div>
+         
+     );
+   };
+     
+   return (
+     <div className={`p-4 md:p-6 min-h-screen transition-colors duration-200 ${themeClasses}`}>
+       {/* Header */}
+       <div className="mb-6 md:mb-8">
+         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+           <div>
+             <h1 className="text-2xl md:text-3xl font-bold mb-2">Lesson Plan Management</h1>
+             <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+               Manage and organize academic lesson plans efficiently
+             </p>
+           </div>
+           
+         </div>
+       </div>
+ 
+       {/* Search and Filter Section */}
+       <div className={`mb-6 p-4 rounded-lg shadow-md ${cardClasses}`}>
+         <div className="flex flex-col lg:flex-row gap-4">
+           {/* Search */}
+           <div className="flex-1">
+             <div className="relative">
+               <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} size={20} />
+               <input
+                 type="text"
+                 placeholder="Search by course name, code, or faculty..."
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className={`pl-10 pr-4 py-2 w-full border rounded-lg transition-colors duration-200 ${inputClasses}`}
+               />
+             </div>
+           </div>
+           
+           {/* Filter Toggle */}
+           <div className="flex gap-2">
+             <button
+               onClick={() => setShowFilters(!showFilters)}
+               className={`px-4 py-2 border rounded-lg flex items-center gap-2 transition-colors duration-200 ${
+                 isDark 
+                   ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+               } ${showFilters ? 'ring-2 ring-blue-500' : ''}`}
+             >
+               <Filter size={16} />
+               Filters
+             </button>
+             {(selectedFaculty || selectedSubject || selectedYear || selectedSemester) && (
+               <button
+                 onClick={clearFilters}
+                 className="px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors duration-200"
+               >
+                 Clear
+               </button>
+             )}
+           </div>
+         </div>
+ 
+         {/* Filter Dropdowns */}
+         {showFilters && (
+           <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+             <div>
+               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                 <User size={16} className="inline mr-1" />
+                 Faculty
+               </label>
+               <select
+                 value={selectedFaculty}
+                 onChange={(e) => setSelectedFaculty(e.target.value)}
+                 className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+               >
+                 <option value="">All Faculty</option>
+                 {uniqueFaculties.map(faculty => (
+                   <option key={faculty} value={faculty}>{faculty}</option>
+                 ))}
+               </select>
+             </div>
+             
+             <div>
+               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                 <Book size={16} className="inline mr-1" />
+                 Course
+               </label>
+               <select
+                 value={selectedSubject}
+                 onChange={(e) => setSelectedSubject(e.target.value)}
+                 className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+               >
+                 <option value="">All Courses</option>
+                 {uniqueSubjects.map(subject => (
+                   <option key={subject} value={subject}>{subject}</option>
+                 ))}
+               </select>
+             </div>
+             
+             <div>
+               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                 <GraduationCap size={16} className="inline mr-1" />
+                 Year
+               </label>
+               <select
+                 value={selectedYear}
+                 onChange={(e) => setSelectedYear(e.target.value)}
+                 className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+               >
+                 <option value="">All Years</option>
+                 {uniqueYears.map(year => (
+                   <option key={year} value={year}>{year}</option>
+                 ))}
+               </select>
+             </div>
+             <div>
+               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                 <GraduationCap size={16} className="inline mr-1" />
+                 Semester
+               </label>
+               <select
+                 value={selectedSemester}
+                 onChange={(e) => setSelectedSemester(e.target.value)}
+                 className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+               >
+                 <option value="">All Semesters</option>
+                 {uniqueSemesters.map(semester => (
+                   <option key={semester} value={semester}>{semester}</option>
+                 ))}
+               </select>
+             </div>
+           </div>
+         )}
+         
+         <p className={`text-sm mt-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+           Showing {filteredLessonPlans.length} of {lessonPlans.length} total lesson plans.
+         </p>
+       </div>
+ 
+       {/* Stats Cards */}
+       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+         <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
+           <div className="flex items-center">
+             <FileText className="h-6 md:h-8 w-6 md:w-8 text-blue-600" />
+             <div className="ml-3 md:ml-4">
+               <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                 Total Plans
+               </p>
+               <p className="text-xl md:text-2xl font-bold">{filteredLessonPlans.length}</p>
+             </div>
+           </div>
+         </div>
+         <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
+           <div className="flex items-center">
+             <BookOpen className="h-6 md:h-8 w-6 md:w-8 text-green-600" />
+             <div className="ml-3 md:ml-4">
+               <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                 Unique Courses
+               </p>
+               <p className="text-xl md:text-2xl font-bold">
+                 {new Set(filteredLessonPlans.map(p => p.courseCode)).size}
+               </p>
+             </div>
+           </div>
+         </div>
+         <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
+           <div className="flex items-center">
+             <User className="h-6 md:h-8 w-6 md:w-8 text-purple-600" />
+             <div className="ml-3 md:ml-4">
+               <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                 Unique Faculty
+               </p>
+               <p className="text-xl md:text-2xl font-bold">
+                 {new Set(filteredLessonPlans.map(p => p.facultyName)).size}
+               </p>
+             </div>
+           </div>
+         </div>
+         <div className={`p-4 md:p-6 rounded-lg shadow-md ${cardClasses}`}>
+           <div className="flex items-center">
+             <Clock className="h-6 md:h-8 w-6 md:w-8 text-orange-600" />
+             <div className="ml-3 md:ml-4">
+               <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                 Total Hours
+               </p>
+               <p className="text-xl md:text-2xl font-bold">
+                 {filteredLessonPlans.reduce((sum, plan) => 
+                   sum + plan.topics.reduce((topicSum, topic) => topicSum + topic.hoursRequired, 0), 0
+                 )}
+               </p>
+             </div>
+           </div>
+         </div>
+       </div>
+ 
+       {/* Lesson Plans Grid */}
+       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+         {filteredLessonPlans.map(plan => {
+           const totalHours = plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0);
+           return (
+             <div key={plan.id} className={`rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ${cardClasses}`}>
+               <div className="p-4 md:p-6">
+                 <div className="flex justify-between items-start mb-4">
+                   <div className="flex-1 min-w-0">
+                     <h3 className="text-lg font-semibold mb-1 truncate">{plan.courseName}</h3>
+                     <p className={`text-sm mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                       {plan.courseCode}
+                     </p>
+                     <div className={`flex items-center text-sm mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                       <User size={16} className="mr-2 flex-shrink-0" />
+                       <span className="truncate">{plan.facultyName}</span>
+                     </div>
+                   </div>
+                   <div className="flex gap-1 ml-2">
+                     <button
+                       onClick={() => openViewModal(plan)}
+                       className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors duration-200"
+                       title="View"
+                     >
+                       <Eye size={16} />
+                     </button>
+                      
+                     
+                   </div>
+                 </div>
+ 
+                 <div className={`space-y-2 text-sm mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                   <div className="flex items-center">
+                     <GraduationCap size={16} className="mr-2 flex-shrink-0" />
+                     <span className="truncate">{plan.programName}</span>
+                   </div>
+                   <div className="flex items-center">
+                     <Calendar size={16} className="mr-2 flex-shrink-0" />
+                     <span>{plan.courseYear} Year, {plan.semester} Semester</span>
+                   </div>
+                   <div className="flex items-center">
+                     <Clock size={16} className="mr-2 flex-shrink-0" />
+                     <span>{plan.classesPerWeek} classes/week, {totalHours}hrs total</span>
+                   </div>
+                 </div>
+ 
+                 <div className="border-t pt-4 dark:border-gray-600">
+                   <p className={`text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                     Units: {new Set(plan.topics.map(t => t.unit)).size}
+                   </p>
+                   <div className="flex flex-wrap gap-1">
+                     {Array.from(new Set(plan.topics.map(t => t.unit))).slice(0, 4).map(unit => (
+                       <span key={unit} className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs rounded">
+                         Unit {unit}
+                       </span>
+                     ))}
+                     {Array.from(new Set(plan.topics.map(t => t.unit))).length > 4 && (
+                       <span className={`px-2 py-1 text-xs rounded ${
+                         isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                       }`}>
+                         +{Array.from(new Set(plan.topics.map(t => t.unit))).length - 4} more
+                       </span>
+                     )}
+                   </div>
+                 </div>
+               </div>
+             </div>
+           );
+         })}
+       </div>
+ 
+       {/* No Results Message */}
+       {filteredLessonPlans.length === 0 && (
+         <div className={`text-center py-12 ${cardClasses} rounded-lg`}>
+           <BookOpen className={`mx-auto h-12 w-12 mb-4 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+           <h3 className={`text-lg font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+             No lesson plans found
+           </h3>
+           <p className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+             Try adjusting your search criteria or add a new lesson plan.
+           </p>
+         </div>
+       )}
+ 
+       {/* Add/Edit Modal */}
+       {isModalOpen && (
+         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+           <div className={`rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto ${modalClasses}`}>
+             <div className={`p-4 md:p-6 border-b ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
+               <div className="flex justify-between items-center">
+                 <h2 className="text-xl font-semibold">
+                   {isEditing ? 'Edit Lesson Plan' : 'Add New Lesson Plan'}
+                 </h2>
+                 <button 
+                   onClick={closeModal} 
+                   className={`hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded ${
+                     isDark ? 'text-gray-300' : 'text-gray-400'
+                   }`}
+                 >
+                   <X size={24} />
+                 </button>
+               </div>
+             </div>
+ 
+             <div className="p-4 md:p-6">
+               {/* Basic Information */}
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Program Name
+                   </label>
+                   <input
+                     type="text"
+                     value={formData.programName}
+                     onChange={(e) => handleFormChange('programName', e.target.value)}
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Faculty Name
+                   </label>
+                   <input
+                     type="text"
+                     value={formData.facultyName}
+                     onChange={(e) => handleFormChange('facultyName', e.target.value)}
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Course Name
+                   </label>
+                   <input
+                     type="text"
+                     value={formData.courseName}
+                     onChange={(e) => handleFormChange('courseName', e.target.value)}
+                     placeholder="e.g., DATA STRUCTURES AND ALGORITHMS"
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Course Code
+                   </label>
+                   <input
+                     type="text"
+                     value={formData.courseCode}
+                     onChange={(e) => handleFormChange('courseCode', e.target.value)}
+                     placeholder="e.g., CSE301"
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Course Year
+                   </label>
+                   <select
+                     value={formData.courseYear}
+                     onChange={(e) => handleFormChange('courseYear', e.target.value)}
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   >
+                     <option value="">Select Year</option>
+                     {['FIRST', 'SECOND', 'THIRD', 'FOURTH'].map(year => <option key={year} value={year}>{year}</option>)}
+                   </select>
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Semester
+                   </label>
+                   <input
+                     type="text"
+                     value={formData.semester}
+                     onChange={(e) => handleFormChange('semester', e.target.value)}
+                     placeholder="e.g., 3rd or V"
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Academic Period
+                   </label>
+                   <input
+                     type="text"
+                     value={formData.academicPeriod}
+                     onChange={(e) => handleFormChange('academicPeriod', e.target.value)}
+                     placeholder="e.g., 2024-25"
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Classes per Week
+                   </label>
+                   <input
+                     type="number"
+                     value={formData.classesPerWeek || ''}
+                     onChange={(e) => handleFormChange('classesPerWeek', Number(e.target.value))}
+                     min="0"
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+                 <div>
+                   <label className={`block text-sm font-medium mb-2 ${
+                     isDark ? 'text-gray-200' : 'text-gray-700'
+                   }`}>
+                     Total Planned Classes
+                   </label>
+                   <input
+                     type="number"
+                     value={formData.totalPlannedClasses || ''}
+                     onChange={(e) => handleFormChange('totalPlannedClasses', Number(e.target.value))}
+                     min="0"
+                     className={`w-full px-3 py-2 border rounded-lg transition-colors duration-200 ${inputClasses}`}
+                   />
+                 </div>
+               </div>
+ 
+               {/* Topic Details Section */}
+               <h3 className="text-lg font-semibold border-t pt-4 mt-6 mb-4 flex items-center gap-2">
+                 <BookOpen size={20} />
+                 Topics & Hours
+               </h3>
+               
+               <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
+                 {formData.topics.map((topic, index) => (
+                   <div key={index} className={`p-4 rounded-lg border ${cardClasses} shadow-sm`}>
+                     <div className="flex justify-between items-center mb-3">
+                       <h4 className="font-medium">Topic {topic.slNo}</h4>
+                       <button 
+                         onClick={() => removeTopic(index)}
+                         className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 rounded-full transition-colors"
+                         title="Remove Topic"
+                       >
+                         <X size={16} />
+                       </button>
+                     </div>
+                     
+                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                       {/* Topic Description */}
+                       <div className="md:col-span-4">
+                         <label className="block text-xs font-medium mb-1">Description</label>
+                         <input
+                           type="text"
+                           value={topic.topic}
+                           onChange={(e) => handleTopicChange(index, 'topic', e.target.value)}
+                           className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                           placeholder="Topic Name"
+                         />
+                       </div>
+                       
+                       {/* Unit */}
+                       <div>
+                         <label className="block text-xs font-medium mb-1">Unit</label>
+                         <input
+                           type="number"
+                           value={topic.unit}
+                           onChange={(e) => handleTopicChange(index, 'unit', Number(e.target.value))}
+                           min="1"
+                           className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                         />
+                       </div>
+                       
+                       {/* Hours Required */}
+                       <div>
+                         <label className="block text-xs font-medium mb-1">Hours</label>
+                         <input
+                           type="number"
+                           value={topic.hoursRequired}
+                           onChange={(e) => handleTopicChange(index, 'hoursRequired', Number(e.target.value))}
+                           min="1"
+                           className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                         />
+                       </div>
+ 
+                       {/* Mode of Teaching */}
+                       <div className="md:col-span-2">
+                         <label className="block text-xs font-medium mb-1">Mode of Teaching</label>
+                         <select
+                           value={topic.modeOfTeaching}
+                           onChange={(e) => handleTopicChange(index, 'modeOfTeaching', e.target.value)}
+                           className={`w-full px-3 py-2 text-sm border rounded-lg ${inputClasses}`}
+                         >
+                           <option value="Lecture">Lecture</option>
+                           <option value="Lab">Lab</option>
+                           <option value="Seminar">Seminar</option>
+                           <option value="Tutorial">Tutorial</option>
+                         </select>
+                       </div>
+                     </div>
+                   </div>
+                 ))}
+               </div>
+ 
+               <button
+                 type="button"
+                 onClick={addTopic}
+                 className="w-full mt-4 flex items-center justify-center gap-2 border-2 border-dashed border-blue-500 text-blue-500 p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-200"
+               >
+                 <Plus size={20} /> Add Topic
+               </button>
+             </div>
+ 
+             {/* Modal Footer */}
+             <div className={`p-4 md:p-6 border-t ${isDark ? 'border-gray-600' : 'border-gray-200'} flex justify-end gap-3 sticky bottom-0 ${modalClasses}`}>
+               <button
+                 onClick={closeModal}
+                 className={`px-4 py-2 border rounded-lg transition-colors duration-200 ${
+                   isDark 
+                     ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
+                     : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                 }`}
+               >
+                 Cancel
+               </button>
+               <button
+                 onClick={saveLessonPlan}
+                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 shadow-md"
+               >
+                 <Save size={20} /> 
+                 {isEditing ? 'Update Plan' : 'Save Plan'}
+               </button>
+             </div>
+           </div>
+         </div>
+       )}
+         
+       {/* View Modal */}
+       {isViewModalOpen && viewingPlan && (
+         <LessonPlanViewModal 
+           plan={viewingPlan} 
+           closeModal={closeViewModal} 
+           downloadPlan={downloadLessonPlan} 
+           modalClasses={modalClasses}
+         />
+       )}
+     </div>
+   );
+ };
+ 
+ export default LessonPlanManager;
+ 

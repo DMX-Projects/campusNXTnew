@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
-import { Plus, Edit3, Trash2, BookOpen, User, Calendar, Clock, X, Save, GraduationCap, FileText, Eye, Download, Search, Filter, Users, Book } from 'lucide-react';
+ import React, { useState, useMemo } from 'react';
+import { useTheme } from '../../../../contexts/ThemeContext'; // IMPORT YOUR EXISTING THEME CONTEXT
+import { Plus, Edit3, Trash2, BookOpen, User, Calendar, Clock, X, Save, GraduationCap, FileText, Eye, Download, Search, Filter, Users, Book, ChevronDown, ChevronRight } from 'lucide-react';
 
 // Types
 interface LessonPlanTopic {
@@ -38,10 +39,6 @@ interface LessonPlanFormData {
   classesPerWeek: number;
   totalPlannedClasses: number;
   topics: Omit<LessonPlanTopic, 'id'>[];
-}
-
-interface LessonPlanManagerProps {
-  isDarkMode?: boolean;
 }
 
 // Enhanced mock data with CSE subjects
@@ -333,7 +330,10 @@ const emptyTopic = {
   modeOfTeaching: 'Lecture'
 };
 
-const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = false }) => {
+const LessonPlanManager: React.FC = () => {
+  // USE YOUR EXISTING THEME CONTEXT (isDark instead of isDarkMode)
+  const { isDark } = useTheme();
+
   const [lessonPlans, setLessonPlans] = useState<LessonPlan[]>(initialLessonPlans);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -341,6 +341,9 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
   const [currentPlanId, setCurrentPlanId] = useState<string | null>(null);
   const [viewingPlan, setViewingPlan] = useState<LessonPlan | null>(null);
   const [formData, setFormData] = useState<LessonPlanFormData>(emptyForm);
+
+  // State for tracking expanded units in hierarchical view
+  const [expandedUnits, setExpandedUnits] = useState<Set<number>>(new Set());
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -393,19 +396,45 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
     setSelectedSemester('');
   };
 
-  const themeClasses = isDarkMode 
+  // Toggle unit expansion
+  const toggleUnit = (unitNumber: number) => {
+    setExpandedUnits(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(unitNumber)) {
+        newSet.delete(unitNumber);
+      } else {
+        newSet.add(unitNumber);
+      }
+      return newSet;
+    });
+  };
+
+  // Group topics by unit
+  const groupTopicsByUnit = (topics: LessonPlanTopic[]) => {
+    const grouped = new Map<number, LessonPlanTopic[]>();
+    topics.forEach(topic => {
+      if (!grouped.has(topic.unit)) {
+        grouped.set(topic.unit, []);
+      }
+      grouped.get(topic.unit)!.push(topic);
+    });
+    return Array.from(grouped.entries()).sort((a, b) => a[0] - b[0]);
+  };
+
+  // CHANGED: Use isDark instead of isDarkMode
+  const themeClasses = isDark 
     ? 'bg-gray-900 text-white' 
     : 'bg-gray-50 text-gray-900';
 
-  const cardClasses = isDarkMode 
+  const cardClasses = isDark 
     ? 'bg-gray-800 border-gray-700' 
     : 'bg-white border-gray-200';
 
-  const modalClasses = isDarkMode 
+  const modalClasses = isDark 
     ? 'bg-gray-800 text-white' 
     : 'bg-white text-gray-900';
 
-  const inputClasses = isDarkMode 
+  const inputClasses = isDark 
     ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-400 focus:border-blue-400' 
     : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500';
 
@@ -463,17 +492,17 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
       academicPeriod: plan.academicPeriod,
       classesPerWeek: plan.classesPerWeek,
       totalPlannedClasses: plan.totalPlannedClasses,
-      // Map existing topics for form, omitting the unique ID for re-creation/updates
-      topics: plan.topics.map(({ id, ...topic }) => topic) 
+      topics: plan.topics.map(({ id, ...topic }) => topic)
     });
     setIsEditing(true);
     setCurrentPlanId(plan.id);
     setIsModalOpen(true);
   };
 
-  // Open view modal
+  // Open view modal with hierarchical structure
   const openViewModal = (plan: LessonPlan) => {
     setViewingPlan(plan);
+    setExpandedUnits(new Set());
     setIsViewModalOpen(true);
   };
 
@@ -488,18 +517,17 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
   const closeViewModal = () => {
     setIsViewModalOpen(false);
     setViewingPlan(null);
+    setExpandedUnits(new Set());
   };
 
   // Save lesson plan
   const saveLessonPlan = () => {
     if (isEditing && currentPlanId) {
-      // Update existing plan
       setLessonPlans(prev => prev.map(plan => 
         plan.id === currentPlanId 
           ? {
               ...plan,
               ...formData,
-              // Re-add unique IDs to topics
               topics: formData.topics.map((topic, index) => ({
                 ...topic,
                 id: `${currentPlanId}-${index}`
@@ -509,14 +537,13 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
           : plan
       ));
     } else {
-      // Add new plan
       const newId = Date.now().toString();
       const newPlan: LessonPlan = {
         id: newId,
         ...formData,
         topics: formData.topics.map((topic, index) => ({
           ...topic,
-          id: `${newId}-${index}` // Assign stable topic ID based on plan ID
+          id: `${newId}-${index}`
         })),
         createdAt: new Date(),
         updatedAt: new Date()
@@ -533,7 +560,7 @@ const LessonPlanManager: React.FC<LessonPlanManagerProps> = ({ isDarkMode = fals
     }
   };
 
-  // Download lesson plan as PDF-like format
+  // Download lesson plan
   const downloadLessonPlan = (plan: LessonPlan) => {
     const content = `
 GANDHI INSTITUTE FOR EDUCATION AND TECHNOLOGY
@@ -564,7 +591,6 @@ Generated on: ${new Date().toLocaleDateString()}
 HOD Approval: ________________
     `;
 
-    // Functionality to create and trigger file download
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -576,110 +602,163 @@ HOD Approval: ________________
     URL.revokeObjectURL(url);
   };
     
-  // Helper component for View Modal details (inlined)
-  const PlanDetailItem = ({ icon: Icon, label, value }) => {
-      const textSecondary = isDarkMode ? 'text-gray-300' : 'text-gray-600';
-      return (
-          <div className="flex items-start">
-              <Icon size={18} className={`mr-3 flex-shrink-0 text-blue-500`} />
-              <div>
-                  <p className={`font-medium ${textSecondary}`}>{label}</p>
-                  <p className="font-semibold">{value}</p>
-              </div>
-          </div>
-      );
+  // Helper component for View Modal details
+  const PlanDetailItem = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => {
+    const textSecondary = isDark ? 'text-gray-300' : 'text-gray-600';
+    return (
+      <div className="flex items-start">
+        <Icon size={18} className="mr-3 flex-shrink-0 text-blue-500" />
+        <div>
+          <p className={`font-medium ${textSecondary}`}>{label}</p>
+          <p className="font-semibold">{value}</p>
+        </div>
+      </div>
+    );
   };
 
-  // View Modal Component (inlined)
-  const LessonPlanViewModal = ({ plan, closeModal, downloadPlan, modalClasses }) => {
-    
-    // Calculate total hours for display
+  // Enhanced View Modal Component with Hierarchical Structure
+  const LessonPlanViewModal = ({ plan, closeModal, downloadPlan, modalClasses }: { plan: LessonPlan, closeModal: () => void, downloadPlan: (plan: LessonPlan) => void, modalClasses: string }) => {
     const totalHours = plan.topics.reduce((sum, topic) => sum + topic.hoursRequired, 0);
+    const unitGroups = groupTopicsByUnit(plan.topics);
     
-    // Define classes based on mode for sub-elements
-    const textPrimary = isDarkMode ? 'text-white' : 'text-gray-900';
-    const borderClass = isDarkMode ? 'border-gray-700' : 'border-gray-200';
-    const tableHeaderClass = isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700';
-    const tableRowClass = isDarkMode ? 'even:bg-gray-800 odd:bg-gray-900/50' : 'even:bg-gray-50 odd:bg-white';
-    const cardColor = isDarkMode ? 'bg-gray-700' : 'bg-gray-100';
-
+    const textPrimary = isDark ? 'text-white' : 'text-gray-900';
+    const borderClass = isDark ? 'border-gray-700' : 'border-gray-200';
+    const cardColor = isDark ? 'bg-gray-700' : 'bg-gray-100';
+    const unitHeaderClass = isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-blue-50 hover:bg-blue-100';
+    const topicRowClass = isDark ? 'bg-gray-800' : 'bg-white';
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className={`rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl ${modalClasses}`}>
-                {/* Header */}
-                <div className={`p-4 md:p-6 border-b ${borderClass} flex justify-between items-center sticky top-0 ${modalClasses}`}>
-                    <h2 className="text-xl font-semibold flex items-center gap-2">
-                        <FileText size={24} className="text-blue-500" />
-                        Lesson Plan: <span className="font-mono text-base">{plan.courseCode}</span>
-                    </h2>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => downloadPlan(plan)}
-                            className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-1 transition-colors shadow-md"
-                        >
-                            <Download size={16} /> Download
-                        </button>
-                        <button 
-                            onClick={closeModal} 
-                            className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${isDarkMode ? 'text-gray-300' : 'text-gray-400'}`}
-                        >
-                            <X size={24} />
-                        </button>
-                    </div>
-                </div>
-
-                <div className="p-4 md:p-6">
-                    <div className={`p-4 rounded-lg shadow-inner mb-6 ${cardColor}`}>
-                        <h3 className={`text-lg font-bold mb-3 ${textPrimary}`}>{plan.courseName}</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                            <PlanDetailItem icon={User} label="Faculty" value={plan.facultyName} />
-                            <PlanDetailItem icon={GraduationCap} label="Program" value={plan.programName} />
-                            <PlanDetailItem icon={Calendar} label="Academic Period" value={plan.academicPeriod} />
-                            <PlanDetailItem icon={Clock} label="Total Hours" value={`${totalHours} hrs`} />
-                            <PlanDetailItem icon={Calendar} label="Year/Sem" value={`${plan.courseYear} / ${plan.semester}`} />
-                            <PlanDetailItem icon={Users} label="Classes/Week" value={`${plan.classesPerWeek}`} />
-                            <PlanDetailItem icon={Calendar} label="Last Updated" value={new Date(plan.updatedAt).toLocaleDateString()} />
-                        </div>
-                    </div>
-
-                    <h3 className={`text-lg font-bold mt-8 mb-4 border-b pb-2 ${borderClass} ${textPrimary}`}>Topic Breakdown ({plan.topics.length} topics)</h3>
-
-                    <div className="overflow-x-auto rounded-lg border">
-                        <table className={`min-w-full divide-y ${borderClass}`}>
-                            <thead className={tableHeaderClass}>
-                                <tr>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-1/12">SL. No</th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-5/12">Topic</th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-1/12">Unit</th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-2/12">Hours</th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider w-3/12">Mode</th>
-                                </tr>
-                            </thead>
-                            <tbody className={`divide-y ${borderClass} text-sm ${textPrimary}`}>
-                                {plan.topics.map((topic, index) => (
-                                    <tr key={topic.id || index} className={tableRowClass}>
-                                        <td className="px-6 py-4 whitespace-nowrap">{topic.slNo}</td>
-                                        <td className="px-6 py-4">{topic.topic}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{topic.unit}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{topic.hoursRequired}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                                topic.modeOfTeaching === 'Lecture' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' :
-                                                topic.modeOfTeaching === 'Lab' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' :
-                                                'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200'
-                                            }`}>
-                                                {topic.modeOfTeaching}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className={`rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl ${modalClasses}`}>
+          {/* Header */}
+          <div className={`p-4 md:p-6 border-b ${borderClass} flex justify-between items-center sticky top-0 ${modalClasses} z-10`}>
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              <FileText size={24} className="text-blue-500" />
+              Lesson Plan: <span className="font-mono text-base">{plan.courseCode}</span>
+            </h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => downloadPlan(plan)}
+                className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-1 transition-colors shadow-md"
+              >
+                <Download size={16} /> Download
+              </button>
+              <button 
+                onClick={closeModal} 
+                className={`p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${isDark ? 'text-gray-300' : 'text-gray-400'}`}
+              >
+                <X size={24} />
+              </button>
             </div>
-        </div>
+          </div>
+
+          <div className="p-4 md:p-6">
+            {/* Course Overview */}
+            <div className={`p-4 rounded-lg shadow-inner mb-6 ${cardColor}`}>
+              <h3 className={`text-lg font-bold mb-3 ${textPrimary}`}>{plan.courseName}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                <PlanDetailItem icon={User} label="Faculty" value={plan.facultyName} />
+                <PlanDetailItem icon={GraduationCap} label="Program" value={plan.programName} />
+                <PlanDetailItem icon={Calendar} label="Academic Period" value={plan.academicPeriod} />
+                <PlanDetailItem icon={Clock} label="Total Hours" value={`${totalHours} hrs`} />
+                <PlanDetailItem icon={Calendar} label="Year/Sem" value={`${plan.courseYear} / ${plan.semester}`} />
+                <PlanDetailItem icon={Users} label="Classes/Week" value={`${plan.classesPerWeek}`} />
+                <PlanDetailItem icon={Calendar} label="Last Updated" value={new Date(plan.updatedAt).toLocaleDateString()} />
+              </div>
+            </div>
+
+            {/* Hierarchical Unit Structure */}
+            <h3 className={`text-lg font-bold mt-8 mb-4 border-b pb-2 ${borderClass} ${textPrimary} flex items-center gap-2`}>
+              <BookOpen size={20} />
+              Units & Topics Breakdown ({unitGroups.length} units, {plan.topics.length} topics)
+            </h3>
+
+            <div className="space-y-3">
+              {unitGroups.map(([unitNumber, unitTopics]) => {
+                const isExpanded = expandedUnits.has(unitNumber);
+                const unitTotalHours = unitTopics.reduce((sum, topic) => sum + topic.hoursRequired, 0);
+                
+                return (
+                  <div key={unitNumber} className={`border rounded-lg overflow-hidden ${borderClass}`}>
+                    {/* Unit Header - Clickable */}
+                    <button
+                      onClick={() => toggleUnit(unitNumber)}
+                      className={`w-full p-4 flex items-center justify-between transition-colors ${unitHeaderClass}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                        <div className="text-left">
+                          <h4 className={`font-bold text-lg ${textPrimary}`}>Unit {unitNumber}</h4>
+                          <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                            {unitTopics.length} topic{unitTopics.length > 1 ? 's' : ''} • {unitTotalHours} hours total
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          isDark ? 'bg-blue-900/40 text-blue-200' : 'bg-blue-100 text-blue-700'
+                        }`}>
+                          {unitTotalHours}h
+                        </span>
+                      </div>
+                    </button>
+
+                    {/* Expanded Topics - Shows subjects and hours */}
+                    {isExpanded && (
+                      <div className={`${topicRowClass} border-t ${borderClass}`}>
+                        <div className="divide-y dark:divide-gray-700">
+                          {unitTopics.map((topic, index) => (
+                            <div 
+                              key={topic.id} 
+                              className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors ${
+                                index % 2 === 0 ? (isDark ? 'bg-gray-800' : 'bg-gray-50') : ''
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <div className="flex items-start gap-3">
+                                    <span className={`mt-1 px-2 py-1 rounded text-xs font-bold ${
+                                      isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
+                                    }`}>
+                                      {topic.slNo}
+                                    </span>
+                                    <div className="flex-1">
+                                      <p className={`font-medium ${textPrimary} mb-1`}>{topic.topic}</p>
+                                      <div className="flex items-center gap-3 text-sm">
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                          topic.modeOfTeaching === 'Lecture' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' :
+                                          topic.modeOfTeaching === 'Lab' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' :
+                                          'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200'
+                                        }`}>
+                                          {topic.modeOfTeaching}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                {/* Hours Display */}
+                                <div className="flex items-center gap-2">
+                                  <Clock size={16} className={isDark ? 'text-gray-400' : 'text-gray-500'} />
+                                  <span className={`font-bold text-lg ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                                    {topic.hoursRequired}h
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+           
+              </div>
+            </div>
+          // </div>
+        
     );
   };
     
@@ -689,8 +768,10 @@ HOD Approval: ________________
       <div className="mb-6 md:mb-8">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2"></h1>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}></p>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">Lesson Plan Management</h1>
+            <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              Manage and organize academic lesson plans efficiently
+            </p>
           </div>
           <button
             onClick={openAddModal}
@@ -709,7 +790,7 @@ HOD Approval: ________________
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} size={20} />
+              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} size={20} />
               <input
                 type="text"
                 placeholder="Search by course name, code, or faculty..."
@@ -725,7 +806,7 @@ HOD Approval: ________________
             <button
               onClick={() => setShowFilters(!showFilters)}
               className={`px-4 py-2 border rounded-lg flex items-center gap-2 transition-colors duration-200 ${
-                isDarkMode 
+                isDark 
                   ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
               } ${showFilters ? 'ring-2 ring-blue-500' : ''}`}
@@ -748,7 +829,7 @@ HOD Approval: ________________
         {showFilters && (
           <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                 <User size={16} className="inline mr-1" />
                 Faculty
               </label>
@@ -765,7 +846,7 @@ HOD Approval: ________________
             </div>
             
             <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                 <Book size={16} className="inline mr-1" />
                 Course
               </label>
@@ -782,7 +863,7 @@ HOD Approval: ________________
             </div>
             
             <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                 <GraduationCap size={16} className="inline mr-1" />
                 Year
               </label>
@@ -798,7 +879,7 @@ HOD Approval: ________________
               </select>
             </div>
             <div>
-              <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                 <GraduationCap size={16} className="inline mr-1" />
                 Semester
               </label>
@@ -816,8 +897,8 @@ HOD Approval: ________________
           </div>
         )}
         
-        <p className={`text-sm mt-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Showing {filteredLessonPlans.length} of {lessonPlans.length} total lesson plans.
+        <p className={`text-sm mt-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+          Showing {filteredLessonPlans.length} of {lessonPlans.length} total lesson plans.
         </p>
       </div>
 
@@ -827,7 +908,7 @@ HOD Approval: ________________
           <div className="flex items-center">
             <FileText className="h-6 md:h-8 w-6 md:w-8 text-blue-600" />
             <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                 Total Plans
               </p>
               <p className="text-xl md:text-2xl font-bold">{filteredLessonPlans.length}</p>
@@ -838,7 +919,7 @@ HOD Approval: ________________
           <div className="flex items-center">
             <BookOpen className="h-6 md:h-8 w-6 md:w-8 text-green-600" />
             <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                 Unique Courses
               </p>
               <p className="text-xl md:text-2xl font-bold">
@@ -851,7 +932,7 @@ HOD Approval: ________________
           <div className="flex items-center">
             <User className="h-6 md:h-8 w-6 md:w-8 text-purple-600" />
             <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                 Unique Faculty
               </p>
               <p className="text-xl md:text-2xl font-bold">
@@ -864,7 +945,7 @@ HOD Approval: ________________
           <div className="flex items-center">
             <Clock className="h-6 md:h-8 w-6 md:w-8 text-orange-600" />
             <div className="ml-3 md:ml-4">
-              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                 Total Hours
               </p>
               <p className="text-xl md:text-2xl font-bold">
@@ -887,10 +968,10 @@ HOD Approval: ________________
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-semibold mb-1 truncate">{plan.courseName}</h3>
-                    <p className={`text-sm mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <p className={`text-sm mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       {plan.courseCode}
                     </p>
-                    <div className={`flex items-center text-sm mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <div className={`flex items-center text-sm mb-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       <User size={16} className="mr-2 flex-shrink-0" />
                       <span className="truncate">{plan.facultyName}</span>
                     </div>
@@ -920,7 +1001,7 @@ HOD Approval: ________________
                   </div>
                 </div>
 
-                <div className={`space-y-2 text-sm mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className={`space-y-2 text-sm mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                   <div className="flex items-center">
                     <GraduationCap size={16} className="mr-2 flex-shrink-0" />
                     <span className="truncate">{plan.programName}</span>
@@ -936,7 +1017,7 @@ HOD Approval: ________________
                 </div>
 
                 <div className="border-t pt-4 dark:border-gray-600">
-                  <p className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+                  <p className={`text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                     Units: {new Set(plan.topics.map(t => t.unit)).size}
                   </p>
                   <div className="flex flex-wrap gap-1">
@@ -947,7 +1028,7 @@ HOD Approval: ________________
                     ))}
                     {Array.from(new Set(plan.topics.map(t => t.unit))).length > 4 && (
                       <span className={`px-2 py-1 text-xs rounded ${
-                        isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                        isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
                       }`}>
                         +{Array.from(new Set(plan.topics.map(t => t.unit))).length - 4} more
                       </span>
@@ -963,11 +1044,11 @@ HOD Approval: ________________
       {/* No Results Message */}
       {filteredLessonPlans.length === 0 && (
         <div className={`text-center py-12 ${cardClasses} rounded-lg`}>
-          <BookOpen className={`mx-auto h-12 w-12 mb-4 ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
-          <h3 className={`text-lg font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <BookOpen className={`mx-auto h-12 w-12 mb-4 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+          <h3 className={`text-lg font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
             No lesson plans found
           </h3>
-          <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          <p className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
             Try adjusting your search criteria or add a new lesson plan.
           </p>
         </div>
@@ -977,7 +1058,7 @@ HOD Approval: ________________
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className={`rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto ${modalClasses}`}>
-            <div className={`p-4 md:p-6 border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+            <div className={`p-4 md:p-6 border-b ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">
                   {isEditing ? 'Edit Lesson Plan' : 'Add New Lesson Plan'}
@@ -985,7 +1066,7 @@ HOD Approval: ________________
                 <button 
                   onClick={closeModal} 
                   className={`hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-400'
+                    isDark ? 'text-gray-300' : 'text-gray-400'
                   }`}
                 >
                   <X size={24} />
@@ -998,7 +1079,7 @@ HOD Approval: ________________
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Program Name
                   </label>
@@ -1011,7 +1092,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Faculty Name
                   </label>
@@ -1024,7 +1105,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Course Name
                   </label>
@@ -1038,7 +1119,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Course Code
                   </label>
@@ -1052,7 +1133,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Course Year
                   </label>
@@ -1067,7 +1148,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Semester
                   </label>
@@ -1081,7 +1162,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Academic Period
                   </label>
@@ -1095,7 +1176,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Classes per Week
                   </label>
@@ -1109,7 +1190,7 @@ HOD Approval: ________________
                 </div>
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    isDark ? 'text-gray-200' : 'text-gray-700'
                   }`}>
                     Total Planned Classes
                   </label>
@@ -1209,11 +1290,11 @@ HOD Approval: ________________
             </div>
 
             {/* Modal Footer */}
-            <div className={`p-4 md:p-6 border-t ${isDarkMode ? 'border-gray-600' : 'border-gray-200'} flex justify-end gap-3 sticky bottom-0 ${modalClasses}`}>
+            <div className={`p-4 md:p-6 border-t ${isDark ? 'border-gray-600' : 'border-gray-200'} flex justify-end gap-3 sticky bottom-0 ${modalClasses}`}>
               <button
                 onClick={closeModal}
                 className={`px-4 py-2 border rounded-lg transition-colors duration-200 ${
-                  isDarkMode 
+                  isDark 
                     ? 'border-gray-600 text-gray-300 hover:bg-gray-700' 
                     : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                 }`}
@@ -1234,13 +1315,12 @@ HOD Approval: ________________
         
       {/* View Modal */}
       {isViewModalOpen && viewingPlan && (
-          <LessonPlanViewModal 
-              plan={viewingPlan} 
-              closeModal={closeViewModal} 
-              downloadPlan={downloadLessonPlan} 
-              isDarkMode={isDarkMode}
-              modalClasses={modalClasses}
-          />
+        <LessonPlanViewModal 
+          plan={viewingPlan} 
+          closeModal={closeViewModal} 
+          downloadPlan={downloadLessonPlan} 
+          modalClasses={modalClasses}
+        />
       )}
     </div>
   );
