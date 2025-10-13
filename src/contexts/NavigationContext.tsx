@@ -329,6 +329,7 @@ const SIDEBAR_ITEMS = {
   },
 
   { name: 'Continuous Assessments', path: '/academics/hod/cat', icon: 'Code' },
+  {name:'Booking Approval', path:'/academics/hod/booking-approvals', icon:'CalendarDays'},
   { name: 'Leave Portal', path: '/academics/faculty-leave-request', icon: 'UserMinus' },
   { name: 'Inbox', path: '/common/common/inbox', icon: 'Mail' },
   { name: 'Reports', path: '/academics/hod/reports', icon: 'FileText' },
@@ -605,6 +606,10 @@ const SIDEBAR_ITEMS = {
         name: 'Final list & Logins', 
         path: '/management/list&logins', 
         icon: 'FileBarChart',
+      },
+      {  name:'booking-approvals',
+         path: '/management/booking-approvals',
+         icon: 'CalendarDays',
       },
       { 
         name: 'Reports & Logs', 

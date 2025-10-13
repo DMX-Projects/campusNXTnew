@@ -117,6 +117,7 @@ import HODStudentLeaveDetails from '../pages/HODModules/Academics/Students/HODSt
 import HODStudentProjects from '../pages/HODModules/Academics/Students/HODStudentProjects';
 import HODReports from '../pages/HODModules/Academics/HODReports';
 import HODCatPage from '../pages/HODModules/Academics/HODCatPage';
+import HODBookingApproval from '../pages/RegistorModule/HODBookingApproval';
 
 
 
@@ -259,6 +260,7 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/hod/student-projects" element={<HODStudentProjects />} />
     <Route path="/hod/reports" element={<HODReports  />} />
     <Route path="/hod/cat" element={<HODCatPage  />} />
+    <Route path="/hod/booking-approvals" element={<HODBookingApproval />} />
     <Route path="/hod/academic-dashboard" element={<HODAcademicDashboard />} />
 
     <Route path="student-attendance" element={<HODStudentAttendance  />} />
