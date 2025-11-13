@@ -1,157 +1,230 @@
-
 import React, { useState, useEffect } from 'react';
-import { Eye } from 'lucide-react';
+import { TrendingUp, TrendingDown, Award, AlertCircle, Eye, BarChart3 } from 'lucide-react';
 
-interface FeedbackData {
+interface FacultyPerformance {
   id: string;
   facultyName: string;
   facultyId: string;
   department: string;
-  program: string;
   course: string;
-  year: string;
   semester: string;
-  studentName: string;
-  studentId: string;
-  overallRating: number;
-  teachingQuality: number;
-  communication: number;
-  subjectKnowledge: number;
-  punctuality: number;
-  helpfulness: number;
-  comments: string;
-  submittedDate: string;
-  status: 'pending' | 'reviewed' | 'archived';
+  academicYear: string;
+  totalStudents: number;
+  studentsAppeared: number;
+  studentsPassed: number;
+  studentsFailed: number;
+  passPercentage: number;
+  averageMarks: number;
+  distinctionCount: number;
+  firstClassCount: number;
+  secondClassCount: number;
+  performanceScore: number;
+  performanceGrade: 'Excellent' | 'Good' | 'Average' | 'Needs Improvement';
+  trend: 'up' | 'down' | 'stable';
+  previousPassPercentage: number;
 }
 
 interface FilterState {
   department: string;
-  program: string;
-  course: string;
-  year: string;
   semester: string;
-  status: string;
-  rating: string;
+  academicYear: string;
+  performanceGrade: string;
 }
 
-const FacultyFeedbackPrincipal: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme ? savedTheme === 'dark' : false;
-  });
-
+const FacultyPerformanceDashboard: React.FC = () => {
   const [filters, setFilters] = useState<FilterState>({
     department: '',
-    program: '',
-    course: '',
-    year: '',
     semester: '',
-    status: '',
-    rating: ''
+    academicYear: '2024-25',
+    performanceGrade: ''
   });
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedFeedback, setSelectedFeedback] = useState<FeedbackData | null>(null);
+  const [selectedFaculty, setSelectedFaculty] = useState<FacultyPerformance | null>(null);
   const [showDetailModal, setShowDetailModal] = useState<boolean>(false);
   const itemsPerPage = 10;
 
-  // Sample data - replace with API call
-  const [feedbackData] = useState<FeedbackData[]>([
+  // Calculate performance score based on multiple metrics
+  const calculatePerformanceScore = (data: {
+    passPercentage: number;
+    averageMarks: number;
+    distinctionCount: number;
+    totalStudents: number;
+  }): number => {
+    const passWeight = 0.5;
+    const avgMarksWeight = 0.3;
+    const distinctionWeight = 0.2;
+
+    const passScore = (data.passPercentage / 100) * 100;
+    const marksScore = (data.averageMarks / 100) * 100;
+    const distinctionScore = data.totalStudents > 0 
+      ? (data.distinctionCount / data.totalStudents) * 100 
+      : 0;
+
+    return (
+      passScore * passWeight +
+      marksScore * avgMarksWeight +
+      distinctionScore * distinctionWeight
+    );
+  };
+
+  const getPerformanceGrade = (score: number): 'Excellent' | 'Good' | 'Average' | 'Needs Improvement' => {
+    if (score >= 85) return 'Excellent';
+    if (score >= 70) return 'Good';
+    if (score >= 55) return 'Average';
+    return 'Needs Improvement';
+  };
+
+  // Sample auto-generated data based on student results
+  const [performanceData] = useState<FacultyPerformance[]>([
     {
       id: '1',
       facultyName: 'Dr. John Smith',
       facultyId: 'FAC001',
       department: 'Computer Science',
-      program: 'B.Tech',
       course: 'Data Structures',
-      year: '2nd',
-      semester: '3rd',
-      studentName: 'Alice Johnson',
-      studentId: 'STU001',
-      overallRating: 4.5,
-      teachingQuality: 4,
-      communication: 5,
-      subjectKnowledge: 5,
-      punctuality: 4,
-      helpfulness: 4,
-      comments: 'Excellent teacher with great subject knowledge. Very helpful during doubt sessions.',
-      submittedDate: '2025-09-25',
-      status: 'pending'
+      semester: 'Semester 3',
+      academicYear: '2024-25',
+      totalStudents: 60,
+      studentsAppeared: 58,
+      studentsPassed: 52,
+      studentsFailed: 6,
+      passPercentage: 89.66,
+      averageMarks: 72.5,
+      distinctionCount: 15,
+      firstClassCount: 22,
+      secondClassCount: 15,
+      performanceScore: 0,
+      performanceGrade: 'Excellent',
+      trend: 'up',
+      previousPassPercentage: 85.5
     },
     {
       id: '2',
       facultyName: 'Prof. Sarah Wilson',
       facultyId: 'FAC002',
       department: 'Mathematics',
-      program: 'B.Sc',
       course: 'Calculus',
-      year: '1st',
-      semester: '2nd',
-      studentName: 'Bob Brown',
-      studentId: 'STU002',
-      overallRating: 3.8,
-      teachingQuality: 4,
-      communication: 3,
-      subjectKnowledge: 4,
-      punctuality: 4,
-      helpfulness: 4,
-      comments: 'Good teacher but could improve communication skills.',
-      submittedDate: '2025-09-24',
-      status: 'reviewed'
+      semester: 'Semester 2',
+      academicYear: '2024-25',
+      totalStudents: 55,
+      studentsAppeared: 55,
+      studentsPassed: 40,
+      studentsFailed: 15,
+      passPercentage: 72.73,
+      averageMarks: 65.2,
+      distinctionCount: 8,
+      firstClassCount: 18,
+      secondClassCount: 14,
+      performanceScore: 0,
+      performanceGrade: 'Good',
+      trend: 'stable',
+      previousPassPercentage: 73.1
     },
     {
       id: '3',
       facultyName: 'Dr. Michael Chen',
       facultyId: 'FAC003',
       department: 'Physics',
-      program: 'B.Sc',
       course: 'Quantum Physics',
-      year: '3rd',
-      semester: '5th',
-      studentName: 'Emma Davis',
-      studentId: 'STU003',
-      overallRating: 4.8,
-      teachingQuality: 5,
-      communication: 5,
-      subjectKnowledge: 5,
-      punctuality: 4,
-      helpfulness: 5,
-      comments: 'Outstanding professor! Makes complex topics easy to understand.',
-      submittedDate: '2025-09-23',
-      status: 'pending'
+      semester: 'Semester 5',
+      academicYear: '2024-25',
+      totalStudents: 45,
+      studentsAppeared: 45,
+      studentsPassed: 42,
+      studentsFailed: 3,
+      passPercentage: 93.33,
+      averageMarks: 78.8,
+      distinctionCount: 18,
+      firstClassCount: 20,
+      secondClassCount: 4,
+      performanceScore: 0,
+      performanceGrade: 'Excellent',
+      trend: 'up',
+      previousPassPercentage: 88.9
     },
     {
       id: '4',
       facultyName: 'Prof. Lisa Martinez',
       facultyId: 'FAC004',
       department: 'Chemistry',
-      program: 'B.Tech',
       course: 'Organic Chemistry',
-      year: '2nd',
-      semester: '4th',
-      studentName: 'James Wilson',
-      studentId: 'STU004',
-      overallRating: 2.5,
-      teachingQuality: 3,
-      communication: 2,
-      subjectKnowledge: 4,
-      punctuality: 2,
-      helpfulness: 2,
-      comments: 'Often late to classes and not very approachable for doubts.',
-      submittedDate: '2025-09-22',
-      status: 'archived'
+      semester: 'Semester 4',
+      academicYear: '2024-25',
+      totalStudents: 50,
+      studentsAppeared: 48,
+      studentsPassed: 25,
+      studentsFailed: 23,
+      passPercentage: 52.08,
+      averageMarks: 52.3,
+      distinctionCount: 3,
+      firstClassCount: 10,
+      secondClassCount: 12,
+      performanceScore: 0,
+      performanceGrade: 'Needs Improvement',
+      trend: 'down',
+      previousPassPercentage: 65.2
+    },
+    {
+      id: '5',
+      facultyName: 'Dr. Robert Kumar',
+      facultyId: 'FAC005',
+      department: 'Computer Science',
+      course: 'Database Management',
+      semester: 'Semester 4',
+      academicYear: '2024-25',
+      totalStudents: 62,
+      studentsAppeared: 60,
+      studentsPassed: 48,
+      studentsFailed: 12,
+      passPercentage: 80.0,
+      averageMarks: 68.5,
+      distinctionCount: 12,
+      firstClassCount: 20,
+      secondClassCount: 16,
+      performanceScore: 0,
+      performanceGrade: 'Good',
+      trend: 'up',
+      previousPassPercentage: 76.5
+    },
+    {
+      id: '6',
+      facultyName: 'Prof. Emily Davis',
+      facultyId: 'FAC006',
+      department: 'Mathematics',
+      course: 'Linear Algebra',
+      semester: 'Semester 3',
+      academicYear: '2024-25',
+      totalStudents: 58,
+      studentsAppeared: 56,
+      studentsPassed: 38,
+      studentsFailed: 18,
+      passPercentage: 67.86,
+      averageMarks: 61.2,
+      distinctionCount: 6,
+      firstClassCount: 16,
+      secondClassCount: 16,
+      performanceScore: 0,
+      performanceGrade: 'Average',
+      trend: 'down',
+      previousPassPercentage: 72.0
     }
   ]);
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+  // Calculate performance scores
+  const enrichedData = performanceData.map(faculty => ({
+    ...faculty,
+    performanceScore: calculatePerformanceScore({
+      passPercentage: faculty.passPercentage,
+      averageMarks: faculty.averageMarks,
+      distinctionCount: faculty.distinctionCount,
+      totalStudents: faculty.totalStudents
+    })
+  })).map(faculty => ({
+    ...faculty,
+    performanceGrade: getPerformanceGrade(faculty.performanceScore)
+  }));
 
   const handleFilterChange = (filterType: keyof FilterState, value: string) => {
     setFilters(prev => ({
@@ -164,60 +237,30 @@ const FacultyFeedbackPrincipal: React.FC = () => {
   const handleClearFilters = () => {
     setFilters({
       department: '',
-      program: '',
-      course: '',
-      year: '',
       semester: '',
-      status: '',
-      rating: ''
+      academicYear: '2024-25',
+      performanceGrade: ''
     });
     setSearchTerm('');
     setCurrentPage(1);
   };
 
-  const handleViewDetails = (feedback: FeedbackData) => {
-    setSelectedFeedback(feedback);
+  const handleViewDetails = (faculty: FacultyPerformance) => {
+    setSelectedFaculty(faculty);
     setShowDetailModal(true);
   };
 
-  const handleStatusUpdate = (feedbackId: string, newStatus: 'pending' | 'reviewed' | 'archived') => {
-    console.log(`Updating feedback ${feedbackId} to ${newStatus}`);
-    showToast(`Feedback status updated to ${newStatus}`);
-  };
-
-  const showToast = (message: string) => {
-    const toast = document.createElement('div');
-    toast.className = 'fixed top-5 right-5 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-0 transition-all duration-300 ease-in-out';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.style.transform = 'translateX(100%)';
-      setTimeout(() => {
-        if (document.body.contains(toast)) {
-          document.body.removeChild(toast);
-        }
-      }, 300);
-    }, 3000);
-  };
-
-  const filteredData = feedbackData.filter(item => {
+  const filteredData = enrichedData.filter(item => {
     const matchesSearch = searchTerm === '' || 
       item.facultyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.course.toLowerCase().includes(searchTerm.toLowerCase());
+      item.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.facultyId.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesFilters = 
       (filters.department === '' || item.department === filters.department) &&
-      (filters.program === '' || item.program === filters.program) &&
-      (filters.course === '' || item.course === filters.course) &&
-      (filters.year === '' || item.year === filters.year) &&
       (filters.semester === '' || item.semester === filters.semester) &&
-      (filters.status === '' || item.status === filters.status) &&
-      (filters.rating === '' || 
-        (filters.rating === '4+' && item.overallRating >= 4) ||
-        (filters.rating === '3-4' && item.overallRating >= 3 && item.overallRating < 4) ||
-        (filters.rating === '3-' && item.overallRating < 3));
+      (filters.academicYear === '' || item.academicYear === filters.academicYear) &&
+      (filters.performanceGrade === '' || item.performanceGrade === filters.performanceGrade);
 
     return matchesSearch && matchesFilters;
   });
@@ -228,32 +271,80 @@ const FacultyFeedbackPrincipal: React.FC = () => {
     currentPage * itemsPerPage
   );
 
-  const getRatingColor = (rating: number) => {
-    if (rating >= 4) return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100';
-    if (rating >= 3) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100';
-    return 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100';
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100';
-      case 'reviewed': return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100';
-      case 'archived': return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100';
+  const getGradeColor = (grade: string) => {
+    switch (grade) {
+      case 'Excellent': return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100';
+      case 'Good': return 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100';
+      case 'Average': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100';
+      case 'Needs Improvement': return 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100';
     }
   };
 
+  const getPassPercentageColor = (percentage: number) => {
+    if (percentage >= 85) return 'text-green-600 dark:text-green-400';
+    if (percentage >= 70) return 'text-blue-600 dark:text-blue-400';
+    if (percentage >= 55) return 'text-yellow-600 dark:text-yellow-400';
+    return 'text-red-600 dark:text-red-400';
+  };
+
+  // Calculate statistics
+  const avgPassPercentage = (filteredData.reduce((sum, f) => sum + f.passPercentage, 0) / filteredData.length).toFixed(2);
+  const excellentCount = filteredData.filter(f => f.performanceGrade === 'Excellent').length;
+  const needsImprovementCount = filteredData.filter(f => f.performanceGrade === 'Needs Improvement').length;
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex-1 mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Faculty Feedback Management
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Review and manage student feedback for faculty members
-          </p>
+      <div className="mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Faculty Performance
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Auto-generated performance metrics based on student pass percentages and academic results
+        </p>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Faculty</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{filteredData.length}</p>
+            </div>
+            <BarChart3 className="text-blue-600 dark:text-blue-400" size={32} />
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Avg Pass Rate</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{avgPassPercentage}%</p>
+            </div>
+            <TrendingUp className="text-green-600 dark:text-green-400" size={32} />
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Excellent Performers</p>
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{excellentCount}</p>
+            </div>
+            <Award className="text-purple-600 dark:text-purple-400" size={32} />
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Need Attention</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">{needsImprovementCount}</p>
+            </div>
+            <AlertCircle className="text-red-600 dark:text-red-400" size={32} />
+          </div>
         </div>
       </div>
 
@@ -262,104 +353,65 @@ const FacultyFeedbackPrincipal: React.FC = () => {
         <div className="mb-5">
           <input
             type="text"
-            placeholder="Search by faculty, student, or course..."
+            placeholder="Search by faculty name, ID, or course..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
           <select
             value={filters.department}
             onChange={(e) => handleFilterChange('department', e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Departments</option>
             <option value="Computer Science">Computer Science</option>
             <option value="Mathematics">Mathematics</option>
             <option value="Physics">Physics</option>
             <option value="Chemistry">Chemistry</option>
-            <option value="English">English</option>
-          </select>
-
-          <select
-            value={filters.program}
-            onChange={(e) => handleFilterChange('program', e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-          >
-            <option value="">All Programs</option>
-            <option value="B.Tech">B.Tech</option>
-            <option value="B.Sc">B.Sc</option>
-            <option value="M.Tech">M.Tech</option>
-            <option value="M.Sc">M.Sc</option>
-            <option value="PhD">PhD</option>
-          </select>
-
-          <select
-            value={filters.course}
-            onChange={(e) => handleFilterChange('course', e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-          >
-            <option value="">All Courses</option>
-            <option value="Data Structures">Data Structures</option>
-            <option value="Calculus">Calculus</option>
-            <option value="Quantum Physics">Quantum Physics</option>
-            <option value="Organic Chemistry">Organic Chemistry</option>
-          </select>
-
-          <select
-            value={filters.year}
-            onChange={(e) => handleFilterChange('year', e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-          >
-            <option value="">All Years</option>
-            <option value="1st">1st Year</option>
-            <option value="2nd">2nd Year</option>
-            <option value="3rd">3rd Year</option>
-            <option value="4th">4th Year</option>
           </select>
 
           <select
             value={filters.semester}
             onChange={(e) => handleFilterChange('semester', e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Semesters</option>
-            <option value="1st">1st Semester</option>
-            <option value="2nd">2nd Semester</option>
-            <option value="3rd">3rd Semester</option>
-            <option value="4th">4th Semester</option>
-            <option value="5th">5th Semester</option>
-            <option value="6th">6th Semester</option>
-            <option value="7th">7th Semester</option>
-            <option value="8th">8th Semester</option>
+            <option value="Semester 1">Semester 1</option>
+            <option value="Semester 2">Semester 2</option>
+            <option value="Semester 3">Semester 3</option>
+            <option value="Semester 4">Semester 4</option>
+            <option value="Semester 5">Semester 5</option>
+            <option value="Semester 6">Semester 6</option>
           </select>
 
           <select
-            value={filters.status}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+            value={filters.academicYear}
+            onChange={(e) => handleFilterChange('academicYear', e.target.value)}
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="reviewed">Reviewed</option>
-            <option value="archived">Archived</option>
+            <option value="">All Years</option>
+            <option value="2024-25">2024-25</option>
+            <option value="2023-24">2023-24</option>
+            <option value="2022-23">2022-23</option>
           </select>
 
           <select
-            value={filters.rating}
-            onChange={(e) => handleFilterChange('rating', e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+            value={filters.performanceGrade}
+            onChange={(e) => handleFilterChange('performanceGrade', e.target.value)}
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">All Ratings</option>
-            <option value="4+">4+ Stars</option>
-            <option value="3-4">3-4 Stars</option>
-            <option value="3-">Below 3 Stars</option>
+            <option value="">All Grades</option>
+            <option value="Excellent">Excellent</option>
+            <option value="Good">Good</option>
+            <option value="Average">Average</option>
+            <option value="Needs Improvement">Needs Improvement</option>
           </select>
 
           <button 
-            className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500"
             onClick={handleClearFilters}
           >
             Clear All
@@ -370,106 +422,83 @@ const FacultyFeedbackPrincipal: React.FC = () => {
       {/* Results Summary */}
       <div className="mb-5 text-gray-600 dark:text-gray-400">
         <span className="text-sm">
-          Showing {paginatedData.length} of {filteredData.length} feedback entries
+          Showing {paginatedData.length} of {filteredData.length} faculty members
         </span>
       </div>
 
-      {/* Feedback Table */}
+      {/* Performance Table */}
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm mb-6">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-blue-600 dark:bg-blue-700">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Faculty
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Course
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Student
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Department
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Program
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Year/Semester
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Overall Rating
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Actions
-                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Faculty</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Department</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Course</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Semester</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Students</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Pass %</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Avg Marks</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Performance</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Trend</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              {paginatedData.map((feedback) => (
-                <tr key={feedback.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+              {paginatedData.map((faculty) => (
+                <tr key={faculty.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex flex-col">
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {feedback.facultyName}
+                        {faculty.facultyName}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {feedback.facultyId}
+                        {faculty.facultyId}
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {feedback.course}
+                    {faculty.department}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    {faculty.course}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    {faculty.semester}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex flex-col">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                        {feedback.studentName}
-                      </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {feedback.studentId}
-                      </div>
+                    <div className="text-sm text-gray-900 dark:text-gray-100">
+                      {faculty.studentsPassed}/{faculty.studentsAppeared}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      Failed: {faculty.studentsFailed}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {feedback.department}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {feedback.program}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {feedback.year} Year / {feedback.semester} Sem
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRatingColor(feedback.overallRating)}`}>
-                      ⭐ {feedback.overallRating}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(feedback.status)}`}>
-                      {feedback.status.charAt(0).toUpperCase() + feedback.status.slice(1)}
+                    <span className={`text-sm font-bold ${getPassPercentageColor(faculty.passPercentage)}`}>
+                      {faculty.passPercentage.toFixed(2)}%
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {new Date(feedback.submittedDate).toLocaleDateString()}
+                    {faculty.averageMarks.toFixed(1)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-xs transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        onClick={() => handleViewDetails(feedback)}
-                        title="View Details"
-                      >
-                        <Eye size={16} />
-                      </button>
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getGradeColor(faculty.performanceGrade)}`}>
+                      {faculty.performanceGrade}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {faculty.trend === 'up' && <TrendingUp className="text-green-600 dark:text-green-400" size={20} />}
+                    {faculty.trend === 'down' && <TrendingDown className="text-red-600 dark:text-red-400" size={20} />}
+                    {faculty.trend === 'stable' && <span className="text-gray-500">→</span>}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-xs transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onClick={() => handleViewDetails(faculty)}
+                    >
+                      <Eye size={16} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -482,7 +511,7 @@ const FacultyFeedbackPrincipal: React.FC = () => {
       {totalPages > 1 && (
         <div className="flex justify-center items-center space-x-2 mt-6">
           <button
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
@@ -493,7 +522,7 @@ const FacultyFeedbackPrincipal: React.FC = () => {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                   currentPage === page
                     ? 'bg-blue-600 text-white'
                     : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-blue-600 hover:text-white'
@@ -506,7 +535,7 @@ const FacultyFeedbackPrincipal: React.FC = () => {
           </div>
 
           <button
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-blue-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
           >
@@ -516,15 +545,15 @@ const FacultyFeedbackPrincipal: React.FC = () => {
       )}
 
       {/* Detail Modal */}
-      {showDetailModal && selectedFeedback && (
+      {showDetailModal && selectedFaculty && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4" onClick={() => setShowDetailModal(false)}>
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Feedback Details
+                Performance Analysis
               </h2>
               <button
-                className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-2xl font-bold p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-2xl font-bold p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                 onClick={() => setShowDetailModal(false)}
               >
                 ✕
@@ -535,63 +564,123 @@ const FacultyFeedbackPrincipal: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                    Faculty Information
+                    Student Statistics
                   </h3>
                   <div className="space-y-2 text-sm">
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Name:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.facultyName}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">ID:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.facultyId}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Department:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.department}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Course:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.course}</span></p>
-                  </div>
-                </div>
-
-                <div className="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                    Student Information
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Name:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.studentName}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">ID:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.studentId}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Program:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.program}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Year/Semester:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.year} Year / {selectedFeedback.semester} Semester</span></p>
+                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Total Students:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFaculty.totalStudents}</span></p>
+                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Students Appeared:</span> <span className="text-gray-900 dark:text-gray-100">{selectedFaculty.studentsAppeared}</span></p>
+                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Students Passed:</span> <span className="text-green-600 dark:text-green-400 font-semibold">{selectedFaculty.studentsPassed}</span></p>
+                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Students Failed:</span> <span className="text-red-600 dark:text-red-400 font-semibold">{selectedFaculty.studentsFailed}</span></p>
+                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Pass Percentage:</span> <span className={`font-bold ${getPassPercentageColor(selectedFaculty.passPercentage)}`}>{selectedFaculty.passPercentage.toFixed(2)}%</span></p>
                   </div>
                 </div>
 
                 <div className="md:col-span-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                    Ratings
+                    Performance Breakdown
                   </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Overall:</span> <span className="text-gray-900 dark:text-gray-100">⭐ {selectedFeedback.overallRating}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Teaching:</span> <span className="text-gray-900 dark:text-gray-100">⭐ {selectedFeedback.teachingQuality}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Communication:</span> <span className="text-gray-900 dark:text-gray-100">⭐ {selectedFeedback.communication}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Knowledge:</span> <span className="text-gray-900 dark:text-gray-100">⭐ {selectedFeedback.subjectKnowledge}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Punctuality:</span> <span className="text-gray-900 dark:text-gray-100">⭐ {selectedFeedback.punctuality}</span></p>
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Helpfulness:</span> <span className="text-gray-900 dark:text-gray-100">⭐ {selectedFeedback.helpfulness}</span></p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Distinction</p>
+                      <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{selectedFaculty.distinctionCount}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{((selectedFaculty.distinctionCount / selectedFaculty.totalStudents) * 100).toFixed(1)}%</p>
+                    </div>
+                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">First Class</p>
+                      <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{selectedFaculty.firstClassCount}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{((selectedFaculty.firstClassCount / selectedFaculty.totalStudents) * 100).toFixed(1)}%</p>
+                    </div>
+                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Second Class</p>
+                      <p className="text-lg font-bold text-green-600 dark:text-green-400">{selectedFaculty.secondClassCount}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{((selectedFaculty.secondClassCount / selectedFaculty.totalStudents) * 100).toFixed(1)}%</p>
+                    </div>
+                    <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <p className="text-gray-600 dark:text-gray-400 text-xs mb-1">Avg Marks</p>
+                      <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{selectedFaculty.averageMarks.toFixed(1)}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">out of 100</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="md:col-span-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                    Comments
+                <div className="md:col-span-2 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 border border-blue-200 dark:border-gray-600 rounded-lg p-5">
+                  <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center">
+                    <Award className="mr-2" size={20} />
+                    Overall Performance Assessment
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300 italic bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                    "{selectedFeedback.comments}"
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                    Submission Details
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Date:</span> <span className="text-gray-900 dark:text-gray-100">{new Date(selectedFeedback.submittedDate).toLocaleDateString()}</span></p>
-                    <p>
-                      <span className="font-medium text-gray-700 dark:text-gray-300">Status:</span>{' '}
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ml-2 ${getStatusColor(selectedFeedback.status)}`}>
-                        {selectedFeedback.status.charAt(0).toUpperCase() + selectedFeedback.status.slice(1)}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Performance Score:</span>
+                      <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">{selectedFaculty.performanceScore.toFixed(2)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Grade:</span>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getGradeColor(selectedFaculty.performanceGrade)}`}>
+                        {selectedFaculty.performanceGrade}
                       </span>
-                    </p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Trend:</span>
+                      <div className="flex items-center">
+                        {selectedFaculty.trend === 'up' && (
+                          <>
+                            <TrendingUp className="text-green-600 dark:text-green-400 mr-1" size={20} />
+                            <span className="text-green-600 dark:text-green-400 font-semibold">Improving</span>
+                          </>
+                        )}
+                        {selectedFaculty.trend === 'down' && (
+                          <>
+                            <TrendingDown className="text-red-600 dark:text-red-400 mr-1" size={20} />
+                            <span className="text-red-600 dark:text-red-400 font-semibold">Declining</span>
+                          </>
+                        )}
+                        {selectedFaculty.trend === 'stable' && (
+                          <span className="text-gray-600 dark:text-gray-400 font-semibold">Stable</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="pt-3 border-t border-blue-200 dark:border-gray-500">
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Previous Pass %: <span className="font-semibold">{selectedFaculty.previousPassPercentage.toFixed(2)}%</span></p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Current Pass %: <span className="font-semibold">{selectedFaculty.passPercentage.toFixed(2)}%</span></p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                        Change: <span className={selectedFaculty.passPercentage >= selectedFaculty.previousPassPercentage ? 'text-green-600 dark:text-green-400 font-semibold' : 'text-red-600 dark:text-red-400 font-semibold'}>
+                          {(selectedFaculty.passPercentage - selectedFaculty.previousPassPercentage).toFixed(2)}%
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="md:col-span-2 bg-yellow-50 dark:bg-gray-700 border border-yellow-200 dark:border-gray-600 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-yellow-700 dark:text-yellow-400 mb-3 flex items-center">
+                    <AlertCircle className="mr-2" size={20} />
+                    Performance Insights
+                  </h3>
+                  <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                    {selectedFaculty.passPercentage >= 85 && (
+                      <p>✓ Excellent pass percentage. Students are performing exceptionally well.</p>
+                    )}
+                    {selectedFaculty.passPercentage >= 70 && selectedFaculty.passPercentage < 85 && (
+                      <p>✓ Good pass percentage. Majority of students are succeeding.</p>
+                    )}
+                    {selectedFaculty.passPercentage >= 55 && selectedFaculty.passPercentage < 70 && (
+                      <p>⚠ Average pass percentage. Consider review of teaching methods.</p>
+                    )}
+                    {selectedFaculty.passPercentage < 55 && (
+                      <p>⚠ Below average pass percentage. Immediate intervention recommended.</p>
+                    )}
+                    {selectedFaculty.distinctionCount > selectedFaculty.totalStudents * 0.25 && (
+                      <p>✓ High distinction rate indicates strong student engagement.</p>
+                    )}
+                    {selectedFaculty.averageMarks >= 70 && (
+                      <p>✓ High average marks reflect effective teaching delivery.</p>
+                    )}
+                    {selectedFaculty.trend === 'up' && (
+                      <p>✓ Positive trend shows continuous improvement in teaching effectiveness.</p>
+                    )}
+                    {selectedFaculty.trend === 'down' && (
+                      <p>⚠ Declining trend requires attention and support.</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -599,22 +688,19 @@ const FacultyFeedbackPrincipal: React.FC = () => {
 
             <div className="flex justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700">
               <button
-                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
                 onClick={() => setShowDetailModal(false)}
               >
                 Close
               </button>
-              {selectedFeedback.status === 'pending' && (
-                <button
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onClick={() => {
-                    handleStatusUpdate(selectedFeedback.id, 'reviewed');
-                    setShowDetailModal(false);
-                  }}
-                >
-                  Mark as Reviewed
-                </button>
-              )}
+              <button
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all"
+                onClick={() => {
+                  alert('Generate detailed report for ' + selectedFaculty.facultyName);
+                }}
+              >
+                Generate Report
+              </button>
             </div>
           </div>
         </div>
@@ -623,4 +709,4 @@ const FacultyFeedbackPrincipal: React.FC = () => {
   );
 };
 
-export default FacultyFeedbackPrincipal;
+export default FacultyPerformanceDashboard;

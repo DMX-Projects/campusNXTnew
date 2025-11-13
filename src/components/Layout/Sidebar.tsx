@@ -14,7 +14,7 @@ import {
   ArrowRight, UserMinus, UserPlus, FileCheck, UserX,
   CheckSquare, FileOutput, FileQuestion, Phone, Upload,
   HelpCircle, Receipt, Link, List, Code, MessageSquare,
-  Inbox, FolderOpen as FolderOpenIcon
+  FolderOpen as FolderOpenIcon
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -41,11 +41,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
     ArrowRight, UserMinus, UserPlus, FileCheck, UserX,
     CheckSquare, FileOutput, FileQuestion, Phone, Upload,
     HelpCircle, Receipt, Link, List, Code, MessageSquare,
-    Inbox, FolderOpenIcon
+    FolderOpenIcon
   };
 
   const menuItems = user ? getSidebarItemsForModule(activeModule, user.role) : [];
-
 
   const truncateText = (text: string, maxLength: number = 25) => {
     if (text.length <= maxLength) return text;
@@ -180,8 +179,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
         )}
       </nav>
 
-      <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-      </div>
+      <div className="p-2 border-t border-gray-200 dark:border-gray-700"></div>
     </div>
   );
 };

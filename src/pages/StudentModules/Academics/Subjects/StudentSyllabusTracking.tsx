@@ -623,88 +623,10 @@ const StudentSyllabusTracking: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-5 transition-colors duration-300">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-5 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex-1 mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center">
-            <BarChart3 className="w-8 h-8 mr-3 text-blue-500" />
-            Syllabus Tracking
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Monitor your progress through course syllabi and track completion of units and topics
-          </p>
-        </div>
-        <button
-          className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-xl hover:bg-blue-500 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          aria-label="Toggle theme"
-        >
-          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
-      </div>
+      
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total Subjects</p>
-              <p className="text-2xl font-bold">{summaryStats.totalSubjects}</p>
-            </div>
-            <BookOpen className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-green-400 to-green-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Avg Progress</p>
-              <p className="text-2xl font-bold">{summaryStats.averageProgress}%</p>
-            </div>
-            <TrendingUp className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">Completed</p>
-              <p className="text-2xl font-bold">{summaryStats.completedSubjects}</p>
-            </div>
-            <CheckCircle className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-orange-100 text-sm font-medium">Units Done</p>
-              <p className="text-2xl font-bold">{summaryStats.completedUnits}/{summaryStats.totalUnits}</p>
-            </div>
-            <Target className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-indigo-400 to-indigo-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-indigo-100 text-sm font-medium">Study Hours</p>
-              <p className="text-2xl font-bold">{summaryStats.totalHours}</p>
-            </div>
-            <Clock className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-pink-400 to-pink-500 rounded-xl p-4 text-white shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-pink-100 text-sm font-medium">Efficiency</p>
-              <p className="text-2xl font-bold">{Math.round((summaryStats.completedUnits / summaryStats.totalUnits) * 100)}%</p>
-            </div>
-            <Award className="w-6 h-6 opacity-80" />
-          </div>
-        </div>
-      </div>
-
+      
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -765,9 +687,7 @@ const StudentSyllabusTracking: React.FC = () => {
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(subject.difficulty)}`}>
-                    {subject.difficulty.toUpperCase()}
-                  </span>
+                  
                   <span className="text-xs text-gray-500 dark:text-gray-400">{subject.semester}</span>
                 </div>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -854,9 +774,7 @@ const StudentSyllabusTracking: React.FC = () => {
                   <Eye className="w-4 h-4" />
                   <span>View Details</span>
                 </button>
-                <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
-                  <TrendingUp className="w-4 h-4" />
-                </button>
+               
               </div>
             </div>
           </div>
@@ -928,9 +846,7 @@ const StudentSyllabusTracking: React.FC = () => {
                                   <div className="flex-1">
                                     <div className="flex items-center space-x-2">
                                       <h5 className="font-medium text-sm">{topic.name}</h5>
-                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(topic.difficulty)}`}>
-                                        {topic.difficulty}
-                                      </span>
+                                      
                                     </div>
                                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                                       {topic.description}
@@ -962,21 +878,6 @@ const StudentSyllabusTracking: React.FC = () => {
                                   </div>
                                 </div>
                                 
-                                {topic.resources.length > 0 && (
-                                  <div className="mt-2 space-y-1">
-                                    <p className="text-xs font-medium text-gray-700 dark:text-gray-300">Resources:</p>
-                                    {topic.resources.map((resource) => (
-                                      <div key={resource.id} className="flex items-center space-x-2 text-xs">
-                                        {resource.type === 'video' && <PlayCircle className="w-3 h-3 text-red-500" />}
-                                        {resource.type === 'pdf' && <FileText className="w-3 h-3 text-blue-500" />}
-                                        {resource.type === 'link' && <Eye className="w-3 h-3 text-green-500" />}
-                                        {resource.type === 'practice' && <Target className="w-3 h-3 text-purple-500" />}
-                                        <span className={resource.isCompleted ? 'line-through text-gray-500' : ''}>{resource.title}</span>
-                                        {resource.duration && <span className="text-gray-500">({resource.duration}min)</span>}
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
                               </div>
                             ))}
                           </div>

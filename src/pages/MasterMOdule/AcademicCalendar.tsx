@@ -9,6 +9,18 @@ const formatDate = (dateString: string) => {
   return new Intl.DateTimeFormat('en-GB', options).format(date);
 };
 
+function calculateNoOfWeeksOrDays(start: string, end: string) {
+  if (!start || !end) return '-';
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return '-';
+  const diffMs = endDate.getTime() - startDate.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  if (diffDays <= 1) return `${diffDays} day`;
+  if (diffDays < 7) return `${diffDays} days`;
+  return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''}${diffDays % 7 ? ` ${diffDays % 7} day${diffDays % 7 > 1 ? 's' : ''}` : ''}`;
+}
+
 type Period = { start: string; end: string };
 type CalEvent = {
   id?: number;
@@ -102,7 +114,7 @@ const EditEventModal: React.FC<{
 };
 
 export default function AcademicCalendarView() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const isMasterAdmin = user?.role === 'Master Admin';
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -169,21 +181,15 @@ export default function AcademicCalendarView() {
   const handleDownload = () => {
     let content = `Academic Calendar ${academicYear}\n\n`;
     content += 'ODD SEMESTER\n';
-    content += 'Sr. No., Description, Period\n';
+    content += 'Sr. No., Description, From, To, No of Weeks/Days\n';
     oddSemesterData.forEach((item, index) => {
-      const period = `${formatDate(item.period.start)} ${
-        item.period.end && item.period.start !== item.period.end ? `to ${formatDate(item.period.end)}` : ''
-      }`;
-      content += `${index + 1}, "${item.description}", "${period}"\n`;
+      content += `${index + 1}, "${item.description}", "${formatDate(item.period.start)}", "${item.period.end ? formatDate(item.period.end) : 'onwards'}", "${calculateNoOfWeeksOrDays(item.period.start, item.period.end)}"\n`;
     });
 
     content += '\nEVEN SEMESTER\n';
-    content += 'Sr. No., Description, Period\n';
+    content += 'Sr. No., Description, From, To, No of Weeks/Days\n';
     evenSemesterData.forEach((item, index) => {
-      const period = `${formatDate(item.period.start)} ${
-        item.period.end && item.period.start !== item.period.end ? `to ${formatDate(item.period.end)}` : ''
-      }`;
-      content += `${index + 1}, "${item.description}", "${period}"\n`;
+      content += `${index + 1}, "${item.description}", "${formatDate(item.period.start)}", "${item.period.end ? formatDate(item.period.end) : 'onwards'}", "${calculateNoOfWeeksOrDays(item.period.start, item.period.end)}"\n`;
     });
 
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
@@ -214,19 +220,13 @@ export default function AcademicCalendarView() {
         <table className="w-full text-sm text-left text-gray-600 dark:text-gray-300">
           <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="px-6 py-3 rounded-l-lg">
-                Sr. No.
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Description
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Period
-              </th>
+              <th scope="col" className="px-6 py-3 rounded-l-lg">Sr. No.</th>
+              <th scope="col" className="px-6 py-3">Description</th>
+              <th scope="col" className="px-6 py-3">From</th>
+              <th scope="col" className="px-6 py-3">To</th>
+              <th scope="col" className="px-6 py-3">No of Weeks/Days</th>
               {isMasterAdmin && (
-                <th scope="col" className="px-6 py-3 text-center rounded-r-lg">
-                  Actions
-                </th>
+                <th scope="col" className="px-6 py-3 text-center rounded-r-lg">Actions</th>
               )}
             </tr>
           </thead>
@@ -238,13 +238,12 @@ export default function AcademicCalendarView() {
               >
                 <td className="px-6 py-4">{index + 1}.</td>
                 <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{item.description}</td>
+                <td className="px-6 py-4">{formatDate(item.period.start)}</td>
+                <td className="px-6 py-4">{item.period.end ? formatDate(item.period.end) : 'onwards'}</td>
                 <td className="px-6 py-4">
-                  {formatDate(item.period.start)}{' '}
-                  {item.period.end && item.period.start !== item.period.end
-                    ? `to ${formatDate(item.period.end)}`
-                    : item.period.end
-                    ? ''
-                    : 'onwards'}
+                  {item.period.end && item.period.start
+                    ? calculateNoOfWeeksOrDays(item.period.start, item.period.end)
+                    : '-'}
                 </td>
                 {isMasterAdmin && (
                   <td className="px-6 py-4 text-center">
@@ -272,7 +271,7 @@ export default function AcademicCalendarView() {
     </div>
   );
 
-  if (loading) {
+  if (user === undefined) {
     return (
       <div className="bg-gray-100 dark:bg-gray-900 min-h-screen p-6 flex items-center justify-center">
         <div className="text-gray-600 dark:text-gray-300">Loading...</div>
@@ -286,7 +285,6 @@ export default function AcademicCalendarView() {
         <header className="mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">Academic Calendar</h1>
               {isMasterAdmin && isEditingYear ? (
                 <div className="flex items-center gap-2">
@@ -344,7 +342,6 @@ export default function AcademicCalendarView() {
               : 'Technical University'
             }
           </p>
-          
         </header>
 
         <main className="space-y-8">
@@ -367,15 +364,14 @@ export default function AcademicCalendarView() {
         </footer>
       </div>
       <div className="flex justify-end mt-2">
-  {isMasterAdmin && (
-    <button
-      className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-md"
-    >
-      Publish
-    </button>
-  )}
-</div>
-
+        {isMasterAdmin && (
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-md"
+          >
+            Publish
+          </button>
+        )}
+      </div>
 
       {editingEvent && isMasterAdmin && (
         <EditEventModal event={editingEvent} onSave={handleSaveEvent} onClose={() => setEditingEvent(null)} />

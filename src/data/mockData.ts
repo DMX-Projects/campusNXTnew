@@ -37,10 +37,12 @@ export interface Course {
   program: string;       // UG / PG / Diploma
   department: string;    // Computer Science, Mechanical etc.
   specialization?: string; // Optional specialization
-  year: number;
-  examType:string;          // Academic Year (1,2,3,4)
-  semester: number;      // Semester (1-8 etc.)
-  credits: number;       // Credits (2,3,4 etc.)
+  year: number;         // Regulation Year
+  examType: string;     // Academic Year (1,2,3,4)
+  semester: number;     // Semester (1-8 etc.)
+  credits: number;      // Credits (2,3,4 etc.)
+  cumulativeCredits: number; // Total credits accumulated
+  semesterTotalCredits: number; // Total credits for the semester
   subjectType: string;   // Core / Elective / Lab / Theory / Practical
   facultyId: string;     // Reference to faculty handling course
   internalMarks: number; // e.g. 30
@@ -48,6 +50,9 @@ export interface Course {
   evaluationMethod: string; // Theory / Lab / Project / Viva
   description: string;   // Short description
   thumbnail?: string;    // Optional image
+  ph: boolean;          // Physical Handicapped status
+  regulationUpdate: string; // Latest regulation updates/changes
+  subjectCriteria: string; // Subject eligibility criteria
   status: 'active' | 'inactive'; // For enabling/disabling courses
 }
 
@@ -274,17 +279,22 @@ export const mockCourses: Course[] = [
     program: 'Undergraduate',
     department: 'Computer Science',
     specialization: 'Software Engineering',
-    year: 2,
-    examType:'Theory',
+    year: 2023,
+    examType: 'Theory',
     semester: 1,
     credits: 4,
+    cumulativeCredits: 16,
+    semesterTotalCredits: 24,
     subjectType: 'Core',
     facultyId: 'FAC001',
     internalMarks: 30,
     externalMarks: 70,
     evaluationMethod: 'Theory',
     description: 'Introduction to fundamental data structures and algorithms',
-    status: 'active',
+    ph: false,
+    regulationUpdate: 'Updated as per 2023 regulations - Added practical component',
+    subjectCriteria: 'Prerequisites: Programming Fundamentals, Minimum CGPA 6.0',
+    status: 'active'
   },
   {
     id: 'COU002',
@@ -293,17 +303,22 @@ export const mockCourses: Course[] = [
     program: 'Undergraduate',
     department: 'Computer Science',
     specialization: 'Data Engineering',
-    year: 2,
-    examType:'Practical',
+    year: 2023,
+    examType: 'Practical',
     semester: 2,
     credits: 3,
+    cumulativeCredits: 19,
+    semesterTotalCredits: 22,
     subjectType: 'Core',
     facultyId: 'FAC002',
     internalMarks: 30,
     externalMarks: 70,
     evaluationMethod: 'Theory + Lab',
     description: 'Comprehensive study of database design and management',
-    status: 'inactive',
+    ph: true,
+    regulationUpdate: 'Updated as per 2023 regulations - Lab hours increased',
+    subjectCriteria: 'Prerequisites: Data Structures, SQL Basics, Minimum grade C in CS301',
+    status: 'active'
   },
 ];
 

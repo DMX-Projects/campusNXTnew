@@ -6,9 +6,11 @@ import FacultyDetail from '../pages/PrincipalModules/Academics/Faculty/FacultyDe
 import LeaveRequests from '../pages/PrincipalModules/Academics/Faculty/LeaveRequests';
 import RaiseTicket from '../pages/PrincipalModules/Academics/RaiseTicket';
 import AttendanceManagement from '../components/Modules/AttendanceManagement'
+import AcademicCalenderc from '../pages/ChairpersonModule/Academics/AcademicCalender/AcademicCalenderc';
 import Timetable from '../pages/ChairpersonModule/Academics/timetable/TimeTable';
 // import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
-import AcademicCalender from '../pages/ChairpersonModule/Academics/AcademicCalender/AcademicCalender';
+// import AcademicCalender from '../pages/ChairpersonModule/Academics/AcademicCalender/AcademicCalender';
+import AcademicCalendar from '../pages/MasterMOdule/AcademicCalendar';
 // import SubjectsAndSyllabus from '../pages/Academics/SubjectandSyllabus/SubjectSyllabus';
 import StudentExamprepation from '../pages/ChairpersonModule/Academics/StudentExamprepration/StudentExamprep';
 import StudyMaterialPage from '../pages/ChairpersonModule/Academics/StudyMaterial/StudyMaterial';
@@ -56,7 +58,7 @@ import StudentfeeManagement from '../pages/FacultyModules/FacultyAcademic/studen
 import StudentRecordsResults from '../pages/FacultyModules/FacultyAcademic/StudentRecords&Results';
 import StudentClassSchedule from '../pages/FacultyModules/FacultyAcademic/StudentClassSchedule';
 import StudentCourseAcademic from '../pages/FacultyModules/FacultyAcademic/StudentCourse';
-import FacultyFeedbackStudent from '../pages/StudentModules/Academics/FacultyFeedbackStudent';
+// import FacultyFeedbackStudent from '../pages/StudentModules/Academics/FacultyFeedbackStudent';
 import OnlineClassesFaculty from '../pages/FacultyModules/Academic/OnlineClassesFaculty';
 import StudyMaterial from '../pages/StudentModules/Academics/Subjects/StudyMaterial';
 
@@ -117,6 +119,7 @@ import HODStudentLeaveDetails from '../pages/HODModules/Academics/Students/HODSt
 import HODStudentProjects from '../pages/HODModules/Academics/Students/HODStudentProjects';
 import HODReports from '../pages/HODModules/Academics/HODReports';
 import HODCatPage from '../pages/HODModules/Academics/HODCatPage';
+import HODBookingApproval from '../pages/RegistorModule/HODBookingApproval';
 
 
 
@@ -135,6 +138,7 @@ import SemExamPrepararation from '../pages/FacultyModules/FacultyAcademic/SemExa
 import { i } from 'framer-motion/client';
 import FacultyLessonPlan from '../pages/FacultyModules/Academic/FacultyLessonplan';
 import Dashboard from '../components/Dashboard';
+import BookPermissions from '../pages/StudentModules/Academics/BookPermissions';
 
 
 
@@ -145,7 +149,8 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/student-attendance" element={<StudentAttendance />} />
       {/* <Route path="student-leaves" element={<StudentLeave />} /> */}
-      <Route path="academic-calendar" element={<AcademicCalender />} />
+      <Route path="academic-calendar" element={<AcademicCalendar />} />
+      <Route path="academic-calender" element={<AcademicCalenderc />} />
       {/* <Route path="subjects-syllabus" element={<SubjectsAndSyllabus />} /> */}
       <Route path="exam-preparation" element={<StudentExamprepation />} />
       <Route path="study-material" element={<StudyMaterialPage />} />
@@ -225,13 +230,14 @@ const AcademicsRoutes: React.FC = () => {
 
     <Route path="/student-timetable" element={<TimeTable />} />
     <Route path="/attendance" element={<StudentAttendence />} />
+    <Route path="/book-permissions" element={<BookPermissions />} />
     <Route path="/student-results" element={<Results />} />
     <Route path="/leaveRequest" element={<LeaveRequest />} />
     <Route path="/studentdashboard" element={<Dashboard />} />
 
     <Route path="/student/online-classes" element={<OnlineClasses />} />
     <Route path="/student-subjects-syllabus" element={<Subjects />} />
-    <Route path="/student/faculty-feedback" element={<FacultyFeedbackStudent />} />
+    {/* <Route path="/student/faculty-feedback" element={<FacultyFeedbackStudent />} /> */}
 
     <Route path="/student/coding-assessment" element={<StudentCodingAssesments />} />
     <Route path="/student/assignment" element={<StudentAssignements />} />
@@ -257,6 +263,7 @@ const AcademicsRoutes: React.FC = () => {
     <Route path="/hod/student-projects" element={<HODStudentProjects />} />
     <Route path="/hod/reports" element={<HODReports  />} />
     <Route path="/hod/cat" element={<HODCatPage  />} />
+    <Route path="/hod/booking-approvals" element={<HODBookingApproval />} />
     <Route path="/hod/academic-dashboard" element={<HODAcademicDashboard />} />
 
     <Route path="student-attendance" element={<HODStudentAttendance  />} />
