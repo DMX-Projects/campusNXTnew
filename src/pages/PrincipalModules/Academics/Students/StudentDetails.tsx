@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 interface StudentData {
@@ -13,6 +12,7 @@ interface StudentData {
   year: string;
   semester: string;
   section: string;
+  academicYear: string;
   dateOfBirth: string;
   address: string;
   parentName: string;
@@ -84,6 +84,7 @@ const StudentDetails: React.FC = () => {
       year: '2nd',
       semester: '3rd',
       section: 'A',
+      academicYear: '2024-2025',
       dateOfBirth: '2003-05-15',
       address: '123 MG Road, Mumbai, Maharashtra',
       parentName: 'Rajesh Sharma',
@@ -106,6 +107,7 @@ const StudentDetails: React.FC = () => {
       year: '1st',
       semester: '2nd',
       section: 'B',
+      academicYear: '2024-2025',
       dateOfBirth: '2004-08-22',
       address: '456 Gandhi Nagar, Ahmedabad, Gujarat',
       parentName: 'Kiran Patel',
@@ -128,6 +130,7 @@ const StudentDetails: React.FC = () => {
       year: '3rd',
       semester: '5th',
       section: 'A',
+      academicYear: '2024-2025',
       dateOfBirth: '2002-12-10',
       address: '789 Jubilee Hills, Hyderabad, Telangana',
       parentName: 'Suresh Reddy',
@@ -150,6 +153,7 @@ const StudentDetails: React.FC = () => {
       year: '4th',
       semester: '8th',
       section: 'C',
+      academicYear: '2024-2025',
       dateOfBirth: '2001-03-18',
       address: '321 Civil Lines, Delhi, NCR',
       parentName: 'Vikram Singh',
@@ -172,6 +176,7 @@ const StudentDetails: React.FC = () => {
       year: '1st',
       semester: '1st',
       section: 'B',
+      academicYear: '2024-2025',
       dateOfBirth: '2004-11-25',
       address: '654 Fraser Road, Patna, Bihar',
       parentName: 'Manoj Kumar',
@@ -194,6 +199,7 @@ const StudentDetails: React.FC = () => {
       year: '2nd',
       semester: '3rd',
       section: 'A',
+      academicYear: '2024-2025',
       dateOfBirth: '2000-07-08',
       address: '987 Park Street, Kolkata, West Bengal',
       parentName: 'Amit Gupta',
@@ -216,6 +222,7 @@ const StudentDetails: React.FC = () => {
       year: '2nd',
       semester: '4th',
       section: 'B',
+      academicYear: '2024-2025',
       dateOfBirth: '2003-01-14',
       address: '123 Hazratganj, Lucknow, Uttar Pradesh',
       parentName: 'Ramesh Yadav',
@@ -238,6 +245,7 @@ const StudentDetails: React.FC = () => {
       year: '1st',
       semester: '2nd',
       section: 'A',
+      academicYear: '2024-2025',
       dateOfBirth: '2004-09-03',
       address: '456 Brigade Road, Bangalore, Karnataka',
       parentName: 'Krishnan Iyer',
@@ -260,6 +268,7 @@ const StudentDetails: React.FC = () => {
       year: '3rd',
       semester: '5th',
       section: 'A',
+      academicYear: '2024-2025',
       dateOfBirth: '1999-06-20',
       address: '789 Ashok Nagar, Bhopal, Madhya Pradesh',
       parentName: 'Shyam Mishra',
@@ -282,6 +291,7 @@ const StudentDetails: React.FC = () => {
       year: '2nd',
       semester: '3rd',
       section: 'C',
+      academicYear: '2024-2025',
       dateOfBirth: '2002-04-12',
       address: '321 Marine Drive, Kochi, Kerala',
       parentName: 'Sunil Nair',
@@ -304,6 +314,7 @@ const StudentDetails: React.FC = () => {
       year: '1st',
       semester: '1st',
       section: 'A',
+      academicYear: '2024-2025',
       dateOfBirth: '2004-10-28',
       address: '654 FC Road, Pune, Maharashtra',
       parentName: 'Prakash Joshi',
@@ -326,6 +337,7 @@ const StudentDetails: React.FC = () => {
       year: '1st',
       semester: '2nd',
       section: 'B',
+      academicYear: '2024-2025',
       dateOfBirth: '2004-02-16',
       address: '987 Connaught Place, New Delhi, NCR',
       parentName: 'Ajay Verma',
@@ -688,6 +700,15 @@ const StudentDetails: React.FC = () => {
                 </th>
                 <th 
                   className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+                  onClick={() => handleSort('academicYear')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Academic Year</span>
+                    <SortIcon field="academicYear" />
+                  </div>
+                </th>
+                <th 
+                  className="px-6 py-4 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
                   onClick={() => handleSort('cgpa')}
                 >
                   <div className="flex items-center space-x-1">
@@ -759,6 +780,9 @@ const StudentDetails: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {student.year} / {student.semester} / {student.section}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    {student.academicYear}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`text-sm ${getCGPAColor(student.cgpa)}`}>
@@ -947,6 +971,10 @@ const StudentDetails: React.FC = () => {
                       <div className="flex justify-between">
                         <span className="font-medium text-gray-700 dark:text-gray-300">Section:</span>
                         <span className="text-gray-900 dark:text-gray-100">{selectedStudent.section}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="font-medium text-gray-700 dark:text-gray-300">Academic Year:</span>
+                        <span className="text-gray-900 dark:text-gray-100">{selectedStudent.academicYear}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="font-medium text-gray-700 dark:text-gray-300">Admission Date:</span>
