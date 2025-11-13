@@ -248,7 +248,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Faculty Details', path: '/academics/faculty-details', icon: 'Users' },
       { name: 'Faculty Attendance', path: '/academics/faculty-attendance', icon: 'CheckCircle' },
       { name: 'Leave Requests', path: '/academics/leave-requests', icon: 'UserMinus' },
-       { name: 'Faculty Feedback', path: '/academics/principal/faculty-feedback', icon: 'MessageSquare' },
+       { name: 'Faculty Subject Performance', path: '/academics/principal/faculty-feedback', icon: 'MessageSquare' },
 
     ]
   },
@@ -283,7 +283,7 @@ const SIDEBAR_ITEMS = {
       { name: 'Faculty Details', path: '/academics/faculty/faculty-details', icon: 'GraduationCap' },
       { name: 'Faculty Attendance', path: '/academics/faculty/faculty-attendance', icon: 'MessageSquare' },
       { name: 'Faculty Leave Requests', path: '/academics/leave-requests', icon: 'MessageSquare' },
-      { name: 'Faculty Feedback', path: '/academics/hod/faculty-feedback', icon: 'MessageSquare' }
+      { name: 'Faculty Subject Feedback', path: '/academics/hod/faculty-feedback', icon: 'MessageSquare' }
     ]
   },
 
