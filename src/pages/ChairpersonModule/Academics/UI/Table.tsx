@@ -4,6 +4,8 @@ interface Column {
   key: string;
   label: string;
   sortable?: boolean;
+  // optional render function for custom cell content
+  render?: (row: any) => React.ReactNode;
 }
 
 interface TableProps {
@@ -40,8 +42,8 @@ export const Table: React.FC<TableProps> = ({ columns, data, actions }) => {
               className="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
             >
               {columns.map((column) => (
-                <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {row[column.key]}
+                <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 align-top">
+                  {column.render ? column.render(row) : row[column.key]}
                 </td>
               ))}
               {actions && (

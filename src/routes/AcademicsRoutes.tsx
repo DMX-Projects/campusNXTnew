@@ -6,9 +6,11 @@ import FacultyDetail from '../pages/PrincipalModules/Academics/Faculty/FacultyDe
 import LeaveRequests from '../pages/PrincipalModules/Academics/Faculty/LeaveRequests';
 import RaiseTicket from '../pages/PrincipalModules/Academics/RaiseTicket';
 import AttendanceManagement from '../components/Modules/AttendanceManagement'
+import AcademicCalenderc from '../pages/ChairpersonModule/Academics/AcademicCalender/AcademicCalenderc';
 import Timetable from '../pages/ChairpersonModule/Academics/timetable/TimeTable';
 // import StudentLeave from '../pages/Academics/StudentLeaves/StudentLeaves';
-import AcademicCalender from '../pages/ChairpersonModule/Academics/AcademicCalender/AcademicCalender';
+// import AcademicCalender from '../pages/ChairpersonModule/Academics/AcademicCalender/AcademicCalender';
+import AcademicCalendar from '../pages/MasterMOdule/AcademicCalendar';
 // import SubjectsAndSyllabus from '../pages/Academics/SubjectandSyllabus/SubjectSyllabus';
 import StudentExamprepation from '../pages/ChairpersonModule/Academics/StudentExamprepration/StudentExamprep';
 import StudyMaterialPage from '../pages/ChairpersonModule/Academics/StudyMaterial/StudyMaterial';
@@ -147,7 +149,8 @@ const AcademicsRoutes: React.FC = () => {
       <Route path="/inbox" element={<Inbox />} />
       <Route path="/student-attendance" element={<StudentAttendance />} />
       {/* <Route path="student-leaves" element={<StudentLeave />} /> */}
-      <Route path="academic-calendar" element={<AcademicCalender />} />
+      <Route path="academic-calendar" element={<AcademicCalendar />} />
+      <Route path="academic-calender" element={<AcademicCalenderc />} />
       {/* <Route path="subjects-syllabus" element={<SubjectsAndSyllabus />} /> */}
       <Route path="exam-preparation" element={<StudentExamprepation />} />
       <Route path="study-material" element={<StudyMaterialPage />} />
